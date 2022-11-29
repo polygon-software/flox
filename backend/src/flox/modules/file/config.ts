@@ -20,6 +20,7 @@ const defaultConfig: FileModuleConfig = {
 
 /**
  * Gets the module's actual configuration
+ *
  * @returns configuration
  */
 export function moduleConfig(): FileModuleConfig {
@@ -28,3 +29,4 @@ export function moduleConfig(): FileModuleConfig {
     floxModuleOptions(MODULES.FILE),
   ) as FileModuleConfig;
 }
+export default moduleConfig;

@@ -1,11 +1,12 @@
-import gql from 'graphql-tag';
-import { MutationTypes } from 'src/apollo/mutation';
+import { gql } from '@apollo/client/core';
+
+import { MutationObject, MutationTypes } from 'src/apollo/mutation';
 import { TABLES } from 'src/flox/TABLES';
 
-export const CREATE_IMAGE = {
+export const CREATE_IMAGE: MutationObject = {
   mutation: gql`
-    mutation createImage($file: ID!, $objectRecognition: Boolean) {
-      createImage(
+    mutation CreateImage($file: ID!, $objectRecognition: Boolean) {
+      CreateImage(
         createImageInput: { file: $file, objectRecognition: $objectRecognition }
       ) {
         uuid
@@ -25,13 +26,13 @@ export const CREATE_IMAGE = {
   `,
   tables: [TABLES.IMAGE],
   type: MutationTypes.CREATE,
-  cacheLocation: 'createImage',
+  cacheLocation: 'CreateImage',
 };
 
-export const DELETE_IMAGE = {
+export const DELETE_IMAGE: MutationObject = {
   mutation: gql`
-    mutation deleteImage($uuid: ID!) {
-      deleteImage(deleteImageInput: { uuid: $uuid }) {
+    mutation DeleteImage($uuid: ID!) {
+      DeleteImage(deleteImageInput: { uuid: $uuid }) {
         uuid
         file {
           uuid
@@ -44,5 +45,5 @@ export const DELETE_IMAGE = {
   `,
   tables: [TABLES.IMAGE],
   type: MutationTypes.DELETE,
-  cacheLocation: 'deleteImage',
+  cacheLocation: 'DeleteImage',
 };

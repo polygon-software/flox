@@ -6,8 +6,10 @@ import {
   createWebHistory,
   RouteRecordRaw,
 } from 'vue-router';
-import routes from './routes';
+
 import Env from 'src/env';
+
+import routes from './routes';
 
 /*
  * If not building with SSR mode, you can
@@ -18,7 +20,7 @@ import Env from 'src/env';
  * with the Router instance.
  */
 
-export default route(function () {
+export default route(() => {
   const historyType =
     Env.MODE === 'ssr' ? createWebHistory : createWebHashHistory;
   const createHistory = Env.SERVER ? createMemoryHistory : historyType;

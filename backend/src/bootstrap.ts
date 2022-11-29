@@ -1,14 +1,19 @@
-import { NestApplication, NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { RequestListener } from 'http';
+
 import { ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { NestApplication, NestFactory } from '@nestjs/core';
+import serverlessExpress from '@vendia/serverless-express';
 import { express as voyagerMiddleware } from 'graphql-voyager/middleware';
 import helmet from 'helmet';
-import { ConfigService } from '@nestjs/config';
-import serverlessExpress from '@vendia/serverless-express';
+import isUndefined from 'lodash/isUndefined';
+
+import AppModule from './app.module';
 import Env from './env';
 
 /**
  * Creates nest application based on GraphQL
+ *
  * @returns Nest Application
  */
 async function createNestApp(): Promise<NestApplication> {
@@ -36,8 +41,8 @@ async function createNestApp(): Promise<NestApplication> {
 export async function bootstrapNest(): Promise<NestApplication> {
   const app = await createNestApp();
   const configService: ConfigService = app.get(ConfigService);
-  const serverPort = configService.getOrThrow('server.port');
-  if (serverPort == undefined) {
+  const serverPort: string = configService.getOrThrow<string>('server.port');
+  if (isUndefined(serverPort)) {
     throw new Error('Server port can not be undefined');
   }
   await app.listen(serverPort);
@@ -50,7 +55,7 @@ export async function bootstrapNest(): Promise<NestApplication> {
 export async function bootstrapServerless(): Promise<
   ReturnType<typeof serverlessExpress>
 > {
-  const app = await createNestApp();
-  const expressApp = app.getHttpAdapter().getInstance();
-  return serverlessExpress({ app: expressApp });
+  const nestApplication = await createNestApp();
+  const app: RequestListener = nestApplication.getHttpAdapter().getInstance();
+  return serverlessExpress({ app });
 }

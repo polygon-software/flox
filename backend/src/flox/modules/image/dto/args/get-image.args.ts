@@ -1,13 +1,11 @@
-import { ArgsType, Field, ID } from '@nestjs/graphql';
-import { IsNumber, IsOptional, IsUUID } from 'class-validator';
+import { ArgsType, Field, Int } from '@nestjs/graphql';
+import { IsNumber, IsOptional } from 'class-validator';
+
+import GetOneArgs from '../../../abstracts/crud/dto/get-one.args';
 
 @ArgsType()
-export class GetImageArgs {
-  @Field(() => ID)
-  @IsUUID()
-  uuid: string;
-
-  @Field(() => [Number], {
+export default class GetImageArgs extends GetOneArgs {
+  @Field(() => Int, {
     nullable: true,
     description: 'URL expiration duration (in seconds)',
   })

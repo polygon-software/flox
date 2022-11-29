@@ -4,7 +4,8 @@
     "roles": true,
     "file": true,
     "image": true,
-    "sharing": false
+    "sharing": false,
+    "notification": true
   },
   "moduleOptions": {
     "roles": {

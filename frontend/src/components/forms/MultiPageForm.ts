@@ -1,6 +1,7 @@
-import { computed, Ref, ref } from 'vue';
-import { Field } from 'src/flox/modules/auth/components/forms/fields';
 import cloneDeep from 'lodash/cloneDeep';
+import { computed, Ref, ref } from 'vue';
+
+import { Field } from 'src/flox/modules/auth/components/forms/fields';
 
 export interface FormPage {
   key: string;
@@ -28,6 +29,7 @@ export class MultiPageForm {
 
   /**
    * Constructor
+   *
    * @param pages - the form's pages
    */
   constructor(pages?: FormPage[]) {
@@ -56,20 +58,20 @@ export class MultiPageForm {
         return false;
       }
 
-      const rules = field.attributes.rules;
+      const { rules } = field.attributes;
       return rules.every((rule) => {
         // If the rule returns true, it is fulfilled (otherwise, it will return an error message)
         if (typeof rule === 'function') {
           return rule(this.values.value[field.key]) === true;
-        } else {
-          return true;
         }
+        return true;
       });
     });
   });
 
   /**
    * Updates a value within the form's values
+   *
    * @param key - the value's name
    * @param value - the actual value to add
    */

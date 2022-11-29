@@ -1,16 +1,25 @@
 import { ArgsType, Field, Int } from '@nestjs/graphql';
+import { IsNumber, IsOptional, IsString, Max, Min } from 'class-validator';
+
+import GetAllArgs from '../../../abstracts/crud/dto/get-all.args';
 
 @ArgsType()
-export class GetAllFilesArgs {
+export default class GetAllFilesArgs extends GetAllArgs {
   @Field(() => Int, {
-    defaultValue: 500,
-    description: 'Number of files to load',
+    nullable: true,
+    description: 'URL expiration duration (in seconds)',
   })
-  take = 500;
+  @IsOptional()
+  @IsNumber()
+  @Min(60)
+  @Max(60 * 60 * 24)
+  expires?: number;
 
-  @Field(() => Int, {
-    defaultValue: 0,
-    description: 'How many files to skip',
+  @Field(() => String, {
+    nullable: true,
+    description: 'Path in which files must be located',
   })
-  skip = 0;
+  @IsOptional()
+  @IsString()
+  path?: string;
 }

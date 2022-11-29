@@ -1,34 +1,41 @@
 <template>
-  <q-card class="q-pa-md">
-    <q-table
+  <q-card class="q-pa-md" flat bordered>
+    <QTable
       ref="tableRef"
+      v-bind="tableProps"
       v-model:pagination="pagination"
       v-model:selected="selected"
       :title="title"
       :rows="rows"
-      :columns="columns"
+      :columns="extendedColumns"
       row-key="uuid"
       :loading="loading"
       :filter="filter"
       binary-state-sort
-      selection="multiple"
-      :visible-columns="visibleColumnNames"
+      :selection="multi ? 'multiple' : 'single'"
+      :visible-columns="extendedVisibleColumnNames"
       @request="onRequest"
       @selection="handleSelection"
     >
+      <template #body-cell-prepend="cellProps">
+        <slot name="prepend" v-bind="cellProps" />
+      </template>
+      <template #body-cell-append="cellProps">
+        <slot name="append" v-bind="cellProps" />
+      </template>
       <template #body-cell="cellProps">
         <q-td :props="cellProps">
           {{ cellProps.row[cellProps.col.field] }}
-          <q-popup-edit
+          <QPopupEdit
             v-if="cellProps.col.edit"
             :ref="
-              (el) => {
+              (el: any) => {
                 popupRefs[getPopupEditKey(cellProps.row, cellProps.col)] = el;
               }
             "
             v-slot="scope"
             buttons
-            :validate="validateInput(cellProps.col, $event)"
+            :validate="validateInput(cellProps.col)"
             :model-value="cellProps.row[cellProps.col.field]"
             :label-set="$t('general.save')"
             :label-cancel="$t('general.cancel')"
@@ -44,7 +51,7 @@
               autofocus
               counter
             />
-          </q-popup-edit>
+          </QPopupEdit>
         </q-td>
       </template>
       <template #header-selection="scope">
@@ -54,33 +61,31 @@
       <template #body-selection="scope">
         <q-checkbox
           :model-value="scope.selected"
-          @update:model-value="
-            (val, evt) => {
-              Object.getOwnPropertyDescriptor(scope, 'selected').set(val, evt);
-            }
-          "
+          @update:model-value="scope.selected = $event"
         />
       </template>
       <template #top-right="headerProps">
         <q-input
+          v-if="!hideSearch"
           v-model="filter"
           borderless
           hide-bottom-space
           dense
           debounce="300"
-          placeholder="Search"
+          :placeholder="$t('general.search')"
         >
           <template #append>
             <q-icon name="search" />
           </template>
         </q-input>
         <q-select
+          v-if="!hideColumnSelector"
           v-model="visibleColumnNames"
           borderless
           multiple
           dense
           hide-bottom-space
-          :display-value="$q.lang.table.columns"
+          :display-value="$t('general.display')"
           emit-value
           map-options
           :options="columns"
@@ -106,6 +111,7 @@
           </template>
         </q-select>
         <q-btn
+          v-if="!hideFullscreen"
           flat
           round
           dense
@@ -114,10 +120,11 @@
           @click="headerProps.toggleFullscreen"
         />
       </template>
-    </q-table>
+    </QTable>
     <div class="row">
       <div class="col">
         <div
+          v-if="multi"
           class="text-subtitle2 q-pa-sm"
           v-text="$t('table.ctrl_shift_hint')"
         />
@@ -125,21 +132,25 @@
       <div class="col">
         <div class="row justify-end" style="gap: 10px">
           <q-btn
-            v-if="selected.length > 0"
+            v-if="selected.length > 0 && exportSelection"
             color="primary"
             icon-right="file_download"
             label="Export"
             no-caps
             @click="exportTable"
           />
-          <q-btn
-            v-if="selected.length > 0"
-            color="negative"
-            icon-right="delete"
-            label="Delete"
-            no-caps
+          <ConfirmButton
+            v-if="selected.length > 0 && deleteSelection"
+            :label="removeLabel"
+            :confirm-label="$t('general.confirm')"
+            :button-props="{
+              color: 'negative',
+              iconRight: removeIcon,
+              noCaps: true,
+            }"
             @click="deleteActiveRows"
           />
+          <slot name="actions" :selected="selected" />
         </div>
       </div>
     </div>
@@ -147,25 +158,77 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, Ref, defineProps, watchEffect } from 'vue';
-import { QPopupEdit, QTable } from 'quasar';
-import { ColumnInterface, useDataTable } from 'components/tables/useDataTable';
-import { MutationObject } from 'src/apollo/mutation';
-import { BaseEntity } from 'src/flox/core/base-entity/entities/BaseEntity';
-import { QueryObject } from 'src/apollo/query';
+import { QPopupEdit, QTable, QTableProps } from 'quasar';
+import {
+  computed,
+  ComputedRef,
+  defineProps,
+  onMounted,
+  Ref,
+  ref,
+  watch,
+  watchEffect,
+} from 'vue';
 
-const props = defineProps<{
-  title: string;
-  query: QueryObject;
-  updateMutation: MutationObject;
-  deleteMutation: MutationObject;
-  columns: ColumnInterface<BaseEntity>[];
+import {
+  ColumnAlign,
+  ColumnInterface,
+  useDataTable,
+} from 'components/tables/useDataTable';
+import { MutationObject } from 'src/apollo/mutation';
+import { QueryObject } from 'src/apollo/query';
+import BaseEntity from 'src/flox/core/base-entity/entities/BaseEntity';
+import ConfirmButton from 'components/buttons/ConfirmButton.vue';
+import { ValidationRule } from 'src/tools/validation.tool';
+
+const props = withDefaults(
+  defineProps<{
+    query: QueryObject;
+    updateMutation: MutationObject;
+    deleteMutation: MutationObject;
+    columns: ColumnInterface<BaseEntity>[];
+    tableProps?: QTableProps;
+    title?: string;
+    exportSelection?: boolean;
+    deleteSelection?: boolean;
+    hideFullscreen?: boolean;
+    hideSearch?: boolean;
+    hideColumnSelector?: boolean;
+    prependSlot?: boolean;
+    prependName?: string;
+    appendSlot?: boolean;
+    appendName?: string;
+    multi?: boolean;
+    removeIcon?: string;
+    removeLabel?: string;
+  }>(),
+  {
+    title: undefined,
+    exportSelection: false,
+    deleteSelection: false,
+    multi: false,
+    hideFullscreen: false,
+    hideSearch: false,
+    prependSlot: false,
+    appendSlot: false,
+    hideColumnSelector: false,
+    removeIcon: 'delete',
+    removeLabel: 'Remove',
+    appendName: '',
+    prependName: '',
+    tableProps: () => ({}),
+  }
+);
+
+const emit = defineEmits<{
+  (e: 'update:selected', selected: BaseEntity[]): void;
 }>();
 
 const popupRefs: Ref<Record<string, QPopupEdit>> = ref({});
 
 /**
  * Generates an index key for a popup referenec
+ *
  * @param row - row of data in which popup edit occurs
  * @param col column in which popup edit occurs
  * @returns popup key
@@ -199,6 +262,7 @@ const {
 
 /**
  * Validates an input for qPopupEdit
+ *
  * @param column - currently edited column
  * @returns function that validates input
  */
@@ -209,21 +273,66 @@ function validateInput(column: ColumnInterface): (value: any) => boolean {
     }
     return column?.qInputProps?.rules.every((rule) => {
       if (typeof rule === 'function') {
-        return rule(value) === true;
-      } else {
-        return true;
+        return (rule as ValidationRule)(value) === true;
       }
+      return true;
     });
   };
 }
 
+watch(selected, (val) => {
+  emit('update:selected', val);
+});
+
 watchEffect(() => {
   columns.value = props.columns;
+});
+
+const extendedColumns: ComputedRef<ColumnInterface<BaseEntity>[]> = computed(
+  () => {
+    const prependContent = {
+      name: 'prepend',
+      align: ColumnAlign.left,
+      field: 'prepend',
+      label: props.prependName ?? '',
+    };
+    const appendContent = {
+      name: 'append',
+      field: 'append',
+      label: props.appendName ?? '',
+    };
+    return [
+      ...(props.prependSlot ? [prependContent] : []),
+      ...props.columns,
+      ...(props.appendSlot ? [appendContent] : []),
+    ];
+  }
+);
+const extendedVisibleColumnNames: ComputedRef<string[]> = computed(() => {
+  return [
+    ...(props.prependSlot ? ['prepend'] : []),
+    ...visibleColumnNames.value,
+    ...(props.appendSlot ? ['append'] : []),
+  ];
 });
 
 onMounted(() => {
   if (tableRef.value) {
     tableRef.value.requestServerInteraction();
   }
+});
+
+/**
+ * Refreshes the content of the table by requesting a server interaction
+ */
+function refresh(): void {
+  if (tableRef.value) {
+    tableRef.value.requestServerInteraction();
+  }
+}
+
+defineExpose({
+  refresh,
+  rows,
 });
 </script>

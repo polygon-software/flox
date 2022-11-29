@@ -1,30 +1,28 @@
 <template>
-  <div
-    class="img-container"
-    :style="{
-      width: `${maxWidth}px`,
-      height: `${maxHeight}px`,
-    }"
-  >
+  <div class="img-container">
     <img
       v-if="image"
       ref="imgRef"
-      :src="image.file.url"
+      :src="image.file?.url"
       alt="image"
-      style="max-width: 100%; max-height: 100%"
-      @load="updateImageProperties"
+      class="full-width"
     />
     <template v-if="image">
       <div
         v-for="label in image.labels"
-        :key="label.name + label.confidence"
-        class="bbox"
-        :style="{
-          top: `${label.boundingBox.top * height}px`,
-          left: `${label.boundingBox.left * width}px`,
-          width: `${label.boundingBox.width * width}px`,
-          height: `${label.boundingBox.height * height}px`,
+        :key="`${label?.name} ${label?.confidence}`"
+        class="bbox cursor-pointer"
+        :class="{
+          focus: focusLabel && focusLabel.uuid === label.uuid,
+          defocus: focusLabel && focusLabel.uuid !== label.uuid,
         }"
+        :style="{
+          top: `${(label.boundingBox?.top ?? 0) * 100}%`,
+          left: `${(label.boundingBox?.left ?? 0) * 100}%`,
+          width: `${(label.boundingBox?.width ?? 0) * 100}%`,
+          height: `${(label.boundingBox?.height ?? 0) * 100}%`,
+        }"
+        @click="emit('focus', label)"
       >
         <span>{{ label.name }}</span>
       </div>
@@ -33,78 +31,70 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, ref, watch, Ref } from 'vue';
-import { ImageEntity } from 'src/flox/modules/image/entities/image.entity';
-import { dom } from 'quasar';
-import { getImage } from 'src/flox/modules/image/services/image.service';
+import { defineProps, Ref, ref } from 'vue';
 
-const props = defineProps({
-  uuid: {
-    type: String,
-    required: true,
-  },
-  maxWidth: {
-    type: Number,
-    required: true,
-  },
-  maxHeight: {
-    type: Number,
-    required: true,
-  },
-});
+import ImageEntity from 'src/flox/modules/image/entities/image.entity';
+import LabelEntity from 'src/flox/modules/image/entities/label.entity';
 
-const image: Ref<ImageEntity | null> = ref(null);
+const props = defineProps<{
+  image?: ImageEntity | null;
+  focusLabel?: LabelEntity | null;
+}>();
+
+const emit = defineEmits<{
+  (e: 'focus', label: LabelEntity): void;
+}>();
 
 const imgRef: Ref<HTMLImageElement | null> = ref(null);
-const width: Ref<number> = ref(0);
-const height: Ref<number> = ref(0);
-
-/**
- * Updates image width and height
- */
-function updateImageProperties(): void {
-  if (imgRef.value) {
-    width.value = dom.width(imgRef.value);
-    height.value = dom.height(imgRef.value);
-  }
-}
-
-watch(
-  () => props.uuid,
-  async () => {
-    image.value = await getImage(props.uuid);
-  }
-);
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .img-container {
+  max-width: 99.99%;
+  height: 100%;
   position: relative;
+  overflow: hidden;
+
+  img {
+    z-index: 1;
+    max-width: 100%;
+    display: block;
+    image-orientation: from-image;
+  }
 }
 .bbox {
   position: absolute;
   border: 2px solid rgba(255, 255, 255, 0.69);
-  box-shadow: 0 0 1px #687078, 0 0 2px #687078, 0 0 2px #687078, 0 0 2px #687078,
-    inset 0 0 2px #687078, inset 0 0 2px #687078, inset 0 0 2px #687078,
-    inset 0 0 2px #687078;
+  box-shadow: 0 0 1px $primary, 0 0 2px $primary, 0 0 2px $primary,
+    0 0 2px $primary, inset 0 0 2px $primary, inset 0 0 2px $primary,
+    inset 0 0 2px $primary, inset 0 0 2px $primary;
   border-radius: 5px;
+
+  span {
+    position: absolute;
+    left: -2px;
+    top: -2px;
+    color: black;
+    background-color: rgba(255, 255, 255, 0.69);
+    border-radius: 5px 2px 2px 2px;
+    font-size: 0.8rem;
+    line-height: 0.8rem;
+    padding: 3px;
+    opacity: 1;
+  }
 }
-.bbox:hover {
-  border: 2px solid #687078;
+.bbox:hover,
+.bbox.focus {
+  border: 2px solid $primary;
+  background-color: rgba($primary, 0.35);
 }
-.bbox span {
-  position: absolute;
-  left: -2px;
-  top: -2px;
-  color: black;
-  background-color: rgba(255, 255, 255, 0.69);
-  border-radius: 5px 2px 2px 2px;
-  font-size: 0.8rem;
-  line-height: 0.8rem;
-  padding: 3px;
+.bbox.defocus {
+  opacity: 0.3;
 }
-.bbox:hover span {
+.bbox .bbox:hover span,
+.bbox.focus span {
+  opacity: 0;
   color: white;
-  background-color: #687078;
+  background-color: $primary;
 }
 </style>

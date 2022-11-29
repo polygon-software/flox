@@ -16,20 +16,18 @@
 
 <script setup lang="ts">
 import { computed, defineProps, onMounted } from 'vue';
-import { isModuleActive } from 'src/flox';
+
 import { i18n } from 'boot/i18n';
+import { isModuleActive } from 'src/flox';
 
 /**
  * This is a wrapper component to be used with Flox module components. It prevents the module's components from being
  * used without the corresponding module being active, since this could lead to erroneous behaviour.
  */
 
-const props = defineProps({
-  module: {
-    type: String,
-    required: true,
-  },
-});
+const props = defineProps<{
+  module: string;
+}>();
 
 // Determines whether the given module is active (and shows an error otherwise)
 const moduleValid = computed(() => {

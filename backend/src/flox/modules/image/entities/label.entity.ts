@@ -1,13 +1,15 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 import { Field, ObjectType } from '@nestjs/graphql';
-import { BaseEntity } from '../../../core/base-entity/entities/base-entity.entity';
-import { IsNumber, IsString } from 'class-validator';
-import { BoundingBox } from './bounding-box.entity';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
+import { IsDecimal, IsString } from 'class-validator';
+
+import BaseEntity from '../../../core/base-entity/entities/base-entity.entity';
+
+import BoundingBox from './bounding-box.entity';
 import Image from './image.entity';
 
 @Entity()
 @ObjectType()
-export class Label extends BaseEntity {
+export default class Label extends BaseEntity {
   @Field(() => Image, {
     description: 'Image on which this label was detected',
   })
@@ -26,7 +28,7 @@ export class Label extends BaseEntity {
 
   @Field(() => Number, { description: 'Confidence between 0 and 100' })
   @Column('float8')
-  @IsNumber()
+  @IsDecimal()
   public confidence: number;
 
   @Field(() => [String], {

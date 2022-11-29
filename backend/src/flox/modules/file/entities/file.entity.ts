@@ -1,7 +1,8 @@
-import { Column, Entity } from 'typeorm';
-import { BaseEntity } from '../../../core/base-entity/entities/base-entity.entity';
 import { Field, ObjectType } from '@nestjs/graphql';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { Column, Entity } from 'typeorm';
+import { IsNumber, IsOptional, IsString, IsUrl } from 'class-validator';
+
+import AccessControlledEntity from '../../access-control/entities/access-controlled.entity';
 
 /**
  * Defines a file within an AWS S3 bucket
@@ -9,11 +10,14 @@ import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 @Entity()
 @ObjectType()
-export abstract class S3File extends BaseEntity {
-  @Field(() => String, { description: 'S3 File Key' })
-  @Column()
-  @IsString()
-  public key: string;
+export default abstract class S3File extends AccessControlledEntity {
+  @Field(() => String, {
+    nullable: true,
+    description: 'Pre-signed download URL',
+  })
+  @IsOptional()
+  @IsUrl()
+  public url?: string;
 
   @Field(() => String, { description: 'Files mime type' })
   @Column()
@@ -29,10 +33,25 @@ export abstract class S3File extends BaseEntity {
   @IsString()
   public filename: string;
 
+  @Field(() => String, {
+    nullable: true,
+    description: 'Path that leads to file',
+  })
+  @Column()
+  @IsOptional()
+  @IsString()
+  public path: string;
+
   @Field(() => Number, { description: 'Filesize in bytes' })
   @Column()
   @IsNumber()
   public size: number;
-}
 
-export default S3File;
+  @Field(() => String, {
+    nullable: true,
+    description: 'Signed URL to upload object. Only works 1 time',
+  })
+  @IsString()
+  @IsOptional()
+  public signedUrl?: string;
+}

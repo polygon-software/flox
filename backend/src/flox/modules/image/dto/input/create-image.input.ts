@@ -1,8 +1,10 @@
 import { Field, ID, InputType } from '@nestjs/graphql';
 import { IsBoolean, IsOptional, IsUUID } from 'class-validator';
 
+import CreateAccessControlledInput from '../../../abstracts/crud-access-control/dto/inputs/create-access-controlled.input';
+
 @InputType()
-export class CreateImageInput {
+export default class CreateImageInput extends CreateAccessControlledInput {
   @Field(() => ID)
   @IsUUID()
   file: string;

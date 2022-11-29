@@ -1,4 +1,4 @@
-import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 import {
   CreateDateColumn,
   DeleteDateColumn,
@@ -12,7 +12,7 @@ import { IsUUID } from 'class-validator';
  * Includes unique UUID, as well as creation/modification/deletion timestamps
  */
 @ObjectType()
-export class BaseEntity {
+export default class BaseEntity {
   @Field(() => ID, { description: 'UUID' })
   @PrimaryGeneratedColumn('uuid')
   @IsUUID()

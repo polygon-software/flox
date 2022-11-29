@@ -1,7 +1,9 @@
-import { SES, SendRawEmailCommand } from '@aws-sdk/client-ses';
+import { SendRawEmailCommand, SES } from '@aws-sdk/client-ses';
 import { createTransport } from 'nodemailer';
-import { AttachmentFile } from './AttachmentFile';
+
 import Env from '../../../../env';
+
+import { AttachmentFile } from './AttachmentFile';
 
 export type Credentials = {
   accessKeyId: string;
@@ -11,6 +13,7 @@ export type Credentials = {
 
 /**
  * Sends an e-mail, optionally with attachment(s) using SES and Nodemailer
+ *
  * @param credentials - SES credentials object
  * @param from - the sender's e-mail address
  * @param to - list of recipient's e-mail addresses
@@ -29,7 +32,7 @@ export async function sendEmail(
   // Create SES service object
   const sesClient = new SES({
     region: Env.AWS_MAIN_REGION,
-    credentials: credentials,
+    credentials,
   });
 
   // Create Nodemailer SES transporter
@@ -48,9 +51,5 @@ export async function sendEmail(
     attachments: attachments ?? [],
   };
 
-  try {
-    await transporter.sendMail(emailParams);
-  } catch (e: any) {
-    throw new Error(`Error while sending e-mail: ${e.name}: ${e.message}`);
-  }
+  await transporter.sendMail(emailParams);
 }

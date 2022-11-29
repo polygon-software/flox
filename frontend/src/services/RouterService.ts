@@ -1,5 +1,4 @@
 import {
-  NavigationFailure,
   RouteLocationNormalizedLoaded,
   Router,
   RouteRecordRaw,
@@ -9,9 +8,10 @@ import {
 /**
  * This is a service that is used globally throughout the application for routing
  */
-export class RouterService {
+export default class RouterService {
   // Router instance
   router: Router;
+
   route: RouteLocationNormalizedLoaded;
 
   // eslint-disable-next-line require-jsdoc
@@ -22,6 +22,7 @@ export class RouterService {
 
   /**
    * Adds the given string to the URl path
+   *
    * @param path - path to route to
    * @param query - query
    * @returns the navigation result.
@@ -36,12 +37,13 @@ export class RouterService {
     }
     return this.router.push({
       path: `${currentRoute}/${path}`,
-      query: query,
+      query,
     });
   }
 
   /**
    * Routes to a given route, as defined in ROUTES constant.
+   *
    * @param to - the route to go to.
    * @param query - props to pass to the component, if any.
    * @param keepQuery - keep the current query and add new query parameters if given.
@@ -58,28 +60,26 @@ export class RouterService {
           path: to.path,
           query: { ...this.route.query, ...query },
         });
-      } else {
-        return this.router.push({
-          path: to.path,
-          query: this.route.query,
-        });
       }
-    } else {
-      if (query) {
-        return this.router.push({
-          path: to.path,
-          query: query,
-        });
-      } else {
-        return this.router.push({
-          path: to.path,
-        });
-      }
+      return this.router.push({
+        path: to.path,
+        query: this.route.query,
+      });
     }
+    if (query) {
+      return this.router.push({
+        path: to.path,
+        query,
+      });
+    }
+    return this.router.push({
+      path: to.path,
+    });
   }
 
   /**
    * Adds given parameters to the URL query.
+   *
    * @param params - query parameters.
    * @returns the navigation result.
    */
@@ -94,6 +94,7 @@ export class RouterService {
 
   /**
    * Returns the requested query parameter.
+   *
    * @param key - parameter name
    * @returns key - requested parameter
    */
@@ -103,6 +104,7 @@ export class RouterService {
 
   /**
    * Removes the last URL part
+   *
    * @returns the navigation result.
    */
   pop(): ReturnType<typeof this.router.push> {
@@ -114,6 +116,7 @@ export class RouterService {
   /**
    * Replaces the last URL part with the given new part.
    * Removes all Query parameter
+   *
    * @param path - path to route to
    * @returns the navigation result.
    */

@@ -1,12 +1,14 @@
-import { UserResolver } from './user.resolver';
-import { UserService } from './user.service';
-import { User } from './entities/user.entity';
-import { CreateUserInput } from './dto/input/create-user.input';
-import { DEFAULT_ROLES } from '../roles/config';
-import { Repository } from 'typeorm';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
 import { MockType, repositoryMockFactory } from '../../testing/testUtils';
+import { DefaultRoles } from '../roles/config';
+
+import CreateUserInput from './dto/input/create-user.input';
+import User from './entities/user.entity';
+import UserResolver from './user.resolver';
+import UserService from './user.service';
 
 describe('UserResolver', () => {
   let userService: UserService;
@@ -46,7 +48,8 @@ describe('UserResolver', () => {
       username: 'Test User',
       email: 'test@test.com',
       cognitoUuid: '1234-abcd-4567',
-      role: DEFAULT_ROLES.ADMIN,
+      lang: 'en',
+      role: DefaultRoles.ADMIN,
     };
 
     const date = new Date();
@@ -56,10 +59,13 @@ describe('UserResolver', () => {
       createdAt: date,
       updatedAt: date,
       validateRole: jest.fn(),
+      validateLang: jest.fn(),
+      groups: [],
       ...input,
     };
 
-    jest.spyOn(userService, 'createUser').mockImplementation(async () => user);
+    // eslint-disable-next-line @typescript-eslint/require-await
+    jest.spyOn(userService, 'create').mockImplementation(async () => user);
 
     // Create user
     expect(await userResolver.createUser(input)).toBe(user);

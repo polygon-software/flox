@@ -1,5 +1,5 @@
 <template>
-  <q-dialog ref="dialogRef" :persistent="true">
+  <q-dialog ref="dialogRef" persistent>
     <q-card class="q-pa-lg q-pt-xl" style="width: 400px; min-height: 250px">
       <q-form
         class="q-gutter-md"
@@ -45,13 +45,17 @@
 </template>
 
 <script setup lang="ts">
-import { defineEmits, ref } from 'vue';
 import { useDialogPluginComponent } from 'quasar';
+import { defineEmits, ref } from 'vue';
+
+import { i18n } from 'boot/i18n';
 import {
   joiPasswordSchema,
   joiSchemaToValidationRule,
 } from 'src/tools/validation.tool';
-import { i18n } from 'boot/i18n';
+
+// eslint-disable-next-line vue/define-emits-declaration
+defineEmits(useDialogPluginComponent.emits);
 
 const verificationCode = ref('');
 const password = ref('');
@@ -69,8 +73,6 @@ const matchingRules = [
 ];
 
 const { dialogRef, onDialogOK, onDialogHide } = useDialogPluginComponent();
-
-defineEmits(useDialogPluginComponent.emits);
 
 /**
  * On submit, emit data outwards

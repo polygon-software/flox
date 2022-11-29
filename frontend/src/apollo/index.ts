@@ -1,4 +1,4 @@
-import type { ApolloClientOptions, StoreObject } from '@apollo/client/core';
+import { NormalizedCacheObject } from '@apollo/client/cache/inmemory/types';
 import {
   ApolloLink,
   concat,
@@ -7,12 +7,16 @@ import {
   InMemoryCache,
 } from '@apollo/client/core';
 import { Cookies } from 'quasar';
-import { QSsrContext } from '@quasar/app-vite';
-import { NormalizedCacheObject } from '@apollo/client/cache/inmemory/types';
+
 import Env from 'src/env';
+import { ALIAS_COOKIE_NAME } from 'src/flox/modules/alias/services/alias.service';
+
+import type { QSsrContext } from '@quasar/app-vite';
+import type { ApolloClientOptions, StoreObject } from '@apollo/client/core';
 
 /**
  * Sets up auth middleware
+ *
  * @param ssrContext - SSR context
  * @returns the auth middleware
  */
@@ -22,24 +26,28 @@ function getAuthMiddleware(
   return new ApolloLink((operation, forward) => {
     const cookies =
       Env.SERVER && ssrContext ? Cookies.parseSSR(ssrContext) : Cookies;
-    let token = cookies.get('authentication.idToken');
+    const headers: Record<string, string> = {};
+    const token = cookies.get('authentication.idToken');
     if (token) {
       // If token contains quotes, remove them
-      token = token.replace(/"/g, '');
-
-      // Add the authorization to the headers
-      operation.setContext({
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      });
+      const cleanedToken = token.replace(/"/g, '');
+      headers.authorization = `Bearer ${cleanedToken}`;
     }
+    const alias = cookies.get(ALIAS_COOKIE_NAME);
+    if (alias) {
+      headers['user-alias'] = alias;
+    }
+    // Add the authorization to the headers
+    operation.setContext({
+      headers,
+    });
     return forward(operation);
   });
 }
 
 /**
  * ID Builder function for caching
+ *
  * @param responseObject - the object received by apollo
  * @returns a cache key, e.g. 'User:ab12-cd34-xyz' or nothing
  */
@@ -51,6 +59,7 @@ function dataIdFromObject(
   }
 
   const uuid: string | undefined = responseObject.uuid?.toString();
+  // eslint-disable-next-line no-underscore-dangle
   const typename: string | undefined = responseObject.__typename as string;
   let result;
 
@@ -64,10 +73,12 @@ function dataIdFromObject(
     ] as Record<string, string>;
 
     // Cases that we cannot handle (e.g. arrays): use default function
+    // eslint-disable-next-line no-underscore-dangle
     if (!innerObject || !innerObject.__typename || !innerObject.uuid) {
       return defaultDataIdFromObject(responseObject);
     }
 
+    // eslint-disable-next-line no-underscore-dangle
     result = `${innerObject.__typename ?? ''}:${innerObject.uuid ?? ''}`;
   }
   return result;
@@ -75,9 +86,11 @@ function dataIdFromObject(
 
 /**
  * Get Apollo client options
+ *
  * @param ssrContext - quasar ssr context
  * @returns  config options
  */
+// eslint-disable-next-line import/prefer-default-export
 export function getClientOptions(
   ssrContext: QSsrContext | null | undefined
 ): ApolloClientOptions<NormalizedCacheObject> {

@@ -1,26 +1,27 @@
-import { ExtractJwt, Strategy } from 'passport-jwt';
-import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
+import { PassportStrategy } from '@nestjs/passport';
 import { passportJwtSecret } from 'jwks-rsa';
+import { ExtractJwt, Strategy } from 'passport-jwt';
+
 import Env from '../../../env';
 
 /**
  * Validation strategy for JSON web tokens from Cognito
  */
 
-export class JwtStrategyValidationPayload {
+export type JwtStrategyValidationPayload = {
   'cognito:username': string;
   sub: string;
   username: string;
-}
+};
 
-export class JwtStrategyValidationResult {
+export type JwtStrategyValidationResult = {
   userId: string;
   username: string;
-}
+};
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
+export default class JwtStrategy extends PassportStrategy(Strategy) {
   constructor() {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -37,6 +38,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   /**
    * Validates the JWT token and appends the user to the Request
    * Note: This is only triggered once the JWT's validity (from-url and expiration) has been checked successfully!
+   *
    * @param payload - decoded JSON Web Token (JWT)
    * @returns object with Cognito userId and username
    */
@@ -44,7 +46,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const username = payload['cognito:username'];
     return {
       userId: payload.sub,
-      username: username,
+      username,
     } as JwtStrategyValidationResult;
   }
 }

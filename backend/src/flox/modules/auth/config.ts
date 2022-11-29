@@ -1,6 +1,6 @@
 import {
-  mergeConfigurations,
   floxModuleOptions,
+  mergeConfigurations,
 } from '../../core/flox-helpers';
 import { MODULES } from '../../MODULES';
 
@@ -20,6 +20,7 @@ const defaultConfig: AuthModuleConfig = {
 
 /**
  * Gets the module's actual configuration
+ *
  * @returns configuration
  */
 export function moduleConfig(): AuthModuleConfig {
@@ -28,3 +29,4 @@ export function moduleConfig(): AuthModuleConfig {
     floxModuleOptions(MODULES.AUTH),
   ) as AuthModuleConfig;
 }
+export default moduleConfig;

@@ -3,11 +3,12 @@
 </template>
 
 <script setup lang="ts">
-import { EMAIL, USERNAME } from 'src/flox/modules/auth/components/forms/fields';
-import GenericForm from 'components/forms/GenericForm.vue';
-import { showSuccessNotification } from 'src/tools/notification.tool';
 import { useQuasar } from 'quasar';
+
+import GenericForm from 'components/forms/GenericForm.vue';
 import { FormPage } from 'components/forms/MultiPageForm';
+import { EMAIL, USERNAME } from 'src/flox/modules/auth/components/forms/fields';
+import { showSuccessNotification } from 'src/tools/notification.tool';
 
 /**
  * This is a sample form component that uses the GenericForm helper component.
@@ -21,12 +22,13 @@ const pages = [
   {
     key: 'sample',
     label: 'Sample',
-    fields: fields,
+    fields,
   },
 ] as FormPage[];
 
 /**
  * Emits the 'submit' event, containing the form's data
+ *
  * @param formValues - form inputs
  */
 function onSubmit(formValues: Record<string, string>): void {

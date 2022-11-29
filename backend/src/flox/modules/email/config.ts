@@ -21,6 +21,7 @@ const defaultConfig: EmailModuleConfig = {
 
 /**
  * Gets the module's actual configuration
+ *
  * @returns configuration
  */
 export function moduleConfig(): EmailModuleConfig {
@@ -46,3 +47,4 @@ export function moduleConfig(): EmailModuleConfig {
     floxModuleConfig,
   ) as EmailModuleConfig;
 }
+export default moduleConfig;

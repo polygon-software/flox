@@ -23,10 +23,11 @@
 
 <script setup lang="ts">
 import { computed, inject } from 'vue';
-import { AuthenticationService } from 'src/flox/modules/auth/services/auth.service';
-import { RouterService } from 'src/services/RouterService';
-import ROUTES from 'src/router/routes';
+
+import AuthenticationService from 'src/flox/modules/auth/services/auth.service';
 import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
+import ROUTES from 'src/router/routes';
+import RouterService from 'src/services/RouterService';
 
 const $authService: AuthenticationService | undefined = inject('$authService');
 const $routerService: RouterService | undefined = inject('$routerService');
@@ -34,12 +35,13 @@ const $authStore: ReturnType<typeof useAuthStore> = useAuthStore();
 
 const loggedIn = computed(() => {
   // Explicit type
-  const result: boolean = $authStore.getLoggedInStatus;
+  const result: boolean = $authStore.loggedIn;
   return result;
 });
 
 /**
  * Logs out the current authentication
+ *
  * @async
  */
 async function logout(): Promise<void> {

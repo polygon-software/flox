@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
+
 import { Credentials, sendEmail } from './helpers/email-helpers';
 import { moduleConfig } from './config';
 
 @Injectable()
-export class EmailService {
+export default class EmailService {
   /**
    * Sends a test e-mail
+   *
    * @param recipient - e-mail recipient
    * @param credentials - SES auth credentials
    */

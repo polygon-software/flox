@@ -8,8 +8,9 @@
 // Configuration for your app
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js
 
-const { configure } = require('quasar/wrappers');
 const path = require('path');
+
+const { configure } = require('quasar/wrappers');
 const checker = require('vite-plugin-checker').default;
 
 module.exports = configure(function ({ prod }) {
@@ -30,7 +31,7 @@ module.exports = configure(function ({ prod }) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
-    boot: ['auth', 'i18n', 'apollo', 'router'],
+    boot: ['apollo', 'auth', 'i18n', 'router'],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
     css: ['app.scss'],
@@ -42,9 +43,10 @@ module.exports = configure(function ({ prod }) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#build
     build: {
+      transpileDependencies: [],
       target: {
         browser: ['es2019', 'edge88', 'firefox78', 'chrome87', 'safari13.1'],
-        node: 'node16',
+        node: 'node14',
       },
 
       vueRouterMode: 'hash', // available values: "hash", "history"
@@ -74,7 +76,7 @@ module.exports = configure(function ({ prod }) {
       },
 
       vitePlugins: [
-        checker({ typescript: true }),
+        checker({ vueTsc: true }),
         [
           '@intlify/vite-plugin-vue-i18n',
           {
@@ -99,7 +101,7 @@ module.exports = configure(function ({ prod }) {
     framework: {
       config: {},
 
-      // iconSet: "material-icons", // Quasar icon set
+      iconSet: 'material-icons', // Quasar icon set
       // lang: "en-US", // Quasar language pack
 
       // For special cases outside where the auto-import strategy can have an impact

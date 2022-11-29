@@ -1,23 +1,30 @@
 import { join } from 'path';
 
-import { APP_GUARD } from '@nestjs/core';
-import { Module } from '@nestjs/common';
-import { GraphQLModule } from '@nestjs/graphql';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { TerminusModule } from '@nestjs/terminus';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { HttpModule } from '@nestjs/axios';
-import { ThrottlerModule } from '@nestjs/throttler';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-
+import { HttpModule } from '@nestjs/axios';
+import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
+import { GraphQLModule } from '@nestjs/graphql';
+import { TerminusModule } from '@nestjs/terminus';
+import { ThrottlerModule } from '@nestjs/throttler';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import * as Joi from 'joi';
+import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
+import {
+  AcceptLanguageResolver,
+  CookieResolver,
+  I18nModule,
+} from 'nestjs-i18n';
+
+import flox from '../flox.config.json';
 
 import configuration from './config/configuration';
-import { floxModules, floxProviders } from './flox/flox';
-import { HealthcheckController } from './flox/modules/healthcheck/healthcheck.controller';
 import { isServerless } from './flox/core/flox-helpers';
-import { GqlThrottlerGuard } from './flox/modules/GqlThrottlerGuard';
-import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
+import { floxModules, floxProviders } from './flox/flox';
+import GqlThrottlerGuard from './flox/modules/GqlThrottlerGuard';
+import HealthcheckController from './flox/modules/healthcheck/healthcheck.controller';
+import env from './env';
 
 @Module({
   imports: [
@@ -29,7 +36,10 @@ import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConne
         : join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
       driver: ApolloDriver,
-      context: ({ req, res }) => ({ req, res }),
+      context: ({ req, res }: { req: Request; res: Response }) => ({
+        req,
+        res,
+      }),
     }),
     ConfigModule.forRoot({
       isGlobal: true,
@@ -62,13 +72,14 @@ import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConne
       useFactory: (configService: ConfigService) =>
         ({
           type: 'postgres',
-          host: configService.getOrThrow('database.host'),
-          port: configService.getOrThrow('database.port'),
-          username: configService.getOrThrow('database.username'),
-          password: configService.getOrThrow('database.password'),
-          database: configService.getOrThrow('database.database'),
-          entities: [configService.getOrThrow('entities')],
-          synchronize: true,
+          host: configService.getOrThrow<string>('database.host'),
+          port: configService.getOrThrow<number>('database.port'),
+          username: configService.getOrThrow<string>('database.username'),
+          password: configService.getOrThrow<string>('database.password'),
+          database: configService.getOrThrow<string>('database.database'),
+          entities: [configService.getOrThrow<string>('entities')],
+          synchronize: env.DEV,
+          logging: ['query', 'error'],
         } as PostgresConnectionOptions),
       inject: [ConfigService],
     }),
@@ -85,12 +96,24 @@ import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConne
         /'bingbot'/gi,
       ],
     }),
+    I18nModule.forRoot({
+      fallbackLanguage: flox.i18n.defaultLocale,
+      loaderOptions: {
+        path: join(__dirname, '/i18n/'),
+        watch: env.DEV,
+      },
+      resolvers: [
+        { use: CookieResolver, options: 'lang' },
+        AcceptLanguageResolver,
+      ],
+    }),
 
     // Healthcheck modules
     TerminusModule,
     HttpModule,
 
     // Flox modules
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     ...(floxModules() as any[]),
     // Add any custom modules here
   ],
@@ -102,6 +125,7 @@ import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConne
       useClass: GqlThrottlerGuard,
     },
     // Flox module Providers
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     ...floxProviders(),
     // Add any other custom module providers here
   ],
@@ -110,4 +134,4 @@ import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConne
 /**
  * Main Module
  */
-export class AppModule {}
+export default class AppModule {}

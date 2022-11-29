@@ -1,20 +1,32 @@
-import { BaseEntity } from 'src/flox/core/base-entity/entities/BaseEntity';
+import { IsInt, IsOptional, IsString } from 'class-validator';
+
+import BaseEntity from 'src/flox/core/base-entity/entities/BaseEntity';
 
 /**
  * A class representing a file
  */
-export class FileEntity extends BaseEntity {
-  // eslint-disable-next-line require-jsdoc
-  constructor(
-    uuid: string,
-    createdAt: Date,
-    updatedAt: Date,
-    deletedAt: Date | null,
-    public key: string,
-    public mimetype: string,
-    public filename: string | null,
-    public size: number
-  ) {
-    super(uuid, createdAt, updatedAt, deletedAt);
-  }
+export default class FileEntity extends BaseEntity {
+  @IsOptional()
+  @IsString()
+  mimetype?: string;
+
+  @IsOptional()
+  @IsString()
+  filename?: string;
+
+  @IsOptional()
+  @IsString()
+  path?: string;
+
+  @IsOptional()
+  @IsString()
+  signedUrl?: string;
+
+  @IsOptional()
+  @IsString()
+  url?: string;
+
+  @IsOptional()
+  @IsInt()
+  size?: number;
 }
