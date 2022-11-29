@@ -112,4 +112,10 @@ export default {
   get DEV(): boolean {
     return asBoolean(process.env.DEV);
   },
+  /**
+   * @returns base url of frontend
+   */
+  get BASE_URL(): string {
+    return asString(process.env.BASE_URL);
+  },
 };

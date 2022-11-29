@@ -3,6 +3,7 @@ import {
   mergeConfigurations,
 } from '../../core/flox-helpers';
 import { MODULES } from '../../MODULES';
+import Env from '../../../env';
 
 /**
  * The file module handles file up/download using a database tables each for private and public files, as well as storing
@@ -22,12 +23,12 @@ const defaultConfig: EmailModuleConfig = {
  * Gets the module's actual configuration
  * @returns configuration
  */
-export function moduleConfig() {
-  if (!process.env.BASE_URL) {
-    throw Error('Required env variable BASE_URL is missing');
+export function moduleConfig(): EmailModuleConfig {
+  if (!Env.BASE_URL || !Env.BASE_URL.includes('//')) {
+    throw Error('Required env variable BASE_URL is missing or malformed');
   }
   // The domain the emails are sent from
-  const domain = process.env.BASE_URL.split('//')[1];
+  const domain = Env.BASE_URL.split('//')[1];
   const correctedDefaultEmail = `${defaultConfig.emailSender}@${domain}`;
   const correctedDefaultConfig = {
     ...defaultConfig,
