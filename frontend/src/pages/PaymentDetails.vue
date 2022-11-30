@@ -1,6 +1,6 @@
 <template>
   <h4>
-    Payment
+    {{ $t('payment.payment_details') }}
     <PaymentStateBadge :status="payment?.status" />
   </h4>
   <q-table
@@ -26,7 +26,8 @@ import PaymentEntity from 'src/flox/modules/payment/entities/payment.enttity';
 import { getPayment } from 'src/flox/modules/payment/services/payment.service';
 import RouterService from 'src/services/RouterService';
 import { formatCurrency } from 'src/format/currency.format';
-import PaymentStateBadge from 'src/flox/modules/payment/components/PaymentStateBadge.vue';
+import PaymentStateBadge from 'src/flox/modules/payment/components/PaymentStatusBadge.vue';
+import { i18n } from 'boot/i18n';
 
 const $routerService: RouterService | undefined = inject('$routerService');
 
@@ -44,11 +45,23 @@ const amountStr: ComputedRef<string> = computed(() => {
 const rows: ComputedRef<Record<string, any>[]> = computed(() => {
   const created = new Date(payment.value?.createdAt ?? 0);
   return [
-    { name: 'Date', value: format(created, 'dd.MM.yyyy') },
-    { name: 'Amount', value: amountStr.value },
-    { name: 'Currency', value: payment.value?.currency?.toUpperCase() },
-    { name: 'Description', value: payment.value?.description },
-    { name: 'E-Mail', value: payment.value?.buyer?.email },
+    {
+      name: i18n.global.t('payment.payment_date'),
+      value: format(created, 'dd.MM.yyyy'),
+    },
+    { name: i18n.global.t('payment.amount'), value: amountStr.value },
+    {
+      name: i18n.global.t('payment.currency'),
+      value: payment.value?.currency?.toUpperCase(),
+    },
+    {
+      name: i18n.global.t('payment.product'),
+      value: payment.value?.description,
+    },
+    {
+      name: i18n.global.t('payment.buyer'),
+      value: payment.value?.buyer?.email,
+    },
   ].filter((r) => r.value);
 });
 

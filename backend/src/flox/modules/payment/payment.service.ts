@@ -111,7 +111,7 @@ export default class PaymentService extends AbstractSearchService<Payment> {
       customer = await this.createCustomer(buyer);
     }
     const intent = await this.stripe.paymentIntents.create({
-      amount: amount * 100,
+      amount: amount * 100, // Stripe accepts the minimum divisiable currency unit. Hence, cents, not dollars etc.
       currency,
       description,
       customer: customer.id,

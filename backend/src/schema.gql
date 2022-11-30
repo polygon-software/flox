@@ -344,7 +344,7 @@ input NotifyUsersInput {
 }
 
 type Payment {
-  """Amount payed in this transaction"""
+  """Amount paid in this transaction"""
   amount: Float!
 
   """Author of this article"""
@@ -382,7 +382,7 @@ type Payment {
 }
 
 type PaymentIntentOutput {
-  """Amount payed in this transaction"""
+  """Amount paid in this transaction"""
   amount: Float!
 
   """transaction currency"""

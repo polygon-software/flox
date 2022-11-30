@@ -126,6 +126,9 @@ export default {
   payment: {
     payment: 'Payment',
     payments: 'Payments',
+    payment_details: 'Payment details',
+    payment_date: 'Date',
+    currency: 'Currency',
     test_payment: 'Do Test payment',
     pay: 'Pay',
     pay_amount: 'Pay ({amount})',

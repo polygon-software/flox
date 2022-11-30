@@ -80,7 +80,7 @@ import { SEARCH_PAYMENT } from 'src/flox/modules/payment/payment.query';
 import { ColumnAlign, ColumnInterface } from 'components/tables/useDataTable';
 import { avatarForUser } from 'src/flox/modules/auth/services/user.service';
 import { formatCurrency } from 'src/format/currency.format';
-import PaymentStateBadge from 'src/flox/modules/payment/components/PaymentStateBadge.vue';
+import PaymentStateBadge from 'src/flox/modules/payment/components/PaymentStatusBadge.vue';
 import { i18n } from 'boot/i18n';
 
 const payment: Ref<PaymentEntity | null> = ref(null);

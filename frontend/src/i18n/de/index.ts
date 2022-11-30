@@ -129,6 +129,9 @@ export default {
   payment: {
     payment: 'Bezahlung',
     payments: 'Bezahlungen',
+    payment_details: 'Details zur Bezahlung',
+    payment_date: 'Datum',
+    currency: 'Währung',
     test_payment: 'Testzahlung tätigen',
     pay: 'Bezahlen',
     pay_amount: 'Bezahlen ({amount})',

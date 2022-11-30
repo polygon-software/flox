@@ -58,7 +58,7 @@ export default class Payment extends BaseEntity {
   description: string;
 
   @Field(() => Float, {
-    description: 'Amount payed in this transaction',
+    description: 'Amount paid in this transaction',
   })
   @Column()
   @IsNumber()

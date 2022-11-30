@@ -2,6 +2,7 @@ import {
   IsCurrency,
   IsNotEmpty,
   IsNumber,
+  IsObject,
   IsOptional,
   IsString,
   MaxLength,
@@ -12,6 +13,8 @@ import {
 import BaseEntity from 'src/flox/core/base-entity/entities/BaseEntity';
 import UserEntity from 'src/flox/modules/auth/entities/user.entity';
 
+import type { PaymentIntent } from '@stripe/stripe-js/types/api/payment-intents';
+
 export default class PaymentEntity extends BaseEntity {
   @IsString()
   @MinLength(6)
@@ -21,7 +24,7 @@ export default class PaymentEntity extends BaseEntity {
 
   @IsOptional()
   @IsString()
-  status?: string;
+  status?: PaymentIntent.Status;
 
   @IsOptional()
   @IsString()
@@ -40,5 +43,6 @@ export default class PaymentEntity extends BaseEntity {
   currency?: string;
 
   @IsOptional()
+  @IsObject()
   buyer?: UserEntity;
 }

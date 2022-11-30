@@ -5,7 +5,7 @@ import {
 import { MODULES } from '../../MODULES';
 
 /**
- * The article module is handles stripe payments.
+ * The Payment module handles stripe payments.
  */
 
 type PaymentModuleConfig = {

@@ -40,7 +40,7 @@ export default class PaymentIntentOutput {
   status: Stripe.PaymentIntent.Status;
 
   @Field(() => Float, {
-    description: 'Amount payed in this transaction',
+    description: 'Amount paid in this transaction',
   })
   @IsNumber()
   @Min(0)

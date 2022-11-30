@@ -40,10 +40,10 @@ export async function createTestPayment(): Promise<PaymentEntity | null> {
  * @returns search results
  */
 export async function searchPayment(
-  take: number,
-  skip: number,
-  filter: string,
-  sortBy: string,
+  take = 10,
+  skip = 0,
+  filter = '',
+  sortBy = 'uuid',
   descending = false
 ): Promise<CountQuery<PaymentEntity>> {
   const { data } = await executeQuery<CountQuery<PaymentEntity>>(

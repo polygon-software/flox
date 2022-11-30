@@ -33,6 +33,10 @@
                 )
               : get(cellProps.row, cellProps.col.field)
           }}
+          <!--
+          If the column field path contains a dot, it is a property of a nested object
+          and should / can hence not be edited directly.
+          -->
           <QPopupEdit
             v-if="
               cellProps.col.edit &&
