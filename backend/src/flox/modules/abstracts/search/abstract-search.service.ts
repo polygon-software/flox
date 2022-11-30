@@ -5,6 +5,7 @@ import {
   Like,
   Repository,
 } from 'typeorm';
+import { isNumber } from 'lodash';
 
 import BaseEntity from '../../../core/base-entity/entities/base-entity.entity';
 import AbstractCrudService from '../crud/abstract-crud.service';
