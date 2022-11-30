@@ -103,6 +103,16 @@ export default class RouterService {
   }
 
   /**
+   * Returns the requested path parameter.
+   *
+   * @param key - parameter name
+   * @returns key - requested parameter
+   */
+  getUrlParam(key: string): string | null {
+    return (this.route.params[key] as string) ?? null;
+  }
+
+  /**
    * Removes the last URL part
    *
    * @returns the navigation result.

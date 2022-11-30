@@ -115,4 +115,10 @@ export default {
   get DEV(): boolean {
     return asBoolean(process.env.DEV);
   },
+  /**
+   * @returns stripe secret key used to create payment intents
+   */
+  get STRIPE_SECRET_KEY(): string {
+    return asString(process.env.STRIPE_SECRET_KEY);
+  },
 };

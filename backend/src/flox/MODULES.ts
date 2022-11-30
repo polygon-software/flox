@@ -8,4 +8,5 @@ export enum MODULES {
   SHARING = 'sharing',
   EMAIL = 'email',
   NOTIFICATION = 'notification',
+  PAYMENT = 'payment',
 }

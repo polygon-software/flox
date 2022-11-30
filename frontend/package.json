@@ -36,6 +36,7 @@
     "@graphql-tools/import": "^6.7.7",
     "@quasar/app": "^3.3.3",
     "@quasar/extras": "^1.15.5",
+    "@stripe/stripe-js": "^1.44.1",
     "@vue/apollo-composable": "^4.0.0-beta.1",
     "@vue/test-utils": "^2.1.0",
     "@vue/vue3-jest": "^29.2.0",

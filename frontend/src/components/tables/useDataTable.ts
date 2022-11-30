@@ -1,5 +1,6 @@
 import cloneDeep from 'lodash/cloneDeep';
 import set from 'lodash/set';
+import get from 'lodash/get';
 import { exportFile, QInputProps, useQuasar } from 'quasar';
 import { computed, ComputedRef, nextTick, Ref, ref, toRaw, watch } from 'vue';
 
@@ -74,10 +75,10 @@ export interface ColumnInterface<T = any> {
  */
 export function useDataTable<T extends BaseEntity>(
   queryObject: QueryObject,
-  updateObject: MutationObject,
-  deletionObject: MutationObject,
-  sortBy = 'uuid',
-  descending = false,
+  updateObject?: MutationObject,
+  deletionObject?: MutationObject,
+  sortBy = 'createdAt',
+  descending = true,
   rowsPerPage = 10,
   multi = false
 ): {
@@ -239,7 +240,7 @@ export function useDataTable<T extends BaseEntity>(
                 const colHasField = col.field === void 0;
                 const colKey: string = colHasField ? col.name : col.field;
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                fieldVal = (row as Record<string, any>)[colKey];
+                fieldVal = get(row, colKey);
               }
               return wrapCsvValue(fieldVal, col.format, row);
             })
@@ -327,6 +328,9 @@ export function useDataTable<T extends BaseEntity>(
    * @param value - new value at key location
    */
   async function updateRow(row: T, path: keyof T, value: any): Promise<void> {
+    if (!updateObject) {
+      throw new Error('Unable to update row - update query not provided');
+    }
     const correctRowIndex = rows.value.findIndex((r) => row.uuid === r.uuid);
     if (correctRowIndex > -1) {
       const rawRow = toRaw(rows.value[correctRowIndex]);
@@ -363,6 +367,9 @@ export function useDataTable<T extends BaseEntity>(
   function deleteActiveRows(): Promise<
     PromiseSettledResult<Awaited<T> | void | null | undefined>[]
   > {
+    if (!deletionObject) {
+      throw new Error('Unable to delete row - delete query not provided');
+    }
     const deletionUuids = selected.value.map((val) => val.uuid);
     const deletionRequests = selected.value.map((selectedRow: T) => {
       return executeMutation<T>(

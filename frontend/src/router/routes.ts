@@ -42,6 +42,20 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/FilesPage.vue') }],
   },
 
+  PAYMENT: {
+    path: '/payment',
+    component: () => import('layouts/DashboardLayout.vue'),
+    children: [{ path: '', component: () => import('pages/PaymentPage.vue') }],
+  },
+
+  PAYMENT_DETAILS: {
+    path: '/payment/:uuid',
+    component: () => import('layouts/DashboardLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/PaymentDetails.vue') },
+    ],
+  },
+
   ACCESS_CONTROL: {
     path: '/access-control',
     component: () => import('layouts/DashboardLayout.vue'),

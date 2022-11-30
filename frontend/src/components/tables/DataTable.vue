@@ -25,9 +25,24 @@
       </template>
       <template #body-cell="cellProps">
         <q-td :props="cellProps">
-          {{ cellProps.row[cellProps.col.field] }}
+          {{
+            cellProps.col.format
+              ? cellProps.col.format(
+                  get(cellProps.row, cellProps.col.field),
+                  cellProps.row
+                )
+              : get(cellProps.row, cellProps.col.field)
+          }}
+          <!--
+          If the column field path contains a dot, it is a property of a nested object
+          and should / can hence not be edited directly.
+          -->
           <QPopupEdit
-            v-if="cellProps.col.edit"
+            v-if="
+              cellProps.col.edit &&
+              updateMutation &&
+              !cellProps.col.field.includes('.')
+            "
             :ref="
               (el: any) => {
                 popupRefs[getPopupEditKey(cellProps.row, cellProps.col)] = el;
@@ -140,7 +155,7 @@
             @click="exportTable"
           />
           <ConfirmButton
-            v-if="selected.length > 0 && deleteSelection"
+            v-if="selected.length > 0 && deleteSelection && deleteMutation"
             :label="removeLabel"
             :confirm-label="$t('general.confirm')"
             :button-props="{
@@ -169,6 +184,7 @@ import {
   watch,
   watchEffect,
 } from 'vue';
+import get from 'lodash/get';
 
 import {
   ColumnAlign,
@@ -184,8 +200,8 @@ import { ValidationRule } from 'src/tools/validation.tool';
 const props = withDefaults(
   defineProps<{
     query: QueryObject;
-    updateMutation: MutationObject;
-    deleteMutation: MutationObject;
+    updateMutation?: MutationObject;
+    deleteMutation?: MutationObject;
     columns: ColumnInterface<BaseEntity>[];
     tableProps?: QTableProps;
     title?: string;
@@ -203,6 +219,8 @@ const props = withDefaults(
     removeLabel?: string;
   }>(),
   {
+    updateMutation: undefined,
+    deleteMutation: undefined,
     title: undefined,
     exportSelection: false,
     deleteSelection: false,

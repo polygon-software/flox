@@ -6,7 +6,8 @@
     "image": true,
     "sharing": false,
     "email": false,
-    "notification": true
+    "notification": true,
+    "payment": true
   },
   "moduleOptions": {
     "auth": {
@@ -23,7 +24,8 @@
     "email": {
       "email_sender": "test@polygon-project.ch"
     },
-    "notification": {}
+    "notification": {},
+    "payment": {}
   },
   "i18n": {
     "defaultLocale": "en",
