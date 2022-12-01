@@ -12,6 +12,7 @@ import { FILE_QUERIES } from 'src/flox/modules/file/file.query';
 import { IMAGE_QUERIES } from 'src/flox/modules/image/image.query';
 import { ACCESS_CONTROL_QUERIES } from 'src/flox/modules/access-control/access-control.query';
 import { NOTIFICATION_QUERIES } from 'src/flox/modules/notification/notification.query';
+import { PAYMENT_QUERIES } from 'src/flox/modules/payment/payment.query';
 
 // Queries for all modules
 export default [
@@ -20,4 +21,5 @@ export default [
   ...IMAGE_QUERIES,
   ...ACCESS_CONTROL_QUERIES,
   ...NOTIFICATION_QUERIES,
+  ...PAYMENT_QUERIES,
 ] as QueryObject[];

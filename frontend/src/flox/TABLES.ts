@@ -6,5 +6,6 @@ export enum TABLES {
   USER = 'USER',
   USER_GROUP = 'USER_GROUP',
   NOTIFICATION = 'NOTIFICATION',
+  PAYMENT = 'PAYMENT',
 }
 export const ALL_TABLES = Object.values(TABLES);

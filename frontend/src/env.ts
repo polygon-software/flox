@@ -112,7 +112,14 @@ export default {
   /**
    * @returns quasar mode: dev, spa, pwa, ssr etc.
    */
-  get MODE(): 'pwa' | 'ssr' | 'bex' | 'cordova' | 'capacitor' | 'electron' {
+  get MODE():
+    | 'spa'
+    | 'pwa'
+    | 'ssr'
+    | 'bex'
+    | 'cordova'
+    | 'capacitor'
+    | 'electron' {
     return asOneOf<string>(asString(process.env.MODE), [
       'spa',
       'pwa',
@@ -167,5 +174,11 @@ export default {
    */
   get SERVER(): boolean {
     return asBoolean(process.env.SERVER);
+  },
+  /**
+   * @returns stripe public key used to accept payment intents
+   */
+  get STRIPE_PUBLIC_KEY(): string {
+    return asString(process.env.STRIPE_PUBLIC_KEY);
   },
 };

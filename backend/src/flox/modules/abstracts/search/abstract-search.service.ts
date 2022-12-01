@@ -25,15 +25,22 @@ export default abstract class AbstractSearchService<
    * @returns where options including Like-searches
    */
   private nestedSearch(
-    searchKeys: (keyof Entity)[],
+    searchKeys: (keyof Entity | string)[],
     filter: string,
   ): FindOptionsWhere<Entity>[] {
-    return searchKeys.map(
-      (key) =>
-        ({
-          [key]: Like(`%${filter}%`),
-        } as FindOptionsWhere<Entity>),
-    );
+    return searchKeys.map((key) => {
+      if ((key as string).includes('.')) {
+        const [entity, value] = (key as string).split('.');
+        return {
+          [entity]: {
+            [value]: Like(`%${filter}%`),
+          },
+        } as FindOptionsWhere<Entity>;
+      }
+      return {
+        [key]: Like(`%${filter}%`),
+      } as FindOptionsWhere<Entity>;
+    });
   }
 
   /**
@@ -46,7 +53,7 @@ export default abstract class AbstractSearchService<
    */
   async search(
     searchQueryArgs: SearchArgs,
-    searchKeys: (keyof Entity)[],
+    searchKeys: (keyof Entity | string)[],
     options?: FindOneOptions<Entity>,
   ): Promise<SearchQueryOutputInterface<Entity>> {
     const [data, count] = await this.repository.findAndCount({

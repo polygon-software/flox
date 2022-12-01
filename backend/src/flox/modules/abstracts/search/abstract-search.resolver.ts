@@ -13,7 +13,7 @@ export default abstract class AbstractSearchResolver<
 > extends AbstractCrudResolver<Entity, Service> {
   abstract get service(): Service;
 
-  protected constructor(private searchKeys: (keyof Entity)[]) {
+  protected constructor(private searchKeys: (keyof Entity | string)[]) {
     super();
   }
 
