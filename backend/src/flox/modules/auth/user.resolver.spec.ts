@@ -14,24 +14,52 @@ describe('UserResolver', () => {
   let userService: UserService;
   let userResolver: UserResolver;
   let userRepository: MockType<Repository<User>>;
+  let user: User;
+  let input: CreateUserInput;
 
   beforeEach(async () => {
+    input = {
+      username: 'Test User',
+      email: 'test@test.com',
+      cognitoUuid: '1234-abcd-4567',
+      lang: 'en',
+      role: DefaultRoles.ADMIN,
+    };
+
+    const date = new Date();
+    user = {
+      uuid: 'test-UUID-1234',
+      createdAt: date,
+      validateRole: jest.fn(),
+      validateLang: jest.fn(),
+      groups: [],
+      ...input,
+    };
     const module: TestingModule = await Test.createTestingModule({
+      controllers: [UserResolver],
       providers: [
-        UserService,
         // Provide your mock instead of the actual repository
         {
           provide: getRepositoryToken(User),
           useFactory: repositoryMockFactory,
         },
       ],
-    }).compile();
-    userService = module.get<UserService>(UserService);
+    })
+      // eslint-disable-next-line consistent-return
+      .useMocker((token) => {
+        if (token === UserService) {
+          return { create: jest.fn().mockResolvedValue(user) };
+        }
+      })
+      .compile();
+
+    userService = module.get(UserService);
+    userResolver = module.get(UserResolver);
     userRepository = module.get(getRepositoryToken(User));
-    userResolver = new UserResolver(userService);
   });
 
   it('repository should be defined', () => {
+    expect(userRepository).not.toBeNull();
     expect(userRepository).toBeDefined();
   });
 
@@ -44,29 +72,6 @@ describe('UserResolver', () => {
   });
 
   it('should create a user', async () => {
-    const input: CreateUserInput = {
-      username: 'Test User',
-      email: 'test@test.com',
-      cognitoUuid: '1234-abcd-4567',
-      lang: 'en',
-      role: DefaultRoles.ADMIN,
-    };
-
-    const date = new Date();
-
-    const user: User = {
-      uuid: 'test-UUID-1234',
-      createdAt: date,
-      updatedAt: date,
-      validateRole: jest.fn(),
-      validateLang: jest.fn(),
-      groups: [],
-      ...input,
-    };
-
-    // eslint-disable-next-line @typescript-eslint/require-await
-    jest.spyOn(userService, 'create').mockImplementation(async () => user);
-
     // Create user
     expect(await userResolver.createUser(input)).toBe(user);
   });
