@@ -48,7 +48,10 @@ describe('UserResolver', () => {
       // eslint-disable-next-line consistent-return
       .useMocker((token) => {
         if (token === UserService) {
-          return { create: jest.fn().mockResolvedValue(user) };
+          return {
+            create: jest.fn().mockResolvedValue(user),
+            getAll: jest.fn().mockResolvedValue([user]),
+          };
         }
       })
       .compile();
@@ -73,6 +76,13 @@ describe('UserResolver', () => {
 
   it('should create a user', async () => {
     // Create user
-    expect(await userResolver.createUser(input)).toBe(user);
+    expect(await userResolver.createUser(input)).toEqual(user);
+  });
+
+  it('should get all users', async () => {
+    // Get all users
+    expect(await userResolver.getAllUsers({ take: 100, skip: 0 })).toEqual([
+      user,
+    ]);
   });
 });
