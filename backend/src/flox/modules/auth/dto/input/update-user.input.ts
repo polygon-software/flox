@@ -23,7 +23,7 @@ export default class UpdateUserInput extends UpdateInput {
   @IsString()
   @MinLength(6)
   @MaxLength(50)
-  username: string;
+  username?: string;
 
   @Field(() => String, { nullable: true })
   @IsOptional()
@@ -32,11 +32,11 @@ export default class UpdateUserInput extends UpdateInput {
   @MaxLength(2)
   @IsLowercase()
   @IsLocale()
-  lang: string;
+  lang?: string;
 
   @Field(() => String, { nullable: true })
   @IsOptional()
   @IsString()
   @IsEmail()
-  email: string;
+  email?: string;
 }
