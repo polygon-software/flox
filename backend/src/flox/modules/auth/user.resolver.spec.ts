@@ -89,12 +89,21 @@ describe('UserResolver', () => {
     expect(userResolver.service).toBe(userService);
   });
 
-  it('should create a user', async () => {
+  it('should call create() in service', async () => {
     // Create user
     expect(await userResolver.createUser(input)).toEqual(user);
   });
 
-  it('should search a user', async () => {
+  it('should call delete() in service', async () => {
+    // Delete user
+    expect(
+      await userResolver.deleteUser({
+        uuid: 'a2ec1728-da5c-4058-ab05-d2bc924c86c1',
+      }),
+    ).toEqual(user);
+  });
+
+  it('should call search() in service ', async () => {
     // Search user
     expect(
       await userResolver.searchUsers({
@@ -107,12 +116,12 @@ describe('UserResolver', () => {
     ).toEqual({ count: 1, data: [user] });
   });
 
-  it('should get my user', async () => {
+  it('should call getMyUser() in service', async () => {
     // Get my users
     expect(await userResolver.myUser(user)).toEqual(user);
   });
 
-  it('should get a user', async () => {
+  it('should call getUser() in service', async () => {
     // Get a user
     expect(
       await userResolver.getUser({
@@ -122,14 +131,14 @@ describe('UserResolver', () => {
     ).toEqual(user);
   });
 
-  it('should get all users', async () => {
+  it('should call getAll() in service', async () => {
     // Get all users
     expect(await userResolver.getAllUsers({ take: 100, skip: 0 })).toEqual([
       user,
     ]);
   });
 
-  it('should get multiple users', async () => {
+  it('should getMultiple() in service', async () => {
     // Get multiple users
     expect(
       await userResolver.getMultipleUsers({
