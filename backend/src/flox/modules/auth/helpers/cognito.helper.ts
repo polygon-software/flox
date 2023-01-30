@@ -2,6 +2,11 @@ import { randomInt } from 'crypto';
 
 import {
   AdminCreateUserCommand,
+  AdminDeleteUserCommand,
+  AdminDeleteUserCommandOutput,
+  AdminDisableUserCommand,
+  AdminDisableUserCommandOutput,
+  AdminGetUserCommand,
   AdminUpdateUserAttributesCommand,
   CognitoIdentityProviderClient,
 } from '@aws-sdk/client-cognito-identity-provider';
@@ -29,8 +34,8 @@ function randomNumber(min: number, max: number): number {
 /**
  * Generates a random password that is valid for AWS Cognito of at least the given length
  *
- * @param {number} minLength - min length
- * @returns {string} - a random string
+ * @param minLength - min length
+ * @returns a random string
  */
 export function randomPassword(minLength: number): string {
   const charsLower = 'abcdefghijklmnopqrstuvwxyz';
@@ -56,14 +61,14 @@ export function randomPassword(minLength: number): string {
 /**
  * Create a new Cognito Account with the given email address and password.
  *
- * @param {string} email - The email of the new user
- * @param {string|null} password - Initial Password if needed
- * @returns {Promise<Record<string, string>>} - Cognito ID
+ * @param email - The email of the new user
+ * @param password - Initial Password if needed
+ * @returns Cognito ID
  */
 export async function createCognitoAccount(
   email: string,
   password = null,
-): Promise<Record<string, string>> {
+): Promise<{ cognitoUuid: string; password: string }> {
   const pw = password || randomPassword(8);
   const params = {
     UserPoolId: process.env.USER_POOL_ID,
@@ -80,7 +85,7 @@ export async function createCognitoAccount(
   const createUserCommand = new AdminCreateUserCommand(params);
   const resp = await provider.send(createUserCommand);
 
-  // Verfiy e-mail address
+  // Mark e-mail address as verified
   const updateUserAttributesCommand = new AdminUpdateUserAttributesCommand({
     UserPoolId: process.env.USER_POOL_ID,
     Username: email,
@@ -89,7 +94,7 @@ export async function createCognitoAccount(
   await provider.send(updateUserAttributesCommand);
 
   return {
-    cognitoId: resp.User.Username,
+    cognitoUuid: resp.User.Username,
     password: pw,
   };
 }
@@ -97,55 +102,40 @@ export async function createCognitoAccount(
 /**
  * Disables (locks) a cognito account by email
  *
- * @param {string} email - The account's email
- * @returns {Promise<void>} - done
+ * @param email - The account's email
+ * @returns command output
  */
-export async function disableCognitoAccount(email: string): Promise<void> {
-  // Request parameters
-  const params = {
+export function disableCognitoAccount(
+  email: string,
+): Promise<AdminDisableUserCommandOutput> {
+  const disableUserCommand = new AdminDisableUserCommand({
     UserPoolId: process.env.USER_POOL_ID ?? '',
     Username: email,
-  };
-
-  return provider.adminDisableUser(params, handleOperation);
+  });
+  return provider.send(disableUserCommand);
 }
 
 /**
  * Deletes a cognito account by email
  *
- * @param {string} email - The account's email
- * @returns {Promise<void>} - done
+ * @param email - The account's email
+ * @returns command output
  */
-export async function deleteCognitoAccount(email: string): Promise<void> {
-  // Request parameters
-  const params = {
+export function deleteCognitoAccount(
+  email: string,
+): Promise<AdminDeleteUserCommandOutput> {
+  const deleteUserCommand = new AdminDeleteUserCommand({
     UserPoolId: process.env.USER_POOL_ID ?? '',
     Username: email,
-  };
-
-  return provider.adminDeleteUser(params, handleOperation);
-}
-
-/**
- * Handles Cognito operation
- *
- * @param {Error|undefined} err - errors that occurred
- * @param {unknown|undefined} data - output data
- * @returns {void|unknown} - data, if any
- */
-function handleOperation(err: Error | undefined, data: unknown | undefined) {
-  if (err) {
-    console.error('Cognito error occurred:', err, data);
-    throw err;
-  }
-  return data;
+  });
+  return provider.send(deleteUserCommand);
 }
 
 /**
  * Checks whether a Cognito account exists for a given e-mail
  *
- * @param {string} email - The email of the new user
- * @returns {Promise<boolean>} - whether the user already exists
+ * @param email - The email of the new user
+ * @returns whether the user already exists
  */
 export async function checkIfUserExists(email: string): Promise<boolean> {
   // Request parameters
@@ -154,14 +144,8 @@ export async function checkIfUserExists(email: string): Promise<boolean> {
     Username: email,
   };
 
-  const existingUser = await new Promise((resolve) => {
-    provider.adminGetUser(params, function (err) {
-      if (err) {
-        resolve(false);
-      }
-      resolve(true);
-    });
-  });
+  const getUserCommand = new AdminGetUserCommand(parmas);
+  const result = await provider.send(getUserCommand);
 
-  return !!existingUser;
+  return !!result.Username;
 }
