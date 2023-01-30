@@ -6,6 +6,7 @@ import DeleteInput from '../abstracts/crud/inputs/delete.input';
 import AbstractSearchResolver from '../abstracts/search/abstract-search.resolver';
 import SearchArgs from '../abstracts/search/dto/args/search.args';
 import { AdminOnly, CurrentUser } from '../roles/authorization.decorator';
+import UpdateInput from '../abstracts/crud/inputs/update.input';
 
 import GetUserArgs from './dto/args/get-user.args';
 import CreateUserInput from './dto/input/create-user.input';
@@ -145,5 +146,19 @@ export default class UserResolver extends AbstractSearchResolver<
     @Args('deleteUserInput') deleteInput: DeleteInput,
   ): Promise<User> {
     return super.delete(deleteInput);
+  }
+
+  /**
+   * Disables a given user's account
+   *
+   * @param disableInput - contains UUID
+   * @returns the disabled user
+   */
+  @AdminOnly()
+  @Mutation(() => User, { name: 'DisableUser' })
+  async disableUser(
+    @Args('disableUserInput') disableInput: UpdateInput,
+  ): Promise<User> {
+    return this.userService.disableUser(disableInput);
   }
 }

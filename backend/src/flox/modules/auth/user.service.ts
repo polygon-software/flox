@@ -3,9 +3,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import AbstractSearchService from '../abstracts/search/abstract-search.service';
+import UpdateInput from '../abstracts/crud/inputs/update.input';
 
 import User from './entities/user.entity';
-import CreateUserInput from './dto/input/create-user.input';
+import {
+  disableCognitoAccount,
+  enableCognitoAccount,
+} from './helpers/cognito.helper';
 
 @Injectable()
 export default class UserService extends AbstractSearchService<User> {
@@ -69,5 +73,43 @@ export default class UserService extends AbstractSearchService<User> {
         uuid: user.uuid,
       },
     });
+  }
+
+  /**
+   * Disables a given user's account by UUID (user UUID, not cognito UUID)
+   *
+   * @param disableInput - contains UUID
+   * @returns user
+   */
+  async disableUser(disableInput: UpdateInput): Promise<User> {
+    const user = await this.userRepository.findOneOrFail({
+      where: {
+        uuid: disableInput.uuid,
+      },
+    });
+
+    // Disable on cognito
+    await disableCognitoAccount(user.email);
+
+    return user;
+  }
+
+  /**
+   * Re-enables a given user's account by UUID (user UUID, not cognito UUID)
+   *
+   * @param enableInput - contains UUID
+   * @returns user
+   */
+  async enableUser(enableInput: UpdateInput): Promise<User> {
+    const user = await this.userRepository.findOneOrFail({
+      where: {
+        uuid: enableInput.uuid,
+      },
+    });
+
+    // Enable on cognito
+    await enableCognitoAccount(user.email);
+
+    return user;
   }
 }

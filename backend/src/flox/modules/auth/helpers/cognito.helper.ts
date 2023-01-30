@@ -6,6 +6,8 @@ import {
   AdminDeleteUserCommandOutput,
   AdminDisableUserCommand,
   AdminDisableUserCommandOutput,
+  AdminEnableUserCommand,
+  AdminEnableUserCommandOutput,
   AdminGetUserCommand,
   AdminUpdateUserAttributesCommand,
   CognitoIdentityProviderClient,
@@ -122,6 +124,22 @@ export function disableCognitoAccount(
     Username: email,
   });
   return provider.send(disableUserCommand);
+}
+
+/**
+ * Re-enables (unlocks) a cognito account by email
+ *
+ * @param email - The account's email
+ * @returns command output
+ */
+export function enableCognitoAccount(
+  email: string,
+): Promise<AdminEnableUserCommandOutput> {
+  const enableUserCommand = new AdminEnableUserCommand({
+    UserPoolId: process.env.USER_POOL_ID ?? '',
+    Username: email,
+  });
+  return provider.send(enableUserCommand);
 }
 
 /**
