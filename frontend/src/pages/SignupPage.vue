@@ -1,18 +1,12 @@
 <template>
   <div class="blurred-background"></div>
   <q-page class="flex flex-center column bg-gradient">
-    <!-- Login Card -->
-    <q-card class="login-container" flat>
-      <div class="row" style="height: 100%; align-items: stretch">
-        <div class="col-7 color-container gt-sm">
-          <!-- https://undraw.co/search make sure to change color on webpage to primary -->
-          <img
-            src="../assets/images/undraw_working_re_ddwy.svg"
-            alt="welcome graphics"
-          />
-          <h4>{{ $t('authentication.welcome_back') }}</h4>
-          <p>{{ $t('authentication.welcome_text') }}</p>
-        </div>
+    <!-- Signup Form Card -->
+    <q-card class="signup-container" flat>
+      <div
+        class="row justify-center"
+        style="height: 100%; align-items: stretch"
+      >
         <div class="col-12 col-md-5 form-container q-px-lg">
           <SignupForm @submit="onSignup" @cancel="onCancel" />
         </div>
@@ -98,7 +92,7 @@ async function onCancel(): Promise<void> {
     rgba(194, 237, 206, 0.5)
   );
 }
-.login-container {
+.signup-container {
   width: 800px;
   max-width: calc(100% - 20px);
   height: 500px;
