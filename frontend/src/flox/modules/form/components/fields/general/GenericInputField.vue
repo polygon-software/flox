@@ -165,10 +165,16 @@ watch(
  * Properties to pass on to input field (all except some)
  */
 const inputProps = computed(() => {
-  const propsClone = cloneDeep(props);
-  delete propsClone?.stateKey;
-  delete propsClone?.label;
+  const keysToRemove = ['stateKey', 'label'];
+  const result: Record<string, unknown> = {};
+  Object.entries(props).forEach((entry) => {
+    const key = entry[0];
+    const value = entry[1];
+    if (!keysToRemove.includes(key)) {
+      result[key] = value;
+    }
+  });
 
-  return propsClone;
+  return result;
 });
 </script>
