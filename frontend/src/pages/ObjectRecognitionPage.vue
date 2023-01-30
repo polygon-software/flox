@@ -137,7 +137,7 @@ import {
 } from 'src/flox/modules/image/services/image.service';
 import LabeledImage from 'src/flox/modules/image/components/LabeledImage.vue';
 import LabelEntity from 'src/flox/modules/image/entities/label.entity';
-import LazySearchField from 'components/forms/LazySearchField.vue';
+import LazySearchField from 'src/flox/modules/form/components/LazySearchField.vue';
 import { SEARCH_FILES } from 'src/flox/modules/file/file.query';
 import FileEntity from 'src/flox/modules/file/entities/file.entity';
 import {

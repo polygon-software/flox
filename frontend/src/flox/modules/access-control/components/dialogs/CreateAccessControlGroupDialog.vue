@@ -51,7 +51,7 @@ import { ref, Ref } from 'vue';
 import { QForm, useDialogPluginComponent } from 'quasar';
 import Joi from 'joi';
 
-import LazySearchField from 'components/forms/LazySearchField.vue';
+import LazySearchField from 'src/flox/modules/form/components/LazySearchField.vue';
 import { SEARCH_USERS } from 'src/flox/modules/auth/user.query';
 import { createUserGroup } from 'src/flox/modules/access-control/services/access-control.service';
 import UserEntity from 'src/flox/modules/auth/entities/user.entity';
