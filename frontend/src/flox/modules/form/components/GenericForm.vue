@@ -52,7 +52,7 @@
             v-if="form.step > 1"
             color="primary"
             :label="$t('buttons.back')"
-            flat
+            :flat="flat"
             style="margin-right: 30px"
             class="q-ml-sm"
             @click="$refs.stepper.previous()"
@@ -120,17 +120,19 @@
  */
 import { onBeforeMount, PropType, Ref, ref } from 'vue';
 import { QForm, QStepper } from 'quasar';
+
 import {
   ALTERNATE_BUTTON_CLASS,
   DEFAULT_BUTTON_STYLE,
 } from 'src/css/defaultStyles';
-import { FormStructure } from 'src/data/types/forms/generics/FormStructure';
-import { FormPage } from 'src/data/types/forms/generics/FormPage';
-import FormCard from 'components/cards/FormCard.vue';
-import { useFormStore } from 'stores/form';
-import { buildStoreSubstructure } from 'src/helpers/form/form-helpers';
-
 import { i18n } from 'boot/i18n';
+
+import { useFormStore } from '../store/form';
+import { buildStoreSubstructure } from '../helpers/form-helpers';
+import FormPage from '../types/FormPage';
+import FormStructure from '../types/FormStructure';
+
+import FormCard from './cards/FormCard.vue';
 
 const props = defineProps({
   formKey: {
@@ -155,7 +157,6 @@ const props = defineProps({
   pages: {
     type: Array as PropType<FormPage[]>,
     required: true,
-    default: () => [],
   },
   loading: {
     type: Boolean,

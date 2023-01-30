@@ -16,12 +16,13 @@
 
 <script setup lang="ts">
 import { computed, onBeforeMount, PropType, ref, watch } from 'vue';
-import { FormStateKey, useFormStore } from 'stores/form';
 import { cloneDeep } from 'lodash-es';
-import { fetchByKey } from 'src/helpers/form/form-helpers';
-import { Tooltip } from 'src/data/types/Tooltip';
 
 import LabelWrapper from 'src/flox/modules/form/components/fields/general/wrappers/LabelWrapper.vue';
+
+import { FormStateKey, useFormStore } from '../../../store/form';
+import { fetchByKey } from '../../../helpers/form-helpers';
+import { Tooltip } from '../../../types/Tooltip';
 
 const props = defineProps({
   stateKey: {
@@ -117,6 +118,26 @@ const initialValue = props.stateKey
 const fieldValue = ref(initialValue ?? props.defaultValue);
 
 /**
+ * Save or emit the updated value
+ * @returns {void}
+ */
+function saveValue(): void {
+  // If type is 'number', save/emit as actual parsed number
+  if (props.type === 'number' && fieldValue.value) {
+    const value = Number.parseFloat(fieldValue.value as string);
+    if (props.stateKey) {
+      store.setValue(props.stateKey, value);
+    } else {
+      emit('change', value);
+    }
+  } else if (props.stateKey) {
+    store.setValue(props.stateKey, fieldValue.value);
+  } else {
+    emit('change', fieldValue.value);
+  }
+}
+
+/**
  * If no value in store yet, write default
  */
 onBeforeMount(() => {
@@ -150,24 +171,4 @@ const inputProps = computed(() => {
 
   return propsClone;
 });
-
-/**
- * Save or emit the updated value
- * @returns {void}
- */
-function saveValue() {
-  // If type is 'number', save/emit as actual parsed number
-  if (props.type === 'number' && fieldValue.value) {
-    const value = Number.parseFloat(fieldValue.value as string);
-    if (props.stateKey) {
-      store.setValue(props.stateKey, value);
-    } else {
-      emit('change', value);
-    }
-  } else if (props.stateKey) {
-    store.setValue(props.stateKey, fieldValue.value);
-  } else {
-    emit('change', fieldValue.value);
-  }
-}
 </script>
