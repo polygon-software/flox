@@ -9,10 +9,14 @@ import {
   AdminEnableUserCommand,
   AdminEnableUserCommandOutput,
   AdminGetUserCommand,
+  AdminSetUserPasswordCommand,
   AdminUpdateUserAttributesCommand,
   CognitoIdentityProviderClient,
   UserStatusType,
 } from '@aws-sdk/client-cognito-identity-provider';
+
+// Default length for cognito passwords
+const DEFAULT_COGNITO_PASSWORD_LENGTH = 8;
 
 // Set up cognito admin provider
 const provider = new CognitoIdentityProviderClient({
@@ -72,7 +76,7 @@ export async function createCognitoAccount(
   email: string,
   password = null,
 ): Promise<{ cognitoUuid: string; password: string }> {
-  const pw = password || randomPassword(8);
+  const pw = password || randomPassword(DEFAULT_COGNITO_PASSWORD_LENGTH);
   const params = {
     UserPoolId: process.env.USER_POOL_ID,
     Username: email,
@@ -213,4 +217,36 @@ export async function checkIfUserExists(email: string): Promise<boolean> {
   const result = await provider.send(getUserCommand);
 
   return !!result.Username;
+}
+
+/**
+ * Forces a user to reset their password by setting a temporary password for them, forcing them into
+ * FORCE_CHANGE_PASSWORD state. It is suggested to provide the new temporary password to the user via e-mail from the
+ * service that called this function.
+ *
+ * @param email - The email of the new user
+ * @returns the temporary password that was set for the user
+ */
+export async function forceUserPasswordReset(email: string): Promise<string> {
+  const tempPassword = randomPassword(DEFAULT_COGNITO_PASSWORD_LENGTH);
+  // Request parameters
+  const params = {
+    UserPoolId: process.env.USER_POOL_ID ?? '',
+    Username: email,
+    Password: tempPassword,
+  };
+
+  const setPasswordCommand = new AdminSetUserPasswordCommand(params);
+  const result = await provider.send(setPasswordCommand);
+
+  // If status code is anything other than 200, throw error
+  if (result.$metadata.httpStatusCode !== 200) {
+    throw new Error(
+      `An error occurred while resetting the user's password: Status Code ${
+        result?.$metadata.httpStatusCode ?? '-'
+      }, request ID ${result?.$metadata.requestId ?? '-'}`,
+    );
+  }
+
+  return tempPassword;
 }

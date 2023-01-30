@@ -296,6 +296,7 @@ type Mutation {
   DeleteImage(deleteImageInput: DeleteInput!): Image!
   DeleteUser(deleteUserInput: DeleteInput!): User!
   DeleteUserGroup(deleteInput: DeleteInput!): UserGroup!
+  DisableUser(disableUserInput: UpdateInput!): User!
   ManipulateFileAccessUserGroups(manipulateAccessGroups: ManipulateAccessGroupsInput!): S3File!
   MarkNotificationAsRead(markAsReadInput: MarkAsReadInput!): Notification!
   NotifyAllUsers(notifyInput: NotifyInput!): [Notification!]!
@@ -780,6 +781,10 @@ input UpdateFileInput {
 
   """Path to file"""
   path: String!
+  uuid: ID!
+}
+
+input UpdateInput {
   uuid: ID!
 }
 
