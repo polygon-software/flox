@@ -7,23 +7,15 @@
       dense
       @change="saveValue"
     >
-      <q-tooltip v-if="toolTip" :anchor="toolTip.anchor" :self="toolTip.self">
-        {{ toolTip.text }}
+      <q-tooltip v-if="tooltip" :anchor="tooltip.anchor" :self="tooltip.self">
+        {{ tooltip.text }}
       </q-tooltip>
     </q-input>
   </LabelWrapper>
 </template>
 
 <script setup lang="ts">
-import {
-  computed,
-  defineProps,
-  onBeforeMount,
-  PropType,
-  ref,
-  watch,
-} from 'vue';
-import { cloneDeep } from 'lodash-es';
+import { computed, defineProps, onBeforeMount, ref, watch } from 'vue';
 
 import LabelWrapper from 'src/flox/modules/form/components/fields/general/wrappers/LabelWrapper.vue';
 
@@ -62,7 +54,7 @@ const props = withDefaults(
 );
 
 const emit = defineEmits<{
-  (e: 'change'): void;
+  (e: 'change', value: unknown): void;
 }>();
 
 const store = useFormStore();
