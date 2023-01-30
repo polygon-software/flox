@@ -105,6 +105,13 @@ export default class UserResolver extends AbstractSearchResolver<
   async createUser(
     @Args('createUserInput') createUserInput: CreateUserInput,
   ): Promise<User> {
+    // Create Cognito account
+    const cognitoUserUuid = await this.userService.createCognitoAccount(
+      createUserInput,
+    );
+    // TODO use cognito user UUID
+
+    // Create & return database entry
     return super.create(createUserInput);
   }
 

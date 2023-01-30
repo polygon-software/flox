@@ -24,6 +24,7 @@
     "docker:dev": "docker-compose up --build -V"
   },
   "dependencies": {
+    "@aws-sdk/client-cognito-identity-provider": "^3.259.0",
     "@aws-sdk/client-rekognition": "^3.194.0",
     "@aws-sdk/client-s3": "^3.194.0",
     "@aws-sdk/client-ses": "^3.194.0",

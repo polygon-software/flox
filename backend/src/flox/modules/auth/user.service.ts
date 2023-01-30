@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import AbstractSearchService from '../abstracts/search/abstract-search.service';
 
 import User from './entities/user.entity';
+import CreateUserInput from './dto/input/create-user.input';
 
 @Injectable()
 export default class UserService extends AbstractSearchService<User> {
@@ -68,5 +69,16 @@ export default class UserService extends AbstractSearchService<User> {
         uuid: user.uuid,
       },
     });
+  }
+
+  /**
+   * Creates a cognito user account for the given inputs
+   *
+   * @param createUserInput
+   */
+  async createCognitoAccount(
+    createUserInput: CreateUserInput,
+  ): Promise<string> {
+    // TODO
   }
 }
