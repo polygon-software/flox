@@ -11,6 +11,7 @@ import {
   AdminGetUserCommand,
   AdminUpdateUserAttributesCommand,
   CognitoIdentityProviderClient,
+  UserStatusType,
 } from '@aws-sdk/client-cognito-identity-provider';
 
 // Set up cognito admin provider
@@ -140,6 +141,43 @@ export function enableCognitoAccount(
     Username: email,
   });
   return provider.send(enableUserCommand);
+}
+
+/**
+ * Determines whether a user's account is currently enabled
+ *
+ * @param email - The account's email
+ * @returns true if the account is enabled, false if it is disabled
+ */
+export async function isUserEnabled(email: string): Promise<boolean> {
+  const getUserCommand = new AdminGetUserCommand({
+    UserPoolId: process.env.USER_POOL_ID ?? '',
+    Username: email,
+  });
+  const result = await provider.send(getUserCommand);
+
+  return result.Enabled ?? false;
+}
+
+/**
+ * Determines a user's account status
+ *
+ * @param email - The account's email
+ * @returns true if the account is enabled, false if it is disabled
+ */
+export async function getAccountStatus(email: string): Promise<UserStatusType> {
+  const getUserCommand = new AdminGetUserCommand({
+    UserPoolId: process.env.USER_POOL_ID ?? '',
+    Username: email,
+  });
+  const result = await provider.send(getUserCommand);
+
+  const status = result?.UserStatus;
+
+  // If status is of type string (not UserStatusType), return as unknown
+  return status && status in UserStatusType
+    ? (status as UserStatusType)
+    : UserStatusType.UNKNOWN;
 }
 
 /**
