@@ -16,7 +16,7 @@ let routerInstance: Router;
  * Returns the component of the dashboard for the currently logged-in user
  *
  * @param user - the user, if any
- * @param $authStore - authentication store
+ * @param $authStore - authentication stores
  * @returns the layout component
  */
 function getUserRoleRoute(

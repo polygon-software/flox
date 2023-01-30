@@ -1,13 +1,13 @@
 import { cloneDeep } from 'lodash-es';
 
-import { FormStateKey, useFormStore } from '../store/form';
+import { FormStateKey, useFormStore } from '../stores/form';
 import FormPage from '../types/FormPage';
 
 /**
- * Set up an empty store sub-structure for a given form structure
+ * Set up an empty stores sub-structure for a given form structure
  * @param formKey - form name
  * @param pages - form pages
- * @param preserveState - whether to maintain any preexisting store values
+ * @param preserveState - whether to maintain any preexisting stores values
  */
 export function buildStoreSubstructure(
   formKey: string,
@@ -61,11 +61,11 @@ export function buildStoreSubstructure(
 }
 
 /**
- * Gets values from store, if present
- * @param {FormStateKey} key - form field access key
- * @returns {unknown | null} - data if it exists, null otherwise
+ * Gets values from stores, if present
+ * @param key - form field access key
+ * @returns data if it exists, null otherwise
  */
-export function fetchByKey(key: FormStateKey) {
+export function fetchByKey(key: FormStateKey): unknown | null {
   if (!key) {
     return null;
   }

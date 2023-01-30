@@ -54,41 +54,33 @@
 </template>
 
 <script setup lang="ts">
-import { ref, Ref, PropType, watch } from 'vue';
-import { IS_VALID_STRING } from 'src/data/RULES';
-import { FullName } from 'src/data/types/dossierFields/FullName';
-import { FormStateKey, useFormStore } from 'stores/form';
-import { fetchByKey } from 'src/helpers/form/form-helpers';
+import { ref, Ref, watch } from 'vue';
 
-import GenericInputField from 'src/flox/modules/form/components/fields/general/GenericInputField.vue';
+import FullName from '../../../data/types/FullName';
+import { IS_VALID_STRING } from '../../../data/RULES';
+import { FormStateKey, useFormStore } from '../../../stores/form';
+import { fetchByKey } from '../../../helpers/form-helpers';
 
-const props = defineProps({
-  stateKey: {
-    type: Object as PropType<FormStateKey>,
-    required: false, // If not given, this field emits instead of saving
-    default: null,
-  },
-  // Only considered when stateKey is null,
-  // so this field can be a non-saving subfield of other fields
-  initialValue: {
-    type: Object as PropType<FullName>,
-    required: false,
-    default: null,
-  },
-  // Whether to show the optional fields (middle name, second last name)
-  showOptionalFields: {
-    type: Boolean,
-    required: false,
-    default: true,
-  },
-  showTitle: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
-});
+import GenericInputField from './GenericInputField.vue';
 
-const emit = defineEmits(['change']);
+const props = withDefaults(
+  defineProps<{
+    stateKey?: FormStateKey | null; // If not given, this field emits instead of saving
+    initialValue?: FullName | null; // Only considered when stateKey is null, so this field can be a non-saving subfield of other fields
+    showOptionalFields?: boolean; // Whether to show the optional fields (middle name, second last name)
+    showTitle?: boolean;
+  }>(),
+  {
+    stateKey: null,
+    initialValue: null,
+    showOptionalFields: true,
+    showTitle: false,
+  }
+);
+
+const emit = defineEmits<{
+  (e: 'change', value: FullName | null): void;
+}>();
 
 const store = useFormStore();
 const initialValue = props.stateKey
@@ -99,21 +91,9 @@ const fieldValue: Ref<FullName> = ref(
 );
 
 /**
- * Save value on change
- */
-watch(
-  fieldValue,
-  () => {
-    saveValue();
-  },
-  { deep: true }
-);
-
-/**
  * Save or emit the updated value if valid, otherwise null
- * @returns {void}
  */
-function saveValue() {
+function saveValue(): void {
   if (props.stateKey) {
     if (fieldValue.value.isComplete()) {
       // Replace empty strings with undefined
@@ -128,4 +108,15 @@ function saveValue() {
     emit('change', null);
   }
 }
+
+/**
+ * Save value on change
+ */
+watch(
+  fieldValue,
+  () => {
+    saveValue();
+  },
+  { deep: true }
+);
 </script>

@@ -1,57 +1,58 @@
 <template>
   <div class="row">
     <q-toggle
-        v-model="fieldValue"
-        :label="label"
-        @update:model-value="saveValue"
+      v-model="fieldValue"
+      :label="label"
+      @update:model-value="saveValue"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import {onBeforeMount, PropType, ref, Ref} from 'vue';
-import {FormStateKey, useFormStore} from 'stores/form';
-import {fetchByKey} from 'src/helpers/form/form-helpers';
+import { onBeforeMount, ref, Ref } from 'vue';
 
-const props = defineProps({
-  stateKey: {
-    type: Object as PropType<FormStateKey>,
-    required: false, // If not given, this field emits instead of saving
-    default: null
-  },
-  label: {
-    type: String,
-    required: false,
-    default: null
-  },
-  defaultValue: {
-    type: Boolean,
-    required: false,
-    default: null
-  }
-})
+import { FormStateKey, useFormStore } from '../../../stores/form';
+import { fetchByKey } from '../../../helpers/form-helpers';
 
-const store = useFormStore()
+const props = defineProps<{
+  stateKey?: FormStateKey; // If not given, this field emits instead of saving
+  label?: string;
+  defaultValue?: boolean;
+}>();
+
+const emit = defineEmits<{
+  (e: 'change', selected: boolean): void;
+}>();
+
+const store = useFormStore();
 
 // Get value (if preset)
-const initialValue = fetchByKey(props.stateKey)
-const fieldValue: Ref<boolean> = ref(initialValue ? initialValue as boolean : props.defaultValue)
+const initialValue = props.stateKey ? fetchByKey(props.stateKey) : null;
+const fieldValue: Ref<boolean> = ref(
+  initialValue ? (initialValue as boolean) : !!props.defaultValue
+);
 
 /**
- * If no value in store yet, write default
- */
-onBeforeMount(() => {
-  if((initialValue === null || initialValue === undefined) && props.defaultValue !== null){
-    saveValue()
-  }
-})
-
-/**
- * Save the updated value
+ * Save or emit the updated value
  * @returns {void}
  */
-function saveValue() {
+function saveValue(): void {
+  if (props.stateKey) {
     store.setValue(props.stateKey, fieldValue.value);
+  } else {
+    emit('change', fieldValue.value);
+  }
 }
-</script>
 
+/**
+ * If no value in stores yet, write default
+ */
+onBeforeMount(() => {
+  if (
+    (initialValue === null || initialValue === undefined) &&
+    props.defaultValue !== undefined
+  ) {
+    saveValue();
+  }
+});
+</script>

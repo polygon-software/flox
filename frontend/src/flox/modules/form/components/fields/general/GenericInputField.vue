@@ -19,7 +19,7 @@ import { computed, defineProps, onBeforeMount, ref, watch } from 'vue';
 
 import LabelWrapper from 'src/flox/modules/form/components/fields/general/wrappers/LabelWrapper.vue';
 
-import { FormStateKey, useFormStore } from '../../../store/form';
+import { FormStateKey, useFormStore } from '../../../stores/form';
 import { fetchByKey } from '../../../helpers/form-helpers';
 import { Tooltip } from '../../../types/Tooltip';
 
@@ -39,7 +39,7 @@ const props = withDefaults(
     style?: string;
     lazyRules?: boolean | string;
     initialValue?: unknown; // Only considered when stateKey is null, so this field can be a non-saving subfield of other fields
-    tooltip?: Tooltip;
+    tooltip?: Tooltip | null;
     defaultValue?: unknown;
   }>(),
   {
@@ -50,6 +50,9 @@ const props = withDefaults(
     loading: false,
     disable: false,
     lazyRules: true,
+    initialValue: undefined,
+    tooltip: null,
+    defaultValue: undefined,
   }
 );
 
@@ -67,7 +70,6 @@ const fieldValue = ref(initialValue ?? props.defaultValue);
 
 /**
  * Save or emit the updated value
- * @returns {void}
  */
 function saveValue(): void {
   // If type is 'number', save/emit as actual parsed number
@@ -86,7 +88,7 @@ function saveValue(): void {
 }
 
 /**
- * If no value in store yet, write default
+ * If no value in stores yet, write default
  */
 onBeforeMount(() => {
   if (

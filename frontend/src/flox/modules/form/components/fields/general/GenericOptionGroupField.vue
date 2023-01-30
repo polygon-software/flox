@@ -12,47 +12,34 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, ref, watch } from 'vue';
+import { ref, watch } from 'vue';
 import { QOptionGroup } from 'quasar';
-import { FormStateKey, useFormStore } from 'stores/form';
-import { fetchByKey } from 'src/helpers/form/form-helpers';
-import { Option } from 'src/data/types/Option';
 
-import LabelWrapper from 'src/flox/modules/form/components/fields/general/wrappers/LabelWrapper.vue';
+import { GenericOption } from '../../../data/types/GenericOption';
+import { FormStateKey, useFormStore } from '../../../stores/form';
+import { fetchByKey } from '../../../helpers/form-helpers';
 
-const props = defineProps({
-  stateKey: {
-    type: Object as PropType<FormStateKey>,
-    required: false, // If not given, this field emits instead of saving
-    default: null,
-  },
-  // Only considered when stateKey is null,
-  // so this field can be a non-saving subfield of other fields
-  initialValue: {
-    type: Object as PropType<Option>,
-    required: false,
-    default: null,
-  },
-  rules: {
-    type: Array,
-    required: true,
-  },
-  options: {
-    type: Array,
-    required: true,
-  },
-  label: {
-    type: String,
-    required: true,
-  },
-  inline: {
-    type: Boolean,
-    required: false,
-    default: true,
-  },
-});
+import LabelWrapper from './wrappers/LabelWrapper.vue';
 
-const emit = defineEmits(['change']);
+const props = withDefaults(
+  defineProps<{
+    stateKey?: FormStateKey | null; // If not given, this field emits instead of saving
+    initialValue?: unknown; // Only considered when stateKey is null, so this field can be a non-saving subfield of other fields
+    rules: [];
+    options: GenericOption[];
+    label: string;
+    inline?: boolean;
+  }>(),
+  {
+    stateKey: null,
+    initialValue: undefined,
+    inline: false,
+  }
+);
+
+const emit = defineEmits<{
+  (e: 'change', selected: unknown): void;
+}>();
 
 const store = useFormStore();
 
@@ -76,9 +63,8 @@ watch(
 
 /**
  * Save or emit the updated value if valid, otherwise null
- * @returns {void}
  */
-function saveValue() {
+function saveValue(): void {
   if (props.stateKey) {
     store.setValue(props.stateKey, fieldValue.value);
   } else {

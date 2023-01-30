@@ -127,7 +127,7 @@ import {
 } from 'src/css/defaultStyles';
 import { i18n } from 'boot/i18n';
 
-import { useFormStore } from '../store/form';
+import { useFormStore } from '../stores/form';
 import { buildStoreSubstructure } from '../helpers/form-helpers';
 import FormPage from '../types/FormPage';
 import FormStructure from '../types/FormStructure';
@@ -168,7 +168,7 @@ const props = defineProps({
     required: false,
     default: false,
   },
-  // Whether the store state should be preserved when rebuilding the form
+  // Whether the stores state should be preserved when rebuilding the form
   preserveState: {
     type: Boolean,
     required: false,
@@ -194,7 +194,7 @@ onBeforeMount(() => {
   // Initialize form structure
   form.value = new FormStructure(props.formKey, props.pages);
 
-  // Set up store structure
+  // Set up stores structure
   buildStoreSubstructure(props.formKey, props.pages, props.preserveState);
 });
 

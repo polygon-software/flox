@@ -13,7 +13,7 @@ export default defineStore('ssrState', {
     /**
      * Gets prefetched data for a key
      *
-     * @param state - the current state of the store
+     * @param state - the current state of the stores
      * @returns any result
      */
     getPrefetchedData(
@@ -29,7 +29,7 @@ export default defineStore('ssrState', {
     /**
      * Sets prefetched data state
      *
-     * @param payload - payload to be set in prefetched data store
+     * @param payload - payload to be set in prefetched data stores
      * @param payload.key - key to be set in prefetched data
      * @param payload.value - value to be set
      */

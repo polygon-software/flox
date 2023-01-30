@@ -4,9 +4,9 @@
 
 <script setup lang="ts">
 import { useQuasar } from 'quasar';
+import { FormPage } from 'src/flox/modules/form/components/MultiPageForm.vue';
 
 import GenericForm from 'src/flox/modules/form/components/GenericForm.vue';
-import { FormPage } from 'src/flox/modules/form/components/MultiPageForm';
 import { EMAIL, USERNAME } from 'src/flox/modules/auth/components/forms/fields';
 import { showSuccessNotification } from 'src/tools/notification.tool';
 

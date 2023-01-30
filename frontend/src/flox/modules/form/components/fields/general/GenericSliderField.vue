@@ -1,5 +1,5 @@
 <template>
-  <LabelWrapper :label="props.label">
+  <LabelWrapper :label="label">
     <q-slider
       v-model="fieldValue"
       class="row"
@@ -19,96 +19,70 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, PropType, Ref, ref } from 'vue';
-import { FormStateKey, useFormStore } from 'stores/form';
-import { fetchByKey } from 'src/helpers/form/form-helpers';
+import { onBeforeMount, Ref, ref } from 'vue';
 
-import LabelWrapper from 'src/flox/modules/form/components/fields/general/wrappers/LabelWrapper.vue';
+import { FormStateKey, useFormStore } from '../../../stores/form';
+import { fetchByKey } from '../../../helpers/form-helpers';
 
-const props = defineProps({
-  stateKey: {
-    type: Object as PropType<FormStateKey>,
-    required: false, // If not given, this field emits instead of saving
-    default: null,
-  },
-  // Only considered when stateKey is null,
-  // so this field can be a non-saving subfield of other fields
-  initialValue: {
-    type: Number,
-    required: false,
-    default: null,
-  },
-  label: {
-    type: String,
-    required: true,
-  },
-  // i18n key of suffix for label value (so count can be applied correctly)
-  suffix: {
-    type: String,
-    required: false,
-    default: null,
-  },
-  min: {
-    type: Number,
-    required: false,
-    default: 0,
-  },
-  max: {
-    type: Number,
-    required: false,
-    default: 100,
-  },
-  // Whether to not set any tick increments
-  smooth: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
-  // Default value for field (must be larger than min)
-  defaultValue: {
-    type: Number,
-    required: false,
-    default: 0,
-  },
-});
+import LabelWrapper from './wrappers/LabelWrapper.vue';
 
-const emit = defineEmits(['change']);
+const props = withDefaults(
+  defineProps<{
+    stateKey?: FormStateKey | null;
+    initialValue?: number | null; // Only considered when stateKey is null, so this field can be a non-saving subfield of other fields
+    label: string;
+    suffix?: string | null; // i18n key of suffix for label value (so count can be applied correctly)
+    min?: number;
+    max?: number;
+    smooth?: boolean; // Whether to not set any tick increments
+    defaultValue?: number; // Default value for field (must be larger than min)
+  }>(),
+  {
+    stateKey: null,
+    initialValue: null,
+    suffix: null,
+    min: 0,
+    max: 100,
+    smooth: false,
+    defaultValue: 0,
+  }
+);
+
+const emit = defineEmits<{
+  (e: 'change', selected: number): void;
+}>();
 
 const store = useFormStore();
 
-// Fetch from store or use default value
+// Fetch from stores or use default value
 const initialValue = props.stateKey
   ? (fetchByKey(props.stateKey) as number | null)
   : props.initialValue;
 
-const _defaultValue = props.defaultValue
+const validatedDefaultValue = props.defaultValue
   ? Math.min(Math.max(props.defaultValue, props.min), props.max)
   : props.min;
 
 // InitialValue takes precedence over defaultValue
-const fieldValue: Ref<number> = ref(initialValue ?? _defaultValue);
-
-/**
- * If no value in store yet, write default
- */
-onBeforeMount(() => {
-  if (
-    (initialValue === null || initialValue === undefined) &&
-    props.defaultValue !== null
-  ) {
-    saveValue();
-  }
-});
+const fieldValue: Ref<number> = ref(initialValue ?? validatedDefaultValue);
 
 /**
  * Save or emit the updated value if valid, otherwise null
- * @returns {void}
  */
-function saveValue() {
+function saveValue(): void {
   if (props.stateKey) {
     store.setValue(props.stateKey, fieldValue.value);
   } else {
     emit('change', fieldValue.value);
   }
 }
+
+/**
+ * If no value in stores yet, write default
+ */
+onBeforeMount(() => {
+  if (initialValue === null) {
+    saveValue();
+  }
+});
 </script>
