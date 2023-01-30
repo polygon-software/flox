@@ -9,6 +9,7 @@ import User from './entities/user.entity';
 import {
   disableCognitoAccount,
   enableCognitoAccount,
+  forceUserPasswordChange,
   isUserEnabled,
 } from './helpers/cognito.helper';
 
@@ -120,6 +121,27 @@ export default class UserService extends AbstractSearchService<User> {
 
     // Enable on cognito
     await enableCognitoAccount(user.email);
+
+    return user;
+  }
+
+  /**
+   * Forces a user to change their password
+   *
+   * @param changeInput - contains UUID
+   * @returns the user whose password was force-changed
+   */
+  async forceUserPasswordChange(changeInput: UpdateInput): Promise<User> {
+    const user = await this.userRepository.findOneOrFail({
+      where: {
+        uuid: changeInput.uuid,
+      },
+    });
+
+    // Force password change & get temporary password
+    const tempPassword = await forceUserPasswordChange(user.email);
+
+    // TODO application specific: send E-mail informing the user that their password was changed
 
     return user;
   }

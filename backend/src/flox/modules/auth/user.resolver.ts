@@ -16,7 +16,10 @@ import UserSearchOutput from './output/user-search.output';
 import { LoggedIn } from './authentication.decorator';
 import UserService from './user.service';
 import { assertIsAllowedToManipulate } from './helpers/auth.helper';
-import { createCognitoAccount } from './helpers/cognito.helper';
+import {
+  createCognitoAccount,
+  deleteCognitoAccount,
+} from './helpers/cognito.helper';
 
 @Resolver(() => User)
 export default class UserResolver extends AbstractSearchResolver<
@@ -135,7 +138,7 @@ export default class UserResolver extends AbstractSearchResolver<
   }
 
   /**
-   * Deletes a given user
+   * Deletes a given user, along with their Cognito account
    *
    * @param deleteInput - contains UUID
    * @returns the deleted user
@@ -145,6 +148,13 @@ export default class UserResolver extends AbstractSearchResolver<
   async deleteUser(
     @Args('deleteUserInput') deleteInput: DeleteInput,
   ): Promise<User> {
+    // Find corresponding user
+    const user = await this.userService.getUser({ uuid: deleteInput.uuid });
+
+    // Delete cognito account
+    await deleteCognitoAccount(user.email);
+
+    // Delete in database
     return super.delete(deleteInput);
   }
 
@@ -160,5 +170,33 @@ export default class UserResolver extends AbstractSearchResolver<
     @Args('disableUserInput') disableInput: UpdateInput,
   ): Promise<User> {
     return this.userService.disableUser(disableInput);
+  }
+
+  /**
+   * Re-enables a given user's account
+   *
+   * @param enableInput - contains UUID
+   * @returns the disabled user
+   */
+  @AdminOnly()
+  @Mutation(() => User, { name: 'EnableUser' })
+  async enableUser(
+    @Args('enableUserInput') enableInput: UpdateInput,
+  ): Promise<User> {
+    return this.userService.enableUser(enableInput);
+  }
+
+  /**
+   * Forces a user to change their password
+   *
+   * @param changeInput - contains UUID
+   * @returns the user whose password was force-changed
+   */
+  @AdminOnly()
+  @Mutation(() => User, { name: 'ForceUserPasswordChange' })
+  async forceUserPasswordChange(
+    @Args('forceUserPasswordChangeInput') changeInput: UpdateInput,
+  ): Promise<User> {
+    return this.userService.forceUserPasswordChange(changeInput);
   }
 }

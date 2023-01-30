@@ -220,14 +220,14 @@ export async function checkIfUserExists(email: string): Promise<boolean> {
 }
 
 /**
- * Forces a user to reset their password by setting a temporary password for them, forcing them into
+ * Forces a user to change their password by setting a temporary password for them, forcing them into
  * FORCE_CHANGE_PASSWORD state. It is suggested to provide the new temporary password to the user via e-mail from the
  * service that called this function.
  *
  * @param email - The email of the new user
  * @returns the temporary password that was set for the user
  */
-export async function forceUserPasswordReset(email: string): Promise<string> {
+export async function forceUserPasswordChange(email: string): Promise<string> {
   const tempPassword = randomPassword(DEFAULT_COGNITO_PASSWORD_LENGTH);
   // Request parameters
   const params = {

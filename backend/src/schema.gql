@@ -297,6 +297,8 @@ type Mutation {
   DeleteUser(deleteUserInput: DeleteInput!): User!
   DeleteUserGroup(deleteInput: DeleteInput!): UserGroup!
   DisableUser(disableUserInput: UpdateInput!): User!
+  EnableUser(enableUserInput: UpdateInput!): User!
+  ForceUserPasswordChange(forceUserPasswordChangeInput: UpdateInput!): User!
   ManipulateFileAccessUserGroups(manipulateAccessGroups: ManipulateAccessGroupsInput!): S3File!
   MarkNotificationAsRead(markAsReadInput: MarkAsReadInput!): Notification!
   NotifyAllUsers(notifyInput: NotifyInput!): [Notification!]!
