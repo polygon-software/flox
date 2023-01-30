@@ -126,7 +126,7 @@ export default class UserService extends AbstractSearchService<User> {
   }
 
   /**
-   * Forces a user to change their password
+   * Forces a user to change their password by setting a temporary password
    *
    * @param changeInput - contains UUID
    * @returns the user whose password was force-changed
