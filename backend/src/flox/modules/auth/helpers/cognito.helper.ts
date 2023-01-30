@@ -85,6 +85,7 @@ export async function createCognitoAccount(
   const createUserCommand = new AdminCreateUserCommand(params);
   const resp = await provider.send(createUserCommand);
 
+  // Ensure user was created successfully, otherwise throw with request ID for traceability
   if (!resp.User || !resp.User.Username) {
     throw new Error(
       `An error occurred while creating the Cognito user. Request ID: ${
