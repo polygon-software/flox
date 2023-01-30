@@ -45,7 +45,7 @@ export function randomPassword(minLength: number): string {
   const requiredChars = [charsLower, charsUpper, numbers, special];
   let res = '';
   requiredChars.forEach((requiredChar) => {
-    for (let i = 0; i < Math.ceil(minLength / requiredChars.length); i++) {
+    for (let i = 0; i < Math.ceil(minLength / requiredChars.length); i += 1) {
       res += requiredChar[randomNumber(0, requiredChar.length)];
     }
   });
@@ -84,6 +84,14 @@ export async function createCognitoAccount(
   };
   const createUserCommand = new AdminCreateUserCommand(params);
   const resp = await provider.send(createUserCommand);
+
+  if (!resp.User || !resp.User.Username) {
+    throw new Error(
+      `An error occurred while creating the Cognito user. Request ID: ${
+        resp.$metadata.requestId ?? '-'
+      }`,
+    );
+  }
 
   // Mark e-mail address as verified
   const updateUserAttributesCommand = new AdminUpdateUserAttributesCommand({
@@ -144,7 +152,7 @@ export async function checkIfUserExists(email: string): Promise<boolean> {
     Username: email,
   };
 
-  const getUserCommand = new AdminGetUserCommand(parmas);
+  const getUserCommand = new AdminGetUserCommand(params);
   const result = await provider.send(getUserCommand);
 
   return !!result.Username;
