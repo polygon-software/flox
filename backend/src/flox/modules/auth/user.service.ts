@@ -9,6 +9,7 @@ import User from './entities/user.entity';
 import {
   disableCognitoAccount,
   enableCognitoAccount,
+  isUserEnabled,
 } from './helpers/cognito.helper';
 
 @Injectable()
@@ -88,6 +89,11 @@ export default class UserService extends AbstractSearchService<User> {
       },
     });
 
+    const isEnabled = await isUserEnabled(user.email);
+    if (!isEnabled) {
+      throw new Error(`User with email ${user.email} is already disabled`);
+    }
+
     // Disable on cognito
     await disableCognitoAccount(user.email);
 
@@ -106,6 +112,11 @@ export default class UserService extends AbstractSearchService<User> {
         uuid: enableInput.uuid,
       },
     });
+
+    const isEnabled = await isUserEnabled(user.email);
+    if (isEnabled) {
+      throw new Error(`User with email ${user.email} is already enabled`);
+    }
 
     // Enable on cognito
     await enableCognitoAccount(user.email);
