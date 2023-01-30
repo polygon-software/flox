@@ -15,7 +15,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeMount, PropType, ref, watch } from 'vue';
+import {
+  computed,
+  defineProps,
+  onBeforeMount,
+  PropType,
+  ref,
+  watch,
+} from 'vue';
 import { cloneDeep } from 'lodash-es';
 
 import LabelWrapper from 'src/flox/modules/form/components/fields/general/wrappers/LabelWrapper.vue';
@@ -24,90 +31,39 @@ import { FormStateKey, useFormStore } from '../../../store/form';
 import { fetchByKey } from '../../../helpers/form-helpers';
 import { Tooltip } from '../../../types/Tooltip';
 
-const props = defineProps({
-  stateKey: {
-    type: Object as PropType<FormStateKey>,
-    required: false, // If not given, this field emits instead of saving
-    default: null,
-  },
-  rules: {
-    type: Array,
-    required: true,
-  },
-  label: {
-    type: String,
-    required: true,
-  },
-  type: {
-    type: String,
-    required: false,
-    default: 'text',
-  },
-  min: {
-    type: String,
-    required: false,
-    default: '0',
-  },
-  suffix: {
-    type: String,
-    required: false,
-    default: undefined,
-  },
-  mask: {
-    type: String,
-    required: false,
-    default: undefined,
-  },
-  reverseFillMask: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
-  hint: {
-    type: String,
-    required: false,
-    default: undefined,
-  },
-  loading: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
-  disable: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
-  style: {
-    type: String,
-    required: false,
-    default: null,
-  },
-  lazyRules: {
-    type: [Boolean, String],
-    required: false,
-    default: true,
-  },
-  // Only considered when stateKey is null,
-  // so this field can be a non-saving subfield of other fields
-  initialValue: {
-    type: undefined,
-    required: false,
-    default: null,
-  },
-  toolTip: {
-    type: Object as PropType<Tooltip>,
-    required: false,
-    default: null,
-  },
-  defaultValue: {
-    type: Object as PropType<unknown>,
-    required: false,
-    default: null,
-  },
-});
+const props = withDefaults(
+  defineProps<{
+    stateKey?: FormStateKey | null; // If not given, this field emits instead of saving
+    rules: unknown[]; // TODO
+    label: string;
+    type?: string;
+    min?: string;
+    suffix?: string;
+    mask?: string;
+    reverseFillMask?: boolean;
+    hint?: string;
+    loading?: boolean;
+    disable?: boolean;
+    style?: string;
+    lazyRules?: boolean | string;
+    initialValue?: unknown; // Only considered when stateKey is null, so this field can be a non-saving subfield of other fields
+    tooltip?: Tooltip;
+    defaultValue?: unknown;
+  }>(),
+  {
+    stateKey: null,
+    type: 'text',
+    min: '0',
+    reverseFillMask: false,
+    loading: false,
+    disable: false,
+    lazyRules: true,
+  }
+);
 
-const emit = defineEmits(['change']);
+const emit = defineEmits<{
+  (e: 'change'): void;
+}>();
 
 const store = useFormStore();
 const initialValue = props.stateKey

@@ -34,14 +34,9 @@
 </template>
 
 <script setup lang="ts">
-import { PropType } from 'vue';
-
 import FormCard from '../../types/FormCard';
 
-const props = defineProps({
-  card: {
-    type: Object as PropType<FormCard>,
-    required: true,
-  },
-});
+const props = defineProps<{
+  card: FormCard;
+}>();
 </script>
