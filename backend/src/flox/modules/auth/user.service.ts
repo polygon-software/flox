@@ -70,15 +70,4 @@ export default class UserService extends AbstractSearchService<User> {
       },
     });
   }
-
-  /**
-   * Creates a cognito user account for the given inputs
-   *
-   * @param createUserInput
-   */
-  async createCognitoAccount(
-    createUserInput: CreateUserInput,
-  ): Promise<string> {
-    // TODO
-  }
 }

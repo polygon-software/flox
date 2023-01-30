@@ -15,6 +15,7 @@ import UserSearchOutput from './output/user-search.output';
 import { LoggedIn } from './authentication.decorator';
 import UserService from './user.service';
 import { assertIsAllowedToManipulate } from './helpers/auth.helper';
+import { createCognitoAccount } from './helpers/cognito.helper';
 
 @Resolver(() => User)
 export default class UserResolver extends AbstractSearchResolver<
@@ -95,7 +96,7 @@ export default class UserResolver extends AbstractSearchResolver<
   }
 
   /**
-   * Creates a User
+   * Creates a User with a corresponding Cognito account
    *
    * @param createUserInput - contains all user data
    * @returns the newly created user
@@ -106,13 +107,13 @@ export default class UserResolver extends AbstractSearchResolver<
     @Args('createUserInput') createUserInput: CreateUserInput,
   ): Promise<User> {
     // Create Cognito account
-    const cognitoUserUuid = await this.userService.createCognitoAccount(
-      createUserInput,
-    );
-    // TODO use cognito user UUID
+    const cognitoUser = await createCognitoAccount(createUserInput.email);
 
     // Create & return database entry
-    return super.create(createUserInput);
+    return super.create({
+      ...createUserInput,
+      cognitoUuid: cognitoUser.cognitoUuid,
+    });
   }
 
   /**
