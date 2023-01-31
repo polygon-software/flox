@@ -23,21 +23,21 @@
         v-model="phoneInput"
         dense
         outlined
-        :mask="selectedCode.value.mask"
+        :mask="selectedCode.mask"
         :rules="
           optional
             ? [
                 (val) =>
                   (!!val && val.length === 0) ||
                   IS_VALID_PHONE_NUMBER(
-                    (selectedCode.value.value + val).replaceAll(' ', '')
+                    (selectedCode.value + val).replaceAll(' ', '')
                   ) ||
                   $t('errors.invalid_phone_number'),
               ]
             : [
                 (val) =>
                   IS_VALID_PHONE_NUMBER(
-                    (selectedCode.value.value + val).replaceAll(' ', '')
+                    (selectedCode.value + val).replaceAll(' ', '')
                   ) || $t('errors.invalid_phone_number'),
               ]
         "
@@ -75,7 +75,7 @@ const emit = defineEmits<{
   (e: 'change', selected: string | null): void;
 }>();
 
-const selectedCode: Ref<PhoneCountryCode | null> = ref(props.countryCodes[0]);
+const selectedCode: Ref<PhoneCountryCode> = ref(props.countryCodes[0]);
 const phoneInput: Ref<string | null> = ref(null);
 
 const store = useFormStore();

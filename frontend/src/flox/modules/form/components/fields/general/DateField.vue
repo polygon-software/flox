@@ -44,7 +44,7 @@ const props = withDefaults(
     stateKey?: FormStateKey | null;
     dateFormat?: string;
     label?: string;
-    hint?: string | null;
+    hint?: string;
     rules?: ValidationRule[];
     initialValue?: Date | null; // Only considered when stateKey is null,
     // so this field can be a non-saving subfield of other fields
@@ -54,7 +54,7 @@ const props = withDefaults(
     stateKey: null,
     dateFormat: 'YYYY-MM-DD',
     label: i18n.global.t('dossier.privateCustomer.birthdate'),
-    hint: null,
+    hint: undefined,
     rules: () => [],
     initialValue: null,
     optional: false,

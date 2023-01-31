@@ -15,7 +15,7 @@
         :name="index + 1"
         :prefix="index + 1"
         :title="page.label"
-        :done="form.step > index"
+        :done="form.step.value > index"
       >
         <FormCard
           v-for="card in page.cards"
@@ -49,23 +49,23 @@
       <template #navigation>
         <q-stepper-navigation>
           <q-btn
-            v-if="form.step > 1"
+            v-if="form.step.value > 1"
             color="primary"
             :label="$t('buttons.back')"
             :flat="flat"
             style="margin-right: 30px"
             class="q-ml-sm"
-            @click="$refs.stepper.previous()"
+            @click="previous($refs.stepper)"
           />
           <q-btn
-            v-if="form.step < form.pages.length"
+            v-if="form.step.value < form.pages.length"
             color="primary"
             :label="$t('buttons.next')"
             :disable="!form.pageValid"
             @click="toNext"
           />
           <q-btn
-            v-if="form.step === form.pages.length"
+            v-if="form.step.value === form.pages.length"
             color="primary"
             :label="finishLabel"
             :disable="!form.pageValid"
@@ -194,5 +194,16 @@ async function onSubmit(): Promise<void> {
 function toNext(): void {
   stepper.value?.next();
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/**
+ * Calls previous since vue is too dumb
+ * @param stepperRef - stepper ref
+ * @returns void
+ */
+function previous(stepperRef: QStepper | null): void {
+  if (stepperRef) {
+    stepperRef.previous();
+  }
 }
 </script>

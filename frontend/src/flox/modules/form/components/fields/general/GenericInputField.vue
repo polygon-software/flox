@@ -48,7 +48,7 @@ const props = withDefaults(
     style?: string;
     // eslint-disable-next-line vue/no-unused-properties
     lazyRules?: boolean | string;
-    initialValue?: unknown; // Only considered when stateKey is null, so this field can be a non-saving subfield of other fields
+    initialValue?: any; // Only considered when stateKey is null, so this field can be a non-saving subfield of other fields
     tooltip?: Tooltip | null;
     defaultValue?: unknown;
   }>(),

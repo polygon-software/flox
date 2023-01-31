@@ -6,11 +6,11 @@
     <!-- First name -->
     <GenericInputField
       :label="$t('dossier.privateCustomer.firstName')"
-      :rules="[(val) => IS_VALID_STRING(val) || $t('errors.invalid_name')]"
+      :rules="[(val: string) => IS_VALID_STRING(val) || $t('errors.invalid_name')]"
       :initial-value="fieldValue.firstName"
       outlined
       dense
-      @change="(val) => (fieldValue.firstName = val)"
+      @change="(newValue) => fieldValueChange('firstName', newValue)"
     />
 
     <!-- Middle name -->
@@ -18,23 +18,23 @@
       v-if="showOptionalFields"
       :label="$t('dossier.privateCustomer.middleName')"
       :rules="[
-        (val) => !val || IS_VALID_STRING(val) || $t('errors.invalid_name'),
+        (val: string) => !val || IS_VALID_STRING(val) || $t('errors.invalid_name'),
       ]"
       :initial-value="fieldValue.middleName"
       outlined
       dense
-      @change="(val) => (fieldValue.middleName = val)"
+      @change="(newValue) => fieldValueChange('middleName', newValue)"
     />
   </div>
   <div class="q-gutter-sm row">
     <!-- Last name -->
     <GenericInputField
       :label="$t('dossier.privateCustomer.lastName')"
-      :rules="[(val) => IS_VALID_STRING(val) || $t('errors.invalid_name')]"
+      :rules="[(val: string) => IS_VALID_STRING(val) || $t('errors.invalid_name')]"
       :initial-value="fieldValue.lastName"
       outlined
       dense
-      @change="(val) => (fieldValue.lastName = val)"
+      @change="(newValue) => fieldValueChange('lastName', newValue)"
     />
 
     <!-- Second last name -->
@@ -43,12 +43,12 @@
       v-model="fieldValue.secondLastName"
       :label="$t('dossier.privateCustomer.secondLastName')"
       :rules="[
-        (val) => !val || IS_VALID_STRING(val) || $t('errors.invalid_name'),
+        (val: string) => !val || IS_VALID_STRING(val) || $t('errors.invalid_name'),
       ]"
       :initial-value="fieldValue.secondLastName"
       outlined
       dense
-      @change="(val) => (fieldValue.secondLastName = val)"
+      @change="(newValue) => fieldValueChange('secondLastName', newValue)"
     />
   </div>
 </template>
@@ -120,4 +120,17 @@ watch(
   },
   { deep: true }
 );
+
+/**
+ * Updates the field value if a subfield updates.
+ * @param fieldKey - name of the field to update
+ * @param value - new value
+ * @returns void
+ */
+function fieldValueChange(
+  fieldKey: 'firstName' | 'middleName' | 'lastName' | 'secondLastName',
+  value: unknown
+): void {
+  fieldValue.value[fieldKey] = value as string;
+}
 </script>

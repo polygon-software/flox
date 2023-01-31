@@ -24,7 +24,7 @@ const props = withDefaults(
   defineProps<{
     stateKey?: FormStateKey | null; // If not given, this field emits instead of saving
     initialValue?: string | null;
-    label?: string | null;
+    label?: string;
   }>(),
   {
     stateKey: null,

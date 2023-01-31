@@ -10,8 +10,8 @@
       label
       label-always
       switch-label-side
-      :label-value="fieldValue + ' ' + $t(suffix, { count: fieldValue })"
-      :markers="smooth ? null : max - min"
+      :label-value="labelValue"
+      :markers="smooth ? undefined : max - min"
       marker-labels
       @change="saveValue"
     />
@@ -19,7 +19,9 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, Ref, ref } from 'vue';
+import { computed, onBeforeMount, Ref, ref } from 'vue';
+
+import { i18n } from 'boot/i18n';
 
 import { FormStateKey, useFormStore } from '../../../stores/form';
 import { fetchByKey } from '../../../helpers/form-helpers';
@@ -77,6 +79,15 @@ function saveValue(): void {
     emit('change', fieldValue.value);
   }
 }
+
+const labelValue = computed(() => {
+  if (props.suffix) {
+    return `${fieldValue.value} ${i18n.global.t(
+      `${props.suffix}, { count: ${fieldValue.value}`
+    )}`;
+  }
+  return fieldValue.value;
+});
 
 /**
  * If no value in stores yet, write default
