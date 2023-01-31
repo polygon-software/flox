@@ -85,43 +85,36 @@
 
 <script setup lang="ts">
 import { ref, PropType } from 'vue';
+
 import {
   IS_VALID_STRING,
   IS_VALID_HOUSE_NUMBER,
   IS_VALID_ZIP,
-} from 'src/data/RULES';
-import { AddressInput } from 'src/data/types/AddressInput';
-import { FormStateKey, useFormStore } from 'stores/form';
-import { fetchByKey } from 'src/helpers/form/form-helpers';
+} from '../../../data/RULES';
+import AddressInput from '../../../data/types/AddressInput';
+import { FormStateKey, useFormStore } from '../../../stores/form';
+import { fetchByKey } from '../../../helpers/form-helpers';
 
-import LabelWrapper from 'src/flox/modules/form/components/fields/general/wrappers/LabelWrapper.vue';
+import LabelWrapper from './wrappers/LabelWrapper.vue';
 
-const props = defineProps({
-  stateKey: {
-    type: Object as PropType<FormStateKey>,
-    required: false, // If not given, this field emits instead of saving
-    default: null,
-  },
-  title: {
-    type: String,
-    required: false,
-    default: null,
-  },
-  // Only considered when stateKey is null,
-  // so this field can be a non-saving subfield of other fields
-  initialValue: {
-    type: Object as PropType<AddressInput>,
-    required: false,
-    default: null,
-  },
-  showAdditionalAddress: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
-});
+const props = withDefaults(
+  defineProps<{
+    stateKey?: FormStateKey | null; // If not given, this field emits instead of saving
+    title?: string | null;
+    initialValue?: AddressInput | null; // Only considered when stateKey is null, so this field can be a non-saving subfield of other fields
+    showAdditionalAddress?: boolean;
+  }>(),
+  {
+    stateKey: null,
+    title: null,
+    initialValue: null,
+    showAdditionalAddress: false,
+  }
+);
 
-const emit = defineEmits(['change']);
+const emit = defineEmits<{
+  (e: 'change', value: AddressInput | null): void;
+}>();
 
 const store = useFormStore();
 const initialValue = props.stateKey
@@ -137,7 +130,7 @@ const fieldValue = ref(
  * Save or emit the updated value if valid, otherwise null
  * @returns {void}
  */
-function saveValue() {
+function saveValue(): void {
   if (!!fieldValue.value && fieldValue.value.isComplete()) {
     if (props.stateKey) {
       store.setValue(props.stateKey, fieldValue.value);

@@ -110,6 +110,7 @@
 </template>
 
 <script setup lang="ts">
+// TODO: Implement!
 /**
  * This component defines a generic form that can have a single or multiple pages.
  * It takes the following properties:
@@ -118,7 +119,7 @@
  * @param {string} [loadingLabel] - the label to show when loading
  * @param {boolean} [loading] - loading status to show on the finish button
  */
-import { onBeforeMount, Ref, ref } from 'vue';
+import { onBeforeMount, PropType, Ref, ref } from 'vue';
 import { QForm, QStepper } from 'quasar';
 
 import {

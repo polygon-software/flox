@@ -68,6 +68,7 @@ const fieldValue: Ref<number> = ref(initialValue ?? validatedDefaultValue);
 
 /**
  * Save or emit the updated value if valid, otherwise null
+ * @returns {void}
  */
 function saveValue(): void {
   if (props.stateKey) {

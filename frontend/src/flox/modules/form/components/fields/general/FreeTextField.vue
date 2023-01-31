@@ -12,42 +12,42 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, ref, Ref } from 'vue';
-import { FormStateKey, useFormStore } from 'stores/form';
-import { fetchByKey } from 'src/helpers/form/form-helpers';
+import { ref, Ref } from 'vue';
 
 import { i18n } from 'boot/i18n';
 import LabelWrapper from 'src/flox/modules/form/components/fields/general/wrappers/LabelWrapper.vue';
 
-const props = defineProps({
-  stateKey: {
-    type: Object as PropType<FormStateKey>,
-    required: false, // If not given, this field emits instead of saving
-    default: null,
-  },
-  initialValue: {
-    type: String,
-    required: false,
-    default: null,
-  },
-  label: {
-    type: String,
-    required: false,
-    default: i18n.global.t('authentication.free_text'),
-  },
-});
+import { FormStateKey, useFormStore } from '../../../stores/form';
+import { fetchByKey } from '../../../helpers/form-helpers';
 
-const emit = defineEmits(['change']);
+const props = withDefaults(
+  defineProps<{
+    stateKey?: FormStateKey | null; // If not given, this field emits instead of saving
+    initialValue?: string | null;
+    label?: string | null;
+  }>(),
+  {
+    stateKey: null,
+    initialValue: null,
+    label: i18n.global.t('authentication.free_text'),
+  }
+);
+
+const emit = defineEmits<{
+  (e: 'change', value: string | null): void;
+}>();
 
 const store = useFormStore();
-const initialValue = fetchByKey(props.stateKey);
+const initialValue = props.stateKey
+  ? fetchByKey(props.stateKey)
+  : props.initialValue;
 const fieldValue: Ref<string | null> = ref((initialValue as string) ?? null);
 
 /**
  * Save the updated value
  * @returns {void}
  */
-function saveValue() {
+function saveValue(): void {
   if (props.stateKey) {
     if (fieldValue.value) {
       store.setValue(props.stateKey, fieldValue.value);

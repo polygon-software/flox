@@ -63,6 +63,7 @@ watch(
 
 /**
  * Save or emit the updated value if valid, otherwise null
+ * @returns {void}
  */
 function saveValue(): void {
   if (props.stateKey) {

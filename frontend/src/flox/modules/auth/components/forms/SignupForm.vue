@@ -34,12 +34,13 @@
 
 <script setup lang="ts">
 import { defineEmits } from 'vue';
-import { MultiPageForm } from 'src/flox/modules/form/components/MultiPageForm';
 
-import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';
-import { MODULES } from 'src/flox/MODULES';
-import * as auth from 'src/flox/modules/auth';
-import { FIELDS } from 'src/flox/modules/auth/components/forms/fields';
+import MultiPageForm from '../../../form/components/MultiPageForm.vue';
+import FloxWrapper from '../../../../core/components/FloxWrapper.vue';
+import { MODULES } from '../../../../MODULES';
+import * as auth from '../..';
+
+import { FIELDS } from './fields';
 
 type SignUp = {
   username: string;

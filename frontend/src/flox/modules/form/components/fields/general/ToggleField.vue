@@ -46,6 +46,7 @@ function saveValue(): void {
 
 /**
  * If no value in stores yet, write default
+ * @returns {void}
  */
 onBeforeMount(() => {
   if (

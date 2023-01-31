@@ -39,26 +39,25 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, ref, defineProps, Ref, watch } from 'vue';
-import { IS_VALID_IBAN, IS_VALID_STRING } from 'src/data/RULES';
-import { BankInfoInput } from 'src/data/types/BankInfoInput';
-import { FormStateKey, useFormStore } from 'stores/form';
-import { fetchByKey } from 'src/helpers/form/form-helpers';
+import { ref, defineProps, Ref, watch } from 'vue';
 
-import GenericInputField from 'src/flox/modules/form/components/fields/general/GenericInputField.vue';
-import AddressField from 'src/flox/modules/form/components/fields/general/AddressField.vue';
+import { FormStateKey, useFormStore } from '../../../stores/form';
+import { fetchByKey } from '../../../helpers/form-helpers';
+import BankInfoInput from '../../../data/types/BankInfoInput';
+import { IS_VALID_IBAN, IS_VALID_STRING } from '../../../data/RULES';
 
-const props = defineProps({
-  stateKey: {
-    type: Object as PropType<FormStateKey>,
-    required: true,
-  },
-  optional: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
-});
+import GenericInputField from './GenericInputField.vue';
+import AddressField from './AddressField.vue';
+
+const props = withDefaults(
+  defineProps<{
+    stateKey: FormStateKey;
+    optional?: boolean;
+  }>(),
+  {
+    optional: false,
+  }
+);
 
 const store = useFormStore();
 const initialValue = props.stateKey ? fetchByKey(props.stateKey) : null;
@@ -66,6 +65,19 @@ const fieldValue: Ref<BankInfoInput> = ref(
   initialValue ? (initialValue as BankInfoInput) : new BankInfoInput()
 );
 const showBankInfo: Ref<boolean> = ref(!props.optional);
+
+/**
+ * Save or emit the updated value if valid, otherwise null
+ * @returns {void}
+ */
+function saveValue(): void {
+  if (fieldValue.value.isComplete()) {
+    store.setValue(props.stateKey, fieldValue.value);
+  } else {
+    store.setValue(props.stateKey, null);
+  }
+}
+
 /**
  * Save value on change
  */
@@ -76,16 +88,4 @@ watch(
   },
   { deep: true }
 );
-
-/**
- * Save or emit the updated value if valid, otherwise null
- * @returns {void}
- */
-function saveValue() {
-  if (fieldValue.value.isComplete()) {
-    store.setValue(props.stateKey, fieldValue.value);
-  } else {
-    store.setValue(props.stateKey, null);
-  }
-}
 </script>

@@ -29,56 +29,41 @@
 </template>
 
 <script setup lang="ts">
-import { computed, PropType, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { date, ValidationRule } from 'quasar';
-import { IS_VALID_DATE_STRING } from 'src/data/RULES';
-import { fetchByKey } from 'src/helpers/form/form-helpers';
-import { FormStateKey, useFormStore } from 'stores/form';
 
 import LabelWrapper from 'src/flox/modules/form/components/fields/general/wrappers/LabelWrapper.vue';
 import { i18n } from 'boot/i18n';
 
-const props = defineProps({
-  stateKey: {
-    type: Object as PropType<FormStateKey>,
-    required: false, // If not given, this field emits instead of saving
-    default: null,
-  },
-  dateFormat: {
-    type: String,
-    required: false,
-    default: 'YYYY-MM-DD',
-  },
-  label: {
-    type: String,
-    required: false,
-    default: i18n.global.t('dossier.privateCustomer.birthdate'),
-  },
-  hint: {
-    type: String,
-    required: false,
-    default: null,
-  },
-  rules: {
-    type: Array as PropType<ValidationRule[]>,
-    required: false,
-    default: () => [],
-  },
-  // Only considered when stateKey is null,
-  // so this field can be a non-saving subfield of other fields
-  initialValue: {
-    type: Object as PropType<Date>,
-    required: false,
-    default: null,
-  },
-  optional: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
-});
+import { IS_VALID_DATE_STRING } from '../../../data/RULES';
+import { fetchByKey } from '../../../helpers/form-helpers';
+import { FormStateKey, useFormStore } from '../../../stores/form';
 
-const emit = defineEmits(['change']);
+const props = withDefaults(
+  defineProps<{
+    stateKey?: FormStateKey | null;
+    dateFormat?: string;
+    label?: string;
+    hint?: string | null;
+    rules?: ValidationRule[];
+    initialValue?: Date | null; // Only considered when stateKey is null,
+    // so this field can be a non-saving subfield of other fields
+    optional?: boolean;
+  }>(),
+  {
+    stateKey: null,
+    dateFormat: 'YYYY-MM-DD',
+    label: i18n.global.t('dossier.privateCustomer.birthdate'),
+    hint: null,
+    rules: () => [],
+    initialValue: null,
+    optional: false,
+  }
+);
+
+const emit = defineEmits<{
+  (e: 'change', value: unknown): void;
+}>();
 
 const store = useFormStore();
 const initialValue = props.stateKey
@@ -125,9 +110,11 @@ const fixedRules = computed(() => {
 watch(
   () => props.initialValue,
   () => {
-    const newDate = date.formatDate(props.initialValue, props.dateFormat);
-    if (!props.stateKey && fieldValue.value !== newDate) {
-      fieldValue.value = newDate;
+    if (props.initialValue) {
+      const newDate = date.formatDate(props.initialValue, props.dateFormat);
+      if (!props.stateKey && fieldValue.value !== newDate) {
+        fieldValue.value = newDate;
+      }
     }
   }
 );
@@ -136,7 +123,7 @@ watch(
  * Save or emit the updated value if valid, otherwise null
  * @returns {void}
  */
-function saveValue() {
+function saveValue(): void {
   if (
     fieldValue.value &&
     IS_VALID_DATE_STRING(fieldValue.value, props.dateFormat)
