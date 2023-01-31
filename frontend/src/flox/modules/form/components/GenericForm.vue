@@ -189,7 +189,7 @@ async function onSubmit(): Promise<void> {
 
 /**
  * Goes to the next page and animated scrolling to the top of the page
- * @returns {void}
+ * @returns void
  */
 function toNext(): void {
   stepper.value?.next();

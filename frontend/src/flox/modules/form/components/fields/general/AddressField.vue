@@ -50,7 +50,6 @@
     <div class="col-3">
       <LabelWrapper :label="$t('address.zipCode')">
         <q-input
-          ref="zipRef"
           v-model="fieldValue.zipCode"
           dense
           outlined
@@ -84,7 +83,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, PropType } from 'vue';
+import { ref } from 'vue';
 
 import {
   IS_VALID_STRING,
@@ -128,7 +127,7 @@ const fieldValue = ref(
 
 /**
  * Save or emit the updated value if valid, otherwise null
- * @returns {void}
+ * @returns void
  */
 function saveValue(): void {
   if (!!fieldValue.value && fieldValue.value.isComplete()) {

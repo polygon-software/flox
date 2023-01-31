@@ -42,7 +42,7 @@ export default class FormPage {
    * Adds or updates a card to the page
    * @param {string} key - Name of the card to add or update
    * @param {FormCard} value - Card to add or update
-   * @return {void}
+   * @return void
    */
   setCard(key: string, value: FormCard): void {
     const existingCard = this.cards.find((card) => card.key === key);

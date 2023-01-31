@@ -46,7 +46,7 @@ export default class FormCard {
    * Adds or updates a field.
    * @param {string} key - Name of the field
    * @param {Field} value - Field to add or update
-   * @return {void}
+   * @return void
    */
   setField(key: string, value: Field): void {
     const existingField = this.fields.find((field) => field.key === key);

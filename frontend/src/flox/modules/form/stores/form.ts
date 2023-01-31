@@ -40,7 +40,7 @@ export const useFormStore = defineStore('formState', {
      * Persists a value to the stores
      * @param {FormStateKey} key - access key
      * @param {unknown} value - value to stores
-     * @returns {void}
+     * @returns void
      */
     setValue(key: FormStateKey, value: unknown): void {
       this.data[key.formKey][key.pageKey][key.cardKey][key.fieldKey] = value;
@@ -49,7 +49,7 @@ export const useFormStore = defineStore('formState', {
     /**
      * Clears all data for the given form from the stores
      * @param {string} formKey - form key
-     * @returns {void}
+     * @returns void
      */
     clearForm(formKey: string) {
       delete this.data[formKey];

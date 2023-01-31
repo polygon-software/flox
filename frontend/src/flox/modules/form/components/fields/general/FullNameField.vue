@@ -92,7 +92,7 @@ const fieldValue: Ref<FullName> = ref(
 
 /**
  * Save or emit the updated value if valid, otherwise null
- * @returns {void}
+ * @returns void
  */
 function saveValue(): void {
   if (props.stateKey) {

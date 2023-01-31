@@ -34,7 +34,7 @@ const fieldValue: Ref<boolean> = ref(
 
 /**
  * Save or emit the updated value
- * @returns {void}
+ * @returns void
  */
 function saveValue(): void {
   if (props.stateKey) {
@@ -46,7 +46,7 @@ function saveValue(): void {
 
 /**
  * If no value in stores yet, write default
- * @returns {void}
+ * @returns void
  */
 onBeforeMount(() => {
   if (

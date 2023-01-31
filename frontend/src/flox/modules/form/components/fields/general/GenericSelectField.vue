@@ -56,7 +56,7 @@ const fieldValue = ref(initialValue);
 
 /**
  * Save or emit the updated value if valid, otherwise null
- * @returns {void}
+ * @returns void
  */
 function saveValue(): void {
   // Store value
@@ -78,7 +78,7 @@ function saveValue(): void {
 /**
  * If there is a value saved in the stores, this ensures
  * that the correct value is assigned to fieldvalue
- * @returns {void}
+ * @returns void
  */
 function matchValue(): void {
   if (fieldValue.value) {

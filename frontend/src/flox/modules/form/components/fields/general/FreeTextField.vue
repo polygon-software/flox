@@ -45,7 +45,7 @@ const fieldValue: Ref<string | null> = ref((initialValue as string) ?? null);
 
 /**
  * Save the updated value
- * @returns {void}
+ * @returns void
  */
 function saveValue(): void {
   if (props.stateKey) {

@@ -68,7 +68,7 @@ const showBankInfo: Ref<boolean> = ref(!props.optional);
 
 /**
  * Save or emit the updated value if valid, otherwise null
- * @returns {void}
+ * @returns void
  */
 function saveValue(): void {
   if (fieldValue.value.isComplete()) {

@@ -26,17 +26,27 @@ import { Tooltip } from '../../../types/Tooltip';
 const props = withDefaults(
   defineProps<{
     stateKey?: FormStateKey | null; // If not given, this field emits instead of saving
+    // eslint-disable-next-line vue/no-unused-properties
     rules: unknown[]; // TODO
     label: string;
     type?: string;
+    // eslint-disable-next-line vue/no-unused-properties
     min?: string;
+    // eslint-disable-next-line vue/no-unused-properties
     suffix?: string;
+    // eslint-disable-next-line vue/no-unused-properties
     mask?: string;
+    // eslint-disable-next-line vue/no-unused-properties
     reverseFillMask?: boolean;
+    // eslint-disable-next-line vue/no-unused-properties
     hint?: string;
+    // eslint-disable-next-line vue/no-unused-properties
     loading?: boolean;
+    // eslint-disable-next-line vue/no-unused-properties
     disable?: boolean;
+    // eslint-disable-next-line vue/no-unused-properties
     style?: string;
+    // eslint-disable-next-line vue/no-unused-properties
     lazyRules?: boolean | string;
     initialValue?: unknown; // Only considered when stateKey is null, so this field can be a non-saving subfield of other fields
     tooltip?: Tooltip | null;

@@ -1,17 +1,20 @@
 <template>
-  <GenericForm :pages="pages" @submit="onSubmit" />
+  <FloxWrapper>
+    <GenericForm
+      form-key="sample"
+      :pages="SampleFormPages"
+      @submit="onSubmit"
+    />
+  </FloxWrapper>
 </template>
 
 <script setup lang="ts">
 import { useQuasar } from 'quasar';
 
 import GenericForm from '../../flox/modules/form/components/GenericForm.vue';
-import { showSuccessNotification } from '../../tools/notification.tool';
-import {
-  EMAIL,
-  USERNAME,
-} from '../../flox/modules/auth/components/forms/fields';
-import FormPage from '../../flox/modules/form/components/MultiPageForm.vue';
+import { showSuccessNotification } from '../../flox/modules/form/helpers/notification-helpers';
+import SampleFormPages from '../../flox/modules/form/data/form/SampleFormPages';
+import FloxWrapper from '../../flox/core/components/FloxWrapper.vue';
 
 /**
  * This is a sample form component that uses the GenericForm helper component.
@@ -19,20 +22,10 @@ import FormPage from '../../flox/modules/form/components/MultiPageForm.vue';
 
 const $q = useQuasar();
 
-const fields = [EMAIL, USERNAME];
-
-const pages = [
-  {
-    key: 'sample',
-    label: 'Sample',
-    fields,
-  },
-] as FormPage[];
-
 /**
  * Emits the 'submit' event, containing the form's data
- *
  * @param formValues - form inputs
+ * @returns void
  */
 function onSubmit(formValues: Record<string, string>): void {
   showSuccessNotification(
