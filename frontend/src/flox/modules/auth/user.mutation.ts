@@ -76,5 +76,44 @@ export const DELETE_USER: MutationObject = {
   `,
   tables: [TABLES.USER],
   type: MutationTypes.DELETE,
-  cacheLocation: 'deleteUser',
+  cacheLocation: 'DeleteUser',
+};
+
+export const DISABLE_USER: MutationObject = {
+  mutation: gql`
+    mutation DisableUser($uuid: ID!) {
+      DisableUser(disableUserInput: { uuid: $uuid }) {
+        uuid
+      }
+    }
+  `,
+  tables: [], // This mutation affects only Cognito
+  type: MutationTypes.UPDATE,
+  cacheLocation: 'DisableUser',
+};
+
+export const ENABLE_USER: MutationObject = {
+  mutation: gql`
+    mutation EnableUser($uuid: ID!) {
+      EnableUser(enableUserInput: { uuid: $uuid }) {
+        uuid
+      }
+    }
+  `,
+  tables: [], // This mutation affects only Cognito
+  type: MutationTypes.UPDATE,
+  cacheLocation: 'EnableUser',
+};
+
+export const FORCE_USER_PASSWORD_CHANGE: MutationObject = {
+  mutation: gql`
+    mutation ForceUserPasswordChange($uuid: ID!) {
+      ForceUserPasswordChange(forceUserPasswordChangeInput: { uuid: $uuid }) {
+        uuid
+      }
+    }
+  `,
+  tables: [], // This mutation affects only Cognito
+  type: MutationTypes.UPDATE,
+  cacheLocation: 'ForceUserPasswordChange',
 };
