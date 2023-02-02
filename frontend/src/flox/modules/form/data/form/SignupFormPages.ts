@@ -7,8 +7,8 @@ import FormCard from '../types/FormCard';
 import { FIELDS } from './FIELDS';
 
 const fields = auth.moduleConfig().emailAsUsername
-  ? [FIELDS.EMAIL, FIELDS.PASSWORD_REPEAT, FIELDS.PASSWORD]
-  : [FIELDS.USERNAME, FIELDS.EMAIL, FIELDS.PASSWORD_REPEAT, FIELDS.PASSWORD];
+  ? [FIELDS.EMAIL, FIELDS.PASSWORD_REPEAT]
+  : [FIELDS.USERNAME, FIELDS.EMAIL, FIELDS.PASSWORD_REPEAT];
 
 // Signup
 const signupCard = new FormCard(

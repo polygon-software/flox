@@ -45,7 +45,7 @@ const props = withDefaults(
     dateFormat?: string;
     label?: string;
     hint?: string;
-    rules?: ValidationRule[];
+    rules?: ((val: unknown) => string | boolean)[];
     initialValue?: Date | null; // Only considered when stateKey is null,
     // so this field can be a non-saving subfield of other fields
     optional?: boolean;
@@ -89,15 +89,14 @@ const mask = computed(() => {
  * rules should expect dates)
  */
 const fixedRules = computed(() => {
-  const result: ValidationRule[] = [];
+  const result: ((val: string) => string | boolean)[] = [];
 
   // For every rule, adapt such that value is converted to date before being passed to rule
-  props.rules?.forEach((rule: ValidationRule<boolean | string>) => {
+  props.rules?.forEach((rule) => {
     const fixedRule = (val: string): boolean | string => {
       const convertedDate = date.extractDate(val, props.dateFormat);
-      return rule(convertedDate) as boolean | string;
+      return rule(convertedDate);
     };
-
     result.push(fixedRule);
   });
 

@@ -197,13 +197,13 @@ function toNext(): void {
 }
 
 /**
- * Calls previous since vue is too dumb
+ * Calls previous on QStepper to avoid typing issues.
  * @param stepperRef - stepper ref
  * @returns void
  */
-function previous(stepperRef: QStepper | null): void {
+function previous(stepperRef: QStepper | null | unknown): void {
   if (stepperRef) {
-    stepperRef.previous();
+    (stepperRef as QStepper).previous();
   }
 }
 </script>
