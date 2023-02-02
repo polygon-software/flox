@@ -1,4 +1,4 @@
-# Variables to store in AWS SSM Parameter stores
+# Variables to store in AWS SSM Parameter store
 
 resource "aws_ssm_parameter" "user_pool_id" {
   name  = "${var.type}-user_pool_id"

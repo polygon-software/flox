@@ -32,7 +32,7 @@ export const useAuthStore = defineStore('authStore', {
     /**
      * Gets logged in status
      *
-     * @param state - the current state of the stores
+     * @param state - the current state of the store
      * @returns whether the user is logged in
      */
     loggedIn: (state): boolean => state.userSession?.isValid() ?? false,
@@ -40,7 +40,7 @@ export const useAuthStore = defineStore('authStore', {
     /**
      * Gets the current user's username, if any
      *
-     * @param state - the current state of the stores
+     * @param state - the current state of the store
      * @returns username, if any
      */
     username: (state) => state.loggedInUser?.username,

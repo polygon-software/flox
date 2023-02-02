@@ -7,7 +7,7 @@ import FormPage from '../types/FormPage';
  * Set up an empty store sub-structure for a given form structure
  * @param formKey - form name
  * @param pages - form pages
- * @param preserveState - whether to maintain any preexisting stores values
+ * @param preserveState - whether to maintain any preexisting store values
  */
 export function buildStoreSubstructure(
   formKey: string,
@@ -61,7 +61,7 @@ export function buildStoreSubstructure(
 }
 
 /**
- * Gets values from stores, if present
+ * Gets values from store, if present
  * @param key - form field access key
  * @returns data if it exists, null otherwise
  */

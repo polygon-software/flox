@@ -7,7 +7,7 @@ import FormCard from './FormCard';
 import { Field } from './Field';
 
 /**
- * A class representing a form's structure (pages, cards, fields). Used to store data in Pinia stores
+ * A class representing a form's structure (pages, cards, fields). Used to store data in Pinia store
  */
 export default class FormStructure {
   key: string;
@@ -43,7 +43,7 @@ export default class FormStructure {
       return card.fields.every((field: Field) => {
         const { rules } = field.attributes;
         return rules.every((rule: (valueElement: any) => boolean | string) => {
-          // Get relevant value from stores
+          // Get relevant value from store
           const fieldValue =
             this.store.data[this.key]?.[currentPage.key]?.[card.key]?.[
               field.key

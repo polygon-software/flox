@@ -262,7 +262,7 @@ export default class AuthenticationService {
    * Logs out the currently logged in authentication (if any)
    */
   async logout(): Promise<void> {
-    // Deep copy to avoid mutating stores state
+    // Deep copy to avoid mutating store state
     const cognitoUser: CognitoUser | undefined = cloneDeep(
       this.$authStore.cognitoUser
     );
@@ -651,7 +651,7 @@ export default class AuthenticationService {
         // 15min before de-validation token is refreshed
         const currentUser: CognitoUser | undefined = cloneDeep(
           this.$authStore.cognitoUser
-        ); // refresh session mutates the state of stores: illegal
+        ); // refresh session mutates the state of store: illegal
         currentUser?.refreshSession(refreshToken, (err, session) => {
           if (session) {
             this.$authStore.setCognitoUser(currentUser);

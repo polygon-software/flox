@@ -1,4 +1,4 @@
-# Variables to store in AWS SSM Parameter stores
+# Variables to store in AWS SSM Parameter store
 
 resource "aws_ssm_parameter" "source_code_bucket" {
   name  = "${var.type}-source_code_bucket"

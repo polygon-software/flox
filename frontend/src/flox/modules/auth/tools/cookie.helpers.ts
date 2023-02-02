@@ -9,7 +9,7 @@ import Env from 'src/env';
 /**
  * Persists a given payload to one or multiple cookies
  *
- * @param category - sub-category to stores the cookie to
+ * @param category - sub-category to store the cookie to
  * @param payload - the data to persist (in stringified form)
  */
 export function persistToCookies(

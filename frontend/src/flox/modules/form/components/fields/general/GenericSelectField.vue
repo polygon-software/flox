@@ -76,7 +76,7 @@ function saveValue(): void {
 }
 
 /**
- * If there is a value saved in the stores, this ensures
+ * If there is a value saved in the store, this ensures
  * that the correct value is assigned to fieldvalue
  * @returns void
  */
@@ -102,7 +102,7 @@ function matchValue(): void {
 }
 
 onBeforeMount(() => {
-  // Ensures that selected options are correctly fetched from the stores
+  // Ensures that selected options are correctly fetched from the store
   matchValue();
 });
 

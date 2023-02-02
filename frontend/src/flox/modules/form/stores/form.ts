@@ -11,7 +11,7 @@ export type FormStore = {
   ): void;
 };
 
-// Form stores content: formKey -> pageKey -> cardKey -> fieldKey -> actual value
+// Form store content: formKey -> pageKey -> cardKey -> fieldKey -> actual value
 export type FormStoreContents = Record<
   string,
   Record<string, Record<string, Record<string, unknown>>>
@@ -37,9 +37,9 @@ export const useFormStore = defineStore('formState', {
 
   actions: {
     /**
-     * Persists a value to the stores
+     * Persists a value to the store
      * @param {FormStateKey} key - access key
-     * @param {unknown} value - value to stores
+     * @param {unknown} value - value to store
      * @returns void
      */
     setValue(key: FormStateKey, value: unknown): void {
@@ -47,7 +47,7 @@ export const useFormStore = defineStore('formState', {
     },
 
     /**
-     * Clears all data for the given form from the stores
+     * Clears all data for the given form from the store
      * @param {string} formKey - form key
      * @returns void
      */
