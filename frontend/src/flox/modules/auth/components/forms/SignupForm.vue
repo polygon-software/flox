@@ -1,6 +1,6 @@
 <template>
   <FloxWrapper :module="MODULES.AUTH">
-    <div class="column q-pa-sm text-center justify-center" style="margin: 50px">
+    <div class="column q-pa-sm text-center justify-center">
       <GenericForm
         form-key="signup"
         :pages="SignupFormPages"
@@ -22,58 +22,47 @@ import GenericForm from '../../../form/components/GenericForm.vue';
 import { fetchByKey } from '../../../form/helpers/form-helpers';
 import { useFormStore } from '../../../form/stores/form';
 
+const emit = defineEmits<{
+  (
+    e: 'submit',
+    value: { username: string; email: string; password: string }
+  ): void;
+}>();
+
 const store = useFormStore();
 
 /**
- * Finishes the signup process with the data saved in the store.
+ * Emit the
  * @returns void
  */
 function onSignup(): void {
+  const email = fetchByKey({
+    formKey: 'signup',
+    pageKey: 'signupPage',
+    cardKey: 'signup',
+    fieldKey: 'email',
+  }) as string;
+
+  const password = fetchByKey({
+    formKey: 'signup',
+    pageKey: 'signupPage',
+    cardKey: 'signup',
+    fieldKey: 'passwordRepeat',
+  }) as string;
+
   if (auth.moduleConfig().emailAsUsername) {
-    const email = fetchByKey({
-      formKey: 'signup',
-      pageKey: 'signup',
-      cardKey: 'signup',
-      fieldKey: 'email',
-    }) as string;
-
-    const password = fetchByKey({
-      formKey: 'signup',
-      pageKey: 'signup',
-      cardKey: 'signup',
-      fieldKey: 'password',
-    }) as string;
-
-    // TODO: do the signup
-    // eslint-disable-next-line no-console
-    console.log(email, password);
+    emit('submit', { username: email, email, password });
   } else {
     const username = fetchByKey({
       formKey: 'signup',
-      pageKey: 'signup',
+      pageKey: 'signupPage',
       cardKey: 'signup',
       fieldKey: 'username',
     }) as string;
 
-    const email = fetchByKey({
-      formKey: 'signup',
-      pageKey: 'signup',
-      cardKey: 'signup',
-      fieldKey: 'email',
-    }) as string;
-
-    const password = fetchByKey({
-      formKey: 'signup',
-      pageKey: 'signup',
-      cardKey: 'signup',
-      fieldKey: 'password',
-    }) as string;
-
-    // TODO: do the signup
-    // eslint-disable-next-line no-console
-    console.log(username, email, password);
+    emit('submit', { username, email, password });
   }
   // Empty store state
-  store.clearForm('login');
+  store.clearForm('signup');
 }
 </script>

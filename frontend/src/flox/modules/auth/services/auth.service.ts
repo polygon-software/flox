@@ -265,7 +265,7 @@ export default class AuthenticationService {
     );
 
     // Register in database TODO application specific: apply any other attributes here as well
-    await createUser(username, email, cognitoUserWrapper.userSub);
+    await createUser(username, email, cognitoUserWrapper.userSub, 'de');
   }
 
   /**
