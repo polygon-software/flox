@@ -6,15 +6,17 @@ import { i18n } from 'boot/i18n';
 import {
   IS_EMAIL,
   IS_NOT_NULL,
+  IS_VALID_DATE,
   IS_VALID_PASSWORD,
   IS_VALID_STRING,
 } from '../RULES';
-import PasswordRepeat from '../../components/fields/general/PasswordRepeatField.vue';
-import Password from '../../components/fields/general/PasswordField.vue';
 import AddressField from '../../components/fields/general/AddressField.vue';
+import DateField from '../../components/fields/general/DateField.vue';
+import EmailRepeatField from '../../components/fields/general/EmailRepeatField.vue';
 import FullNameField from '../../components/fields/general/FullNameField.vue';
 import GenericInputField from '../../components/fields/general/GenericInputField.vue';
-import EmailRepeatField from '../../components/fields/general/EmailRepeatField.vue';
+import Password from '../../components/fields/general/PasswordField.vue';
+import PasswordRepeat from '../../components/fields/general/PasswordRepeatField.vue';
 import { Field } from '../types/Field';
 import FullName from '../types/FullName';
 
@@ -175,6 +177,16 @@ const FIELDS: Record<string, Field> = {
       rules: [
         (val: Record<string, string>): boolean | string =>
           IS_NOT_NULL(val) || i18n.global.t('errors.invalid_address'),
+      ],
+    },
+  },
+  DATE: {
+    key: 'date',
+    component: markRaw(DateField),
+    attributes: {
+      rules: [
+        (val: Date): boolean | string =>
+          IS_VALID_DATE(val) || i18n.global.t('errors.invalid_date'),
       ],
     },
   },

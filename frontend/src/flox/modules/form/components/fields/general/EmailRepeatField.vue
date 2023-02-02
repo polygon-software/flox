@@ -45,7 +45,6 @@ const props = withDefaults(
     initialValue: null,
   }
 );
-
 const emit = defineEmits<{
   (e: 'change', value: string | null): void;
 }>();

@@ -94,11 +94,7 @@ export default class AuthenticationService {
    * @param password - the authentication's password
    * @param newPassword - the new password if this function is triggered from set-password page
    */
-  async login(
-    identifier: string,
-    password: string,
-    newPassword = ''
-  ): Promise<void> {
+  async login(identifier: string, password: string): Promise<void> {
     const { $q } = this;
     // Generate auth details
     const authenticationDetails =

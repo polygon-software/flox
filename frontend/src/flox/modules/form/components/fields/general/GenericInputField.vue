@@ -27,7 +27,7 @@ const props = withDefaults(
   defineProps<{
     stateKey?: FormStateKey | null; // If not given, this field emits instead of saving
     // eslint-disable-next-line vue/no-unused-properties
-    rules: unknown[]; // TODO
+    rules: ((val: any) => string | boolean)[];
     label: string;
     type?: string;
     // eslint-disable-next-line vue/no-unused-properties
@@ -48,9 +48,9 @@ const props = withDefaults(
     style?: string;
     // eslint-disable-next-line vue/no-unused-properties
     lazyRules?: boolean | string;
-    initialValue?: any; // Only considered when stateKey is null, so this field can be a non-saving subfield of other fields
+    initialValue?: string | number | null; // Only considered when stateKey is null, so this field can be a non-saving subfield of other fields
     tooltip?: Tooltip | null;
-    defaultValue?: unknown;
+    defaultValue?: string | number | null;
   }>(),
   {
     stateKey: null,
@@ -71,9 +71,9 @@ const emit = defineEmits<{
 }>();
 
 const store = useFormStore();
-const initialValue = props.stateKey
-  ? fetchByKey(props.stateKey)
-  : props.initialValue;
+const initialValue = (
+  props.stateKey ? fetchByKey(props.stateKey) : props.initialValue
+) as string | number | null | undefined;
 
 // Actual field value
 const fieldValue = ref(initialValue ?? props.defaultValue);

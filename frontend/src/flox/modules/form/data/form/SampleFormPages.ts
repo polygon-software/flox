@@ -8,7 +8,7 @@ import { FIELDS } from './FIELDS';
 // Sample card
 const sampleCard = new FormCard(
   'sample',
-  [FIELDS.USERNAME],
+  [FIELDS.DATE],
   i18n.global.t('path.to.label')
 );
 

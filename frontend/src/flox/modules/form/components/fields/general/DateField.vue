@@ -30,7 +30,7 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
-import { date, ValidationRule } from 'quasar';
+import { date } from 'quasar';
 
 import LabelWrapper from 'src/flox/modules/form/components/fields/general/wrappers/LabelWrapper.vue';
 import { i18n } from 'boot/i18n';
@@ -53,7 +53,7 @@ const props = withDefaults(
   {
     stateKey: null,
     dateFormat: 'YYYY-MM-DD',
-    label: i18n.global.t('dossier.privateCustomer.birthdate'),
+    label: i18n.global.t('dossier.date'),
     hint: undefined,
     rules: () => [],
     initialValue: null,
