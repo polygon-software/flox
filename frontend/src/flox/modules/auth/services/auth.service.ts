@@ -99,6 +99,7 @@ export default class AuthenticationService {
     password: string,
     newPassword = ''
   ): Promise<void> {
+    const { $q } = this;
     // Generate auth details
     const authenticationDetails =
       new AmazonCognitoIdentity.AuthenticationDetails({
@@ -145,23 +146,19 @@ export default class AuthenticationService {
         // Called when user is in FORCE_PASSWORD_CHANGE state and must thus set a new password
         newPasswordRequired(userAttributes) {
           const attrs = cloneDeep(userAttributes) as Record<string, unknown>;
-
-          const $q = useQuasar();
-
-          let dialogPassword = newPassword;
           // Show password change dialog
           $q.dialog({
             component: ChangePasswordDialog,
             componentProps: {},
-          }).onOk(
-            ({ userEnteredPassword }: { userEnteredPassword: string }) => {
-              dialogPassword = userEnteredPassword;
-            }
-          );
-          // Ensure e-mail doesn't get passed, so cognito doesn't recognize it as change
-          delete attrs.email;
-          delete attrs.email_verified;
-          cognitoUser.completeNewPasswordChallenge(dialogPassword, attrs, this);
+          }).onOk(({ passwordNew }: { passwordNew: string }) => {
+            // Ensure e-mail doesn't get passed, so cognito doesn't recognize it as change
+            delete attrs.email;
+            delete attrs.email_verified;
+            console.log(passwordNew);
+            console.log(attrs);
+            console.log(this);
+            cognitoUser.completeNewPasswordChallenge(passwordNew, attrs, this);
+          });
         },
 
         // Called if time-limited one time password is required (only second login or later)
