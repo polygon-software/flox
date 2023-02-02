@@ -143,7 +143,7 @@ const props = withDefaults(
     pages: FormPage[];
     loading?: boolean;
     flat?: boolean;
-    preserveState?: boolean; // Whether the stores state should be preserved when rebuilding the form
+    preserveState?: boolean; // Whether the store state should be preserved when rebuilding the form
     // Manual override for field options (e.g. in GenericSelectFields): maps a field key to a list of options
     optionOverrides?: Record<string, unknown[]> | null;
   }>(),
@@ -172,7 +172,7 @@ onBeforeMount(() => {
   // Initialize form structure
   form.value = new FormStructure(props.formKey, props.pages);
 
-  // Set up stores structure
+  // Set up store structure
   buildStoreSubstructure(props.formKey, props.pages, props.preserveState);
 });
 

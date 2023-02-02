@@ -7,7 +7,7 @@ import FormCard from './FormCard';
 import { Field } from './Field';
 
 /**
- * A class representing a form's structure (pages, cards, fields). Used to stores data in Pinia stores
+ * A class representing a form's structure (pages, cards, fields). Used to store data in Pinia stores
  */
 export default class FormStructure {
   key: string;

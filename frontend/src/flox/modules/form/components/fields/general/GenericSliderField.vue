@@ -56,7 +56,7 @@ const emit = defineEmits<{
 
 const store = useFormStore();
 
-// Fetch from stores or use default value
+// Fetch from store or use default value
 const initialValue = props.stateKey
   ? (fetchByKey(props.stateKey) as number | null)
   : props.initialValue;
@@ -90,7 +90,7 @@ const labelValue = computed(() => {
 });
 
 /**
- * If no value in stores yet, write default
+ * If no value in store yet, write default
  */
 onBeforeMount(() => {
   if (initialValue === null) {

@@ -120,7 +120,7 @@ const initialValue = props.stateKey
   ? fetchByKey(props.stateKey)
   : props.initialValue;
 
-// Value is a string, stored in stores as a Date
+// Value is a string, stored in store as a Date
 const fieldValue = ref(
   initialValue ? (initialValue as AddressInput) : new AddressInput()
 );
