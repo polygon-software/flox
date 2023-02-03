@@ -59,19 +59,21 @@ export default abstract class AbstractSearchService<
     // Build search keys, taking searchQueryArgs into consideration (only those within searchKeys are allowed)
     const correctedKeys = searchQueryArgs.searchKeys ?? searchKeys;
 
-    // If invalid custom keys are given, throw error
-    const invalidKeys = (searchQueryArgs.searchKeys ?? []).filter(
-      (key) => !searchKeys.includes(key),
-    );
-    if (invalidKeys) {
-      throw new Error(
-        `Invalid searchQuery keys given: ${invalidKeys.toString()}`,
+    // If custom keys are given, check for invalid ones & throw error
+    if (searchQueryArgs?.searchKeys) {
+      const invalidKeys = searchQueryArgs.searchKeys.filter(
+        (key) => !searchKeys.includes(key),
       );
+      if (invalidKeys) {
+        throw new Error(
+          `Invalid searchQuery keys given: ${invalidKeys.toString()}`,
+        );
+      }
     }
 
     const [data, count] = await this.repository.findAndCount({
       ...options,
-      order: searchQueryArgs.sortBy
+      order: searchQueryArgs?.sortBy
         ? ({
             [searchQueryArgs.sortBy]: searchQueryArgs.descending
               ? 'DESC'
@@ -80,7 +82,7 @@ export default abstract class AbstractSearchService<
         : undefined,
       skip: searchQueryArgs.skip,
       take: searchQueryArgs.take,
-      where: searchQueryArgs.filter
+      where: searchQueryArgs?.filter
         ? this.nestedSearch(correctedKeys, searchQueryArgs.filter)
         : undefined,
     });
