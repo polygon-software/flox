@@ -24,7 +24,7 @@ import UserGroup from '../../access-control/entities/user-group.entity';
 import { moduleConfig } from '../../roles/config';
 
 /**
- * A user registered within cognito, having a role and contact information
+ * A user registered within Cognito, having a role and contact information
  */
 @ObjectType()
 @Entity()

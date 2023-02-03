@@ -52,9 +52,7 @@ export default class UserService extends AbstractSearchService<User> {
 
     if (cognitoUuid) {
       return this.userRepository.findOneOrFail({
-        where: {
-          cognitoUuid,
-        },
+        where: { cognitoUuid },
       });
     }
 
