@@ -1,6 +1,6 @@
 /**
  * This file contains default styles / classes for quasar component to be used e.g.
- * :class="DEFAULT_BUTTON_CLASS" TODO change style contents
+ * :class="DEFAULT_BUTTON_CLASS"
  */
 
 // Buttons
