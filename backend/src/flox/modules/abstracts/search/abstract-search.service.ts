@@ -56,14 +56,33 @@ export default abstract class AbstractSearchService<
     searchKeys: (keyof Entity | string)[],
     options?: FindOneOptions<Entity>,
   ): Promise<SearchQueryOutputInterface<Entity>> {
+    // Build search keys, taking searchQueryArgs into consideration (only those within searchKeys are allowed)
+    const correctedKeys = searchQueryArgs.searchKeys ?? searchKeys;
+
+    // If invalid custom keys are given, throw error
+    const invalidKeys = (searchQueryArgs.searchKeys ?? []).filter(
+      (key) => !searchKeys.includes(key),
+    );
+    if (invalidKeys) {
+      throw new Error(
+        `Invalid searchQuery keys given: ${invalidKeys.toString()}`,
+      );
+    }
+
     const [data, count] = await this.repository.findAndCount({
       ...options,
-      order: {
-        [searchQueryArgs.sortBy]: searchQueryArgs.descending ? 'DESC' : 'ASC',
-      } as FindOptionsOrder<Entity>,
+      order: searchQueryArgs.sortBy
+        ? ({
+            [searchQueryArgs.sortBy]: searchQueryArgs.descending
+              ? 'DESC'
+              : 'ASC',
+          } as FindOptionsOrder<Entity>)
+        : undefined,
       skip: searchQueryArgs.skip,
       take: searchQueryArgs.take,
-      where: this.nestedSearch(searchKeys, searchQueryArgs.filter),
+      where: searchQueryArgs.filter
+        ? this.nestedSearch(correctedKeys, searchQueryArgs.filter)
+        : undefined,
     });
     return { data, count };
   }
