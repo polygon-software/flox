@@ -633,6 +633,12 @@ export default class AuthenticationService {
           },
         });
         break;
+      // Case 3: User was disabled
+      case 'NotAuthorizedException':
+        this.$errorService.showErrorDialog(
+          new Error(i18n.global.t('errors.account_disabled'))
+        );
+        break;
       // Default: any other error
       default:
         this.$errorService.showErrorDialog(error);

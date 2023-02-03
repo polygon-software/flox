@@ -71,6 +71,8 @@ export default {
     unknown: 'Unbekannter Fehler',
     entry_edit_failed: 'Die Änderung konnte nicht gespeichert werden',
     entry_delete_failed: 'Eintrag konnte nicht gelöscht werden',
+    account_disabled:
+      'Ihr Account ist gesperrt. Bitte wenden Sie sich an den Systemadministrator.',
   },
   files: {
     files: 'Dateien',

@@ -69,6 +69,8 @@ export default {
     unknown: 'Unknown Error',
     entry_edit_failed: 'Edit could not be saved',
     entry_delete_failed: 'Entry could not be deleted',
+    account_disabled:
+      'Your account is disabled. Please contact a system administrator.',
   },
   files: {
     files: 'Files',
