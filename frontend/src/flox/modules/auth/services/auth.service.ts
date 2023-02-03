@@ -633,12 +633,13 @@ export default class AuthenticationService {
           },
         });
         break;
-      // Case 3: User's Cognito account is disabled
-      case 'NotAuthorizedException':
-        this.$errorService.showErrorDialog(
-          new Error(i18n.global.t('errors.account_disabled'))
-        );
-        break;
+      // Case 3: User's Cognito account is disabled TODO continue here, this applies also if wrong PW --> look at message as well
+      // case 'NotAuthorizedException':
+      //   if(message.includes('something something'))
+      //   this.$errorService.showErrorDialog(
+      //     new Error(i18n.global.t('errors.account_disabled'))
+      //   );
+      //   break;
       // Default: any other error
       default:
         this.$errorService.showErrorDialog(error);
