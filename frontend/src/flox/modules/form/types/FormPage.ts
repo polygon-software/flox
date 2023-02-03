@@ -27,8 +27,8 @@ export default class FormPage {
 
   /**
    * Returns the card for the given key.
-   * @param {string} key - Name of the card to retrieve
-   * @return {FormCard | null} - The matching card
+   * @param key - Name of the card to retrieve
+   * @returns The matching card, or null
    */
   getCard(key: string): FormCard | null {
     return (
