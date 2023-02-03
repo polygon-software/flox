@@ -54,7 +54,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineEmits, inject } from 'vue';
+import { inject } from 'vue';
 
 import { MultiPageForm } from 'components/forms/MultiPageForm';
 import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';

@@ -27,7 +27,6 @@
 <script setup lang="ts">
 import QrcodeVue from 'qrcode.vue';
 import { useDialogPluginComponent } from 'quasar';
-import { defineEmits, defineProps } from 'vue';
 
 const props = defineProps<{
   value: string;

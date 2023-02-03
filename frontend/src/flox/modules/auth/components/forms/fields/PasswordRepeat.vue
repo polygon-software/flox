@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineEmits, defineProps, ref, watch } from 'vue';
+import { ref, watch } from 'vue';
 
 import { i18n } from 'boot/i18n';
 import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';

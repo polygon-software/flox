@@ -31,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, Ref, ref } from 'vue';
+import { Ref, ref } from 'vue';
 
 import ImageEntity from 'src/flox/modules/image/entities/image.entity';
 import LabelEntity from 'src/flox/modules/image/entities/label.entity';

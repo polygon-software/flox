@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, Ref, ref } from 'vue';
+import { Ref, ref } from 'vue';
 import { QSelectProps } from 'quasar';
 
 import { executeQuery, QueryObject } from 'src/apollo/query';

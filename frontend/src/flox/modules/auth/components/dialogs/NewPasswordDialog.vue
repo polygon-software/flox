@@ -35,7 +35,7 @@
 
 <script setup lang="ts">
 import { useDialogPluginComponent } from 'quasar';
-import { defineEmits, ref } from 'vue';
+import { ref } from 'vue';
 
 import { i18n } from 'boot/i18n';
 import {

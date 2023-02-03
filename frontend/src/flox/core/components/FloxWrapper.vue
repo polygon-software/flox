@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps, onMounted } from 'vue';
+import { computed, onMounted } from 'vue';
 
 import { i18n } from 'boot/i18n';
 import { isModuleActive } from 'src/flox';

@@ -23,8 +23,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue';
-
 import UserEntity from 'src/flox/modules/auth/entities/user.entity';
 import { avatarForUser } from 'src/flox/modules/auth/services/user.service';
 
