@@ -39,9 +39,9 @@ const emit = defineEmits<{
 
 const store = useFormStore();
 const initialValue = props.stateKey
-  ? fetchByKey(props.stateKey)
+  ? (fetchByKey(props.stateKey) as string | null)
   : props.initialValue;
-const fieldValue: Ref<string | null> = ref((initialValue as string) ?? null);
+const fieldValue: Ref<string | null> = ref(initialValue ?? null);
 
 /**
  * Save the updated value

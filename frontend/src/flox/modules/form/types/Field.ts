@@ -12,9 +12,9 @@
  * */
 export type Field = {
   key: string;
-  component: any;
+  component: unknown;
   attributes: {
-    rules: Array<(val: any) => boolean | string>;
-    [key: string]: any;
+    rules: Array<(val: unknown) => boolean | string>;
+    [key: string]: unknown;
   };
 };

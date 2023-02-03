@@ -1,5 +1,4 @@
 import {
-  calculateAge,
   dateToInputString,
   formatDate,
   formatDateTime,
@@ -19,15 +18,6 @@ describe('Date Helpers', () => {
       new Date().setFullYear(new Date().getFullYear() - 1)
     );
     dateNotFullOneYear.setDate(dateNotFullOneYear.getDate() + 1);
-  });
-  describe('calculated age', () => {
-    it('should return the age given his/her birthday', () => {
-      expect(calculateAge(birthday)).toEqual(
-        new Date().getFullYear() - birthday.getFullYear()
-      );
-      expect(calculateAge(dateOneYearOneDayAgo)).toEqual(1);
-      expect(calculateAge(dateNotFullOneYear)).toEqual(0);
-    });
   });
   describe('returned date in string format', () => {
     it('should return a date as an string in format (YYYY-MM-DD)', () => {

@@ -69,6 +69,16 @@ const FIELDS: Record<string, Field> = {
       rules: [],
     },
   },
+  OLD_PASSWORD: {
+    key: 'oldPassword',
+    component: markRaw(GenericInputField),
+    attributes: {
+      rules: [
+        (val: string): boolean | string =>
+          IS_VALID_STRING(val || i18n.global.t('errors.invalid_old_password')),
+      ],
+    },
+  },
   PASSWORD_REPEAT: {
     key: 'passwordRepeat',
     component: markRaw(PasswordRepeat),

@@ -1,5 +1,8 @@
-/* eslint-disable camelcase */
+import buttonTranslations from './buttons';
+
 export default {
+  ...buttonTranslations,
+
   general: {
     finish: 'Abschliessen',
     back: 'Zurück',

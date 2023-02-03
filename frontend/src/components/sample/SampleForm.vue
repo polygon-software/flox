@@ -24,22 +24,22 @@ import FloxWrapper from '../../flox/core/components/FloxWrapper.vue';
 
 const $q = useQuasar();
 
+const key = {
+  formKey: 'sample',
+  pageKey: 'sample',
+  cardKey: 'sample',
+  fieldKey: '',
+};
+
 /**
  * Fetches and logs the form's data from the store
  * @returns void
  */
 function onSubmit(): void {
-  const email = fetchByKey({
-    formKey: 'signup',
-    pageKey: 'signup',
-    cardKey: 'signup',
-    fieldKey: 'email',
-  }) as string;
+  const email = fetchByKey({ ...key, fieldKey: 'email' }) as string;
 
   const username = fetchByKey({
-    formKey: 'signup',
-    pageKey: 'signup',
-    cardKey: 'signup',
+    ...key,
     fieldKey: 'username',
   }) as string;
   showSuccessNotification(

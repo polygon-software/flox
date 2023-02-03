@@ -33,20 +33,8 @@
       </LabelWrapper>
     </div>
   </div>
-  <!-- Bottom Row: City & ZIP code -->
+  <!-- Bottom Row: ZIP code & city -->
   <div class="row justify-between">
-    <div class="col-8">
-      <LabelWrapper :label="$t('address.city')">
-        <q-input
-          v-model="fieldValue.city"
-          dense
-          outlined
-          type="text"
-          :rules="[(val) => IS_VALID_STRING(val) || $t('errors.invalid_city')]"
-          @change="saveValue"
-        />
-      </LabelWrapper>
-    </div>
     <div class="col-3">
       <LabelWrapper :label="$t('address.zipCode')">
         <q-input
@@ -56,6 +44,18 @@
           type="text"
           :rules="[(val) => IS_VALID_ZIP(val) || $t('errors.invalid_zip_code')]"
           mask="####"
+          @change="saveValue"
+        />
+      </LabelWrapper>
+    </div>
+    <div class="col-8">
+      <LabelWrapper :label="$t('address.city')">
+        <q-input
+          v-model="fieldValue.city"
+          dense
+          outlined
+          type="text"
+          :rules="[(val) => IS_VALID_STRING(val) || $t('errors.invalid_city')]"
           @change="saveValue"
         />
       </LabelWrapper>
@@ -98,9 +98,13 @@ import LabelWrapper from './wrappers/LabelWrapper.vue';
 
 const props = withDefaults(
   defineProps<{
-    stateKey?: FormStateKey | null; // If not given, this field emits instead of saving
+    // User to fetch and save the address data to/from the store. If not given, this field emits instead of saving
+    stateKey?: FormStateKey | null;
+    // Title of the field
     title?: string | null;
-    initialValue?: AddressInput | null; // Only considered when stateKey is null, so this field can be a non-saving subfield of other fields
+    // Only considered when stateKey is null, so this field can be a non-saving subfield of other fields
+    initialValue?: AddressInput | null;
+    // Wheter additional information about the address can be given
     showAdditionalAddress?: boolean;
   }>(),
   {
@@ -120,7 +124,6 @@ const initialValue = props.stateKey
   ? fetchByKey(props.stateKey)
   : props.initialValue;
 
-// Value is a string, stored in store as a Date
 const fieldValue = ref(
   initialValue ? (initialValue as AddressInput) : new AddressInput()
 );

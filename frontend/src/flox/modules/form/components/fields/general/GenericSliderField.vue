@@ -6,12 +6,12 @@
       style="margin: 10px; width: 60%"
       :min="min"
       :max="max"
-      :step="1"
+      :step="step"
       label
       label-always
       switch-label-side
       :label-value="labelValue"
-      :markers="smooth ? undefined : max - min"
+      :markers="smooth ? undefined : markers"
       marker-labels
       @change="saveValue"
     />
@@ -30,14 +30,32 @@ import LabelWrapper from './wrappers/LabelWrapper.vue';
 
 const props = withDefaults(
   defineProps<{
+    // Used to store or fetch data from/to the store
     stateKey?: FormStateKey | null;
-    initialValue?: number | null; // Only considered when stateKey is null, so this field can be a non-saving subfield of other fields
+    // Only considered when stateKey is null, so this field can be a non-saving subfield of other fields
+    initialValue?: number | null;
+    // Field label
     label: string;
-    suffix?: string | null; // i18n key of suffix for label value (so count can be applied correctly)
+    // i18n key of suffix for label value (so count can be applied correctly)
+    suffix?: string | null;
+    // Min value for the slider range
     min?: number;
+    // Max value for the slider range
     max?: number;
-    smooth?: boolean; // Whether to not set any tick increments
-    defaultValue?: number; // Default value for field (must be larger than min)
+    // If true, markers will be automatically set, if a number that many markers will be set
+    markers?: boolean | number;
+    // Labels for markers, only works if markers is set to true
+    markerLabels?:
+      | { value: number; label: string }[]
+      | ((val: number) => string)
+      | { number: string } //TODO: add computed ref type
+      | null;
+    // Whether to not set any tick increments
+    smooth?: boolean;
+    // Step size for slider changes
+    step?: number;
+    // Default value for field (must be larger than min)
+    defaultValue?: number;
   }>(),
   {
     stateKey: null,
@@ -45,7 +63,10 @@ const props = withDefaults(
     suffix: null,
     min: 0,
     max: 100,
+    markers: false,
+    markerLabels: null,
     smooth: false,
+    step: 1,
     defaultValue: 0,
   }
 );

@@ -112,11 +112,6 @@
 <script setup lang="ts">
 /**
  * This component defines a generic form that can have a single or multiple pages.
- * It takes the following properties:
- * @param {Object[]} pages - the pages to show, each containing fields, label and key
- * @param {string} [finishLabel] - the label to show on the 'finish' button
- * @param {string} [loadingLabel] - the label to show when loading
- * @param {boolean} [loading] - loading status to show on the finish button
  */
 import { onBeforeMount, Ref, ref } from 'vue';
 import { QForm, QStepper } from 'quasar';
@@ -136,14 +131,22 @@ import FormCard from './cards/FormCard.vue';
 
 const props = withDefaults(
   defineProps<{
+    // Key used to retrieve the forms data from the store
     formKey: string;
+    // the label to show on the 'finish' button
     finishLabel?: string;
-    loadingLabel?: string;
-    textPosition?: string;
-    pages: FormPage[];
+    // loading status to show on the finish button
     loading?: boolean;
+    // the label to show when loading
+    loadingLabel?: string;
+    // Alignment of the text in the form
+    textPosition?: string;
+    // The pages to show, each containing fields, label and key
+    pages: FormPage[];
+    // Whether the form should be a flat Q-Card (no borders) or not
     flat?: boolean;
-    preserveState?: boolean; // Whether the store state should be preserved when rebuilding the form
+    // Whether the store state should be preserved when rebuilding the form
+    preserveState?: boolean;
     // Manual override for field options (e.g. in GenericSelectFields): maps a field key to a list of options
     optionOverrides?: Record<string, unknown[]> | null;
   }>(),
@@ -201,9 +204,9 @@ function toNext(): void {
  * @param stepperRef - stepper ref
  * @returns void
  */
-function previous(stepperRef: QStepper | null | unknown): void {
+function previous(stepperRef: QStepper | null): void {
   if (stepperRef) {
-    (stepperRef as QStepper).previous();
+    stepperRef.previous();
   }
 }
 </script>

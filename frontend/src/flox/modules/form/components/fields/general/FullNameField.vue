@@ -84,10 +84,10 @@ const emit = defineEmits<{
 
 const store = useFormStore();
 const initialValue = props.stateKey
-  ? fetchByKey(props.stateKey)
+  ? (fetchByKey(props.stateKey) as FullName | null)
   : props.initialValue;
 const fieldValue: Ref<FullName> = ref(
-  initialValue ? (initialValue as FullName) : new FullName()
+  initialValue && initialValue.isComplete() ? initialValue : new FullName()
 );
 
 /**
