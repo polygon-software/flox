@@ -101,6 +101,13 @@ data aws_iam_policy_document flox_manager_document {
     ]
   }
   statement {
+    effect = "Allow"
+    actions = [
+      "sns:*"
+    ]
+    resources = ["*"]
+  }
+  statement {
     sid = "AllowKMSUse"
     effect = "Allow"
     actions = [

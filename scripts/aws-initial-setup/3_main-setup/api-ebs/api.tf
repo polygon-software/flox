@@ -195,7 +195,7 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
   }
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
-    name      = "COMPOSE_PROJECT_NAME"
+    name      = "PROJECT_NAME"
     value     = var.project
   }
 
