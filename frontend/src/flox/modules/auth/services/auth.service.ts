@@ -92,11 +92,13 @@ export default class AuthenticationService {
    *
    * @param identifier - the authentication's identifier (usually E-mail or username)
    * @param password - the authentication's password
-   * @param newPassword - the new password if this function is triggered from set-password page
+   * @param q - Quasar instance (for opening dialogs)
+   * @param [newPassword] - the new password if this function is triggered from set-password page
    */
   async login(
     identifier: string,
     password: string,
+    q: QVueGlobals,
     newPassword = ''
   ): Promise<void> {
     // Generate auth details
@@ -146,11 +148,9 @@ export default class AuthenticationService {
         newPasswordRequired(userAttributes) {
           const attrs = cloneDeep(userAttributes) as Record<string, unknown>;
 
-          const $q = useQuasar();
-
           let dialogPassword = newPassword;
           // Show password change dialog
-          $q.dialog({
+          q.dialog({
             component: ChangePasswordDialog,
             componentProps: {},
           }).onOk(
@@ -158,6 +158,7 @@ export default class AuthenticationService {
               dialogPassword = userEnteredPassword;
             }
           );
+          // TODO sketchy here
           // Ensure e-mail doesn't get passed, so cognito doesn't recognize it as change
           delete attrs.email;
           delete attrs.email_verified;
@@ -601,13 +602,15 @@ export default class AuthenticationService {
    * @param password - the authentication's password for re-login
    */
   onFailure(error: Error, identifier?: string, password?: string): void {
+    let message;
+
     switch (error.name) {
       // Case 1: User has not verified their e-mail yet
       case 'UserNotConfirmedException':
         void this.showEmailVerificationDialog().then(() => {
           if (identifier && password) {
             // Retry login
-            void this.login(identifier, password);
+            void this.login(identifier, password, this.$q);
           }
         });
         break;
@@ -635,7 +638,6 @@ export default class AuthenticationService {
         break;
       // Case 3: Wrong password or user's Cognito account is disabled
       case 'NotAuthorizedException':
-        let message;
         if (error.message.includes('Incorrect username or password')) {
           // Wrong username / password
           message = i18n.global.t('errors.incorrect_username_or_password');

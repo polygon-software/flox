@@ -1,7 +1,8 @@
 <template>
   <q-dialog ref="dialogRef">
-    <q-card class="q-pa-sm" style="width: 400px; min-height: 250px">
+    <q-card class="q-pa-lg" style="width: 400px; min-height: 250px">
       <strong>{{ $t('authentication.change_password') }}</strong>
+      <!-- TODO use new forms module -->
       <q-form class="q-gutter-md" @submit="onSubmit">
         <q-input
           v-model="passwordOld"

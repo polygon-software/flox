@@ -23,12 +23,14 @@
 
 <script setup lang="ts">
 import { inject } from 'vue';
+import { useQuasar } from 'quasar';
 
 import LoginForm from 'src/flox/modules/auth/components/forms/LoginForm.vue';
 
 import AuthenticationService from '../flox/modules/auth/services/auth.service';
 
 const $authService: AuthenticationService | undefined = inject('$authService');
+const $q = useQuasar();
 
 /**
  * Logs in the given authentication
@@ -44,7 +46,7 @@ async function onLogin({
   identifier: string;
   password: string;
 }): Promise<void> {
-  await $authService?.login(identifier, password);
+  await $authService?.login(identifier, password, $q);
 }
 </script>
 
