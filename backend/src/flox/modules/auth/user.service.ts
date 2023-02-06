@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 
 import AbstractSearchService from '../abstracts/search/abstract-search.service';
 import UpdateInput from '../abstracts/crud/inputs/update.input';
+import EmailService from '../email/email.service';
 
 import User from './entities/user.entity';
 import {
@@ -18,6 +19,8 @@ export default class UserService extends AbstractSearchService<User> {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+
+    private readonly emailService: EmailService,
   ) {
     super();
   }
@@ -139,9 +142,13 @@ export default class UserService extends AbstractSearchService<User> {
     // Force password change & get temporary password
     const tempPassword = await forceUserPasswordChange(user.email);
 
-    console.log('CHANGED TO TEMP PW', tempPassword);
-    // TODO do something by default / prevent account from reaching fucked up state
-    // TODO application specific: send E-mail informing the user that their password was changed
+    console.log('CHANGED TO TEMP PW', tempPassword); // TODO delte
+    // Send e-mail notifying user that their password was reset
+    await this.emailService.sendPasswordResetEmail(
+      user.email,
+      user.lang,
+      tempPassword,
+    );
 
     return user;
   }

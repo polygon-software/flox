@@ -11,6 +11,7 @@ import {
   AdminGetUserCommand,
   AdminSetUserPasswordCommand,
   AdminUpdateUserAttributesCommand,
+  AdminUserGlobalSignOutCommand,
   CognitoIdentityProviderClient,
   UserStatusType,
 } from '@aws-sdk/client-cognito-identity-provider';
@@ -22,8 +23,8 @@ const DEFAULT_COGNITO_PASSWORD_LENGTH = 8;
 const provider = new CognitoIdentityProviderClient({
   region: process.env.AWS_MAIN_REGION ?? 'eu-central-1',
   credentials: {
-    accessKeyId: process.env.ADMIN_AWS_ACCESS_KEY_ID ?? '',
-    secretAccessKey: process.env.ADMIN_AWS_SECRET_ACCESS_KEY ?? '',
+    accessKeyId: process.env.AWS_ADMIN_ACCESS_KEY_ID ?? '',
+    secretAccessKey: process.env.AWS_ADMIN_SECRET_ACCESS_KEY ?? '',
   },
 });
 
@@ -239,6 +240,14 @@ export async function forceUserPasswordChange(email: string): Promise<string> {
 
   const setPasswordCommand = new AdminSetUserPasswordCommand(params);
   const result = await provider.send(setPasswordCommand);
+
+  // Globally sign out user
+  await provider.send(
+    new AdminUserGlobalSignOutCommand({
+      UserPoolId: process.env.USER_POOL_ID ?? '',
+      Username: email,
+    }),
+  );
 
   // If status code is anything other than 200, throw error
   if (result.$metadata.httpStatusCode !== 200) {

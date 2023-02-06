@@ -1,0 +1,6 @@
+{
+  "password_changed": {
+    "title": "Passwort zurückgesetzt",
+    "content": "Ihr Passwort wurde zurückgesetzt. Ihr Temporär-Passwort lautet: {password} \nSie werden beim nächsten Login gebeten werden, Ihr Passwort zu ändern."
+  }
+}

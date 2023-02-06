@@ -58,11 +58,8 @@ import env from './env';
 
         // AWS
         AWS_MAIN_REGION: Joi.string().required(),
-        // TODO: handle in separate PR, how do we want to handle keys?
-        // AWS_S3_ACCESS_KEY_ID: Joi.string().required(),
-        // AWS_S3_SECRET_ACCESS_KEY: Joi.string().required(),
-        // AWS_SES_ACCESS_KEY_ID: Joi.string().required(),
-        // AWS_SES_SECRET_ACCESS_KEY: Joi.string().required(),
+        AWS_ADMIN_ACCESS_KEY_ID: Joi.string().required(),
+        AWS_ADMIN_SECRET_ACCESS_KEY: Joi.string().required(),
         AWS_PUBLIC_BUCKET_NAME: Joi.string().required(),
         AWS_PRIVATE_BUCKET_NAME: Joi.string().required(),
       }),
@@ -79,7 +76,7 @@ import env from './env';
           database: configService.getOrThrow<string>('database.database'),
           entities: [configService.getOrThrow<string>('entities')],
           synchronize: env.DEV,
-          logging: ['query', 'error'],
+          logging: ['error'],
         } as PostgresConnectionOptions),
       inject: [ConfigService],
     }),

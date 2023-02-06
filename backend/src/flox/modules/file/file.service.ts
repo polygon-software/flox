@@ -23,10 +23,10 @@ export default class FileService extends AbstractSearchAccessControlService<S3Fi
   private readonly credentials = {
     region: this.configService.getOrThrow<string>('AWS_MAIN_REGION'),
     accessKeyId: this.configService.getOrThrow<string>(
-      'ADMIN_AWS_ACCESS_KEY_ID',
+      'AWS_ADMIN_ACCESS_KEY_ID',
     ),
     secretAccessKey: this.configService.getOrThrow<string>(
-      'ADMIN_AWS_SECRET_ACCESS_KEY',
+      'AWS_ADMIN_SECRET_ACCESS_KEY',
     ),
   };
 

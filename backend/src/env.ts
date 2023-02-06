@@ -121,4 +121,16 @@ export default {
   get STRIPE_SECRET_KEY(): string {
     return asString(process.env.STRIPE_SECRET_KEY);
   },
+  /**
+   * @returns AWS admin access key ID
+   */
+  get AWS_ADMIN_ACCESS_KEY_ID(): string {
+    return asString(process.env.AWS_ADMIN_ACCESS_KEY_ID);
+  },
+  /**
+   * @returns AWS admin secret access key
+   */
+  get AWS_ADMIN_SECRET_ACCESS_KEY(): string {
+    return asString(process.env.AWS_ADMIN_SECRET_ACCESS_KEY);
+  },
 };

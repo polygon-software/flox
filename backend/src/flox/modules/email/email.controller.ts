@@ -1,25 +1,11 @@
 import { Controller, Post, Query, Req, Res } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { Request, Response } from 'express';
 
-import { Credentials } from './helpers/email-helpers';
 import EmailService from './email.service';
 
 @Controller()
 export default class EmailController {
-  constructor(
-    private readonly emailService: EmailService,
-    private readonly configService: ConfigService,
-  ) {}
-
-  // SES credentials
-  private readonly credentials: Credentials = {
-    region: this.configService.getOrThrow<string>('AWS_MAIN_REGION'),
-    accessKeyId: this.configService.getOrThrow<string>('AWS_SES_ACCESS_KEY_ID'),
-    secretAccessKey: this.configService.getOrThrow<string>(
-      'AWS_SES_SECRET_ACCESS_KEY',
-    ),
-  };
+  constructor(private readonly emailService: EmailService) {}
 
   /**
    * Sends a test e-mail to the given address (in 'recipient' param of query)
@@ -45,7 +31,7 @@ export default class EmailController {
 
     // Send e-mail
     try {
-      await this.emailService.sendTestEmail(recipient, this.credentials);
+      await this.emailService.sendTestEmail(recipient);
       res.status(200);
       res.send();
     } catch (e: unknown) {

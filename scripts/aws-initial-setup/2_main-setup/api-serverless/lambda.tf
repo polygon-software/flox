@@ -51,8 +51,8 @@ resource "aws_lambda_function" "api_lambda" {
       AWS_LOG_BUCKET_NAME = var.log_bucket_id,
 
       // AWS user credentials
-      ADMIN_AWS_ACCESS_KEY_ID = var.admin_key_id,
-      ADMIN_AWS_SECRET_ACCESS_KEY = var.admin_key_secret
+      AWS_ADMIN_ACCESS_KEY_ID = var.admin_key_id,
+      AWS_ADMIN_SECRET_ACCESS_KEY = var.admin_key_secret
     }
   }
 }
