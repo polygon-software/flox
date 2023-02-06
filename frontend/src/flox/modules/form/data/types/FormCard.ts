@@ -45,7 +45,7 @@ export default class FormCard {
   /**
    * Adds or updates a field.
    * @param key - Name of the field
-   * @param value Field to add or update
+   * @param value - Field to add or update
    * @returns void
    */
   setField(key: string, value: Field): void {
