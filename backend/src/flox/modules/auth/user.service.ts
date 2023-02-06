@@ -142,7 +142,6 @@ export default class UserService extends AbstractSearchService<User> {
     // Force password change & get temporary password
     const tempPassword = await forceUserPasswordChange(user.email);
 
-    console.log('CHANGED TO TEMP PW', tempPassword); // TODO delte
     // Send e-mail notifying user that their password was reset
     await this.emailService.sendPasswordResetEmail(
       user.email,
