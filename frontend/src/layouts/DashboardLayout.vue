@@ -1,5 +1,6 @@
 <template>
   <q-layout view="hHh lpR fFf" class="bg-grey-1">
+    <!-- Header with toolbar -->
     <q-header class="bg-white text-grey-8 q-py-xs" height-hint="58" bordered>
       <q-toolbar>
         <q-btn
@@ -57,18 +58,35 @@
           >
             <q-tooltip>Apps</q-tooltip>
           </q-btn>
+          <!-- Language switcher -->
           <LocaleSwitcher />
+
+          <!-- Notifications -->
           <NotificationBell />
-          <q-btn round flat>
+
+          <!-- Avatar / account menu -->
+          <q-btn round flat @click="accountMenuOpen = !accountMenuOpen">
             <q-avatar size="26px">
               <img :src="$authStore.avatar" alt="avatar" />
             </q-avatar>
-            <q-tooltip>Account</q-tooltip>
+            <!-- Dropdown menu -->
+            <q-menu>
+              <q-list class="column" item-separator link>
+                <q-item clickable>
+                  <q-item-section @click="logout">
+                    <q-item-label>
+                      {{ $t('authentication.logout') }}
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
           </q-btn>
         </div>
       </q-toolbar>
     </q-header>
 
+    <!-- Left-side menu drawer -->
     <q-drawer
       v-model="leftDrawerOpen"
       show-if-above
@@ -150,11 +168,14 @@ import { invalidateTables } from 'src/apollo/invalidation';
 import { ALL_TABLES } from 'src/flox/TABLES';
 import NotificationBell from 'src/flox/modules/notification/components/NotificationBell.vue';
 import LocaleSwitcher from 'components/locale/LocaleSwitcher.vue';
+import AuthenticationService from 'src/flox/modules/auth/services/auth.service';
 
 const $routerService: RouterService | undefined = inject('$routerService');
+const $authService: AuthenticationService | undefined = inject('$authService');
 const $authStore = useAuthStore();
 
 const leftDrawerOpen: Ref<boolean> = ref(false);
+const accountMenuOpen: Ref<boolean> = ref(false);
 const search: Ref<string> = ref('');
 const key: Ref<number> = ref(0.0);
 
@@ -275,6 +296,16 @@ const bottomLinks: ComputedRef<LinkType[]> = computed(() => [
     ],
   },
 ]);
+
+/**
+ * Logs out the user
+ *
+ * @async
+ */
+async function logout(): Promise<void> {
+  await $authService?.logout();
+  await $routerService?.routeTo(ROUTES.LOGIN);
+}
 </script>
 
 <style lang="sass">

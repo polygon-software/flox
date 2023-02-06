@@ -6,11 +6,9 @@
           v-for="locale in localeOptions"
           :key="locale.code"
           :active="i18n.global.locale.value === locale.code"
+          clickable
         >
-          <q-item-section
-            class="cursor-pointer"
-            @click="setLocale(locale.code)"
-          >
+          <q-item-section @click="setLocale(locale.code)">
             <q-item-label>
               {{ locale.label }}
             </q-item-label>
