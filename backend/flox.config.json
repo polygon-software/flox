@@ -5,7 +5,7 @@
     "file": true,
     "image": true,
     "sharing": false,
-    "email": false,
+    "email": true,
     "notification": true,
     "payment": true
   },

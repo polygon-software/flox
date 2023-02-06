@@ -30,7 +30,7 @@ export default class EmailService {
    */
   async sendTestEmail(recipient: string): Promise<void> {
     // Get sender from module configuration
-    const sender = moduleConfig().emailSender;
+    const sender = moduleConfig().emailAddress;
 
     // Send actual e-mail
     await sendEmail(
@@ -55,7 +55,7 @@ export default class EmailService {
     tempPassword: string,
   ): Promise<void> {
     // Get sender from module configuration
-    const sender = moduleConfig().emailSender;
+    const sender = moduleConfig().emailAddress;
 
     // Send actual e-mail
     await sendEmail(

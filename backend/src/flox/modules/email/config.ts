@@ -1,7 +1,4 @@
-import {
-  floxModuleOptions,
-  mergeConfigurations,
-} from '../../core/flox-helpers';
+import { floxModuleOptions } from '../../core/flox-helpers';
 import { MODULES } from '../../MODULES';
 import Env from '../../../env';
 
@@ -15,7 +12,7 @@ type EmailModuleConfig = {
 };
 
 // Default configuration set; will get merged with custom config from flox.config.js
-// emailSender refers to the part before '@' (e.g. infO)
+// emailSender refers to the part before '@' (e.g. info)
 // emailAddress refers to the complete address from where the email will be sent (e.g. info@dev.polygon-project.ch)
 const defaultConfig: EmailModuleConfig = {
   emailSender: 'noreply',
@@ -32,7 +29,7 @@ export function moduleConfig(): EmailModuleConfig {
     throw Error('Required env variable BASE_URL is missing or malformed');
   }
 
-  // Check if emailSender has alreay been constructed
+  // Check if emailSender has already been constructed
   if (defaultConfig.emailAddress) {
     return defaultConfig;
   }
