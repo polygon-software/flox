@@ -5,7 +5,7 @@
         {{ label }}
       </div>
       <q-icon v-if="icon" name="info" class="text-primary">
-        <q-tooltip>
+        <q-tooltip v-if="tooltip">
           {{ tooltip }}
         </q-tooltip>
       </q-icon>
