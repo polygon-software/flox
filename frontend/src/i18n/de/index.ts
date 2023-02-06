@@ -48,6 +48,7 @@ export default {
     resend_code: 'Ich habe keinen Code erhalten',
   },
   errors: {
+    error: 'Fehler',
     module_error: "Fehler: Modul '{module}' ist nicht aktiv",
     invalid_password: 'Bitte geben Sie ein gültiges Passwort ein',
     invalid_email: 'Bitte geben Sie eine gültige E-Mail-Adresse ein',
@@ -73,6 +74,7 @@ export default {
     entry_delete_failed: 'Eintrag konnte nicht gelöscht werden',
     account_disabled:
       'Ihr Account ist gesperrt. Bitte wenden Sie sich an den Systemadministrator.',
+    incorrect_username_or_password: 'Falscher Benutzername oder Passwort',
   },
   files: {
     files: 'Dateien',

@@ -48,6 +48,7 @@ export default {
     resend_code: 'I did not receive a code',
   },
   errors: {
+    error: 'Error',
     module_error: "Error: Module '{module}' is not active",
     invalid_password: 'Please enter a valid password',
     invalid_email: 'Please enter a valid e-mail address',
@@ -71,6 +72,7 @@ export default {
     entry_delete_failed: 'Entry could not be deleted',
     account_disabled:
       'Your account is disabled. Please contact a system administrator.',
+    incorrect_username_or_password: 'Incorrect username or password',
   },
   files: {
     files: 'Files',
