@@ -73,6 +73,8 @@ export default {
     account_disabled:
       'Your account is disabled. Please contact a system administrator.',
     incorrect_username_or_password: 'Incorrect username or password',
+    cannot_reset_password:
+      'User password cannot be reset in the current state. Please contact a system administrator.',
   },
   files: {
     files: 'Files',

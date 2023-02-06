@@ -73,8 +73,10 @@ export default {
     entry_edit_failed: 'Die Änderung konnte nicht gespeichert werden',
     entry_delete_failed: 'Eintrag konnte nicht gelöscht werden',
     account_disabled:
-      'Ihr Account ist gesperrt. Bitte wenden Sie sich an den Systemadministrator.',
+      'Ihr Account ist gesperrt. Bitte kontaktieren Sie einen Systemadministrator.',
     incorrect_username_or_password: 'Falscher Benutzername oder Passwort',
+    cannot_reset_password:
+      'Das Passwort kann im aktuellen Zustand nicht zurückgesetzt werden. Bitte kontaktieren Sie einen Systemadministrator.',
   },
   files: {
     files: 'Dateien',

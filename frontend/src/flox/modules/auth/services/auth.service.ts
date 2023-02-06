@@ -635,20 +635,26 @@ export default class AuthenticationService {
         break;
       // Case 3: Wrong password or user's Cognito account is disabled
       case 'NotAuthorizedException':
+        let message;
         if (error.message.includes('Incorrect username or password')) {
           // Wrong username / password
-          this.$errorService.showErrorDialog(
-            new Error(i18n.global.t('errors.incorrect_username_or_password'))
-          );
+          message = i18n.global.t('errors.incorrect_username_or_password');
         } else if (error.message.includes('User is disabled')) {
           // Account disabled
-          this.$errorService.showErrorDialog(
-            new Error(i18n.global.t('errors.account_disabled'))
-          );
-        } else {
-          // Other NotAuthorizedExceptions
-          this.$errorService.showErrorDialog(error);
+          message = i18n.global.t('errors.account_disabled');
+        } else if (
+          error.message.includes(
+            'User password cannot be reset in the current state'
+          )
+        ) {
+          // Password can't be reset
+          message = i18n.global.t('errors.cannot_reset_password');
         }
+
+        // Other NotAuthorizedExceptions are handled directly
+        this.$errorService.showErrorDialog(
+          message ? new Error(message) : error
+        );
         break;
       // Default: any other error
       default:
