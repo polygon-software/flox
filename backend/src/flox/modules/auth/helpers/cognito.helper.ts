@@ -16,8 +16,8 @@ import {
   UserStatusType,
 } from '@aws-sdk/client-cognito-identity-provider';
 
-// Default length for cognito passwords
-const DEFAULT_COGNITO_PASSWORD_LENGTH = 8;
+// Default length for Cognito passwords
+const DEFAULT_COGNITO_PASSWORD_LENGTH = 16;
 
 // Set up cognito admin provider
 const provider = new CognitoIdentityProviderClient({
@@ -31,12 +31,12 @@ const provider = new CognitoIdentityProviderClient({
 /**
  * Generates a random number in given range
  *
- * @param min - start of the range
- * @param max - end of the range
+ * @param min - start of the range (inclusive)
+ * @param max - end of the range (exclusive)
  * @returns random number in given range
  */
 function randomNumber(min: number, max: number): number {
-  return randomInt(max - min) + min;
+  return randomInt(min, max);
 }
 
 /**
@@ -49,21 +49,21 @@ export function randomPassword(minLength: number): string {
   const charsLower = 'abcdefghijklmnopqrstuvwxyz';
   const charsUpper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   const numbers = '0123456789';
-  const special = '!?+'; // Limited to known working characters due to base-64 encoding
-  const requiredChars = [charsLower, charsUpper, numbers, special];
-  let res = '';
+  const specialCharacters = '!?+'; // Limited to known working characters due to base-64 encoding
+  const requiredChars = [charsLower, charsUpper, numbers, specialCharacters];
+  let password = '';
   requiredChars.forEach((requiredChar) => {
     for (let i = 0; i < Math.ceil(minLength / requiredChars.length); i += 1) {
-      res += requiredChar[randomNumber(0, requiredChar.length)];
+      password += requiredChar[randomNumber(0, requiredChar.length)];
     }
   });
-  res = res
+  password = password
     .split('')
     .map((value) => ({ value, sort: randomInt(10000) }))
     .sort((a, b) => a.sort - b.sort)
     .map(({ value }) => value)
     .join('');
-  return res;
+  return password;
 }
 
 /**

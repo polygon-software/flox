@@ -76,7 +76,7 @@ import env from './env';
           database: configService.getOrThrow<string>('database.database'),
           entities: [configService.getOrThrow<string>('entities')],
           synchronize: env.DEV,
-          logging: ['error'],
+          logging: ['warn', 'error'],
         } as PostgresConnectionOptions),
       inject: [ConfigService],
     }),
