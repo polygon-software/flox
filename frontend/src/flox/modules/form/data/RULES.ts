@@ -57,7 +57,7 @@ const IS_VALID_FUTURE_DATE = (val: Date): boolean => {
   return (
     isValid(val) &&
     val.setHours(0, 0, 0, 0) >= new Date().setHours(0, 0, 0, 0) &&
-    val.getFullYear() < 2100
+    val.getFullYear() < new Date().getFullYear() + 100
   );
 };
 
