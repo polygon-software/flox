@@ -148,21 +148,28 @@ export default class AuthenticationService {
         newPasswordRequired(userAttributes) {
           const attrs = cloneDeep(userAttributes) as Record<string, unknown>;
 
-          let dialogPassword = newPassword;
-          // Show password change dialog
-          q.dialog({
-            component: ChangePasswordDialog,
-            componentProps: {},
-          }).onOk(
-            ({ userEnteredPassword }: { userEnteredPassword: string }) => {
-              dialogPassword = userEnteredPassword;
-            }
-          );
-          // TODO sketchy here
-          // Ensure e-mail doesn't get passed, so cognito doesn't recognize it as change
-          delete attrs.email;
-          delete attrs.email_verified;
-          cognitoUser.completeNewPasswordChallenge(dialogPassword, attrs, this);
+          // No password given: show dialog for setting new one
+          if (!newPassword) {
+            // Show password change dialog
+            q.dialog({
+              component: ChangePasswordDialog,
+              componentProps: {},
+            }).onOk(({ passwordNew }: { passwordNew: string }) => {
+              // Ensure e-mail doesn't get passed, so Cognito doesn't recognize it as changed
+              delete attrs.email;
+              delete attrs.email_verified;
+              cognitoUser.completeNewPasswordChallenge(
+                passwordNew,
+                attrs,
+                this
+              );
+            });
+          } else {
+            // Ensure e-mail doesn't get passed, so Cognito doesn't recognize it as changed
+            delete attrs.email;
+            delete attrs.email_verified;
+            cognitoUser.completeNewPasswordChallenge(newPassword, attrs, this);
+          }
         },
 
         // Called if time-limited one time password is required (only second login or later)

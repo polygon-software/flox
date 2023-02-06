@@ -9,6 +9,7 @@ import {
   AdminEnableUserCommand,
   AdminEnableUserCommandOutput,
   AdminGetUserCommand,
+  AdminSetUserPasswordCommand,
   AdminUpdateUserAttributesCommand,
   CognitoIdentityProviderClient,
   UserStatusType,
@@ -232,16 +233,12 @@ export async function forceUserPasswordChange(email: string): Promise<string> {
   const params = {
     UserPoolId: process.env.USER_POOL_ID ?? '',
     Username: email,
-    UserAttributes: [
-      {
-        Name: 'AccountStatus',
-        Value: 'FORCE_CHANGE_PASSWORD',
-      },
-    ],
+    Password: tempPassword,
+    Permanent: false,
   };
 
-  const changeAttributesCommand = new AdminUpdateUserAttributesCommand(params);
-  const result = await provider.send(changeAttributesCommand);
+  const setPasswordCommand = new AdminSetUserPasswordCommand(params);
+  const result = await provider.send(setPasswordCommand);
 
   // If status code is anything other than 200, throw error
   if (result.$metadata.httpStatusCode !== 200) {
