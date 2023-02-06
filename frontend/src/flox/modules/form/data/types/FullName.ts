@@ -32,7 +32,7 @@ export default class FullName {
   }
 
   /**
-   * Replaces empty strings in values with nulls
+   * Replaces empty strings in values with undefined
    */
   fixEmptyStrings(): void {
     if (this.firstName?.length === 0) {
