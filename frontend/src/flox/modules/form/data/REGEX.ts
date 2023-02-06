@@ -1,7 +1,6 @@
 export const PASSWORD_REGEX =
   /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d)(?=.*?[#?!@$ %^&*-]).{8,}$/;
 export const EMAIL_REGEX = /^[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+$/;
-export const UID_REGEX = /^((CHE-(\d{3}.){2}\d{3})|(FL-\d{4}.\d{3}.\d{3}-\d))$/;
 export const ZIP_REGEX = /^\d{4}$/;
 export const PHONE_NUMBER_REGEX = /^((\+41\d{9})|(\+423\d{7}))$/;
 export const IBAN_REGEX = /^[A-Z]{2}\d{2}( [A-Z0-9]{4}){4} [A-Z0-9]$/;
