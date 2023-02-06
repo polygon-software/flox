@@ -107,65 +107,13 @@ const FIELDS: Record<string, Field> = {
     attributes: {
       dense: true,
       type: 'text',
-      label: i18n.global.t('authentication.name'),
+      label: i18n.global.t('fields.credentials.name'),
       rules: [
         (val: string): boolean | string =>
           // eslint-disable-next-line sonarjs/no-duplicate-string
           IS_VALID_STRING(val) || i18n.global.t('errors.invalid_name'),
       ],
       width: 100,
-    },
-  },
-  FIRST_NAME: {
-    key: 'firstName',
-    component: markRaw(GenericInputField),
-    attributes: {
-      dense: true,
-      type: 'text',
-      label: i18n.global.t('authentication.first_name'),
-      rules: [
-        (val: string): boolean | string =>
-          IS_VALID_STRING(val) || i18n.global.t('errors.invalid_name'),
-      ],
-    },
-  },
-  MIDDLE_NAME: {
-    key: 'middleName',
-    component: markRaw(QInput),
-    attributes: {
-      dense: true,
-      type: 'text',
-      label: i18n.global.t('dossier.privateCustomer.middleName'),
-      rules: [
-        (val: string): boolean | string =>
-          !val || IS_VALID_STRING(val) || i18n.global.t('errors.invalid_name'),
-      ],
-    },
-  },
-  LAST_NAME: {
-    key: 'lastName',
-    component: markRaw(GenericInputField),
-    attributes: {
-      dense: true,
-      type: 'text',
-      label: i18n.global.t('authentication.last_name'),
-      rules: [
-        (val: string): boolean | string =>
-          IS_VALID_STRING(val) || i18n.global.t('errors.invalid_name'),
-      ],
-    },
-  },
-  SECOND_LAST_NAME: {
-    key: 'secondLastName',
-    component: markRaw(QInput),
-    attributes: {
-      dense: true,
-      type: 'text',
-      label: i18n.global.t('dossier.privateCustomer.secondLastName'),
-      rules: [
-        (val: string): boolean | string =>
-          !val || IS_VALID_STRING(val) || i18n.global.t('errors.invalid_name'),
-      ],
     },
   },
   FULL_NAME: {
@@ -201,6 +149,5 @@ const FIELDS: Record<string, Field> = {
     },
   },
 };
-
 // eslint-disable-next-line import/prefer-default-export
 export { FIELDS };

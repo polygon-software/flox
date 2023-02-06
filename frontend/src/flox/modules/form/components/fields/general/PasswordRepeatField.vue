@@ -14,16 +14,16 @@
         v-model="fieldValue.password"
         dense
         outlined
-        :type="isPwd ? 'password' : 'text'"
+        :type="showPassword ? 'text' : 'password'"
         :rules="[
           (val) => IS_VALID_PASSWORD(val) || $t('errors.invalid_password'),
         ]"
       >
         <template #append>
           <q-icon
-            :name="isPwd ? 'visibility_off' : 'visibility'"
+            :name="showPassword ? 'visibility' : 'visibility_off'"
             class="cursor-pointer"
-            @click="isPwd = !isPwd"
+            @click="showPassword = !showPassword"
           />
         </template>
       </q-input>
@@ -39,7 +39,7 @@
         v-model="fieldValue.passwordRepeat"
         dense
         outlined
-        :type="isPwdRepeat ? 'password' : 'text'"
+        :type="showRepeatedPassword ? 'text' : 'password'"
         :rules="[
           (val) =>
             val === fieldValue.password || $t('errors.non_matching_password'),
@@ -47,9 +47,9 @@
       >
         <template #append>
           <q-icon
-            :name="isPwdRepeat ? 'visibility_off' : 'visibility'"
+            :name="showRepeatedPassword ? 'visibility' : 'visibility_off'"
             class="cursor-pointer"
-            @click="isPwdRepeat = !isPwdRepeat"
+            @click="showRepeatedPassword = !showRepeatedPassword"
           />
         </template>
       </q-input>
@@ -75,7 +75,9 @@ import LabelWrapper from './wrappers/LabelWrapper.vue';
 
 const props = withDefaults(
   defineProps<{
+    // Used to fetch or store data from/to the store
     stateKey: FormStateKey;
+    // Changes the fields label (e.g. "Repeat Password" or "Repeat new Password")
     newPassword?: boolean;
   }>(),
   {
@@ -91,8 +93,8 @@ const fieldValue: Ref<PasswordRepeat> = ref(
   initialValue ?? new PasswordRepeat()
 );
 
-const isPwd = ref(true);
-const isPwdRepeat = ref(true);
+const showPassword = ref(false);
+const showRepeatedPassword = ref(false);
 
 /**
  * Save the updated value if valid, otherwise null

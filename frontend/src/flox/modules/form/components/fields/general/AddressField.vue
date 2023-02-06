@@ -5,7 +5,7 @@
   <!-- Top Row: Street & house number -->
   <div class="row justify-between">
     <div class="col-8">
-      <LabelWrapper :label="$t('address.street')">
+      <LabelWrapper :label="$t('fields.address.street')">
         <q-input
           v-model="fieldValue.street"
           dense
@@ -19,7 +19,7 @@
       </LabelWrapper>
     </div>
     <div class="col-3">
-      <LabelWrapper :label="$t('address.number')">
+      <LabelWrapper :label="$t('fields.address.number')">
         <q-input
           v-model="fieldValue.number"
           dense
@@ -36,7 +36,7 @@
   <!-- Bottom Row: ZIP code & city -->
   <div class="row justify-between">
     <div class="col-3">
-      <LabelWrapper :label="$t('address.zipCode')">
+      <LabelWrapper :label="$t('fields.address.zip_code')">
         <q-input
           v-model="fieldValue.zipCode"
           dense
@@ -49,7 +49,7 @@
       </LabelWrapper>
     </div>
     <div class="col-8">
-      <LabelWrapper :label="$t('address.city')">
+      <LabelWrapper :label="$t('fields.address.city')">
         <q-input
           v-model="fieldValue.city"
           dense
@@ -63,7 +63,7 @@
   </div>
   <div v-if="showAdditionalAddress" class="row">
     <div class="col-12">
-      <LabelWrapper :label="$t('address.additionalAddress')">
+      <LabelWrapper :label="$t('fields.address.additional_address')">
         <q-input
           v-model="fieldValue.additionalAddress"
           dense

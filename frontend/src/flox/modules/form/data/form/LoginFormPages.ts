@@ -1,22 +1,25 @@
 import { i18n } from 'boot/i18n';
-import * as auth from 'src/flox/modules/auth';
 
+import * as auth from '../../../auth';
 import FormPage from '../types/FormPage';
 import FormCard from '../types/FormCard';
 
 import { FIELDS } from './FIELDS';
+import { loginFormKey } from './FormKeys';
 
 // Login
 const loginCard = new FormCard(
-  'login',
+  loginFormKey.cardKey,
   [
     auth.moduleConfig().emailAsUsername ? FIELDS.EMAIL : FIELDS.USERNAME,
     FIELDS.PASSWORD,
   ],
-  i18n.global.t('dossier.cardTitles.login')
+  i18n.global.t('cardTitles.login')
 );
 
 // Login form pages with respective cards
 export default [
-  new FormPage('loginPage', i18n.global.t('authentication.login'), [loginCard]),
+  new FormPage(loginFormKey.pageKey, i18n.global.t('authentication.login'), [
+    loginCard,
+  ]),
 ];

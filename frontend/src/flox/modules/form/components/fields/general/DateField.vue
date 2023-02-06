@@ -53,7 +53,7 @@ const props = withDefaults(
   {
     stateKey: null,
     dateFormat: 'YYYY-MM-DD',
-    label: i18n.global.t('dossier.date'),
+    label: i18n.global.t('fields.date.date'),
     hint: undefined,
     rules: () => [],
     initialValue: null,

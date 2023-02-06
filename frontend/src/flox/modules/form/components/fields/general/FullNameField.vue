@@ -1,11 +1,11 @@
 <template>
   <div v-if="showTitle" class="q-mb-md text-subtitle1 text-left text-primary">
-    {{ $t('dossier.businessCustomer.authorizedPerson') }}
+    {{ $t('fields.credentials.sample_title') }}
   </div>
   <div class="q-gutter-sm row">
     <!-- First name -->
     <GenericInputField
-      :label="$t('dossier.privateCustomer.firstName')"
+      :label="$t('fields.credentials.first_name')"
       :rules="[(val: string) => IS_VALID_STRING(val) || $t('errors.invalid_name')]"
       :initial-value="fieldValue.firstName"
       outlined
@@ -16,7 +16,7 @@
     <!-- Middle name -->
     <GenericInputField
       v-if="showOptionalFields"
-      :label="$t('dossier.privateCustomer.middleName')"
+      :label="$t('fields.credentials.middle_name')"
       :rules="[
         (val: string) => !val || IS_VALID_STRING(val) || $t('errors.invalid_name'),
       ]"
@@ -29,7 +29,7 @@
   <div class="q-gutter-sm row">
     <!-- Last name -->
     <GenericInputField
-      :label="$t('dossier.privateCustomer.lastName')"
+      :label="$t('fields.credentials.last_name')"
       :rules="[(val: string) => IS_VALID_STRING(val) || $t('errors.invalid_name')]"
       :initial-value="fieldValue.lastName"
       outlined
@@ -41,7 +41,7 @@
     <GenericInputField
       v-if="showOptionalFields"
       v-model="fieldValue.secondLastName"
-      :label="$t('dossier.privateCustomer.secondLastName')"
+      :label="$t('fields.credentials.second_last_name')"
       :rules="[
         (val: string) => !val || IS_VALID_STRING(val) || $t('errors.invalid_name'),
       ]"

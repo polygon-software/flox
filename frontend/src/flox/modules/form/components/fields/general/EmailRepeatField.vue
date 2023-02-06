@@ -6,7 +6,7 @@
     outlined
     type="text"
     :rules="[(val: string) => IS_EMAIL(val) || $t('errors.invalid_email')]"
-    @change="(newValue) => fieldValueChange('email', newValue)"
+    @change="(val: string) => (fieldValue.email = val)"
   />
   <GenericInputField
     :initial-value="fieldValue.emailRepeat"
@@ -54,7 +54,7 @@ const initialValue = props.stateKey
   ? (fetchByKey(props.stateKey) as string | null)
   : props.initialValue;
 const fieldValue: Ref<EmailRepeat> = ref(
-  initialValue ? new EmailRepeat(initialValue, initialValue) : new EmailRepeat()
+  initialValue ? new EmailRepeat(initialValue) : new EmailRepeat()
 );
 
 /**

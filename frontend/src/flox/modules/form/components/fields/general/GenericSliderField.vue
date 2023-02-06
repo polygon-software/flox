@@ -12,14 +12,14 @@
       switch-label-side
       :label-value="labelValue"
       :markers="smooth ? undefined : markers"
-      marker-labels
+      :marker-labels="markers === true && markerLabels ? markerLabels : false"
       @change="saveValue"
     />
   </LabelWrapper>
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeMount, Ref, ref } from 'vue';
+import { computed, ComputedRef, onBeforeMount, Ref, ref } from 'vue';
 
 import { i18n } from 'boot/i18n';
 
@@ -48,7 +48,7 @@ const props = withDefaults(
     markerLabels?:
       | { value: number; label: string }[]
       | ((val: number) => string)
-      | { number: string } //TODO: add computed ref type
+      | { number: string }
       | null;
     // Whether to not set any tick increments
     smooth?: boolean;

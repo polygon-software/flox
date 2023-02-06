@@ -5,6 +5,7 @@ import FormPage from '../types/FormPage';
 import FormCard from '../types/FormCard';
 
 import { FIELDS } from './FIELDS';
+import { signupFormKey } from './FormKeys';
 
 const fields = auth.moduleConfig().emailAsUsername
   ? [FIELDS.EMAIL, FIELDS.PASSWORD_REPEAT]
@@ -12,14 +13,14 @@ const fields = auth.moduleConfig().emailAsUsername
 
 // Signup
 const signupCard = new FormCard(
-  'signup',
+  signupFormKey.cardKey,
   fields,
-  i18n.global.t('dossier.cardTitles.signup')
+  i18n.global.t('card_titles.signup')
 );
 
 // Signup form pages with respective cards
 export default [
-  new FormPage('signupPage', i18n.global.t('authentication.signup'), [
+  new FormPage(signupFormKey.pageKey, i18n.global.t('authentication.signup'), [
     signupCard,
   ]),
 ];

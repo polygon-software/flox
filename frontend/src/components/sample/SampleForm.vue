@@ -1,7 +1,7 @@
 <template>
   <FloxWrapper :module="MODULES.AUTH">
     <GenericForm
-      form-key="sample"
+      :form-key="sampleFormKey.formKey"
       :pages="SampleFormPages"
       @submit="onSubmit"
     />
@@ -17,6 +17,8 @@ import GenericForm from '../../flox/modules/form/components/GenericForm.vue';
 import { showSuccessNotification } from '../../flox/modules/form/helpers/notification-helpers';
 import SampleFormPages from '../../flox/modules/form/data/form/SampleFormPages';
 import FloxWrapper from '../../flox/core/components/FloxWrapper.vue';
+import { sampleFormKey } from '../../flox/modules/form/data/form/FormKeys';
+import { FIELDS } from '../../flox/modules/form/data/form/FIELDS';
 
 /**
  * This is a sample form component that uses the GenericForm helper component.
@@ -24,23 +26,19 @@ import FloxWrapper from '../../flox/core/components/FloxWrapper.vue';
 
 const $q = useQuasar();
 
-const key = {
-  formKey: 'sample',
-  pageKey: 'sample',
-  cardKey: 'sample',
-  fieldKey: '',
-};
-
 /**
  * Fetches and logs the form's data from the store
  * @returns void
  */
 function onSubmit(): void {
-  const email = fetchByKey({ ...key, fieldKey: 'email' }) as string;
+  const email = fetchByKey({
+    ...sampleFormKey,
+    fieldKey: FIELDS.EMAIL.key,
+  }) as string;
 
   const username = fetchByKey({
-    ...key,
-    fieldKey: 'username',
+    ...sampleFormKey,
+    fieldKey: FIELDS.USERNAME.key,
   }) as string;
   showSuccessNotification(
     $q,

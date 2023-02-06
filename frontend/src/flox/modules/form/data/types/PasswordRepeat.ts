@@ -7,9 +7,9 @@ export default class PasswordRepeat {
   passwordRepeat?: string;
 
   // eslint-disable-next-line require-jsdoc
-  constructor(password?: string, passwordRepeat?: string) {
+  constructor(password?: string) {
     this.password = password;
-    this.passwordRepeat = passwordRepeat;
+    this.passwordRepeat = password;
   }
 
   /**

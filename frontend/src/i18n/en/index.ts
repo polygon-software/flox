@@ -1,7 +1,14 @@
 import buttonTranslations from './buttons';
+import cardTranslations from './cards';
+import errorTranslations from './errors';
+import fieldTranslations from './fields';
 
+/* eslint-disable camelcase */
 export default {
   ...buttonTranslations,
+  ...cardTranslations,
+  ...errorTranslations,
+  ...fieldTranslations,
   general: {
     finish: 'Finish',
     back: 'Back',
@@ -20,6 +27,7 @@ export default {
     no_results: 'No Results',
     search: 'Search',
     display: 'Display',
+    sample: 'Sample',
   },
   locales: {
     de: 'German',

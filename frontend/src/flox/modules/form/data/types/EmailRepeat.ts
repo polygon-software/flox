@@ -7,9 +7,9 @@ export default class EmailRepeat {
   emailRepeat?: string;
 
   // eslint-disable-next-line require-jsdoc
-  constructor(email?: string, emailRepeat?: string) {
+  constructor(email?: string) {
     this.email = email;
-    this.emailRepeat = emailRepeat;
+    this.emailRepeat = email;
   }
 
   /**

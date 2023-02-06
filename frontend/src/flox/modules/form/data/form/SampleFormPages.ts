@@ -4,15 +4,18 @@ import FormPage from '../types/FormPage';
 import FormCard from '../types/FormCard';
 
 import { FIELDS } from './FIELDS';
+import { sampleFormKey } from './FormKeys';
 
 // Sample card
 const sampleCard = new FormCard(
-  'sample',
-  [FIELDS.DATE],
-  i18n.global.t('path.to.label')
+  sampleFormKey.cardKey,
+  [FIELDS.ADDRESS],
+  i18n.global.t('card_titles.sample')
 );
 
 // Sample form pages with respective cards
 export default [
-  new FormPage('samplePage', i18n.global.t('path.to.label'), [sampleCard]),
+  new FormPage(sampleFormKey.pageKey, i18n.global.t('general.sample'), [
+    sampleCard,
+  ]),
 ];
