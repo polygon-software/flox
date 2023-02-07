@@ -2,7 +2,7 @@
 /* eslint-disable camelcase */
 export default {
   errors: {
-    file_upload_failed: 'An error occured while uploading the file',
+    file_upload_failed: 'An error occurred while uploading the file',
     module_error: "Error: Module '{module}' is not active",
     invalid_password: 'Please enter a valid password',
     invalid_email: 'Please enter a valid e-mail address',
@@ -22,7 +22,7 @@ export default {
     cant_find_module: "Can't find module",
     cache_location_missing: 'Cache-location missing in mutationObject: ',
     missing_attributes: 'Missing attributes',
-    error_while_saving: 'An error occured during saving',
+    error_while_saving: 'An error occurred during saving',
     unknown: 'Unknown error',
     no_text: 'Please enter a message',
     invalid_address: 'Please enter a valid address',
@@ -44,7 +44,7 @@ export default {
       'This e-mail seems not yet to be registered. Please ask you system administrator',
     user_already_exists:
       'An account with the given e-mail does already existit',
-    verification_error_occured: 'An error occured',
+    verification_error_occurred: 'An error occurred',
     invalid_verification_code:
       'The entered verification code is invalid, please try again',
     missing_properties:

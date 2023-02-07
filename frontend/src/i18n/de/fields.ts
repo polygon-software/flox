@@ -19,7 +19,7 @@ export default {
       birthdate: 'Geburtsdatum',
       phone_number: 'Telefonnummer',
       email: 'E-Mail',
-      langauge: 'Sprache',
+      language: 'Sprache',
     },
     date: {
       date: 'Datum',

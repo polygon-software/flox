@@ -46,7 +46,7 @@ export default {
     forgot_password_not_possible:
       'Diese E-Mail Adresse scheint noch nicht registriert zu sein. Bitte wenden Sie sich an Ihren Systemadministrator',
     user_already_exists: 'Ein Account mit dieser E-Mail existiert bereits',
-    verification_error_occured: 'Ein Fehler ist aufgetreten',
+    verification_error_occurred: 'Ein Fehler ist aufgetreten',
     invalid_verification_code:
       'Der eingebene Verifizierungscode ist ungültig, bitte versuchen Sie es erneut',
     missing_properties:
