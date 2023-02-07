@@ -31,6 +31,16 @@ const provider = new CognitoIdentityProviderClient({
 });
 
 /**
+ * Available auto-delivery mediums for new user's login information
+ */
+export enum DeliveryMedium {
+  SMS = 'SMS',
+  EMAIL = 'EMAIL',
+  BOTH = 'BOTH',
+  NONE = 'NONE',
+}
+
+/**
  * Generates a random number in given range
  *
  * @param min - start of the range (inclusive)
@@ -72,19 +82,39 @@ export function randomPassword(minLength: number): string {
  * Create a new Cognito Account with the given email address and password.
  *
  * @param email - The email of the new user
- * @param password - Initial Password if needed
+ * @param [password] - Initial password, if needed (random if not given)
+ * @param [deliveryMedium] - medium to use to deliver user's new login information (sms, email, both or none)
+ * @param [verified] - whether to mark the user's e-mail as verified
  * @returns Cognito ID
  */
 export async function createCognitoAccount(
   email: string,
   password = null,
+  deliveryMedium = DeliveryMedium.EMAIL,
+  verified = true,
 ): Promise<{ cognitoUuid: string; password: string }> {
   const pw = password || randomPassword(DEFAULT_COGNITO_PASSWORD_LENGTH);
+
+  let mediums: string[] = [];
+  switch (deliveryMedium) {
+    case DeliveryMedium.SMS:
+      mediums = ['SMS'];
+      break;
+    case DeliveryMedium.EMAIL:
+      mediums = ['EMAIL'];
+      break;
+    case DeliveryMedium.BOTH:
+      mediums = ['EMAIL', 'SMS'];
+      break;
+    default:
+      break;
+  }
+
   const params = {
     UserPoolId: Env.USER_POOL_ID,
     Username: email,
     TemporaryPassword: pw,
-    DesiredDeliveryMediums: ['EMAIL'],
+    DesiredDeliveryMediums: mediums,
     UserAttributes: [
       {
         Name: 'email',
@@ -108,7 +138,9 @@ export async function createCognitoAccount(
   const updateUserAttributesCommand = new AdminUpdateUserAttributesCommand({
     UserPoolId: Env.USER_POOL_ID,
     Username: email,
-    UserAttributes: [{ Name: 'email_verified', Value: 'true' }],
+    UserAttributes: [
+      { Name: 'email_verified', Value: verified ? 'true' : 'false' },
+    ],
   });
   await provider.send(updateUserAttributesCommand);
 
