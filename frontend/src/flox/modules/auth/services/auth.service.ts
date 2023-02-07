@@ -145,8 +145,17 @@ export default class AuthenticationService {
         },
 
         // Called when user is in FORCE_PASSWORD_CHANGE state and must thus set a new password
-        newPasswordRequired(userAttributes) {
-          const attrs = cloneDeep(userAttributes) as Record<string, unknown>;
+        newPasswordRequired(
+          userAttributes: Record<string, unknown>, // all user attributes (e.g. 'email', 'email_verified')
+          requiredAttributes: string[] // List of attributes that must be passed in order to update password
+        ) {
+          // Build list of required attributes (for most user pools, this will usually be left empty)
+          const attributes: Record<string, unknown> = {};
+          Object.keys(userAttributes).forEach((key) => {
+            if (requiredAttributes.includes(key)) {
+              attributes[key] = userAttributes[key];
+            }
+          });
 
           // No password given: show dialog for setting new one
           if (!newPassword) {
@@ -155,20 +164,19 @@ export default class AuthenticationService {
               component: ChangePasswordDialog,
               componentProps: {},
             }).onOk(({ passwordNew }: { passwordNew: string }) => {
-              // Ensure e-mail doesn't get passed, so Cognito doesn't recognize it as changed
-              delete attrs.email;
-              delete attrs.email_verified;
               cognitoUser.completeNewPasswordChallenge(
                 passwordNew,
-                attrs,
+                attributes,
                 this
               );
             });
           } else {
-            // Ensure e-mail doesn't get passed, so Cognito doesn't recognize it as changed
-            delete attrs.email;
-            delete attrs.email_verified;
-            cognitoUser.completeNewPasswordChallenge(newPassword, attrs, this);
+            // Password already given; complete directly
+            cognitoUser.completeNewPasswordChallenge(
+              newPassword,
+              attributes,
+              this
+            );
           }
         },
 
