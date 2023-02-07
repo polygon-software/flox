@@ -1,9 +1,6 @@
 <template>
-  <div class="row justify-start">
-    <LabelWrapper
-      :label="$t('authentication.country_code')"
-      style="width: 100px; margin-right: 32px"
-    >
+  <div class="row justify-between">
+    <LabelWrapper class="col-3" :label="$t('fields.phone.country_code')">
       <!-- Country code -->
       <q-select
         v-model="selectedCode"
@@ -15,10 +12,7 @@
     </LabelWrapper>
 
     <!-- Actual phone number -->
-    <LabelWrapper
-      :label="$t('authentication.phone')"
-      style="width: calc(100% - 132px)"
-    >
+    <LabelWrapper class="col-8" :label="$t('fields.phone.number')">
       <q-input
         v-model="phoneInput"
         dense
