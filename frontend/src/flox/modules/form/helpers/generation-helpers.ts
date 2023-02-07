@@ -18,6 +18,7 @@ export function availableLanguageOptions(): GenericOption[] {
 
 /**
  * Returns a list of phone number options for the PhoneNumberField
+ * @returns - Available phone number options
  * TODO: Customize for specific application
  */
 export function availablePhonenNumberOptions(): PhoneCountryCode[] {
