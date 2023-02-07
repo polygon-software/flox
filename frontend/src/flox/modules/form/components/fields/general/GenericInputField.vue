@@ -17,11 +17,11 @@
 <script setup lang="ts">
 import { computed, defineProps, onBeforeMount, ref, watch } from 'vue';
 
-import LabelWrapper from 'src/flox/modules/form/components/fields/general/wrappers/LabelWrapper.vue';
-
 import { FormStateKey, useFormStore } from '../../../stores/form';
 import { fetchByKey } from '../../../helpers/form-helpers';
-import { Tooltip } from '../../../types/Tooltip';
+import { Tooltip } from '../../../data/types/Tooltip';
+
+import LabelWrapper from './wrappers/LabelWrapper.vue';
 
 const props = withDefaults(
   defineProps<{

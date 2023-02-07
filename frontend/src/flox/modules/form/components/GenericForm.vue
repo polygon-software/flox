@@ -124,8 +124,8 @@ import { i18n } from 'boot/i18n';
 
 import { useFormStore } from '../stores/form';
 import { buildStoreSubstructure } from '../helpers/form-helpers';
-import FormPage from '../types/FormPage';
-import FormStructure from '../types/FormStructure';
+import FormPage from '../data/types/FormPage';
+import FormStructure from '../data/types/FormStructure';
 
 import FormCard from './cards/FormCard.vue';
 

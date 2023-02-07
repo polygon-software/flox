@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ComputedRef, onBeforeMount, Ref, ref } from 'vue';
+import { computed, onBeforeMount, Ref, ref } from 'vue';
 
 import { i18n } from 'boot/i18n';
 

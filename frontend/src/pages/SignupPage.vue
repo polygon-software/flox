@@ -31,18 +31,21 @@ const $routerService: RouterService | undefined = inject('$routerService');
  * @param user.username - the authentication's username (might be identical to the e-mail)
  * @param user.email - the authentication's email
  * @param user.password - the authentication's password
+ * @param user.language - the user's selected language
  */
 async function onSignup({
   username,
   email,
   password,
+  language,
 }: {
   username: string;
   email: string;
   password: string;
+  language?: string;
 }): Promise<void> {
   try {
-    await $authService?.signUp(username, email, password);
+    await $authService?.signUp(username, email, password, language);
     // Show success notification
     showSuccessNotification($q, i18n.global.t('messages.account_created'));
 

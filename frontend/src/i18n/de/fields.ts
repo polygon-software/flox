@@ -10,7 +10,7 @@ export default {
       zip_code: 'PLZ',
       additional_address: 'Zusätzliche Adresse',
     },
-    credentials: {
+    personal_data: {
       sample_title: 'Beispiel Titel',
       first_name: 'Vorname',
       middle_name: 'Weitere Vornamen',
@@ -19,6 +19,7 @@ export default {
       birthdate: 'Geburtsdatum',
       phone_number: 'Telefonnummer',
       email: 'E-Mail',
+      langauge: 'Sprache',
     },
     date: {
       date: 'Datum',

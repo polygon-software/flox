@@ -29,7 +29,7 @@ const props = withDefaults(
     initialValue?: unknown; // Only considered when stateKey is null, so this field can be a non-saving subfield of other fields
     label: string;
     options: GenericOption[];
-    rules: [];
+    rules: ((val: unknown) => string | boolean)[];
     loading?: boolean;
     disable?: boolean;
   }>(),

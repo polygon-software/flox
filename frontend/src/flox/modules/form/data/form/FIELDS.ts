@@ -1,5 +1,4 @@
 import { markRaw } from 'vue';
-import { QInput } from 'quasar';
 
 import { i18n } from 'boot/i18n';
 
@@ -17,6 +16,7 @@ import FullNameField from '../../components/fields/general/FullNameField.vue';
 import GenericInputField from '../../components/fields/general/GenericInputField.vue';
 import Password from '../../components/fields/general/PasswordField.vue';
 import PasswordRepeat from '../../components/fields/general/PasswordRepeatField.vue';
+import SelectLanguageField from '../../components/fields/general/SelectLanguageField.vue';
 import { Field } from '../types/Field';
 import FullName from '../types/FullName';
 
@@ -107,7 +107,7 @@ const FIELDS: Record<string, Field> = {
     attributes: {
       dense: true,
       type: 'text',
-      label: i18n.global.t('fields.credentials.name'),
+      label: i18n.global.t('fields.personal_data.name'),
       rules: [
         (val: string): boolean | string =>
           // eslint-disable-next-line sonarjs/no-duplicate-string
@@ -145,6 +145,15 @@ const FIELDS: Record<string, Field> = {
       rules: [
         (val: Date): boolean | string =>
           IS_VALID_DATE(val) || i18n.global.t('errors.invalid_date'),
+      ],
+    },
+  },
+  SELECT_LANGUAGE: {
+    key: 'selectLanguage',
+    component: markRaw(SelectLanguageField),
+    attributes: {
+      rules: [
+        (val: string): boolean | string => IS_NOT_NULL(val) || selectionError,
       ],
     },
   },

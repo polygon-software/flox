@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import FormCard from '../../types/FormCard';
+import FormCard from '../../data/types/FormCard';
 
 const props = defineProps<{
   card: FormCard;

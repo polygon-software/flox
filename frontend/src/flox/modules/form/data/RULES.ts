@@ -7,7 +7,6 @@ import {
   PASSWORD_REGEX,
   PHONE_NUMBER_REGEX,
   TIME_REGEX,
-  UID_REGEX,
   URL_REGEX,
   ZIP_REGEX,
 } from 'src/flox/modules/form/data/REGEX';
