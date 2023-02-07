@@ -57,6 +57,7 @@
     "joi": "^17.6.4",
     "joi-password": "^4.0.0",
     "jwt-decode": "^3.1.2",
+    "libphonenumber-js": "^1.10.19",
     "lodash": "^4.17.21",
     "logrocket": "^3.0.1",
     "pinia": "^2.0.23",

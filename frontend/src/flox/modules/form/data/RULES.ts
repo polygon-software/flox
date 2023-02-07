@@ -1,5 +1,6 @@
 import { isValid } from 'date-fns';
 import { date } from 'quasar';
+import { isValidPhoneNumber } from 'libphonenumber-js';
 
 import {
   EMAIL_REGEX,
@@ -37,7 +38,7 @@ const IS_VALID_PASSWORD = (val: string): boolean => {
 };
 
 const IS_VALID_PHONE_NUMBER = (val: string): boolean => {
-  return PHONE_NUMBER_REGEX.test(val);
+  return isValidPhoneNumber(val, 'CH');
 };
 
 const IS_VALID_STRING = (val: string | undefined): boolean =>
