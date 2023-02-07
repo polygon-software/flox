@@ -203,14 +203,14 @@ export default class AuthenticationService {
    * @param username - the chosen username
    * @param email - the authentication's e-mail address
    * @param password - the new authentication's chosen password. Must fulfill the set password conditions
-   * @param language - the chosen language
+   * @param locale - the chosen language locale
    * @param attributes - custom attributes to add (if any)
    */
   async signUp(
     username: string,
     email: string,
     password: string,
-    language?: string,
+    locale?: string,
     attributes?: Record<string, string>
   ): Promise<void> {
     const cognitoUserWrapper: ISignUpResult = await new Promise(
@@ -257,7 +257,7 @@ export default class AuthenticationService {
     );
 
     // Register in database TODO application specific: apply any other attributes here as well
-    await createUser(username, email, cognitoUserWrapper.userSub, language);
+    await createUser(username, email, cognitoUserWrapper.userSub, locale);
   }
 
   /**
