@@ -27,7 +27,7 @@ export default class EmailService {
   };
 
   /**
-   * Sends an e-mail notifying the user that their password was force-changed
+   * Sends an e-mail notifying the user that their password was reset, containing their new temporary password
    *
    * @param recipient - e-mail recipient
    * @param lang - language
@@ -49,6 +49,7 @@ export default class EmailService {
       this.i18nService.t('authentication.password_reset', {
         lang,
       }),
+      // E-mail contents from HTML template
       render(mailTemplate, {
         lang,
         password: tempPassword,
