@@ -56,6 +56,8 @@ export default {
     verification: 'Verifikation',
     verification_message: 'Geben Sie ihren Verifikations-Code ein:',
     resend_code: 'Ich habe keinen Code erhalten',
+    password_rule:
+      "Passwörter müssen mindestens einen Grossbuchstaben, eine Zahl und eines der Sonderzeichen (#?!{'@'}$%^&*-) enthalten",
   },
   files: {
     files: 'Dateien',

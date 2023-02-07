@@ -1,6 +1,6 @@
 import { computed, ref, Ref } from 'vue';
 
-import { useFormStore } from '../stores/form';
+import { useFormStore } from '../../stores/form';
 
 import FormPage from './FormPage';
 import FormCard from './FormCard';

@@ -24,5 +24,8 @@ export default {
     date: {
       date: 'Datum',
     },
+    select: {
+      please_select: 'Bitte wählen',
+    },
   },
 };

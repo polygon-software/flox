@@ -39,7 +39,7 @@
               v-show="selectedFiles.length > 0"
               icon="file_upload"
               flat
-              @click="uploadFiles"
+              @click="uploadFiles('TODO: ask Joel')"
             >
               <q-tooltip>
                 {{ $t('files.upload') }}

@@ -5,7 +5,7 @@ export type Field = {
   key: string;
   component: unknown;
   attributes: {
-    rules: Array<(val: unknown) => boolean | string>;
+    rules: Array<(val: any) => boolean | string>;
     [key: string]: unknown;
   };
 };

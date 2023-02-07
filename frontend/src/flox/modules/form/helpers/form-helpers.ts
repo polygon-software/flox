@@ -1,7 +1,7 @@
 import { cloneDeep } from 'lodash-es';
 
 import { FormStateKey, useFormStore } from '../stores/form';
-import FormPage from '../types/FormPage';
+import FormPage from '../data/types/FormPage';
 
 /**
  * Set up an empty store sub-structure for a given form structure

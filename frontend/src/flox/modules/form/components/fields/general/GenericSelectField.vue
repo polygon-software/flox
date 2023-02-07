@@ -6,7 +6,7 @@
       dense
       outlined
       style="min-width: 200px"
-      :label="!fieldValue ? $t('authentication.please_select') : undefined"
+      :label="!fieldValue ? $t('fields.select.please_select') : undefined"
       @update:model-value="saveValue"
     />
   </LabelWrapper>
@@ -26,33 +26,35 @@ import LabelWrapper from './wrappers/LabelWrapper.vue';
 const props = withDefaults(
   defineProps<{
     stateKey?: FormStateKey | null;
-    initialValue?: unknown; // Only considered when stateKey is null, so this field can be a non-saving subfield of other fields
+    initialValue?: any; // Only considered when stateKey is null, so this field can be a non-saving subfield of other fields
     label: string;
     options: GenericOption[];
-    rules: ((val: unknown) => string | boolean)[];
+    rules: ((val: any) => string | boolean)[];
     loading?: boolean;
     disable?: boolean;
   }>(),
   {
     stateKey: null,
-    initialValue: undefined,
+    initialValue: null,
     loading: false,
     disable: false,
   }
 );
 
 const emit = defineEmits<{
-  (e: 'change', selected: unknown): void;
+  (e: 'change', selected: any): void;
 }>();
 
 const store = useFormStore();
 const selectedOption: Ref<GenericOption | null> = ref(null);
 
 // Get value (if preset)
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const initialValue = props.stateKey
   ? fetchByKey(props.stateKey)
   : props.initialValue;
-const fieldValue = ref(initialValue);
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+const fieldValue: Ref<any> = ref(initialValue);
 
 /**
  * Save or emit the updated value if valid, otherwise null
@@ -60,6 +62,7 @@ const fieldValue = ref(initialValue);
  */
 function saveValue(): void {
   // Store value
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   fieldValue.value = selectedOption.value?.value ?? null;
 
   if (fieldValue.value) {
@@ -92,8 +95,8 @@ function matchValue(): void {
           // sufficient
           const matchingUuid =
             (fieldValue.value as Record<string, unknown>).uuid &&
-            (option as { label: string; value: Record<string, unknown> }).value
-              ?.uuid === (fieldValue.value as Record<string, unknown>).uuid;
+            (option as { label: string; value: Record<string, any> }).value
+              ?.uuid === (fieldValue.value as Record<string, any>).uuid;
           return isEqual(option.value, fieldValue.value) || matchingUuid;
         }
         return null;
@@ -108,8 +111,9 @@ onBeforeMount(() => {
 
 // Prefill, if initial data given or options have changed
 watch(
-  [(): unknown => props.initialValue, (): GenericOption[] => props.options],
+  [(): any => props.initialValue, (): GenericOption[] => props.options],
   () => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     fieldValue.value = props.initialValue;
     matchValue();
   },

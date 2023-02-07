@@ -1,10 +1,10 @@
 <template>
   <GenericSelectField
     :initial-value="fieldValue"
-    :options="availableLanguageOptions()"
+    :options="options"
     :rules="[(val) => IS_NOT_NULL(val) || i18n.global.t('errors.no_selection')]"
     :label="label"
-    @change="saveValue"
+    @change="(val) => (typeof val === 'string' ? saveValue(val) : null)"
   >
   </GenericSelectField>
 </template>
@@ -18,16 +18,19 @@ import { FormStateKey, useFormStore } from '../../../stores/form';
 import { IS_NOT_NULL } from '../../../data/RULES';
 import availableLanguageOptions from '../../../helpers/generation-helpers';
 import { fetchByKey } from '../../../helpers/form-helpers';
+import { GenericOption } from '../../../data/types/GenericOption';
 
 import GenericSelectField from './GenericSelectField.vue';
 
 const props = withDefaults(
   defineProps<{
     stateKey: FormStateKey;
-    label?: string | null;
+    label?: string;
+    options?: GenericOption[];
   }>(),
   {
     label: i18n.global.t('fields.personal_data.language'),
+    options: () => availableLanguageOptions(),
   }
 );
 

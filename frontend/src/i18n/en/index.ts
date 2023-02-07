@@ -56,6 +56,8 @@ export default {
     verification: 'Verification',
     verification_message: 'Enter your verification code:',
     resend_code: 'I did not receive a code',
+    password_rule:
+      "Passwords must contain at least one capital letter, number and one of the following special characters (#?!{'@'}$%^&*-)",
   },
   files: {
     files: 'Files',

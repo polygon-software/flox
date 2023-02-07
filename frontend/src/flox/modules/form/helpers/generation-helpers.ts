@@ -6,9 +6,9 @@ import { LANGUAGECODES, LANGUAGES } from '../../../LANGUAGES';
  */
 export default function availableLanguageOptions(): GenericOption[] {
   return [
-    { value: LANGUAGECODES.DE, label: LANGUAGES.DE },
-    { value: LANGUAGECODES.EN, label: LANGUAGES.EN },
-    { value: LANGUAGECODES.FR, label: LANGUAGES.FR },
-    { value: LANGUAGECODES.IT, label: LANGUAGES.IT },
+    { label: LANGUAGES.DE, value: LANGUAGECODES.DE },
+    { label: LANGUAGES.EN, value: LANGUAGECODES.EN },
+    { label: LANGUAGES.FR, value: LANGUAGECODES.FR },
+    { label: LANGUAGES.IT, value: LANGUAGECODES.IT },
   ];
 }
