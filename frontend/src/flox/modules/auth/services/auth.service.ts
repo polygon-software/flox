@@ -170,10 +170,8 @@ export default class AuthenticationService {
           }
 
           // Case 2: No password given: show dialog for setting new one
-          // Show password change dialog
           q.dialog({
             component: ChangePasswordDialog,
-            componentProps: {},
           }).onOk(({ passwordNew }: { passwordNew: string }) => {
             cognitoUser.completeNewPasswordChallenge(
               passwordNew,
