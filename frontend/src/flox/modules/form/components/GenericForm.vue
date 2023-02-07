@@ -55,7 +55,7 @@
             :flat="flat"
             style="margin-right: 30px"
             class="q-ml-sm"
-            @click="previous"
+            @click="toPrevious"
           />
           <q-btn
             v-if="form.step.value < form.pages.length"
@@ -203,9 +203,7 @@ function toNext(): void {
  * Calls previous on QStepper to avoid typing issues.
  * @returns void
  */
-function previous(): void {
-  if (stepper.value) {
-    stepper.value.previous();
-  }
+function toPrevious(): void {
+  stepper.value?.previous();
 }
 </script>

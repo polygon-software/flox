@@ -107,6 +107,7 @@ onBeforeMount(() => {
       }) ?? null;
     if (matchingCountryCode) {
       selectedCode.value = matchingCountryCode;
+      // Select part after split
       [, phoneInput.value] = fieldValue.value.split(matchingCountryCode.value);
     }
   } // No value given, just assign the first option in the list

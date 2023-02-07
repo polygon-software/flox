@@ -64,20 +64,20 @@ const props = withDefaults(
     disable: false,
     style: undefined,
     lazyRules: true,
-    initialValue: undefined,
+    initialValue: null,
     tooltip: null,
-    defaultValue: undefined,
+    defaultValue: null,
   }
 );
 
 const emit = defineEmits<{
-  (e: 'change', value: unknown): void;
+  (e: 'change', value: string | number | null): void;
 }>();
 
 const store = useFormStore();
 const initialValue = (
   props.stateKey ? fetchByKey(props.stateKey) : props.initialValue
-) as string | number | null | undefined;
+) as string | number | null;
 
 // Actual field value
 const fieldValue = ref(initialValue ?? props.defaultValue);
@@ -105,10 +105,7 @@ function saveValue(): void {
  * If no value in store yet, write default
  */
 onBeforeMount(() => {
-  if (
-    (initialValue === null || initialValue === undefined) &&
-    props.defaultValue !== null
-  ) {
+  if (initialValue === null && props.defaultValue !== null) {
     saveValue();
   }
 });

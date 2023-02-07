@@ -6,7 +6,9 @@
     outlined
     type="text"
     :rules="[(val: string) => IS_EMAIL(val) || $t('errors.invalid_email')]"
-    @change="(val: string) => (fieldValue.email = val)"
+    @change="
+      (val) => (typeof val === 'string' ? (fieldValue.email = val) : null)
+    "
   />
   <GenericInputField
     :initial-value="fieldValue.emailRepeat"
@@ -17,7 +19,9 @@
     :rules="[
       (val: string) => val === fieldValue.email || $t('errors.non_matching_email'),
     ]"
-    @change="(newValue) => fieldValueChange('emailRepeat', newValue)"
+    @change="
+      (val) => (typeof val === 'string' ? (fieldValue.emailRepeat = val) : null)
+    "
   />
 </template>
 
@@ -85,17 +89,4 @@ watch(
   },
   { deep: true }
 );
-
-/**
- * Updates the field value if a subfield updates.
- * @param fieldKey - name of the field to update
- * @param value - new value
- * @returns void
- */
-function fieldValueChange(
-  fieldKey: 'email' | 'emailRepeat',
-  value: unknown
-): void {
-  fieldValue.value[fieldKey] = value as string;
-}
 </script>
