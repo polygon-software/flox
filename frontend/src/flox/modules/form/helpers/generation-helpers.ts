@@ -1,17 +1,18 @@
 import { PhoneCountryCode } from 'src/flox/modules/form/data/types/PhoneCountryCode';
 
 import { GenericOption } from '../data/types/GenericOption';
-import { LANGUAGECODES, LANGUAGES } from '../../../LANGUAGES';
+import { COUNTRY_CODES } from '../../../COUNTRIES';
+import { LANGUAGES } from '../../../LANGUAGES';
 
 /**
  * Returns a list of language options for the SelectLanguageField
  */
 export default function availableLanguageOptions(): GenericOption[] {
   return [
-    { label: LANGUAGES.DE, value: LANGUAGECODES.DE },
-    { label: LANGUAGES.EN, value: LANGUAGECODES.EN },
-    { label: LANGUAGES.FR, value: LANGUAGECODES.FR },
-    { label: LANGUAGES.IT, value: LANGUAGECODES.IT },
+    { label: LANGUAGES.DE, value: COUNTRY_CODES.DE },
+    { label: LANGUAGES.EN, value: COUNTRY_CODES.EN },
+    { label: LANGUAGES.FR, value: COUNTRY_CODES.FR },
+    { label: LANGUAGES.IT, value: COUNTRY_CODES.IT },
   ];
 }
 
