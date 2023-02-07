@@ -1,6 +1,3 @@
 {
-  "password_changed": {
-    "title": "Password reset",
-    "content": "Your password has been reset. Your temporary password is: {password} \nYou will be prompted to change it at the next login."
-  }
+  "password_reset": "Password reset"
 }

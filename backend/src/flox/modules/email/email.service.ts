@@ -46,7 +46,7 @@ export default class EmailService {
       this.credentials,
       sender,
       recipient,
-      this.i18nService.t('authentication.password_changed.title', {
+      this.i18nService.t('authentication.password_reset', {
         lang,
       }),
       render(mailTemplate, {
