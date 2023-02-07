@@ -1,12 +1,11 @@
 import { isValid } from 'date-fns';
 import { date } from 'quasar';
-import { isValidPhoneNumber } from 'libphonenumber-js';
+import { CountryCode, isValidPhoneNumber } from 'libphonenumber-js';
 
 import {
   EMAIL_REGEX,
   IBAN_REGEX,
   PASSWORD_REGEX,
-  PHONE_NUMBER_REGEX,
   TIME_REGEX,
   URL_REGEX,
   ZIP_REGEX,
@@ -37,8 +36,11 @@ const IS_VALID_PASSWORD = (val: string): boolean => {
   return PASSWORD_REGEX.test(val);
 };
 
-const IS_VALID_PHONE_NUMBER = (val: string): boolean => {
-  return isValidPhoneNumber(val, 'CH');
+const IS_VALID_PHONE_NUMBER = (
+  number: string,
+  countryCode: CountryCode
+): boolean => {
+  return isValidPhoneNumber(number, countryCode);
 };
 
 const IS_VALID_STRING = (val: string | undefined): boolean =>

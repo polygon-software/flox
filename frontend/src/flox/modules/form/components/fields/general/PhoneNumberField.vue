@@ -24,14 +24,16 @@
                 (val) =>
                   (!!val && val.length === 0) ||
                   IS_VALID_PHONE_NUMBER(
-                    (selectedCode.value + val).replaceAll(' ', '')
+                    (selectedCode.value + val).replaceAll(' ', ''),
+                    selectedCode.code
                   ) ||
                   $t('errors.invalid_phone_number'),
               ]
             : [
                 (val) =>
                   IS_VALID_PHONE_NUMBER(
-                    (selectedCode.value + val).replaceAll(' ', '')
+                    (selectedCode.value + val).replaceAll(' ', ''),
+                    selectedCode.code
                   ) || $t('errors.invalid_phone_number'),
               ]
         "
@@ -121,7 +123,7 @@ watch(phoneInput, () => {
     );
 
     // Check validity (otherwise save null)
-    if (IS_VALID_PHONE_NUMBER(newInput)) {
+    if (IS_VALID_PHONE_NUMBER(newInput, selectedCode.value.code)) {
       fieldValue.value = newInput;
     } else {
       fieldValue.value = null;

@@ -1,4 +1,5 @@
 import { markRaw } from 'vue';
+import { CountryCode } from 'libphonenumber-js';
 
 import { i18n } from 'boot/i18n';
 
@@ -21,6 +22,7 @@ import PhoneNumberField from '../../components/fields/general/PhoneNumberField.v
 import SelectLanguageField from '../../components/fields/general/SelectLanguageField.vue';
 import { Field } from '../types/Field';
 import FullName from '../types/FullName';
+import { PhoneCountryCode } from '../types/PhoneCountryCode';
 
 /**
  * This file contains bootstrap configurations for sign up and sign in input fields. With these, the corresponding forms can be built modularly.
@@ -154,10 +156,13 @@ const FIELDS: Record<string, Field> = {
     key: 'phoneNumber',
     component: markRaw(PhoneNumberField),
     attributes: {
-      countryCodes: [{ label: '+41', value: '+41', mask: '## ### ## ##' }],
+      countryCodes: [
+        { code: 'CH', label: '+41', mask: '## ### ## ##', value: '+41' },
+        { code: 'DE', label: '+49', mask: undefined, value: '+49' },
+      ] as PhoneCountryCode[],
       rules: [
-        (val: string): boolean | string =>
-          IS_VALID_PHONE_NUMBER(val) ||
+        (val: { number: string; countryCode: CountryCode }): boolean | string =>
+          IS_VALID_PHONE_NUMBER(val.number, val.countryCode) ||
           i18n.global.t('errors.invalid_phone_number'),
       ],
     },
