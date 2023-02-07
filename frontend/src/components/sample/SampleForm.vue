@@ -19,12 +19,14 @@ import SampleFormPages from '../../flox/modules/form/data/form/SampleFormPages';
 import FloxWrapper from '../../flox/core/components/FloxWrapper.vue';
 import { sampleFormKey } from '../../flox/modules/form/data/form/FormKeys';
 import { FIELDS } from '../../flox/modules/form/data/form/FIELDS';
+import { useFormStore } from '../../flox/modules/form/stores/form';
 
 /**
  * This is a sample form component that uses the GenericForm helper component.
  */
 
 const $q = useQuasar();
+const store = useFormStore();
 
 /**
  * Fetches and logs the form's data from the store
@@ -44,5 +46,7 @@ function onSubmit(): void {
     $q,
     `You entered e-mail  '${email}', and username '${username}'`
   );
+  // Empty store state
+  store.clearForm(sampleFormKey.formKey);
 }
 </script>

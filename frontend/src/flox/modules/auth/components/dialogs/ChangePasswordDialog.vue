@@ -27,8 +27,11 @@ import GenericForm from '../../../form/components/GenericForm.vue';
 import ChangePasswordFormPages from '../../../form/data/form/ChangePasswordFormPages';
 import { fetchByKey } from '../../../form/helpers/form-helpers';
 import { FIELDS } from '../../../form/data/form/FIELDS';
+import { useFormStore } from '../../../form/stores/form';
 
 const { dialogRef, onDialogOK, onDialogHide } = useDialogPluginComponent();
+
+const store = useFormStore();
 
 /**
  * Upon submit, pass entered values outwards
@@ -39,6 +42,10 @@ function onSubmit(): void {
     ...changePasswordFormKey,
     fieldKey: FIELDS.PASSWORD_REAPEAT.key,
   });
+
+  // Empty store state
+  store.clearForm(changePasswordFormKey.formKey);
+
   onDialogOK({
     passwordNew: newPassword,
   });
