@@ -7,6 +7,7 @@ import {
   IS_NOT_NULL,
   IS_VALID_DATE,
   IS_VALID_PASSWORD,
+  IS_VALID_PHONE_NUMBER,
   IS_VALID_STRING,
 } from '../RULES';
 import AddressField from '../../components/fields/general/AddressField.vue';
@@ -16,6 +17,7 @@ import FullNameField from '../../components/fields/general/FullNameField.vue';
 import GenericInputField from '../../components/fields/general/GenericInputField.vue';
 import Password from '../../components/fields/general/PasswordField.vue';
 import PasswordRepeat from '../../components/fields/general/PasswordRepeatField.vue';
+import PhoneNumberField from '../../components/fields/general/PhoneNumberField.vue';
 import SelectLanguageField from '../../components/fields/general/SelectLanguageField.vue';
 import { Field } from '../types/Field';
 import FullName from '../types/FullName';
@@ -145,6 +147,18 @@ const FIELDS: Record<string, Field> = {
       rules: [
         (val: Date): boolean | string =>
           IS_VALID_DATE(val) || i18n.global.t('errors.invalid_date'),
+      ],
+    },
+  },
+  PHONE_NUMBER: {
+    key: 'phoneNumber',
+    component: markRaw(PhoneNumberField),
+    attributes: {
+      countryCodes: [{ label: '+41', value: '+41', mask: '## ### ## ##' }],
+      rules: [
+        (val: string): boolean | string =>
+          IS_VALID_PHONE_NUMBER(val) ||
+          i18n.global.t('errors.invalid_phone_number'),
       ],
     },
   },

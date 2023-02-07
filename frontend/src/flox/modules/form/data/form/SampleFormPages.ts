@@ -9,7 +9,7 @@ import { sampleFormKey } from './FormKeys';
 // Sample card
 const sampleCard = new FormCard(
   sampleFormKey.cardKey,
-  [FIELDS.SELECT_LANGUAGE],
+  [FIELDS.PHONE_NUMBER],
   i18n.global.t('card_titles.sample')
 );
 

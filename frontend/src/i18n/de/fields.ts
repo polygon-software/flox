@@ -17,12 +17,15 @@ export default {
       last_name: 'Nachname',
       second_last_name: '2. Nachname',
       birthdate: 'Geburtsdatum',
-      phone_number: 'Telefonnummer',
       email: 'E-Mail',
       language: 'Sprache',
     },
     date: {
       date: 'Datum',
+    },
+    phone: {
+      number: 'Telefonnummer',
+      country_code: 'Vorwahl',
     },
     select: {
       please_select: 'Bitte wählen',
