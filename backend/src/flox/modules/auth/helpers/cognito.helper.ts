@@ -16,15 +16,17 @@ import {
   UserStatusType,
 } from '@aws-sdk/client-cognito-identity-provider';
 
+import Env from 'src/env';
+
 // Default length for Cognito passwords
 const DEFAULT_COGNITO_PASSWORD_LENGTH = 16;
 
 // Set up cognito admin provider
 const provider = new CognitoIdentityProviderClient({
-  region: process.env.AWS_MAIN_REGION ?? 'eu-central-1',
+  region: Env.AWS_MAIN_REGION,
   credentials: {
-    accessKeyId: process.env.AWS_ADMIN_ACCESS_KEY_ID ?? '',
-    secretAccessKey: process.env.AWS_ADMIN_SECRET_ACCESS_KEY ?? '',
+    accessKeyId: Env.AWS_ADMIN_ACCESS_KEY_ID,
+    secretAccessKey: Env.AWS_ADMIN_SECRET_ACCESS_KEY,
   },
 });
 
@@ -79,7 +81,7 @@ export async function createCognitoAccount(
 ): Promise<{ cognitoUuid: string; password: string }> {
   const pw = password || randomPassword(DEFAULT_COGNITO_PASSWORD_LENGTH);
   const params = {
-    UserPoolId: process.env.USER_POOL_ID,
+    UserPoolId: Env.USER_POOL_ID,
     Username: email,
     TemporaryPassword: pw,
     DesiredDeliveryMediums: ['EMAIL'],
@@ -104,7 +106,7 @@ export async function createCognitoAccount(
 
   // Mark e-mail address as verified
   const updateUserAttributesCommand = new AdminUpdateUserAttributesCommand({
-    UserPoolId: process.env.USER_POOL_ID,
+    UserPoolId: Env.USER_POOL_ID,
     Username: email,
     UserAttributes: [{ Name: 'email_verified', Value: 'true' }],
   });
@@ -126,7 +128,7 @@ export function disableCognitoAccount(
   email: string,
 ): Promise<AdminDisableUserCommandOutput> {
   const disableUserCommand = new AdminDisableUserCommand({
-    UserPoolId: process.env.USER_POOL_ID ?? '',
+    UserPoolId: Env.USER_POOL_ID,
     Username: email,
   });
   return provider.send(disableUserCommand);
@@ -142,7 +144,7 @@ export function enableCognitoAccount(
   email: string,
 ): Promise<AdminEnableUserCommandOutput> {
   const enableUserCommand = new AdminEnableUserCommand({
-    UserPoolId: process.env.USER_POOL_ID ?? '',
+    UserPoolId: Env.USER_POOL_ID,
     Username: email,
   });
   return provider.send(enableUserCommand);
@@ -156,7 +158,7 @@ export function enableCognitoAccount(
  */
 export async function isUserEnabled(email: string): Promise<boolean> {
   const getUserCommand = new AdminGetUserCommand({
-    UserPoolId: process.env.USER_POOL_ID ?? '',
+    UserPoolId: Env.USER_POOL_ID,
     Username: email,
   });
   const result = await provider.send(getUserCommand);
@@ -172,7 +174,7 @@ export async function isUserEnabled(email: string): Promise<boolean> {
  */
 export async function getAccountStatus(email: string): Promise<UserStatusType> {
   const getUserCommand = new AdminGetUserCommand({
-    UserPoolId: process.env.USER_POOL_ID ?? '',
+    UserPoolId: Env.USER_POOL_ID,
     Username: email,
   });
   const result = await provider.send(getUserCommand);
@@ -195,7 +197,7 @@ export function deleteCognitoAccount(
   email: string,
 ): Promise<AdminDeleteUserCommandOutput> {
   const deleteUserCommand = new AdminDeleteUserCommand({
-    UserPoolId: process.env.USER_POOL_ID ?? '',
+    UserPoolId: Env.USER_POOL_ID,
     Username: email,
   });
   return provider.send(deleteUserCommand);
@@ -210,7 +212,7 @@ export function deleteCognitoAccount(
 export async function checkIfUserExists(email: string): Promise<boolean> {
   // Request parameters
   const params = {
-    UserPoolId: process.env.USER_POOL_ID ?? '',
+    UserPoolId: Env.USER_POOL_ID,
     Username: email,
   };
 
@@ -232,7 +234,7 @@ export async function forceUserPasswordChange(email: string): Promise<string> {
   const tempPassword = randomPassword(DEFAULT_COGNITO_PASSWORD_LENGTH);
   // Request parameters
   const params = {
-    UserPoolId: process.env.USER_POOL_ID ?? '',
+    UserPoolId: Env.USER_POOL_ID,
     Username: email,
     Password: tempPassword,
     Permanent: false,
@@ -244,7 +246,7 @@ export async function forceUserPasswordChange(email: string): Promise<string> {
   // Globally sign out user
   await provider.send(
     new AdminUserGlobalSignOutCommand({
-      UserPoolId: process.env.USER_POOL_ID ?? '',
+      UserPoolId: Env.USER_POOL_ID,
       Username: email,
     }),
   );

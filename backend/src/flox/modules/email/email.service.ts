@@ -24,25 +24,6 @@ export default class EmailService {
   };
 
   /**
-   * Sends a test e-mail
-   *
-   * @param recipient - e-mail recipient
-   */
-  async sendTestEmail(recipient: string): Promise<void> {
-    // Get sender from module configuration
-    const sender = moduleConfig().emailAddress;
-
-    // Send actual e-mail
-    await sendEmail(
-      this.credentials,
-      sender,
-      recipient,
-      'Test Message from Flox',
-      'This is a test.',
-    );
-  }
-
-  /**
    * Sends an e-mail notifying the user that their password was force-changed
    *
    * @param recipient - e-mail recipient
