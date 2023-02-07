@@ -4,6 +4,7 @@ import { LANGUAGES } from '../../../LANGUAGES';
 
 /**
  * Returns a list of language options for the SelectLanguageField
+ * @returns - Array with all available language options
  */
 export default function availableLanguageOptions(): GenericOption[] {
   return [
