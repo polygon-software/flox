@@ -49,14 +49,10 @@ export default class EmailService {
       this.i18nService.t('authentication.password_changed.title', {
         lang,
       }),
-      render(mailTemplate, { password: tempPassword }) as string,
-      // TODO
-      // this.i18nService.t('authentication.password_changed.content', {
-      //   lang,
-      //   args: {
-      //     password: tempPassword,
-      //   },
-      // }),
+      render(mailTemplate, {
+        lang,
+        password: tempPassword,
+      }) as string,
     );
   }
 }
