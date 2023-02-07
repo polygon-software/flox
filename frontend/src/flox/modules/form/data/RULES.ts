@@ -44,7 +44,6 @@ const IS_VALID_PHONE_NUMBER = (val: string): boolean => {
 const IS_VALID_STRING = (val: string | undefined): boolean =>
   !!(val && val.length > 0);
 
-
 const IS_VALID_ZIP = (val: string): boolean => {
   return ZIP_REGEX.test(val);
 };
