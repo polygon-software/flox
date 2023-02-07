@@ -20,6 +20,7 @@ import {
 import Env from 'src/env';
 
 // Default length for Cognito passwords
+const MINIMUM_COGNITO_PASSWORD_LENGTH = 8;
 const DEFAULT_COGNITO_PASSWORD_LENGTH = 16;
 
 // Set up cognito admin provider
@@ -87,10 +88,20 @@ export function randomPassword(minLength: number): string {
  */
 export async function createCognitoAccount(
   email: string,
-  password = null,
+  password?: string,
   deliveryMedium = DeliveryMedium.EMAIL,
   verified = true,
 ): Promise<{ cognitoUuid: string; password: string }> {
+  // Ensure password satisfies minimum length requirement
+  if (!!password && password.length < MINIMUM_COGNITO_PASSWORD_LENGTH) {
+    throw new Error(
+      `Password failed to satisfy minimum length constraint (length: ${password.length})`,
+    );
+  }
+
+  // Ensure e-mail is valid
+  // if() TODO
+
   const pw = password || randomPassword(DEFAULT_COGNITO_PASSWORD_LENGTH);
 
   let mediums: string[] = [];
