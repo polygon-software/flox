@@ -7,7 +7,7 @@ import { LANGUAGES } from '../../../LANGUAGES';
 /**
  * Returns a list of language options for the SelectLanguageField
  */
-export default function availableLanguageOptions(): GenericOption[] {
+export function availableLanguageOptions(): GenericOption[] {
   return [
     { label: LANGUAGES.DE, value: COUNTRY_CODES.DE },
     { label: LANGUAGES.EN, value: COUNTRY_CODES.EN },
@@ -20,9 +20,14 @@ export default function availableLanguageOptions(): GenericOption[] {
  * Returns a list of phone number options for the PhoneNumberField
  * TODO: Customize for specific application
  */
-export default function getPhonenNumberOptions(): PhoneCountryCode[] {
+export function getPhonenNumberOptions(): PhoneCountryCode[] {
   return [
-    { code: 'CH', label: '+41', mask: '## ### ## ##', value: '+41' },
-    { code: 'DE', label: '+49', mask: undefined, value: '+49' },
+    {
+      code: COUNTRY_CODES.CH,
+      label: '+41',
+      mask: '## ### ## ##',
+      value: '+41',
+    },
+    { code: COUNTRY_CODES.DE, label: '+49', mask: undefined, value: '+49' },
   ];
 }
