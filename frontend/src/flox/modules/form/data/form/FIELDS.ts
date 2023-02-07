@@ -2,6 +2,7 @@ import { markRaw } from 'vue';
 import { CountryCode } from 'libphonenumber-js';
 
 import { i18n } from 'boot/i18n';
+import { availablePhonenNumberOptions } from 'src/flox/modules/form/helpers/generation-helpers';
 
 import {
   IS_EMAIL,
@@ -156,10 +157,7 @@ const FIELDS: Record<string, Field> = {
     key: 'phoneNumber',
     component: markRaw(PhoneNumberField),
     attributes: {
-      countryCodes: [
-        { code: 'CH', label: '+41', mask: '## ### ## ##', value: '+41' },
-        { code: 'DE', label: '+49', mask: undefined, value: '+49' },
-      ] as PhoneCountryCode[],
+      countryCodes: availablePhonenNumberOptions(),
       rules: [
         (val: { number: string; countryCode: CountryCode }): boolean | string =>
           IS_VALID_PHONE_NUMBER(val.number, val.countryCode) ||

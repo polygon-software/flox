@@ -20,7 +20,7 @@ export function availableLanguageOptions(): GenericOption[] {
  * Returns a list of phone number options for the PhoneNumberField
  * TODO: Customize for specific application
  */
-export function getPhonenNumberOptions(): PhoneCountryCode[] {
+export function availablePhonenNumberOptions(): PhoneCountryCode[] {
   return [
     {
       code: COUNTRY_CODES.CH,
