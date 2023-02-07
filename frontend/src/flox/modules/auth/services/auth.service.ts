@@ -147,9 +147,9 @@ export default class AuthenticationService {
         // Called when user is in FORCE_PASSWORD_CHANGE state and must thus set a new password
         newPasswordRequired(
           userAttributes: Record<string, unknown>, // all user attributes (e.g. 'email', 'email_verified')
-          requiredAttributes: string[] // List of attributes that must be passed in order to update password
+          requiredAttributes: string[] // list of attributes that must be passed in order to update password (usually none)
         ) {
-          // Build list of required attributes (for most user pools, this will usually be left empty)
+          // Build list of required attributes (for most user pools, this will be left empty)
           const attributes: Record<string, unknown> = {};
           if (requiredAttributes?.length > 0) {
             Object.keys(userAttributes).forEach((key) => {
