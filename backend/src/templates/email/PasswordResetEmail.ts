@@ -1,3 +1,8 @@
+/**
+ * Template for password reset e-mails
+ * see https://squirrelly.js.org/docs/syntax/overview for variable/condition syntax
+ */
+
 export default `
 <div style="padding: 10px">
   <h3>
