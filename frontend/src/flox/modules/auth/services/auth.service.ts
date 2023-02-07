@@ -151,11 +151,13 @@ export default class AuthenticationService {
         ) {
           // Build list of required attributes (for most user pools, this will usually be left empty)
           const attributes: Record<string, unknown> = {};
-          Object.keys(userAttributes).forEach((key) => {
-            if (requiredAttributes.includes(key)) {
-              attributes[key] = userAttributes[key];
-            }
-          });
+          if (requiredAttributes?.length > 0) {
+            Object.keys(userAttributes).forEach((key) => {
+              if (requiredAttributes.includes(key)) {
+                attributes[key] = userAttributes[key];
+              }
+            });
+          }
 
           // No password given: show dialog for setting new one
           if (!newPassword) {
