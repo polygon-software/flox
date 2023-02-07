@@ -110,7 +110,7 @@ export default class AuthenticationService {
 
     const { userPool } = this.$authStore;
 
-    if (userPool === undefined) {
+    if (!userPool) {
       this.$errorService.showErrorDialog(
         new Error(i18n.global.t('errors.user_not_defined'))
       );
@@ -159,27 +159,28 @@ export default class AuthenticationService {
             });
           }
 
-          // No password given: show dialog for setting new one
-          if (!newPassword) {
-            // Show password change dialog
-            q.dialog({
-              component: ChangePasswordDialog,
-              componentProps: {},
-            }).onOk(({ passwordNew }: { passwordNew: string }) => {
-              cognitoUser.completeNewPasswordChallenge(
-                passwordNew,
-                attributes,
-                this
-              );
-            });
-          } else {
-            // Password already given; complete directly
+          // Case 1: Password already given; complete directly
+          if (newPassword) {
             cognitoUser.completeNewPasswordChallenge(
               newPassword,
               attributes,
               this
             );
+            return;
           }
+
+          // Case 2: No password given: show dialog for setting new one
+          // Show password change dialog
+          q.dialog({
+            component: ChangePasswordDialog,
+            componentProps: {},
+          }).onOk(({ passwordNew }: { passwordNew: string }) => {
+            cognitoUser.completeNewPasswordChallenge(
+              passwordNew,
+              attributes,
+              this
+            );
+          });
         },
 
         // Called if time-limited one time password is required (only second login or later)
