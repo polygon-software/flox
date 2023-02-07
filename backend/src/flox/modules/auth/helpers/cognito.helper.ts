@@ -1,5 +1,6 @@
 import { randomInt } from 'crypto';
 
+import { shuffle } from 'lodash';
 import {
   AdminCreateUserCommand,
   AdminDeleteUserCommand,
@@ -69,12 +70,9 @@ export function randomPassword(minLength: number): string {
       password += requiredChar[randomNumber(0, requiredChar.length)];
     }
   });
-  password = password
-    .split('')
-    .map((value) => ({ value, sort: randomInt(10000) }))
-    .sort((a, b) => a.sort - b.sort)
-    .map(({ value }) => value)
-    .join('');
+  // Note that the shuffle method is not cryptographically secure, but not problematic since the characters themselves are randomized as well
+  // (and this is usually used for temporary passwords only)
+  password = shuffle(password.split('')).join('');
   return password;
 }
 
