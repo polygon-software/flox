@@ -16,6 +16,7 @@ import {
   CognitoIdentityProviderClient,
   UserStatusType,
 } from '@aws-sdk/client-cognito-identity-provider';
+import { isEmail } from 'class-validator';
 
 import Env from 'src/env';
 
@@ -100,7 +101,9 @@ export async function createCognitoAccount(
   }
 
   // Ensure e-mail is valid
-  // if() TODO
+  if (!isEmail(email)) {
+    throw new Error(`${email} is not a valid e-mail address`);
+  }
 
   const pw = password || randomPassword(DEFAULT_COGNITO_PASSWORD_LENGTH);
 
