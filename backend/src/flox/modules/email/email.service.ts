@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
 import { ConfigService } from '@nestjs/config';
+import { render } from 'squirrelly';
+
+import mailTemplate from 'src/templates/email/PasswordResetEmail';
 
 import { Credentials, sendEmail } from './helpers/email-helpers';
 import { moduleConfig } from './config';
@@ -46,12 +49,14 @@ export default class EmailService {
       this.i18nService.t('authentication.password_changed.title', {
         lang,
       }),
-      this.i18nService.t('authentication.password_changed.content', {
-        lang,
-        args: {
-          password: tempPassword,
-        },
-      }),
+      render(mailTemplate, { password: tempPassword }) as string,
+      // TODO
+      // this.i18nService.t('authentication.password_changed.content', {
+      //   lang,
+      //   args: {
+      //     password: tempPassword,
+      //   },
+      // }),
     );
   }
 }
