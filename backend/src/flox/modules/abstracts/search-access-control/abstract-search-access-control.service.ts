@@ -65,14 +65,16 @@ export default abstract class AbstractSearchAccessControlService<
           publicReadAccess: true,
         } as FindOptionsWhere<Entity>,
       ],
-      this.nestedSearch(searchKeys, queryArgs.filter),
+      queryArgs.filter ? this.nestedSearch(searchKeys, queryArgs.filter) : [],
     );
 
     const [data, count] = await this.repository.findAndCount({
       ...options,
-      order: {
-        [queryArgs.sortBy]: queryArgs.descending ? 'DESC' : 'ASC',
-      } as FindOptionsOrder<Entity>,
+      order: queryArgs?.sortBy
+        ? ({
+            [queryArgs.sortBy]: queryArgs.descending ? 'DESC' : 'ASC',
+          } as FindOptionsOrder<Entity>)
+        : undefined,
       skip: queryArgs.skip,
       take: queryArgs.take,
       where,
@@ -115,15 +117,17 @@ export default abstract class AbstractSearchAccessControlService<
           ]),
         } as FindOptionsWhere<Entity>,
       ],
-      this.nestedSearch(searchKeys, queryArgs.filter),
+      queryArgs?.filter ? this.nestedSearch(searchKeys, queryArgs.filter) : [],
     );
 
     const [data, count] = await this.repository.findAndCount({
       ...options,
       where,
-      order: {
-        [queryArgs.sortBy]: queryArgs.descending ? 'DESC' : 'ASC',
-      } as FindOptionsOrder<Entity>,
+      order: queryArgs?.sortBy
+        ? ({
+            [queryArgs.sortBy]: queryArgs.descending ? 'DESC' : 'ASC',
+          } as FindOptionsOrder<Entity>)
+        : undefined,
       skip: queryArgs.skip,
       take: queryArgs.take,
     });
@@ -158,15 +162,17 @@ export default abstract class AbstractSearchAccessControlService<
           uuid: In([...ownerUuids, ...readUuids]),
         } as FindOptionsWhere<Entity>,
       ],
-      this.nestedSearch(searchKeys, queryArgs.filter),
+      queryArgs?.filter ? this.nestedSearch(searchKeys, queryArgs.filter) : [],
     );
 
     const [data, count] = await this.repository.findAndCount({
       ...options,
       where,
-      order: {
-        [queryArgs.sortBy]: queryArgs.descending ? 'DESC' : 'ASC',
-      } as FindOptionsOrder<Entity>,
+      order: queryArgs?.sortBy
+        ? ({
+            [queryArgs.sortBy]: queryArgs.descending ? 'DESC' : 'ASC',
+          } as FindOptionsOrder<Entity>)
+        : undefined,
       skip: queryArgs.skip,
       take: queryArgs.take,
     });
@@ -189,10 +195,14 @@ export default abstract class AbstractSearchAccessControlService<
   ): Promise<SearchQueryOutputInterface<Entity>> {
     const [data, count] = await this.repository.findAndCount({
       ...options,
-      where: this.nestedSearch(searchKeys, queryArgs.filter),
-      order: {
-        [queryArgs.sortBy]: queryArgs.descending ? 'DESC' : 'ASC',
-      } as FindOptionsOrder<Entity>,
+      where: queryArgs?.filter
+        ? this.nestedSearch(searchKeys, queryArgs.filter)
+        : undefined,
+      order: queryArgs?.sortBy
+        ? ({
+            [queryArgs.sortBy]: queryArgs.descending ? 'DESC' : 'ASC',
+          } as FindOptionsOrder<Entity>)
+        : undefined,
       skip: queryArgs.skip,
       take: queryArgs.take,
     });

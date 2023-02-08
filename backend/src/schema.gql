@@ -556,6 +556,9 @@ type Query {
     """Search for text within items"""
     filter: String
 
+    """Subset of the module's allowed search keys to search in"""
+    searchKeys: [String!]
+
     """How many items to skip"""
     skip: Int = 0
 
@@ -574,6 +577,9 @@ type Query {
 
     """Search for text within items"""
     filter: String
+
+    """Subset of the module's allowed search keys to search in"""
+    searchKeys: [String!]
 
     """How many items to skip"""
     skip: Int = 0
@@ -594,6 +600,9 @@ type Query {
     """Search for text within items"""
     filter: String
 
+    """Subset of the module's allowed search keys to search in"""
+    searchKeys: [String!]
+
     """How many items to skip"""
     skip: Int = 0
 
@@ -612,6 +621,9 @@ type Query {
 
     """Search for text within items"""
     filter: String
+
+    """Subset of the module's allowed search keys to search in"""
+    searchKeys: [String!]
 
     """How many items to skip"""
     skip: Int = 0
@@ -632,6 +644,9 @@ type Query {
     """Search for text within items"""
     filter: String
 
+    """Subset of the module's allowed search keys to search in"""
+    searchKeys: [String!]
+
     """How many items to skip"""
     skip: Int = 0
 
@@ -647,6 +662,9 @@ type Query {
 
     """Search for text within items"""
     filter: String
+
+    """Subset of the module's allowed search keys to search in"""
+    searchKeys: [String!]
 
     """How many items to skip"""
     skip: Int = 0
@@ -667,6 +685,9 @@ type Query {
     """Search for text within items"""
     filter: String
 
+    """Subset of the module's allowed search keys to search in"""
+    searchKeys: [String!]
+
     """How many items to skip"""
     skip: Int = 0
 
@@ -683,6 +704,9 @@ type Query {
     """Search for text within items"""
     filter: String
 
+    """Subset of the module's allowed search keys to search in"""
+    searchKeys: [String!]
+
     """How many items to skip"""
     skip: Int = 0
 
@@ -698,6 +722,9 @@ type Query {
 
     """Search for text within items"""
     filter: String
+
+    """Subset of the module's allowed search keys to search in"""
+    searchKeys: [String!]
 
     """How many items to skip"""
     skip: Int = 0

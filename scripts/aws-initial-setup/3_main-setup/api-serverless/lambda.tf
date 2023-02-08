@@ -41,7 +41,7 @@ resource "aws_lambda_function" "api_lambda" {
       AWS_MAIN_REGION = var.aws_region
       AWS_PUBLIC_BUCKET_NAME = var.public_bucket_id,
       AWS_PRIVATE_BUCKET_NAME = var.private_bucket_id,
-      COMPOSE_PROJECT_NAME = var.project,
+      PROJECT_NAME = var.project,
       USER_POOL_ID= var.user_pool_id,
       USER_POOL_CLIENT_ID = var.user_pool_client_id,
       BASE_URL = "https://${var.domain}",
