@@ -1,22 +1,18 @@
 <template>
-  <FloxWrapper :module="MODULES.AUTH">
-    <GenericForm
-      :form-key="sampleFormKey.formKey"
-      :pages="SampleFormPages"
-      @submit="onSubmit"
-    />
-  </FloxWrapper>
+  <GenericForm
+    :form-key="sampleFormKey.formKey"
+    :pages="SampleFormPages"
+    @submit="onSubmit"
+  />
 </template>
 
 <script setup lang="ts">
 import { useQuasar } from 'quasar';
 
 import { fetchByKey } from '../../flox/modules/form/helpers/form-helpers';
-import { MODULES } from '../../flox/MODULES';
 import GenericForm from '../../flox/modules/form/components/GenericForm.vue';
 import { showSuccessNotification } from '../../flox/modules/form/helpers/notification-helpers';
 import SampleFormPages from '../../flox/modules/form/data/form/SampleFormPages';
-import FloxWrapper from '../../flox/core/components/FloxWrapper.vue';
 import { sampleFormKey } from '../../flox/modules/form/data/form/FormKeys';
 import { FIELDS } from '../../flox/modules/form/data/form/FIELDS';
 import { useFormStore } from '../../flox/modules/form/stores/form';
