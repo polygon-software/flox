@@ -35,7 +35,7 @@ resource "aws_elastic_beanstalk_application_version" "frontend_application_versi
 resource "aws_elastic_beanstalk_environment" "frontend_env" {
   name                  = "${var.project}-${var.type}-web-env"
   application           = aws_elastic_beanstalk_application.frontend_application.name
-  solution_stack_name   = "64bit Amazon Linux 2 v5.5.5 running Node.js 16"
+  solution_stack_name   = "64bit Amazon Linux 2 v5.6.3 running Node.js 16"
   description           = "Elastic Beanstalk Environment for the Quasar Frontend"
   version_label         = aws_elastic_beanstalk_application_version.frontend_application_version.name
   tags = {
