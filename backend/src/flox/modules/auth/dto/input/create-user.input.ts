@@ -4,6 +4,7 @@ import {
   IsLocale,
   IsLowercase,
   IsNotEmpty,
+  IsOptional,
   IsString,
   MaxLength,
   MinLength,
@@ -23,12 +24,13 @@ export default class CreateUserInput extends CreateInput {
   @IsEmail()
   email: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   @IsString()
   @MinLength(2)
   @MaxLength(2)
   @IsLowercase()
   @IsLocale()
+  @IsOptional()
   lang: string;
 
   @Field(() => String)

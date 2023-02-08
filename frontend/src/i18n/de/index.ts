@@ -1,5 +1,14 @@
+import buttonTranslations from './buttons';
+import cardTranslations from './cards';
+import errorTranslations from './errors';
+import fieldTranslations from './fields';
+
 /* eslint-disable camelcase */
 export default {
+  ...buttonTranslations,
+  ...cardTranslations,
+  ...errorTranslations,
+  ...fieldTranslations,
   general: {
     finish: 'Abschliessen',
     back: 'Zurück',
@@ -18,6 +27,7 @@ export default {
     no_results: 'Keine Resultate',
     search: 'Suchen',
     display: 'Anzeigen',
+    sample: 'Beispiel',
   },
   locales: {
     de: 'Deutsch',
@@ -46,31 +56,8 @@ export default {
     verification: 'Verifikation',
     verification_message: 'Geben Sie ihren Verifikations-Code ein:',
     resend_code: 'Ich habe keinen Code erhalten',
-  },
-  errors: {
-    module_error: "Fehler: Modul '{module}' ist nicht aktiv",
-    invalid_password: 'Bitte geben Sie ein gültiges Passwort ein',
-    invalid_email: 'Bitte geben Sie eine gültige E-Mail-Adresse ein',
-    invalid_username: 'Bitte geben Sie einen Benutzernamen ein',
-    incorrect_password: 'Inkorrektes Passwort',
-    incorrect_email: 'Inkorrekte E-Mail-Adresse',
-    incorrect_username: 'Inkorrekter Benutzername',
-    non_matching_password: 'Passwörter stimmen nicht überein',
-    invalid_user_pool: 'User Pool ist ungültig.',
-    nothing_here: 'Hoppla. Hier hat es nichts...',
-    user_not_defined: 'Benutzerpool ist nicht definiert',
-    missing_properties:
-      "Eine oder mehrere der folgenden Eigenschaften fehlen für die angegebene Mutation: 'mutation', 'tables', 'type', 'cacheLocation'",
-    not_logged_in:
-      'Versucht, sich abzumelden, obwohl man nicht eingeloggt ist!',
-    error_occurred:
-      'Ein Fehler ist aufgetreten, versuchen Sie sich erneut anzumelden',
-    cant_find_module: 'Kann Modul nicht finden ',
-    cache_location_missing: 'Cache-Speicherort fehlt in mutationObject: ',
-    missing_attributes: 'Fehlende Attribute',
-    unknown: 'Unbekannter Fehler',
-    entry_edit_failed: 'Die Änderung konnte nicht gespeichert werden',
-    entry_delete_failed: 'Eintrag konnte nicht gelöscht werden',
+    password_rule:
+      "Passwörter müssen mindestens einen Grossbuchstaben, eine Zahl und eines der Sonderzeichen (#?!{'@'}$%^&*-) enthalten",
   },
   files: {
     files: 'Dateien',

@@ -1,5 +1,14 @@
+import buttonTranslations from './buttons';
+import cardTranslations from './cards';
+import errorTranslations from './errors';
+import fieldTranslations from './fields';
+
 /* eslint-disable camelcase */
 export default {
+  ...buttonTranslations,
+  ...cardTranslations,
+  ...errorTranslations,
+  ...fieldTranslations,
   general: {
     finish: 'Finish',
     back: 'Back',
@@ -18,6 +27,7 @@ export default {
     no_results: 'No Results',
     search: 'Search',
     display: 'Display',
+    sample: 'Sample',
   },
   locales: {
     de: 'German',
@@ -46,29 +56,8 @@ export default {
     verification: 'Verification',
     verification_message: 'Enter your verification code:',
     resend_code: 'I did not receive a code',
-  },
-  errors: {
-    module_error: "Error: Module '{module}' is not active",
-    invalid_password: 'Please enter a valid password',
-    invalid_email: 'Please enter a valid e-mail address',
-    invalid_username: 'Please enter a username',
-    incorrect_password: 'Incorrect password',
-    incorrect_email: 'Email address not found',
-    incorrect_username: 'Username not found',
-    non_matching_password: "Passwords don't match",
-    invalid_user_pool: 'User Pool is invalid.',
-    nothing_here: 'Oops. Nothing here...',
-    user_not_defined: 'User Pool is not defined',
-    missing_properties:
-      "One or more of the following properties are missing for the given mutation: 'mutation', 'tables', 'type', 'cacheLocation'",
-    not_logged_in: 'Trying to log out despite not being logged in!',
-    error_occurred: 'An error occurred, try logging in again',
-    cant_find_module: 'Cannot find module ',
-    cache_location_missing: 'Cache Location is missing in mutationObject: ',
-    missing_attributes: 'Missing attributes',
-    unknown: 'Unknown Error',
-    entry_edit_failed: 'Edit could not be saved',
-    entry_delete_failed: 'Entry could not be deleted',
+    password_rule:
+      "Passwords must contain at least one capital letter, number and one of the following special characters (#?!{'@'}$%^&*-)",
   },
   files: {
     files: 'Files',

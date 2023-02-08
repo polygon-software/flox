@@ -94,11 +94,8 @@ export default class AuthenticationService {
    * @param password - the authentication's password
    * @param newPassword - the new password if this function is triggered from set-password page
    */
-  async login(
-    identifier: string,
-    password: string,
-    newPassword = ''
-  ): Promise<void> {
+  async login(identifier: string, password: string): Promise<void> {
+    const { $q } = this;
     // Generate auth details
     const authenticationDetails =
       new AmazonCognitoIdentity.AuthenticationDetails({
@@ -145,23 +142,16 @@ export default class AuthenticationService {
         // Called when user is in FORCE_PASSWORD_CHANGE state and must thus set a new password
         newPasswordRequired(userAttributes) {
           const attrs = cloneDeep(userAttributes) as Record<string, unknown>;
-
-          const $q = useQuasar();
-
-          let dialogPassword = newPassword;
           // Show password change dialog
           $q.dialog({
             component: ChangePasswordDialog,
             componentProps: {},
-          }).onOk(
-            ({ userEnteredPassword }: { userEnteredPassword: string }) => {
-              dialogPassword = userEnteredPassword;
-            }
-          );
-          // Ensure e-mail doesn't get passed, so cognito doesn't recognize it as change
-          delete attrs.email;
-          delete attrs.email_verified;
-          cognitoUser.completeNewPasswordChallenge(dialogPassword, attrs, this);
+          }).onOk(({ passwordNew }: { passwordNew: string }) => {
+            // Ensure e-mail doesn't get passed, so cognito doesn't recognize it as change
+            delete attrs.email;
+            delete attrs.email_verified;
+            cognitoUser.completeNewPasswordChallenge(passwordNew, attrs, this);
+          });
         },
 
         // Called if time-limited one time password is required (only second login or later)
@@ -208,17 +198,19 @@ export default class AuthenticationService {
   }
 
   /**
-   * Signs up by creating a new authentication using the given Username, e-mail and password.
+   * Signs up by creating a new authentication using the given Username, e-mail, password and language.
    *
    * @param username - the chosen username
    * @param email - the authentication's e-mail address
    * @param password - the new authentication's chosen password. Must fulfill the set password conditions
+   * @param locale - the chosen language locale
    * @param attributes - custom attributes to add (if any)
    */
   async signUp(
     username: string,
     email: string,
     password: string,
+    locale?: string,
     attributes?: Record<string, string>
   ): Promise<void> {
     const cognitoUserWrapper: ISignUpResult = await new Promise(
@@ -265,14 +257,14 @@ export default class AuthenticationService {
     );
 
     // Register in database TODO application specific: apply any other attributes here as well
-    await createUser(username, email, cognitoUserWrapper.userSub);
+    await createUser(username, email, cognitoUserWrapper.userSub, locale);
   }
 
   /**
    * Logs out the currently logged in authentication (if any)
    */
   async logout(): Promise<void> {
-    // Deep copy to avoid mutating stores state
+    // Deep copy to avoid mutating store state
     const cognitoUser: CognitoUser | undefined = cloneDeep(
       this.$authStore.cognitoUser
     );
@@ -661,7 +653,7 @@ export default class AuthenticationService {
         // 15min before de-validation token is refreshed
         const currentUser: CognitoUser | undefined = cloneDeep(
           this.$authStore.cognitoUser
-        ); // refresh session mutates the state of stores: illegal
+        ); // refresh session mutates the state of store: illegal
         currentUser?.refreshSession(refreshToken, (err, session) => {
           if (session) {
             this.$authStore.setCognitoUser(currentUser);

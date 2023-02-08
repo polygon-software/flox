@@ -1,6 +1,0 @@
-{
-  "user_added_to_user_group": {
-    "title": "You were added to a new user group!",
-    "content": "You are now part of the user group '{group_name}'! You may now have access to new resources!"
-  }
-}

@@ -86,7 +86,7 @@ import { onMounted, ref, Ref } from 'vue';
 
 import { SEARCH_USER_GROUPS } from 'src/flox/modules/access-control/access-control.query';
 import UserGroupEntity from 'src/flox/modules/access-control/entities/user-group.entity';
-import LazySearchField from 'components/forms/LazySearchField.vue';
+import LazySearchField from 'src/flox/modules/form/components/LazySearchField.vue';
 import MultiUserAvatars from 'src/flox/modules/auth/components/avatar/MultiUserAvatars.vue';
 
 const props = defineProps<{

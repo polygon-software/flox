@@ -109,7 +109,7 @@ import {
   removeUserFromUserGroup,
 } from 'src/flox/modules/access-control/services/access-control.service';
 import { sleep } from 'src/tools/general.tool';
-import LazySearchField from 'components/forms/LazySearchField.vue';
+import LazySearchField from 'src/flox/modules/form/components/LazySearchField.vue';
 import MultiUserAvatars from 'src/flox/modules/auth/components/avatar/MultiUserAvatars.vue';
 import { i18n } from 'boot/i18n';
 

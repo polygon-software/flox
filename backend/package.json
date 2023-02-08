@@ -21,7 +21,7 @@
     "test:unit:watch": "jest --watch",
     "test:unit:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "docker:dev": "docker-compose up --build -V"
+    "docker:dev": "docker compose up --build -V"
   },
   "dependencies": {
     "@aws-sdk/client-rekognition": "^3.194.0",
@@ -114,7 +114,7 @@
     ]
   },
   "engines": {
-    "node": ">= 14.20.0",
+    "node": ">= 16.19.0",
     "yarn": ">= 1.21.1"
   }
 }

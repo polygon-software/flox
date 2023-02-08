@@ -18,7 +18,7 @@ resource "aws_elastic_beanstalk_application_version" "api_app_version" {
 resource "aws_elastic_beanstalk_environment" "api_env" {
   name                  = "${var.project}-${var.type}-api-app-env"
   application           = aws_elastic_beanstalk_application.api_app.name
-  solution_stack_name   = "64bit Amazon Linux 2 v5.5.5 running Node.js 14"
+  solution_stack_name   = "64bit Amazon Linux 2 v5.6.3 running Node.js 16"
   description           = "Environment for API"
   # Version override (used for update workflow)
   version_label         = aws_elastic_beanstalk_application_version.api_app_version.name

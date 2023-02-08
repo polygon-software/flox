@@ -1,94 +1,78 @@
 <template>
   <FloxWrapper :module="MODULES.AUTH">
-    <div class="column q-pa-sm text-center">
-      <h5 class="q-ma-none" style="margin-bottom: 20px">
-        {{ $t('authentication.signup') }}
-      </h5>
-      <q-form class="q-gutter-md" @submit="onSubmit">
-        <component
-          :is="field.component"
-          v-for="field in fields"
-          :key="field.key"
-          v-bind="field.attributes"
-          v-model="form.values.value[field.key]"
-          @change="form.updateValue(field.key, $event)"
-        />
-        <q-btn
-          style="margin-top: 20px"
-          color="primary"
-          :label="$t('authentication.signup')"
-          type="submit"
-          :disable="!form.pageValid.value"
-        />
-
-        <q-btn
-          :label="$t('general.cancel')"
-          class="text-primary"
-          flat
-          @click="onCancel"
-        />
-      </q-form>
+    <div class="column q-pa-sm text-center justify-center">
+      <GenericForm
+        :form-key="signupFormKey.formKey"
+        :pages="SignupFormPages"
+        text-position="center"
+        :finish-label="$t('buttons.login')"
+        submit-on-enter
+        @submit="onSignup"
+      />
     </div>
   </FloxWrapper>
 </template>
 
 <script setup lang="ts">
-import { defineEmits } from 'vue';
-
-import { MultiPageForm } from 'components/forms/MultiPageForm';
-import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';
-import { MODULES } from 'src/flox/MODULES';
-import * as auth from 'src/flox/modules/auth';
-import { FIELDS } from 'src/flox/modules/auth/components/forms/fields';
-
-type SignUp = {
-  username: string;
-  email: string;
-  password: string;
-};
+import { FIELDS } from '../../../form/data/form/FIELDS';
+import FloxWrapper from '../../../../core/components/FloxWrapper.vue';
+import * as auth from '../..';
+import SignupFormPages from '../../../form/data/form/SignupFormPages';
+import GenericForm from '../../../form/components/GenericForm.vue';
+import { fetchByKey } from '../../../form/helpers/form-helpers';
+import { useFormStore } from '../../../form/stores/form';
+import { loginFormKey, signupFormKey } from '../../../form/data/form/FormKeys';
+import COUNTRY_CODES from '../../../../COUNTRIES';
+import { MODULES } from '../../../../MODULES';
 
 const emit = defineEmits<{
-  (e: 'submit', formValues: SignUp): void;
-  (e: 'cancel'): void;
+  (
+    e: 'submit',
+    value: {
+      username: string;
+      email: string;
+      password: string;
+      language?: string;
+    }
+  ): void;
 }>();
 
-const fields = auth.moduleConfig().emailAsUsername
-  ? [FIELDS.EMAIL, FIELDS.PASSWORD_REPEAT]
-  : [FIELDS.USERNAME, FIELDS.EMAIL, FIELDS.PASSWORD_REPEAT];
-
-const form = new MultiPageForm();
-form.pages.value = [
-  {
-    key: 'login',
-    label: 'Login',
-    fields,
-  },
-];
+const store = useFormStore();
 
 /**
- * Emits the 'submit' event, containing the form's data
+ * Emit the
+ * @returns void
  */
-function onSubmit(): void {
-  const formValues: SignUp = {
-    username: '',
-    email: form.values.value[FIELDS.EMAIL.key] as string,
-    password: form.values.value[FIELDS.PASSWORD_REPEAT.key] as string,
-  };
+function onSignup(): void {
+  const email = fetchByKey({
+    ...signupFormKey,
+    fieldKey: FIELDS.EMAIL.key,
+  }) as string;
 
-  // If e-mail is also username, add 'username' field directly (identical to e-mail)
+  const password = fetchByKey({
+    ...signupFormKey,
+    fieldKey: FIELDS.PASSWORD_REPEAT.key,
+  }) as string;
+
+  const language =
+    (
+      fetchByKey({
+        ...loginFormKey,
+        fieldKey: FIELDS.SELECT_LANGUAGE.key,
+      }) as COUNTRY_CODES
+    ).toLowerCase() ?? undefined;
+
   if (auth.moduleConfig().emailAsUsername) {
-    formValues.username = form.values.value[FIELDS.EMAIL.key] as string;
+    emit('submit', { username: email, email, password, language });
   } else {
-    formValues.username = form.values.value[FIELDS.USERNAME.key] as string;
+    const username = fetchByKey({
+      ...signupFormKey,
+      fieldKey: FIELDS.USERNAME.key,
+    }) as string;
+
+    emit('submit', { username, email, password, language });
   }
-
-  emit('submit', formValues);
-}
-
-/**
- * On cancel, emit 'cancel' event
- */
-function onCancel(): void {
-  emit('cancel');
+  // Empty store state
+  store.clearForm(signupFormKey.formKey);
 }
 </script>
