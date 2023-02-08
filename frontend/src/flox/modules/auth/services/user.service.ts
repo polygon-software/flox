@@ -100,7 +100,7 @@ export async function searchUsers(
  * @param username - user's username (may be identical to e-mail)
  * @param email - user's e-mail address
  * @param cognitoUuid - user's Cognito UUID
- * @param [lang] - user's langauge
+ * @param [lang] - user's language
  * @returns the newly created user
  */
 export async function createUser(
