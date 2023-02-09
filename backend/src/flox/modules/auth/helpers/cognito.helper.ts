@@ -34,16 +34,6 @@ const provider = new CognitoIdentityProviderClient({
 });
 
 /**
- * Available auto-delivery mediums for new user's login information
- */
-export enum DeliveryMedium {
-  SMS = 'SMS',
-  EMAIL = 'EMAIL',
-  BOTH = 'BOTH',
-  NONE = 'NONE',
-}
-
-/**
  * Generates a random number in given range
  *
  * @param min - start of the range (inclusive)
@@ -83,14 +73,14 @@ export function randomPassword(minLength: number): string {
  *
  * @param email - The email of the new user
  * @param [password] - Initial password, if needed (random if not given)
- * @param [deliveryMedium] - medium to use to deliver user's new login information (sms, email, both or none)
+ * @param [deliveryMediums] - medium to use to deliver user's new login information (sms, email, both or none)
  * @param [verified] - whether to mark the user's e-mail as verified
  * @returns Cognito ID
  */
 export async function createCognitoAccount(
   email: string,
   password?: string,
-  deliveryMedium = DeliveryMedium.EMAIL,
+  deliveryMediums = ['EMAIL'],
   verified = true,
 ): Promise<{ cognitoUuid: string; password: string }> {
   // Ensure password satisfies minimum length requirement
@@ -105,28 +95,22 @@ export async function createCognitoAccount(
     throw new Error(`${email} is not a valid e-mail address`);
   }
 
-  const pw = password || randomPassword(DEFAULT_COGNITO_PASSWORD_LENGTH);
-
-  let mediums: string[] = [];
-  switch (deliveryMedium) {
-    case DeliveryMedium.SMS:
-      mediums = ['SMS'];
-      break;
-    case DeliveryMedium.EMAIL:
-      mediums = ['EMAIL'];
-      break;
-    case DeliveryMedium.BOTH:
-      mediums = ['EMAIL', 'SMS'];
-      break;
-    default:
-      break;
+  // Ensure delivery mediums are valid
+  if (
+    deliveryMediums.length > 0 &&
+    deliveryMediums.some((medium) => {
+      return !['EMAIL', 'SMS'].includes(medium);
+    })
+  ) {
+    throw new Error(`Invalid delivery medium in ${deliveryMediums.join(',')}`);
   }
 
+  const pw = password || randomPassword(DEFAULT_COGNITO_PASSWORD_LENGTH);
   const params = {
     UserPoolId: Env.USER_POOL_ID,
     Username: email,
     TemporaryPassword: pw,
-    DesiredDeliveryMediums: mediums,
+    DesiredDeliveryMediums: deliveryMediums,
     UserAttributes: [
       {
         Name: 'email',
