@@ -75,6 +75,7 @@ const FIELDS: Record<string, Field> = {
     key: 'oldPassword',
     component: markRaw(GenericInputField),
     attributes: {
+      label: i18n.global.t('authentication.old_password'),
       rules: [
         (val: string): boolean | string =>
           IS_VALID_STRING(val || i18n.global.t('errors.invalid_old_password')),
