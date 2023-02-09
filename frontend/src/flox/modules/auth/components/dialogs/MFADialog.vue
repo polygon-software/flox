@@ -1,11 +1,14 @@
 <template>
   <q-dialog ref="dialogRef" persistent>
     <q-card class="q-pa-md text-center">
-      <h5>{{ $t('authentication.set_new_password') }}</h5>
+      <h5>{{ $t('messages.verification') }}</h5>
+      <p class="q-mb-lg text-grey-8">
+        {{ $t('messages.enter_2fa') }}
+      </p>
       <GenericForm
         style="min-width: 300px"
-        :pages="ChangePasswordFormPages"
-        :form-key="changePasswordFormKey.formKey"
+        :pages="MFAFormPages"
+        :form-key="MFAFormKey.formKey"
         text-position="center"
         show-cancel
         @submit="onSubmit"
@@ -18,9 +21,9 @@
 <script setup lang="ts">
 import { useDialogPluginComponent } from 'quasar';
 
-import { changePasswordFormKey } from '../../../form/data/form/FormKeys';
+import { MFAFormKey } from '../../../form/data/form/FormKeys';
 import GenericForm from '../../../form/components/GenericForm.vue';
-import ChangePasswordFormPages from '../../../form/data/form/ChangePasswordFormPages';
+import MFAFormPages from '../../../form/data/form/MFAFormPages';
 import { fetchByKey } from '../../../form/helpers/form-helpers';
 import { FIELDS } from '../../../form/data/form/FIELDS';
 import { useFormStore } from '../../../form/stores/form';
@@ -34,16 +37,14 @@ const store = useFormStore();
  * @returns void
  */
 function onSubmit(): void {
-  const newPassword = fetchByKey({
-    ...changePasswordFormKey,
-    fieldKey: FIELDS.PASSWORD_REPEAT.key,
-  });
+  const code = fetchByKey({
+    ...MFAFormKey,
+    fieldKey: FIELDS.MFA.key,
+  }) as string;
 
   // Empty store state
-  store.clearForm(changePasswordFormKey.formKey);
+  store.clearForm(MFAFormKey.formKey);
 
-  onDialogOK({
-    passwordNew: newPassword,
-  });
+  onDialogOK(code);
 }
 </script>

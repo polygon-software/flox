@@ -5,6 +5,7 @@ export default {
     change_password: 'Change password',
     forgot_password: 'Reset password',
     login: 'Login',
+    MFA: 'Verification',
     sample: 'Sample',
     set_new_password: 'Set new password',
     signup: 'Signup',

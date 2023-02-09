@@ -1,4 +1,11 @@
 /* eslint-disable import/prefer-default-export */
+export const MFAFormKey = {
+  formKey: 'MFA',
+  pageKey: 'MFA',
+  cardKey: 'MFA',
+  fieldKey: '',
+};
+
 export const changePasswordFormKey = {
   formKey: 'changePassword',
   pageKey: 'changePassword',

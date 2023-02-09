@@ -186,6 +186,18 @@ const FIELDS: Record<string, Field> = {
       ],
     },
   },
+  MFA: {
+    key: 'MFA',
+    component: markRaw(GenericInputField),
+    attributes: {
+      mask: '######',
+      rules: [
+        (val: string): boolean | string =>
+          IS_VERIFICATION_CODE(val) ||
+          i18n.global.t('errors.no_verification_code'),
+      ],
+    },
+  },
 };
 // eslint-disable-next-line import/prefer-default-export
 export { FIELDS };

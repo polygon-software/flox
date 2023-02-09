@@ -10,7 +10,6 @@ import { QVueGlobals, useQuasar } from 'quasar';
 
 import { i18n } from 'boot/i18n';
 import Env from 'src/env';
-import * as auth from 'src/flox/modules/auth';
 import { createUser } from 'src/flox/modules/auth/services/user.service';
 import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
 import ROUTES from 'src/router/routes';
@@ -23,6 +22,7 @@ import ChangePasswordDialog from '../components/dialogs/ChangePasswordDialog.vue
 import EmailConfirmationDialog from '../components/dialogs/EmailConfirmationDialog.vue';
 import QrCodeDialog from '../components/dialogs/QrCodeDialog.vue';
 import ResetPasswordDialog from '../components/dialogs/ResetPasswordDialog.vue';
+import MFADialog from '../components/dialogs/MFADialog.vue';
 
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
@@ -496,15 +496,7 @@ export default class AuthenticationService {
           // Verify code
           this.$q
             .dialog({
-              title: i18n.global.t('authentication.verification'),
-              message: i18n.global.t('authentication.verification_message'),
-              cancel: true,
-              persistent: true,
-              prompt: {
-                model: '',
-                isValid: (val: string): boolean => val.length >= 6,
-                type: 'text',
-              },
+              component: MFADialog,
             })
             .onOk((code: string) => {
               cognitoUser.verifySoftwareToken(code, 'TOTP Device', {
@@ -555,15 +547,7 @@ export default class AuthenticationService {
     // Verify code
     this.$q
       .dialog({
-        title: i18n.global.t('messages.verification'),
-        message: i18n.global.t('messages.enter_2fa'),
-        cancel: true,
-        persistent: true,
-        prompt: {
-          model: '',
-          isValid: (val: string): boolean => val.length >= 6,
-          type: 'text',
-        },
+        component: MFADialog,
       })
       .onOk((code: string) => {
         // Deep copy user so state object does not get altered

@@ -1,10 +1,10 @@
 <template>
   <q-dialog ref="dialogRef" persistent>
     <q-card class="q-pa-md text-center">
-      <h6>{{ $t('authentication.forgot_password') }}</h6>
-      <div class="q-mb-lg text-subtitle2">
+      <h5>{{ $t('authentication.forgot_password') }}</h5>
+      <p class="q-mb-lg text-grey-8">
         {{ $t('authentication.forgot_password_hint') }}
-      </div>
+      </p>
       <GenericForm
         style="min-width: 300px"
         :pages="ForgotPasswordFormPages"
