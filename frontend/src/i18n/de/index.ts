@@ -1,14 +1,20 @@
+import authenticationTranslations from './authentication';
 import buttonTranslations from './buttons';
 import cardTranslations from './cards';
 import errorTranslations from './errors';
 import fieldTranslations from './fields';
+import fileTranslations from './files';
+import messageTranslations from './messages';
 
 /* eslint-disable camelcase */
 export default {
+  ...authenticationTranslations,
   ...buttonTranslations,
   ...cardTranslations,
   ...errorTranslations,
   ...fieldTranslations,
+  ...fileTranslations,
+  ...messageTranslations,
   general: {
     finish: 'Abschliessen',
     back: 'Zurück',
@@ -32,69 +38,6 @@ export default {
   locales: {
     de: 'Deutsch',
     en: 'Englisch',
-  },
-  authentication: {
-    authentication: 'Authentifizierung',
-    welcome_back: 'Willkommen zurück!',
-    welcome_text: 'Du kannst dich mit deinem existierenden Account einloggen',
-    login: 'Anmelden',
-    logout: 'Abmelden',
-    signup: 'Registrieren',
-    username: 'Benutzername',
-    email: 'E-Mail',
-    change_password: 'Passwort ändern',
-    forgot_password: 'Passwort vergessen',
-    verification_code: 'Verifizierungscode',
-    password: 'Passwort',
-    password_repeat: 'Passwort wiederholen',
-    old_password: 'Altes Passwort',
-    new_password: 'Neues Passwort',
-    new_password_repeat: 'Neues Passwort wiederholen',
-    set_up_2fa: 'Zwei-Faktor-Authentifizierung einrichten',
-    set_up_2fa_description:
-      'Verwenden Sie ihre bevorzugte Authenticator-App, um den QR-Code zu scannen:',
-    verification: 'Verifikation',
-    verification_message: 'Geben Sie ihren Verifikations-Code ein:',
-    resend_code: 'Ich habe keinen Code erhalten',
-    password_rule:
-      "Passwörter müssen mindestens einen Grossbuchstaben, eine Zahl und eines der Sonderzeichen (#?!{'@'}$%^&*-) enthalten",
-  },
-  files: {
-    files: 'Dateien',
-    create_folder: 'Ordner erstellen',
-    folder_name: 'Ordner Name',
-    add: 'Hinzufügen',
-    failed_upload: '{value} Datei(en) konnten nicht hochgeladen werden',
-    file_upload: 'File Upload',
-    no_preview: 'Keine Vorschau verfügbar',
-    remove: 'Entfernen',
-    remove_all: 'Alle Dateien entfernen',
-    selected_files: 'Ausgewählte Files',
-    status: 'Status',
-    status_ready: 'Bereit',
-    status_loading: 'Laden',
-    status_done: 'Hochgeladen',
-    status_failed: 'Fehler',
-    successfully_uploaded: '{value} Datei(en) wurden erfolgreich hochgeladen',
-    successfully_deleted: '{value} Datei(en) wurden erfolgreich gelöscht',
-    upload: 'Hochladen',
-    file_type: 'Datei Typ',
-    filename: 'Datei Name',
-    last_updated: 'Zuletzt geändert',
-    size: 'Grösse',
-    root: 'Home',
-    access_rights_edited: 'Zugriffsrechte geändert',
-    access_rights_edit_failed: 'Zugriffsrechte konnten nicht geändert werden',
-    preview_error_no_file:
-      'Die Datei kann nicht angezeigt werden, da keine URL vorhanden ist',
-    preview_error_no_audio:
-      'Audio kann nicht abgespielt werden. Fehlende URL oder keine Audio-Datei.',
-    preview_error_no_video:
-      'Video kann nicht abgespielt werden. Fehlende URL oder keine Video-Datei.',
-    preview_error_no_image:
-      'Bild kann nicht geöffnet werden. Fehlende URL oder keine Bild-Datei.',
-    preview_error_no_pdf:
-      'PDF kann nicht geöffnet werden. Fehlende URL oder keine PDF-Datei.',
   },
   users: {
     users: 'Benutzer',
@@ -134,30 +77,6 @@ export default {
     success: 'Erfolgreich',
     error: 'Fehlgeschlagen',
   },
-
-  messages: {
-    success: 'Erfolgreich',
-    failure: 'Fehlgeschlagen',
-    login_failed: 'Login hat fehlgeschlagen',
-    email_sent: 'E-Mail(s) versendet',
-    file_uploaded: 'Datei erfolgreich hochgeladen',
-    files_uploaded: 'Dateien erfolgreich hochgeladen',
-    password_set: 'Passwort erfolgreich festgelegt',
-    enter_new_password: 'Bitte geben Sie ein neues Passwort ein',
-    enter_verification_code:
-      'Bitte geben Sie den Verifizierungscode ein, den Sie per E-Mail erhalten haben',
-    reset_password: 'Passwort zurücksetzen',
-    enter_username: 'Bitte geben Sie ihren Nutzernamen ein:',
-    enter_email: 'Bitte geben Sie ihre E-Mail-Adresse ein:',
-    verification: 'Verifizierung',
-    enter_2fa: 'Geben sie ihren 2-Faktor-Authentifizierungscode ein',
-    code_resent: 'Code erfolgreich versendet',
-    password_changed:
-      'Passwort erfolgreich geändert. Bitte melden Sie sich mit dem neuen Passwort an.',
-    account_created: 'Konto erfolgreich erstellt',
-    entry_edited: 'Änderung gespeichert',
-    entry_deleted: 'Eintrag gelöscht',
-  },
   date: {
     date_format: 'DD.MM.YYYY',
   },
@@ -167,17 +86,6 @@ export default {
   table: {
     ctrl_shift_hint:
       'Hinweis: Verwende SHIFT um einen Bereich auszuwählen und CTRL um einzelne Elemente zu selektieren',
-  },
-  notification: {
-    notifications: 'Benachrichtigungen',
-    no_notifications: 'Keine neuen Benachrichtigungen',
-    invalid_title: 'Die Länge des Titels ist ungültig',
-    invalid_content: 'Die Länge des Inhalts ist ungültig',
-    send_notificaton: 'Benachrichtigungen absenden',
-    notification_title: 'Nachricht Titel',
-    notification_content: 'Nachricht Inhalt',
-    notification_link: 'Nachricht Link (optional)',
-    sent: 'Benachrichtigung gesendet!',
   },
   pages: {
     home: {

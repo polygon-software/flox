@@ -1,16 +1,23 @@
 <template>
   <q-dialog ref="dialogRef" persistent>
-    <GenericForm
-      :pages="ChangePasswordFormPages"
-      :form-key="changePasswordFormKey.formKey"
-      @submit="onSubmit"
-    />
-    <q-btn
-      :class="`${ALTERNATE_BUTTON_CLASS} q-my-md`"
-      :style="`${DEFAULT_BUTTON_STYLE}; width: 150px;`"
-      :label="$t('buttons.cancel')"
-      @click="onDialogHide"
-    />
+    <q-card>
+      <q-card-section>
+        <h6>{{ $t('authentication.') }}</h6>
+        <GenericForm
+          :pages="ChangePasswordFormPages"
+          :form-key="changePasswordFormKey.formKey"
+          @submit="onSubmit"
+        />
+      </q-card-section>
+      <q-card-actions>
+        <q-btn
+          :class="`${ALTERNATE_BUTTON_CLASS} q-my-md`"
+          :style="`${DEFAULT_BUTTON_STYLE}; width: 150px;`"
+          :label="$t('buttons.cancel')"
+          @click="onDialogHide"
+        />
+      </q-card-actions>
+    </q-card>
   </q-dialog>
 </template>
 

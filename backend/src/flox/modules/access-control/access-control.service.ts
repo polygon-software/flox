@@ -46,13 +46,13 @@ export default class AccessControlService extends AbstractSearchService<UserGrou
       messages: ['de', 'en'].map((lang) => ({
         lang,
         title: this.i18nService.t(
-          'notifications.user_added_to_user_group.title',
+          'messages.notifications.user_added_to_user_group.title',
           {
             lang,
           },
         ),
         content: this.i18nService.t(
-          'notifications.user_added_to_user_group.content',
+          'messages.notifications.user_added_to_user_group.content',
           {
             lang,
             args: { name: userGroup.name },
@@ -77,13 +77,13 @@ export default class AccessControlService extends AbstractSearchService<UserGrou
       messages: ['de', 'en'].map((lang) => ({
         lang,
         title: this.i18nService.t(
-          'notifications.user_removed_from_user_group.title',
+          'messages.notifications.user_removed_from_user_group.title',
           {
             lang,
           },
         ),
         content: this.i18nService.t(
-          'notifications.user_removed_from_user_group.content',
+          'messages.notifications.user_removed_from_user_group.content',
           {
             lang,
             args: { name: userGroup.name },
