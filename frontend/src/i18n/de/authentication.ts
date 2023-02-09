@@ -13,6 +13,7 @@ export default {
     email: 'E-Mail',
     change_password: 'Passwort ändern',
     forgot_password: 'Passwort vergessen',
+    reset_password: 'Passwort zurücksetzen',
     verification_code: 'Verifizierungscode',
     password: 'Passwort',
     password_repeat: 'Passwort wiederholen',

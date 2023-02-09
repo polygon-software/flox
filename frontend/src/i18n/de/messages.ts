@@ -13,7 +13,6 @@ export default {
     enter_new_password: 'Bitte geben Sie ein neues Passwort ein',
     enter_verification_code:
       'Bitte geben Sie den Verifizierungscode ein, den Sie per E-Mail erhalten haben',
-    reset_password: 'Passwort zurücksetzen',
     enter_username: 'Bitte geben Sie ihren Nutzernamen ein:',
     enter_email: 'Bitte geben Sie ihre E-Mail-Adresse ein:',
     verification: 'Verifizierung',

@@ -6,6 +6,13 @@ export const changePasswordFormKey = {
   fieldKey: '',
 };
 
+export const forgotPasswordFormKey = {
+  formKey: 'forgotPassword',
+  pageKey: 'forgotPassword',
+  cardKey: 'forgotPassword',
+  fieldKey: '',
+};
+
 export const loginFormKey = {
   formKey: 'login',
   pageKey: 'login',

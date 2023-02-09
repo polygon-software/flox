@@ -17,6 +17,7 @@ import ROUTES from 'src/router/routes';
 import ErrorService from 'src/services/ErrorService';
 import RouterService from 'src/services/RouterService';
 import { showSuccessNotification } from 'src/tools/notification.tool';
+import ForgotPasswordDialog from 'src/flox/modules/auth/components/dialogs/ForgotPasswordDialog.vue';
 
 import ChangePasswordDialog from '../components/dialogs/ChangePasswordDialog.vue';
 import EmailConfirmationDialog from '../components/dialogs/EmailConfirmationDialog.vue';
@@ -363,27 +364,15 @@ export default class AuthenticationService {
       return;
     }
 
-    const isEmailUsername = auth.moduleConfig().emailAsUsername;
-
     this.$q
       .dialog({
-        title: i18n.global.t('messages.reset_password'),
-        message: i18n.global.t(
-          `messages.enter_${isEmailUsername ? 'email' : 'username'}`
-        ),
-        cancel: true,
-        persistent: true,
-        prompt: {
-          model: '',
-          isValid: (val: string): boolean => val.length >= 1,
-          type: 'text',
-        },
+        component: ForgotPasswordDialog,
       })
-      .onOk((input: string) => {
+      .onOk((email: string) => {
         // Set up cognitoUser first
         this.$authStore.setCognitoUser(
           new CognitoUser({
-            Username: input,
+            Username: email,
             Pool: userPool,
           })
         );

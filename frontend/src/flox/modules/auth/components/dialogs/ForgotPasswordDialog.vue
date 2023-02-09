@@ -2,11 +2,11 @@
   <q-dialog ref="dialogRef" persistent>
     <q-card>
       <q-card-section class="text-center">
-        <h6>{{ $t('authentication.set_new_password') }}</h6>
+        <h6>{{ $t('authentication.reset_password') }}</h6>
         <GenericForm
           style="min-width: 300px"
-          :pages="ChangePasswordFormPages"
-          :form-key="changePasswordFormKey.formKey"
+          :pages="ForgotPasswordFormPages"
+          :form-key="forgotPasswordFormKey.formKey"
           text-position="center"
           show-cancel
           @submit="onSubmit"
@@ -20,9 +20,9 @@
 <script setup lang="ts">
 import { useDialogPluginComponent } from 'quasar';
 
-import { changePasswordFormKey } from '../../../form/data/form/FormKeys';
+import { forgotPasswordFormKey } from '../../../form/data/form/FormKeys';
 import GenericForm from '../../../form/components/GenericForm.vue';
-import ChangePasswordFormPages from '../../../form/data/form/ChangePasswordFormPages';
+import ForgotPasswordFormPages from '../../../form/data/form/ForgotPasswordFormPages';
 import { fetchByKey } from '../../../form/helpers/form-helpers';
 import { FIELDS } from '../../../form/data/form/FIELDS';
 import { useFormStore } from '../../../form/stores/form';
@@ -36,16 +36,14 @@ const store = useFormStore();
  * @returns void
  */
 function onSubmit(): void {
-  const newPassword = fetchByKey({
-    ...changePasswordFormKey,
-    fieldKey: FIELDS.PASSWORD_REPEAT.key,
-  });
+  const email = fetchByKey({
+    ...forgotPasswordFormKey,
+    fieldKey: FIELDS.EMAIL.key,
+  }) as string;
 
   // Empty store state
-  store.clearForm(changePasswordFormKey.formKey);
+  store.clearForm(forgotPasswordFormKey.formKey);
 
-  onDialogOK({
-    passwordNew: newPassword,
-  });
+  onDialogOK(email);
 }
 </script>
