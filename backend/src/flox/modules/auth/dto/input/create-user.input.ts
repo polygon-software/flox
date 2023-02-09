@@ -31,7 +31,7 @@ export default class CreateUserInput extends CreateInput {
   @IsLowercase()
   @IsLocale()
   @IsOptional()
-  lang?: string;
+  lang: string;
 
   @Field(() => String)
   @IsString()
