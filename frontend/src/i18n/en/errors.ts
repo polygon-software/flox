@@ -54,6 +54,7 @@ export default {
     entry_delete_failed: 'Entry could not be deleted',
     account_disabled:
       'Your account is disabled. Please contact a system administrator.',
+    account_creation_failed: 'An error occurred while creating the account.',
     incorrect_username_or_password: 'Incorrect username or password',
     cannot_reset_password:
       'User password cannot be reset in the current state. Please contact a system administrator.',

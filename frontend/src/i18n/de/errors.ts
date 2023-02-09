@@ -56,6 +56,8 @@ export default {
     entry_delete_failed: 'Eintrag konnte nicht gelöscht werden',
     account_disabled:
       'Ihr Account ist gesperrt. Bitte kontaktieren Sie einen Systemadministrator.',
+    account_creation_failed:
+      'Beim Erstellen des Accounts ist ein Fehler aufgetreten.',
     incorrect_username_or_password: 'Falscher Benutzername oder Passwort',
     cannot_reset_password:
       'Das Passwort kann im aktuellen Zustand nicht zurückgesetzt werden. Bitte kontaktieren Sie einen Systemadministrator.',
