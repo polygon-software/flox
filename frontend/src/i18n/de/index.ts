@@ -54,6 +54,7 @@ export default {
     en: 'Englisch',
   },
   users: {
+    all_users: 'Alle Benutzer',
     users: 'Benutzer',
     avatar: 'Avatar',
     username: 'Benutzername',

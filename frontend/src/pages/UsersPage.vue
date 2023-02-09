@@ -1,26 +1,39 @@
 <template>
   <div>
     <h4>{{ $t('users.users') }}</h4>
-    <DataTable
-      :title="$t('users.users')"
-      prepend-slot
-      export-selection
-      delete-selection
-      multi
-      :prepend-name="$t('users.avatar')"
-      :columns="columns"
-      :query="SEARCH_USERS"
-      :update-mutation="UPDATE_USER"
-      :delete-mutation="DELETE_USER"
-    >
-      <template #prepend="slotProps">
-        <q-td :props="slotProps">
-          <q-avatar size="26px">
-            <img :src="avatarForUser(slotProps.row.uuid)" alt="avatar" />
-          </q-avatar>
-        </q-td>
-      </template>
-    </DataTable>
+    <div class="col">
+      <DataTable
+        :title="$t('users.all_users')"
+        prepend-slot
+        export-selection
+        delete-selection
+        multi
+        :prepend-name="$t('users.avatar')"
+        :columns="columns"
+        :query="SEARCH_USERS"
+        :update-mutation="UPDATE_USER"
+        :delete-mutation="DELETE_USER"
+      >
+        <template #prepend="slotProps">
+          <q-td :props="slotProps">
+            <q-avatar size="26px">
+              <img :src="avatarForUser(slotProps.row.uuid)" alt="avatar" />
+            </q-avatar>
+          </q-td>
+        </template>
+      </DataTable>
+      <!-- Create new users -->
+      <q-btn
+        :class="`${DEFAULT_BUTTON_CLASS} q-my-md`"
+        :style="`${DEFAULT_BUTTON_STYLE}; width: 200px`"
+        outline
+        color="primary"
+        :label="$t('buttons.create_user')"
+        no-caps
+        style="width: 200px"
+        @click="createUser"
+      />
+    </div>
   </div>
 </template>
 
@@ -39,6 +52,11 @@ import { DELETE_USER, UPDATE_USER } from 'src/flox/modules/auth/user.mutation';
 import { SEARCH_USERS } from 'src/flox/modules/auth/user.query';
 import { avatarForUser } from 'src/flox/modules/auth/services/user.service';
 import { i18n } from 'boot/i18n';
+
+import {
+  DEFAULT_BUTTON_CLASS,
+  DEFAULT_BUTTON_STYLE,
+} from '../css/defaultStyles';
 
 const emailRules: ValidationRule[] = [
   joiSchemaToValidationRule(
@@ -72,4 +90,12 @@ const columns: Ref<ColumnInterface<UserEntity>[]> = ref([
     sortable: true,
   },
 ]);
+
+/**
+ * Open the form to create a new user
+ * @returns void
+ */
+function createUser(): void {
+  // TODO: open create user form
+}
 </script>
