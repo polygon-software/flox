@@ -24,6 +24,8 @@ import QrCodeDialog from '../components/dialogs/QrCodeDialog.vue';
 import ResetPasswordDialog from '../components/dialogs/ResetPasswordDialog.vue';
 import MFADialog from '../components/dialogs/MFADialog.vue';
 
+const userNotDefinedError = i18n.global.t('errors.user_not_defined');
+
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
  * signing up, logging in, logging out, changing passwords, and more.
@@ -112,9 +114,7 @@ export default class AuthenticationService {
     const { userPool } = this.$authStore;
 
     if (!userPool) {
-      this.$errorService.showErrorDialog(
-        new Error(i18n.global.t('errors.user_not_defined'))
-      );
+      this.$errorService.showErrorDialog(new Error(userNotDefinedError));
       return undefined;
     }
     // Actual Cognito authentication on given pool
@@ -358,9 +358,7 @@ export default class AuthenticationService {
     const { userPool } = this.$authStore;
 
     if (userPool === undefined) {
-      this.$errorService.showErrorDialog(
-        new Error(i18n.global.t('errors.user_not_defined'))
-      );
+      this.$errorService.showErrorDialog(new Error(userNotDefinedError));
       return;
     }
 
@@ -437,9 +435,7 @@ export default class AuthenticationService {
     const { userPool } = this.$authStore;
 
     if (userPool === undefined) {
-      this.$errorService.showErrorDialog(
-        new Error(i18n.global.t('errors.user_not_defined'))
-      );
+      this.$errorService.showErrorDialog(new Error(userNotDefinedError));
       return;
     }
 

@@ -36,7 +36,6 @@ import { computed, inject, onBeforeMount, Ref, ref } from 'vue';
 import {
   DEFAULT_BUTTON_CLASS,
   DEFAULT_BUTTON_STYLE,
-  DEFAULT_CARD_STYLE,
 } from '../../../../css/defaultStyles';
 import User from '../../../modules/auth/entities/user.entity';
 import AuthenticationService from '../../../modules/auth/services/auth.service';
