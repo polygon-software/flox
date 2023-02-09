@@ -73,6 +73,13 @@
             <q-menu>
               <q-list class="column" item-separator link>
                 <q-item clickable>
+                  <q-item-section @click="Account">
+                    <q-item-label>
+                      {{ $t('authentication.account') }}
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
+                <q-item clickable>
                   <q-item-section @click="logout">
                     <q-item-label>
                       {{ $t('authentication.logout') }}
@@ -207,28 +214,28 @@ const sideMenu: ComputedRef<MenuType[]> = computed(() => [
     links: [
       {
         icon: 'home',
-        text: i18n.global.t('menu.home'),
+        text: i18n.global.t('layout.menu.home'),
         click: (): void => {
           void $routerService?.routeTo(ROUTES.HOME);
         },
       },
       {
         icon: 'group',
-        text: i18n.global.t('menu.users'),
+        text: i18n.global.t('layout.menu.users'),
         click: (): void => {
           void $routerService?.routeTo(ROUTES.USERS);
         },
       },
       {
         icon: 'lock',
-        text: i18n.global.t('menu.access_rights'),
+        text: i18n.global.t('layout.menu.access_rights'),
         click: (): void => {
           void $routerService?.routeTo(ROUTES.ACCESS_CONTROL);
         },
       },
       {
         icon: 'preview',
-        text: i18n.global.t('menu.alias'),
+        text: i18n.global.t('layout.menu.alias'),
         click: (): void => {
           void $routerService?.routeTo(ROUTES.ALIAS);
         },
@@ -239,7 +246,7 @@ const sideMenu: ComputedRef<MenuType[]> = computed(() => [
     links: [
       {
         icon: 'folder',
-        text: i18n.global.t('menu.files'),
+        text: i18n.global.t('layout.menu.files'),
         click: (): void => {
           void $routerService?.routeTo(ROUTES.FILES);
         },
@@ -250,32 +257,35 @@ const sideMenu: ComputedRef<MenuType[]> = computed(() => [
     links: [
       {
         icon: 'data_object',
-        text: i18n.global.t('menu.object_recognition'),
+        text: i18n.global.t('layout.menu.object_recognition'),
         click: (): void => {
           void $routerService?.routeTo(ROUTES.OBJECT_RECOGNITION);
         },
       },
-      { icon: 'face', text: i18n.global.t('menu.face_recognition') },
-      { icon: 'manage_search', text: i18n.global.t('menu.text_extraction') },
+      { icon: 'face', text: i18n.global.t('layout.menu.face_recognition') },
+      {
+        icon: 'manage_search',
+        text: i18n.global.t('layout.menu.text_extraction'),
+      },
     ],
   },
   {
     links: [
       {
         icon: 'dns',
-        text: i18n.global.t('menu.admin_panel'),
+        text: i18n.global.t('layout.menu.admin_panel'),
         click: (): void => {
           void $routerService?.routeTo(ROUTES.ADMIN_PANEL);
         },
       },
       {
         icon: 'credit_card',
-        text: i18n.global.t('menu.payment'),
+        text: i18n.global.t('layout.menu.payment'),
         click: (): void => {
           void $routerService?.routeTo(ROUTES.PAYMENT);
         },
       },
-      { icon: 'data_object', text: i18n.global.t('menu.settings') },
+      { icon: 'data_object', text: i18n.global.t('layout.menu.settings') },
     ],
   },
 ]);
@@ -290,12 +300,21 @@ type LinkType = {
 const bottomLinks: ComputedRef<LinkType[]> = computed(() => [
   {
     links: [
-      { text: i18n.global.t('footer.developers') },
-      { text: i18n.global.t('footer.privacy') },
-      { text: i18n.global.t('footer.terms') },
+      { text: i18n.global.t('layout.footer.developers') },
+      { text: i18n.global.t('layout.footer.privacy') },
+      { text: i18n.global.t('layout.footer.terms') },
     ],
   },
 ]);
+
+/**
+ * Logs out the user
+ *
+ * @async
+ */
+async function Account(): Promise<void> {
+  await $routerService?.routeTo(ROUTES.ACCOUNT);
+}
 
 /**
  * Logs out the user

@@ -3,6 +3,7 @@
 
 export default {
   authentication: {
+    account: 'Account',
     authentication: 'Authentifizierung',
     welcome_back: 'Willkommen zurück!',
     welcome_text: 'Du kannst dich mit deinem existierenden Account einloggen',
@@ -31,5 +32,7 @@ export default {
     resend_code: 'Ich habe keinen Code erhalten',
     password_rule:
       "Passwörter müssen mindestens einen Grossbuchstaben, eine Zahl und eines der Sonderzeichen (#?!{'@'}$%^&*-) enthalten",
+    reset_password_description:
+      'Sie erhalten einen Verifizierungscode an {email}.',
   },
 };

@@ -25,5 +25,6 @@ export default {
     send: 'Send',
     login: 'Login',
     filter: 'Filter',
+    request_code: 'Request code',
   },
 };

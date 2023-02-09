@@ -25,5 +25,6 @@ export default {
     send: 'Senden',
     login: 'Login',
     filter: 'Filter',
+    request_code: 'Code anfordern',
   },
 };

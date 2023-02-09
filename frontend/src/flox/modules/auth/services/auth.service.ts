@@ -429,6 +429,43 @@ export default class AuthenticationService {
   }
 
   /**
+   * Shows a dialog for requesting password reset. The verification code is sent to the given e-mail address
+   * @param email - the e-mail of the logged-in user
+   * @returns void
+   */
+  showRequestNewPasswordDialog(email: string): void {
+    const { userPool } = this.$authStore;
+
+    if (userPool === undefined) {
+      this.$errorService.showErrorDialog(
+        new Error(i18n.global.t('errors.user_not_defined'))
+      );
+      return;
+    }
+
+    this.$authStore.setCognitoUser(
+      new CognitoUser({
+        Username: email,
+        Pool: userPool,
+      })
+    );
+
+    // Call forgotPassword on cognitoUser
+    this.$authStore.cognitoUser?.forgotPassword({
+      onSuccess() {
+        // Do nothing
+      },
+      onFailure: (err: Error) => {
+        this.$authStore.setCognitoUser(undefined);
+        this.onFailure(err);
+      },
+      inputVerificationCode: () => {
+        this.showResetPasswordFormDialog();
+      },
+    });
+  }
+
+  /**
    * Resends the e-mail configuration code for the current user
    */
   async resendEmailVerificationCode(): Promise<void> {
