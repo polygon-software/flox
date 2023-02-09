@@ -93,18 +93,32 @@
           options: optionOverrides?.[field.key] ?? field.attributes.options,
         }"
       />
+      <!--- Buttons --->
+      <div class="showCancel ? row justify-between : row justify-around">
+        <!-- Cancel button -->
+        <q-btn
+          v-if="showCancel"
+          :label="!loading ? cancelLabel : loadingLabel"
+          :class="`${ALTERNATE_BUTTON_CLASS} q-mt-md`"
+          :style="`${DEFAULT_BUTTON_STYLE}`"
+          :disable="loading"
+          @click="onCancel"
+        >
+          <q-inner-loading :showing="loading" />
+        </q-btn>
 
-      <!-- Finish button -->
-      <q-btn
-        color="primary"
-        :label="!loading ? finishLabel : loadingLabel"
-        :class="`${ALTERNATE_BUTTON_CLASS} q-mt-md`"
-        :style="`${DEFAULT_BUTTON_STYLE}`"
-        :disable="loading"
-        @click="onSubmit"
-      >
-        <q-inner-loading :showing="loading" />
-      </q-btn>
+        <!-- Finish button -->
+        <q-btn
+          color="primary"
+          :label="!loading ? finishLabel : loadingLabel"
+          :class="`${ALTERNATE_BUTTON_CLASS} q-mt-md`"
+          :style="`${DEFAULT_BUTTON_STYLE}`"
+          :disable="loading"
+          @click="onSubmit"
+        >
+          <q-inner-loading :showing="loading" />
+        </q-btn>
+      </div>
     </div>
   </QForm>
 </template>
@@ -149,6 +163,8 @@ const props = withDefaults(
     preserveState?: boolean;
     // Manual override for field options (e.g. in GenericSelectFields): maps a field key to a list of options
     optionOverrides?: Record<string, unknown[]> | null;
+    showCancel?: boolean;
+    cancelLabel?: string;
   }>(),
   {
     finishLabel: i18n.global.t('buttons.finish'),
@@ -158,12 +174,15 @@ const props = withDefaults(
     flat: false,
     preserveState: false,
     optionOverrides: null,
+    showCancel: false,
+    cancelLabel: i18n.global.t('buttons.cancel'),
   }
 );
 
 // Create Form instance with pages from props
 const emit = defineEmits<{
   (e: 'submit', value: QForm | null): void;
+  (e: 'cancel', value: null): void;
 }>();
 const formRef: Ref<QForm | null> = ref(null);
 const form: Ref<FormStructure | null> = ref(null);
@@ -188,6 +207,14 @@ async function onSubmit(): Promise<void> {
   if (isValid) {
     emit('submit', formRef.value);
   }
+}
+
+/**
+ * Emits the click of the cancel button
+ * @returns void
+ */
+function onCancel(): void {
+  emit('cancel', null);
 }
 
 /**

@@ -10,7 +10,7 @@
         @submit="onLogin"
       />
     </div>
-    <div class="col q-mt-md">
+    <div class="col q-mt-md text-center">
       <q-btn
         :label="$t('authentication.forgot_password')"
         class="primary"
