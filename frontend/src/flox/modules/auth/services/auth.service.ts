@@ -225,17 +225,19 @@ export default class AuthenticationService {
   }
 
   /**
-   * Signs up by creating a new authentication using the given Username, e-mail and password.
+   * Signs up by creating a new authentication using the given Username, e-mail, password and language.
    *
    * @param username - the chosen username
    * @param email - the authentication's e-mail address
    * @param password - the new authentication's chosen password. Must fulfill the set password conditions
+   * @param locale - the chosen language locale
    * @param attributes - custom attributes to add (if any)
    */
   async signUp(
     username: string,
     email: string,
     password: string,
+    locale?: string,
     attributes?: Record<string, string>
   ): Promise<void> {
     const cognitoUserWrapper: ISignUpResult = await new Promise(
@@ -282,14 +284,14 @@ export default class AuthenticationService {
     );
 
     // Register in database TODO application specific: apply any other attributes here as well
-    await createUser(username, email, cognitoUserWrapper.userSub);
+    await createUser(username, email, cognitoUserWrapper.userSub, locale);
   }
 
   /**
    * Logs out the currently logged in authentication (if any)
    */
   async logout(): Promise<void> {
-    // Deep copy to avoid mutating stores state
+    // Deep copy to avoid mutating store state
     const cognitoUser: CognitoUser | undefined = cloneDeep(
       this.$authStore.cognitoUser
     );
@@ -702,7 +704,7 @@ export default class AuthenticationService {
         // 15min before de-validation token is refreshed
         const currentUser: CognitoUser | undefined = cloneDeep(
           this.$authStore.cognitoUser
-        ); // refresh session mutates the state of stores: illegal
+        ); // refresh session mutates the state of store: illegal
         currentUser?.refreshSession(refreshToken, (err, session) => {
           if (session) {
             this.$authStore.setCognitoUser(currentUser);

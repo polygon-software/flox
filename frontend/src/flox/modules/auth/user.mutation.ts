@@ -12,7 +12,7 @@ export const CREATE_USER: MutationObject = {
       $username: String!
       $email: String!
       $cognitoUuid: String!
-      $lang: String!
+      $lang: String
     ) {
       CreateUser(
         createUserInput: {

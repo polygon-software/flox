@@ -24,6 +24,7 @@ import SignupForm from 'src/flox/modules/auth/components/forms/SignupForm.vue';
 import ROUTES from 'src/router/routes';
 import RouterService from 'src/services/RouterService';
 import { showSuccessNotification } from 'src/tools/notification.tool';
+import { showErrorNotification } from 'src/flox/modules/form/helpers/notification-helpers';
 
 import AuthenticationService from '../flox/modules/auth/services/auth.service';
 
@@ -38,23 +39,30 @@ const $routerService: RouterService | undefined = inject('$routerService');
  * @param user.username - the authentication's username (might be identical to the e-mail)
  * @param user.email - the authentication's email
  * @param user.password - the authentication's password
+ * @param user.language - the user's selected language
  */
 async function onSignup({
   username,
   email,
   password,
+  language,
 }: {
   username: string;
   email: string;
   password: string;
+  language?: string;
 }): Promise<void> {
-  await $authService?.signUp(username, email, password);
+  try {
+    await $authService?.signUp(username, email, password, language);
+    // Show success notification
+    showSuccessNotification($q, i18n.global.t('messages.account_created'));
 
-  // Show success notification
-  showSuccessNotification($q, i18n.global.t('messages.account_created'));
-
-  // Redirect to login page
-  await $routerService?.routeTo(ROUTES.LOGIN);
+    // Redirect to login page
+    await $routerService?.routeTo(ROUTES.LOGIN);
+  } catch (e) {
+    showErrorNotification($q, i18n.global.t('errors.account_creation_failed'));
+    console.error(e);
+  }
 }
 
 /**

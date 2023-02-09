@@ -17,11 +17,11 @@ module.exports = {
     parser: '@typescript-eslint/parser',
     project: path.resolve(__dirname, './tsconfig.json'),
     ecmaVersion: 2018, // Allows for the parsing of modern ECMAScript features
-    sourceType: 'module' // Allows for the use of imports
+    sourceType: 'module', // Allows for the use of imports
   },
 
   env: {
-    browser: true
+    browser: true,
   },
 
   // Rules order is important, please avoid shuffling them
@@ -49,7 +49,6 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
 
-
     'plugin:import/recommended',
     'plugin:import/typescript',
 
@@ -70,91 +69,117 @@ module.exports = {
     __QUASAR_SSR_PWA__: 'readonly',
     process: 'readonly',
     Capacitor: 'readonly',
-    chrome: 'readonly'
+    chrome: 'readonly',
   },
 
   // add your custom rules here
   rules: {
     quotes: ['warn', 'single', { avoidEscape: true }],
-    camelcase: ['error', {
-      properties: 'always',
-    }],
+    camelcase: [
+      'error',
+      {
+        properties: 'always',
+      },
+    ],
 
     'no-void': 0, // Reason: Otherwise, we are forced to await promises and can't skip it using 'void asyncCall()'
     'import/no-cycle': 0, // Reason: Router is needed in pages, but pages also need router
-    'no-unused-vars': ['error', { "varsIgnorePattern": '(props|emit)' }],
-    '@typescript-eslint/no-unused-vars': ['error', { "varsIgnorePattern": '(props|emit)' }],
+    'no-unused-vars': ['error', { varsIgnorePattern: '(props|emit)' }],
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      { varsIgnorePattern: '(props|emit)' },
+    ],
 
-    'no-console': ["error", { allow: ["warn", "error"] }],
+    'no-console': ['error', { allow: ['warn', 'error'] }],
 
     '@typescript-eslint/explicit-function-return-type': 'error',
     '@typescript-eslint/no-explicit-any': 'off',
 
-    'import/order': ['error', {
-      'newlines-between': 'always',
-      'groups': ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object', 'type']
-    }],
+    'import/order': [
+      'error',
+      {
+        'newlines-between': 'always',
+        groups: [
+          'builtin',
+          'external',
+          'internal',
+          'parent',
+          'sibling',
+          'index',
+          'object',
+          'type',
+        ],
+      },
+    ],
 
     // allow debugger during development only
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
 
     'jsdoc/require-param-type': 0,
     'jsdoc/require-returns-type': 0,
-    'jsdoc/require-jsdoc': ['error', {
-      'require': {
-        'FunctionDeclaration': true,
-        'MethodDefinition': true,
-        'ClassDeclaration': false,
-        'ArrowFunctionExpression': false,
-        'FunctionExpression': false
-      },
-      'checkConstructors': false,
-    }],
-
-    'graphql/template-strings': ['error', {
-      // Import default settings for your GraphQL client. Supported values:
-      // 'apollo', 'relay', 'lokka', 'fraql', 'literal'
-      env: 'apollo',
-    }],
-    "vue/block-lang": ["error",
+    'jsdoc/require-jsdoc': [
+      'error',
       {
-        "script": {
-          "lang": "ts"
-        }
-      }
+        require: {
+          FunctionDeclaration: true,
+          MethodDefinition: true,
+          ClassDeclaration: false,
+          ArrowFunctionExpression: false,
+          FunctionExpression: false,
+        },
+        checkConstructors: false,
+      },
     ],
-    "vue/component-api-style": ["error",
-      ["script-setup"]
+
+    'graphql/template-strings': [
+      'error',
+      {
+        // Import default settings for your GraphQL client. Supported values:
+        // 'apollo', 'relay', 'lokka', 'fraql', 'literal'
+        env: 'apollo',
+      },
     ],
-    "vue/component-name-in-template-casing": ["error", "PascalCase"],
-    "vue/custom-event-name-casing": ["error", "kebab-case"],
-    "vue/define-emits-declaration": ["error", "type-based"],
-    "vue/define-macros-order": ["error", {
-      "order": ["defineProps", "defineEmits"]
-    }],
-    "vue/define-props-declaration": ["error", "type-based"],
-    "vue/next-tick-style": ["error", "promise"],
-    "vue/no-duplicate-attr-inheritance": ["error"],
-    "vue/no-empty-component-block": ["error"],
-    "vue/no-multiple-objects-in-class": ["error"],
-    "vue/no-ref-object-destructure": ["error"],
-    "vue/no-required-prop-with-default": ["error"],
-    "vue/no-template-target-blank": ["error"],
-    "vue/no-undef-properties": ["error"],
-    "vue/no-unused-properties": ["error"],
-    "vue/no-unused-refs": ["error"],
-    "vue/no-useless-mustaches": ["error"],
-    "vue/no-useless-v-bind": ["error"],
-    "vue/padding-line-between-blocks": ["error", "always"],
-    "vue/prefer-true-attribute-shorthand": ["error", "always"],
-    "vue/require-expose": ["error"],
-    "vue/script-indent": ["error", 2],
-    "vue/v-for-delimiter-style": ["error", "in"],
+    'vue/block-lang': [
+      'error',
+      {
+        script: {
+          lang: 'ts',
+        },
+      },
+    ],
+    'vue/component-api-style': ['error', ['script-setup']],
+    'vue/component-name-in-template-casing': ['error', 'PascalCase'],
+    'vue/custom-event-name-casing': ['error', 'kebab-case'],
+    'vue/define-emits-declaration': ['error', 'type-based'],
+    'vue/define-macros-order': [
+      'error',
+      {
+        order: ['defineProps', 'defineEmits'],
+      },
+    ],
+    'vue/define-props-declaration': ['error', 'type-based'],
+    'vue/next-tick-style': ['error', 'promise'],
+    'vue/no-duplicate-attr-inheritance': ['error'],
+    'vue/no-empty-component-block': ['error'],
+    'vue/no-multiple-objects-in-class': ['error'],
+    'vue/no-ref-object-destructure': ['error'],
+    'vue/no-required-prop-with-default': ['error'],
+    'vue/no-template-target-blank': ['error'],
+    'vue/no-undef-properties': ['error'],
+    'vue/no-unused-properties': ['error'],
+    'vue/no-unused-refs': ['error'],
+    'vue/no-useless-mustaches': ['error'],
+    'vue/no-useless-v-bind': ['error'],
+    'vue/padding-line-between-blocks': ['error', 'always'],
+    'vue/prefer-true-attribute-shorthand': ['error', 'always'],
+    'vue/require-expose': ['error'],
+    'vue/script-indent': ['error', 2],
+    'vue/v-for-delimiter-style': ['error', 'in'],
   },
   settings: {
     'import/resolver': {
       typescript: true,
       node: true,
-    }
+    },
   },
-}
+};

@@ -106,7 +106,7 @@ input CreateUserGroupInput {
 input CreateUserInput {
   cognitoUuid: String!
   email: String!
-  lang: String!
+  lang: String
   role: String
   username: String!
 }

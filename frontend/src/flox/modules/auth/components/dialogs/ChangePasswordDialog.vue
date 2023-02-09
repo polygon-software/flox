@@ -1,81 +1,53 @@
 <template>
-  <q-dialog ref="dialogRef">
-    <q-card class="q-pa-lg" style="width: 400px; min-height: 250px">
-      <strong>{{ $t('authentication.change_password') }}</strong>
-      <!-- TODO use new forms module -->
-      <q-form class="q-gutter-md" @submit="onSubmit">
-        <q-input
-          v-model="passwordOld"
-          :label="$t('authentication.old_password')"
-          type="password"
-        />
-        <q-input
-          v-model="password"
-          :label="$t('authentication.new_password')"
-          type="password"
-          :rules="passwordRules"
-        />
-        <q-input
-          v-model="passwordRep"
-          :label="$t('authentication.new_password_repeat')"
-          type="password"
-          :rules="matchingRules"
-        />
-        <q-card-actions align="right">
-          <q-btn
-            color="primary"
-            :label="$t('general.confirm')"
-            :disable="password !== passwordRep"
-            @click="onSubmit"
-          />
-          <q-btn
-            :label="$t('general.cancel')"
-            color="primary"
-            @click="onDialogHide"
-          />
-        </q-card-actions>
-      </q-form>
-    </q-card>
+  <q-dialog ref="dialogRef" persistent>
+    <GenericForm
+      :pages="ChangePasswordFormPages"
+      :form-key="changePasswordFormKey.formKey"
+      @submit="onSubmit"
+    />
+    <q-btn
+      :class="`${ALTERNATE_BUTTON_CLASS} q-my-md`"
+      :style="`${DEFAULT_BUTTON_STYLE}; width: 150px;`"
+      :label="$t('buttons.cancel')"
+      @click="onDialogHide"
+    />
   </q-dialog>
 </template>
 
 <script setup lang="ts">
 import { useDialogPluginComponent } from 'quasar';
-import { ref } from 'vue';
 
-import { i18n } from 'boot/i18n';
 import {
-  joiPasswordSchema,
-  joiSchemaToValidationRule,
-} from 'src/tools/validation.tool';
+  ALTERNATE_BUTTON_CLASS,
+  DEFAULT_BUTTON_STYLE,
+} from 'src/css/defaultStyles';
+import { changePasswordFormKey } from 'src/flox/modules/form/data/form/FormKeys';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars,vue/define-emits-declaration
-const emit = defineEmits(useDialogPluginComponent.emits);
-
-const passwordOld = ref('');
-const password = ref('');
-const passwordRep = ref('');
-
-const passwordRules = [
-  joiSchemaToValidationRule(
-    joiPasswordSchema(),
-    i18n.global.t('errors.invalid_password')
-  ),
-];
-const matchingRules = [
-  (val: string): true | string =>
-    val === password.value || i18n.global.t('errors.non_matching_password'),
-];
+import GenericForm from '../../../form/components/GenericForm.vue';
+import ChangePasswordFormPages from '../../../form/data/form/ChangePasswordFormPages';
+import { fetchByKey } from '../../../form/helpers/form-helpers';
+import { FIELDS } from '../../../form/data/form/FIELDS';
+import { useFormStore } from '../../../form/stores/form';
 
 const { dialogRef, onDialogOK, onDialogHide } = useDialogPluginComponent();
 
+const store = useFormStore();
+
 /**
  * Upon submit, pass entered values outwards
+ * @returns void
  */
 function onSubmit(): void {
+  const newPassword = fetchByKey({
+    ...changePasswordFormKey,
+    fieldKey: FIELDS.PASSWORD_REAPEAT.key,
+  });
+
+  // Empty store state
+  store.clearForm(changePasswordFormKey.formKey);
+
   onDialogOK({
-    passwordNew: password.value,
-    passwordOld: passwordOld.value,
+    passwordNew: newPassword,
   });
 }
 </script>

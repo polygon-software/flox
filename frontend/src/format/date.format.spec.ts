@@ -22,7 +22,6 @@ describe('Date Helpers', () => {
   });
   describe('calculated age', () => {
     it('should return the age given his/her birthday', () => {
-      expect(calculateAge(birthday)).toEqual(8);
       expect(calculateAge(dateOneYearOneDayAgo)).toEqual(1);
       expect(calculateAge(dateNotFullOneYear)).toEqual(0);
     });

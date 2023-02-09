@@ -19,6 +19,7 @@ function asString(value: string | undefined): string {
  * @param value - extracted environment variable
  * @returns environment variable as integer
  */
+// eslint-disable-next-line no-unused-vars,no-unused-vars,@typescript-eslint/no-unused-vars
 function asNumber(value: string | undefined): number {
   const stringValue = asString(value);
   const numberValue = parseFloat(stringValue);

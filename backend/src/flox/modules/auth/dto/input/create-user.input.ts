@@ -24,7 +24,7 @@ export default class CreateUserInput extends CreateInput {
   @IsEmail()
   email: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   @IsString()
   @MinLength(2)
   @MaxLength(2)
