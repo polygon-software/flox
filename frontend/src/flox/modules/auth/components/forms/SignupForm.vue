@@ -22,7 +22,7 @@ import GenericForm from '../../../form/components/GenericForm.vue';
 import { fetchByKey } from '../../../form/helpers/form-helpers';
 import { useFormStore } from '../../../form/stores/form';
 import { signupFormKey } from '../../../form/data/form/FormKeys';
-import { COUNTRY_CODES } from '../../../../COUNTRIES';
+import COUNTRY_CODES from '../../../../COUNTRIES';
 import { MODULES } from '../../../../MODULES';
 
 const emit = defineEmits<{
@@ -57,7 +57,7 @@ function onSignup(): void {
   const language =
     (
       fetchByKey({
-        ...loginFormKey,
+        ...signupFormKey,
         fieldKey: FIELDS.SELECT_LANGUAGE.key,
       }) as COUNTRY_CODES
     ).toLowerCase() ?? undefined;
