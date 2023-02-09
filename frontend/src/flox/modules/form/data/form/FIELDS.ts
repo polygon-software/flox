@@ -23,7 +23,6 @@ import PhoneNumberField from '../../components/fields/general/PhoneNumberField.v
 import SelectLanguageField from '../../components/fields/general/SelectLanguageField.vue';
 import { Field } from '../types/Field';
 import FullName from '../types/FullName';
-import { PhoneCountryCode } from '../types/PhoneCountryCode';
 
 /**
  * This file contains bootstrap configurations for sign up and sign in input fields. With these, the corresponding forms can be built modularly.
