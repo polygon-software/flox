@@ -2,6 +2,7 @@
 /* eslint-disable camelcase */
 export default {
   errors: {
+    error: 'Error',
     file_upload_failed: 'An error occurred while uploading the file',
     module_error: "Error: Module '{module}' is not active",
     invalid_password: 'Please enter a valid password',
@@ -51,5 +52,10 @@ export default {
       "One or more of the following properties are missing for the given mutation: 'mutation', 'tables', 'type', 'cacheLocation'",
     entry_edit_failed: 'Edit could not be saved',
     entry_delete_failed: 'Entry could not be deleted',
+    account_disabled:
+      'Your account is disabled. Please contact a system administrator.',
+    incorrect_username_or_password: 'Incorrect username or password',
+    cannot_reset_password:
+      'User password cannot be reset in the current state. Please contact a system administrator.',
   },
 };
