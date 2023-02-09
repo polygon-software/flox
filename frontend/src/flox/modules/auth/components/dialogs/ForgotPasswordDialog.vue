@@ -1,18 +1,19 @@
 <template>
   <q-dialog ref="dialogRef" persistent>
-    <q-card>
-      <q-card-section class="text-center">
-        <h6>{{ $t('authentication.reset_password') }}</h6>
-        <GenericForm
-          style="min-width: 300px"
-          :pages="ForgotPasswordFormPages"
-          :form-key="forgotPasswordFormKey.formKey"
-          text-position="center"
-          show-cancel
-          @submit="onSubmit"
-          @cancel="onDialogCancel"
-        />
-      </q-card-section>
+    <q-card class="q-pa-md text-center">
+      <h6>{{ $t('authentication.forgot_password') }}</h6>
+      <div class="q-mb-lg text-subtitle2">
+        {{ $t('authentication.forgot_password_hint') }}
+      </div>
+      <GenericForm
+        style="min-width: 300px"
+        :pages="ForgotPasswordFormPages"
+        :form-key="forgotPasswordFormKey.formKey"
+        text-position="center"
+        show-cancel
+        @submit="onSubmit"
+        @cancel="onDialogCancel"
+      />
     </q-card>
   </q-dialog>
 </template>

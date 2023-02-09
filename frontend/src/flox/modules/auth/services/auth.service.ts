@@ -400,19 +400,18 @@ export default class AuthenticationService {
     this.$q
       .dialog({
         component: ResetPasswordDialog,
-        componentProps: {},
       })
       .onOk(
         ({
-          passwordNew,
           verificationCode,
+          newPassword,
         }: {
-          passwordNew: string;
           verificationCode: string;
+          newPassword: string;
         }) => {
           this.$authStore.cognitoUser?.confirmPassword(
             verificationCode,
-            passwordNew,
+            newPassword,
             {
               onSuccess: () => {
                 showSuccessNotification(

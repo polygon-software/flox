@@ -8,8 +8,9 @@ import {
   PHONE_NUMBER_REGEX,
   TIME_REGEX,
   URL_REGEX,
+  VERIFICATION_CODE_REGEX,
   ZIP_REGEX,
-} from 'src/flox/modules/form/data/REGEX';
+} from './REGEX';
 
 /**
  * This file contains rules that can be applied to input forms.
@@ -108,6 +109,10 @@ const IS_VALID_URL = (val: string): boolean => {
   return URL_REGEX.test(val);
 };
 
+const IS_VERIFICATION_CODE = (val: string): boolean => {
+  return VERIFICATION_CODE_REGEX.test(val);
+};
+
 export {
   IS_EMAIL,
   IS_VALID_HOUSE_NUMBER,
@@ -124,4 +129,5 @@ export {
   IS_VALID_NUMBER,
   IS_VALID_POSITIVE_NUMBER,
   IS_VALID_URL,
+  IS_VERIFICATION_CODE,
 };

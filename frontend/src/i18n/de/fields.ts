@@ -10,6 +10,9 @@ export default {
       zip_code: 'PLZ',
       additional_address: 'Zusätzliche Adresse',
     },
+    authentication: {
+      verification_code: 'Bestätigungscode',
+    },
     personal_data: {
       sample_title: 'Beispiel Titel',
       first_name: 'Vorname',

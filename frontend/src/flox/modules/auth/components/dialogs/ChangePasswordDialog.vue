@@ -1,18 +1,16 @@
 <template>
   <q-dialog ref="dialogRef" persistent>
-    <q-card>
-      <q-card-section class="text-center">
-        <h6>{{ $t('authentication.set_new_password') }}</h6>
-        <GenericForm
-          style="min-width: 300px"
-          :pages="ChangePasswordFormPages"
-          :form-key="changePasswordFormKey.formKey"
-          text-position="center"
-          show-cancel
-          @submit="onSubmit"
-          @cancel="onDialogCancel"
-        />
-      </q-card-section>
+    <q-card class="text-center">
+      <h6>{{ $t('authentication.set_new_password') }}</h6>
+      <GenericForm
+        style="min-width: 300px"
+        :pages="ChangePasswordFormPages"
+        :form-key="changePasswordFormKey.formKey"
+        text-position="center"
+        show-cancel
+        @submit="onSubmit"
+        @cancel="onDialogCancel"
+      />
     </q-card>
   </q-dialog>
 </template>

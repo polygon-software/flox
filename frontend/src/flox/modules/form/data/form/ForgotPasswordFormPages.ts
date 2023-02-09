@@ -6,7 +6,7 @@ import FormCard from '../types/FormCard';
 import { FIELDS } from './FIELDS';
 import { forgotPasswordFormKey } from './FormKeys';
 
-// Enter e-mail
+// Forgot password -> enter e-mail
 const forgotPasswordCard = new FormCard(
   forgotPasswordFormKey.cardKey,
   [FIELDS.EMAIL],

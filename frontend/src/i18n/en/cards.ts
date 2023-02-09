@@ -6,6 +6,7 @@ export default {
     forgot_password: 'Reset password',
     login: 'Login',
     sample: 'Sample',
+    set_new_password: 'Set new password',
     signup: 'Signup',
   },
 };

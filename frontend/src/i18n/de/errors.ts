@@ -61,5 +61,7 @@ export default {
     incorrect_username_or_password: 'Falscher Benutzername oder Passwort',
     cannot_reset_password:
       'Das Passwort kann im aktuellen Zustand nicht zurückgesetzt werden. Bitte kontaktieren Sie einen Systemadministrator.',
+    no_verification_code:
+      'Bitte geben Sie den Bestätigungscode ein, den Sie per E-Maile erhalten haben.',
   },
 };

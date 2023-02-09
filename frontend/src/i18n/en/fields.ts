@@ -10,6 +10,9 @@ export default {
       zip_code: 'ZIP',
       additional_address: 'Additional Address',
     },
+    authentication: {
+      verification_code: 'Verification code',
+    },
     personal_data: {
       sample_title: 'Sample title',
       first_name: 'First name',

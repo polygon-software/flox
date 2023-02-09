@@ -13,6 +13,8 @@ export default {
     email: 'E-Mail',
     change_password: 'Passwort ändern',
     forgot_password: 'Passwort vergessen',
+    forgot_password_hint:
+      'Bitte geben Sie registrierte E-Mail Adresse ein, um einen Bestätigungscode zum Zurücksetzen des Passwortes zu erhalten.',
     reset_password: 'Passwort zurücksetzen',
     verification_code: 'Verifizierungscode',
     password: 'Passwort',

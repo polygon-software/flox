@@ -58,5 +58,7 @@ export default {
     incorrect_username_or_password: 'Incorrect username or password',
     cannot_reset_password:
       'User password cannot be reset in the current state. Please contact a system administrator.',
+    no_verification_code:
+      'Please enter your verifiction code, which you received by e-mail.',
   },
 };

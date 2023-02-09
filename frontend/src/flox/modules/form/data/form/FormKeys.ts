@@ -20,6 +20,13 @@ export const loginFormKey = {
   fieldKey: '',
 };
 
+export const resetPasswordFormKey = {
+  formKey: 'resetPassword',
+  pageKey: 'resetPassword',
+  cardKey: 'resetPassword',
+  fieldKey: '',
+};
+
 export const sampleFormKey = {
   formKey: 'sample',
   pageKey: 'sample',

@@ -9,6 +9,7 @@ import {
   IS_VALID_PASSWORD,
   IS_VALID_PHONE_NUMBER,
   IS_VALID_STRING,
+  IS_VERIFICATION_CODE,
 } from '../RULES';
 import AddressField from '../../components/fields/general/AddressField.vue';
 import DateField from '../../components/fields/general/DateField.vue';
@@ -169,6 +170,19 @@ const FIELDS: Record<string, Field> = {
     attributes: {
       rules: [
         (val: string): boolean | string => IS_NOT_NULL(val) || selectionError,
+      ],
+    },
+  },
+  VERIFICATION_CODE: {
+    key: 'verificationCode',
+    component: markRaw(GenericInputField),
+    attributes: {
+      label: i18n.global.t('fields.authentication.verification_code'),
+      mask: '######',
+      rules: [
+        (val: string): boolean | string =>
+          IS_VERIFICATION_CODE(val) ||
+          i18n.global.t('errors.no_verification_code'),
       ],
     },
   },
