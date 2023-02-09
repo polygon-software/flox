@@ -1,5 +1,4 @@
-import { PhoneCountryCode } from 'src/flox/modules/form/data/types/PhoneCountryCode';
-
+import { PhoneCountryCode } from '../data/types/PhoneCountryCode';
 import { GenericOption } from '../data/types/GenericOption';
 import COUNTRY_CODES from '../../../COUNTRIES';
 import LANGUAGES from '../../../LANGUAGES';
