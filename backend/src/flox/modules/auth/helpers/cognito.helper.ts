@@ -1,6 +1,6 @@
 import { randomInt } from 'crypto';
 
-import { shuffle } from 'lodash';
+import shuffle from 'lodash/shuffle';
 import {
   AdminCreateUserCommand,
   AdminDeleteUserCommand,
@@ -18,7 +18,7 @@ import {
 } from '@aws-sdk/client-cognito-identity-provider';
 import { isEmail } from 'class-validator';
 
-import Env from 'src/env';
+import Env from '../../../../env';
 
 // Default length for Cognito passwords
 const MINIMUM_COGNITO_PASSWORD_LENGTH = 8;

@@ -69,7 +69,7 @@ async function onLogin(): Promise<void> {
 
   try {
     // Actually log in
-    await $authService?.login(identifier, password);
+    await $authService?.login(identifier, password, $q);
 
     // Empty store state
     store.clearForm(loginFormKey.formKey);

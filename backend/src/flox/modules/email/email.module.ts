@@ -5,6 +5,5 @@ import EmailService from './email.service';
 
 @Module({
   providers: [EmailService, ConfigService],
-  controllers: [],
 })
 export default class EmailModule {}

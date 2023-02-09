@@ -3,7 +3,7 @@ import { I18nService } from 'nestjs-i18n';
 import { ConfigService } from '@nestjs/config';
 import { render } from 'squirrelly';
 
-import mailTemplate from 'src/templates/email/PasswordResetEmail';
+import mailTemplate from '../../../templates/email/PasswordResetEmail';
 
 import { Credentials, sendEmail } from './helpers/email-helpers';
 import { moduleConfig } from './config';
