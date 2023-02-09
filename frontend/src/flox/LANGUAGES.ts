@@ -1,7 +1,8 @@
-// eslint-disable-next-line import/prefer-default-export
-export enum LANGUAGES {
+enum LANGUAGES {
   DE = 'Deutsch',
   EN = 'English',
   FR = 'Francais',
   IT = 'Italiano',
 }
+
+export default LANGUAGES;

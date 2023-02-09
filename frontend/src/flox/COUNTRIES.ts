@@ -1,8 +1,10 @@
-// eslint-disable-next-line @typescript-eslint/naming-convention,import/prefer-default-export
-export enum COUNTRY_CODES {
+// eslint-disable-next-line @typescript-eslint/naming-convention
+enum COUNTRY_CODES {
   CH = 'CH',
   DE = 'DE',
   EN = 'EN',
   FR = 'FR',
   IT = 'IT',
 }
+
+export default COUNTRY_CODES;

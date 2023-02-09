@@ -21,7 +21,7 @@ import SignupFormPages from '../../../form/data/form/SignupFormPages';
 import GenericForm from '../../../form/components/GenericForm.vue';
 import { fetchByKey } from '../../../form/helpers/form-helpers';
 import { useFormStore } from '../../../form/stores/form';
-import { loginFormKey, signupFormKey } from '../../../form/data/form/FormKeys';
+import { signupFormKey } from '../../../form/data/form/FormKeys';
 import { COUNTRY_CODES } from '../../../../COUNTRIES';
 import { MODULES } from '../../../../MODULES';
 
@@ -58,7 +58,7 @@ function onSignup(): void {
     (
       fetchByKey({
         ...loginFormKey,
-        fieldKey: FIELDS.SELECT_LANGAUGE.key,
+        fieldKey: FIELDS.SELECT_LANGUAGE.key,
       }) as COUNTRY_CODES
     ).toLowerCase() ?? undefined;
 

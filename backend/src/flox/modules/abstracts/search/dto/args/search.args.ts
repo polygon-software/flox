@@ -1,5 +1,11 @@
 import { ArgsType, Field } from '@nestjs/graphql';
-import { IsBoolean, IsOptional, IsString, MaxLength } from 'class-validator';
+import {
+  IsArray,
+  IsBoolean,
+  IsOptional,
+  IsString,
+  MaxLength,
+} from 'class-validator';
 
 import GetAllArgs from '../../../crud/dto/get-all.args';
 
@@ -12,15 +18,24 @@ export default class SearchArgs extends GetAllArgs {
   @IsString()
   @IsOptional()
   @MaxLength(160)
-  filter: string;
+  filter?: string;
 
   @Field(() => String, { nullable: true, description: 'Sort by property' })
   @IsString()
   @IsOptional()
   @MaxLength(160)
-  sortBy: string;
+  sortBy?: string;
 
   @Field(() => Boolean, { defaultValue: false, description: 'Sort descending' })
   @IsBoolean()
-  descending: string;
+  descending?: string;
+
+  @Field(() => [String], {
+    nullable: true,
+    description: "Subset of the module's allowed search keys to search in",
+  })
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  searchKeys?: string[];
 }

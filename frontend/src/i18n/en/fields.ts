@@ -18,7 +18,7 @@ export default {
       second_last_name: 'Second last name',
       birthdate: 'Birthdate',
       email: 'E-mail',
-      language: 'Langauge',
+      language: 'Language',
     },
     date: {
       date: 'Date',
