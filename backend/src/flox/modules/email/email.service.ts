@@ -4,26 +4,20 @@ import { ConfigService } from '@nestjs/config';
 import { render } from 'squirrelly';
 
 import mailTemplate from '../../../templates/email/PasswordResetEmail';
+import Env from '../../../env';
 
 import { Credentials, sendEmail } from './helpers/email-helpers';
 import { moduleConfig } from './config';
 
 @Injectable()
 export default class EmailService {
-  constructor(
-    private readonly i18nService: I18nService,
-    private readonly configService: ConfigService,
-  ) {}
+  constructor(private readonly i18nService: I18nService) {}
 
   // SES credentials
   private readonly credentials: Credentials = {
-    region: this.configService.getOrThrow<string>('AWS_MAIN_REGION'),
-    accessKeyId: this.configService.getOrThrow<string>(
-      'AWS_ADMIN_ACCESS_KEY_ID',
-    ),
-    secretAccessKey: this.configService.getOrThrow<string>(
-      'AWS_ADMIN_SECRET_ACCESS_KEY',
-    ),
+    region: Env.AWS_MAIN_REGION,
+    accessKeyId: Env.AWS_ADMIN_ACCESS_KEY_ID,
+    secretAccessKey: Env.AWS_ADMIN_SECRET_ACCESS_KEY,
   };
 
   /**
