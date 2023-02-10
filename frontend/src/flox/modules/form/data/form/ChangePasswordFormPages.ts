@@ -10,7 +10,7 @@ import { changePasswordFormKey } from './FormKeys';
 const changePasswordCard = new FormCard(
   changePasswordFormKey.cardKey,
   [FIELDS.OLD_PASSWORD, FIELDS.PASSWORD_REPEAT],
-  i18n.global.t('cardTitles.change_password')
+  i18n.global.t('card_titles.change_password')
 );
 
 // Change password form pages with respective cards

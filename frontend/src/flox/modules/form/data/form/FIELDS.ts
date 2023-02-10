@@ -12,6 +12,7 @@ import {
   IS_VERIFICATION_CODE,
 } from '../RULES';
 import AddressField from '../../components/fields/general/AddressField.vue';
+import CognitoOptionsField from '../../../auth/components/forms/fields/CognitoOptionsField.vue';
 import DateField from '../../components/fields/general/DateField.vue';
 import EmailRepeatField from '../../components/fields/general/EmailRepeatField.vue';
 import FullNameField from '../../components/fields/general/FullNameField.vue';
@@ -196,6 +197,13 @@ const FIELDS: Record<string, Field> = {
           IS_VERIFICATION_CODE(val) ||
           i18n.global.t('errors.no_verification_code'),
       ],
+    },
+  },
+  COGNITO_OPTIONS: {
+    key: 'cognitoOptions',
+    component: markRaw(CognitoOptionsField),
+    attributes: {
+      rules: [], // TODO: add rules
     },
   },
 };

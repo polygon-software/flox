@@ -13,6 +13,11 @@ export default {
     authentication: {
       verification_code: 'Verification code',
     },
+    create_user: {
+      generate_password: 'Generate password',
+      send_invite: 'Send invite',
+      set_password: 'Set password',
+    },
     personal_data: {
       sample_title: 'Sample title',
       first_name: 'First name',

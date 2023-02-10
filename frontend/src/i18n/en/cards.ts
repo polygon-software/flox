@@ -3,6 +3,7 @@
 export default {
   card_titles: {
     change_password: 'Change password',
+    create_user: 'Create user',
     forgot_password: 'Reset password',
     login: 'Login',
     MFA: 'Verification',

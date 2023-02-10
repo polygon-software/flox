@@ -5,6 +5,7 @@ export default {
   authentication: {
     account: 'Account',
     authentication: 'Authentifizierung',
+    create_user: 'Benutzer erstellen',
     welcome_back: 'Willkommen zurück!',
     welcome_text: 'Du kannst dich mit deinem existierenden Account einloggen',
     login: 'Anmelden',

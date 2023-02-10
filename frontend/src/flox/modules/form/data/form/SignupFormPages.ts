@@ -1,6 +1,6 @@
 import { i18n } from 'boot/i18n';
-import * as auth from 'src/flox/modules/auth';
 
+import * as auth from '../../../auth';
 import FormPage from '../types/FormPage';
 import FormCard from '../types/FormCard';
 

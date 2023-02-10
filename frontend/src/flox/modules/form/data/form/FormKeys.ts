@@ -13,6 +13,13 @@ export const changePasswordFormKey = {
   fieldKey: '',
 };
 
+export const createUserFormKey = {
+  formKey: 'createUser',
+  pageKey: 'createUser',
+  cardKey: 'createUser',
+  fieldKey: '',
+};
+
 export const forgotPasswordFormKey = {
   formKey: 'forgotPassword',
   pageKey: 'forgotPassword',

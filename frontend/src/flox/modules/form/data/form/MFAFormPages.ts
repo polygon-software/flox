@@ -10,12 +10,12 @@ import { MFAFormKey } from './FormKeys';
 const MFACard = new FormCard(
   MFAFormKey.cardKey,
   [FIELDS.MFA],
-  i18n.global.t('cardTitles.MFA')
+  i18n.global.t('card_titles.mfa')
 );
 
 // MFA form pages with respective cards
 export default [
-  new FormPage(MFAFormKey.pageKey, i18n.global.t('authentication.MFA'), [
+  new FormPage(MFAFormKey.pageKey, i18n.global.t('authentication.mfa'), [
     MFACard,
   ]),
 ];

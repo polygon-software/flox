@@ -25,7 +25,7 @@ const props = withDefaults(
   defineProps<{
     stateKey?: FormStateKey | null; // If not given, this field emits instead of saving
     initialValue?: unknown; // Only considered when stateKey is null, so this field can be a non-saving subfield of other fields
-    rules: [];
+    rules: ((val: any) => string | boolean)[];
     options: GenericOption[];
     label: string;
     inline?: boolean;

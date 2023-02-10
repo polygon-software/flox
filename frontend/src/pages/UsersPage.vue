@@ -31,7 +31,7 @@
         :label="$t('buttons.create_user')"
         no-caps
         style="width: 200px"
-        @click="createUser"
+        @click="openCreateUserDialog"
       />
     </div>
   </div>
@@ -39,24 +39,31 @@
 
 <script setup lang="ts">
 import Joi from 'joi';
-import { ref, Ref } from 'vue';
+import { inject, ref, Ref } from 'vue';
+import { useQuasar } from 'quasar';
 
 import {
   joiSchemaToValidationRule,
   ValidationRule,
 } from 'src/tools/validation.tool';
 import { ColumnAlign, ColumnInterface } from 'components/tables/useDataTable';
-import UserEntity from 'src/flox/modules/auth/entities/user.entity';
 import DataTable from 'components/tables/DataTable.vue';
-import { DELETE_USER, UPDATE_USER } from 'src/flox/modules/auth/user.mutation';
-import { SEARCH_USERS } from 'src/flox/modules/auth/user.query';
-import { avatarForUser } from 'src/flox/modules/auth/services/user.service';
 import { i18n } from 'boot/i18n';
 
+import UserEntity from '../flox/modules/auth/entities/user.entity';
+import { DELETE_USER, UPDATE_USER } from '../flox/modules/auth/user.mutation';
+import { SEARCH_USERS } from '../flox/modules/auth/user.query';
+import { avatarForUser } from '../flox/modules/auth/services/user.service';
+import CreateUserDialog from '../flox/modules/auth/components/dialogs/CreateUserDialog.vue';
 import {
   DEFAULT_BUTTON_CLASS,
   DEFAULT_BUTTON_STYLE,
 } from '../css/defaultStyles';
+import CognitoOptions from '../flox/modules/form/data/types/CognitoOptions';
+import AuthenticationService from '../flox/modules/auth/services/auth.service';
+
+const $authService: AuthenticationService | undefined = inject('$authService');
+const $q = useQuasar();
 
 const emailRules: ValidationRule[] = [
   joiSchemaToValidationRule(
@@ -95,7 +102,23 @@ const columns: Ref<ColumnInterface<UserEntity>[]> = ref([
  * Open the form to create a new user
  * @returns void
  */
-function createUser(): void {
-  // TODO: open create user form
+function openCreateUserDialog(): void {
+  $q.dialog({
+    component: CreateUserDialog,
+  }).onOk(
+    async ({
+      email,
+      cognitoOptions,
+      language,
+      username,
+    }: {
+      email: string;
+      cognitoOptions: CognitoOptions;
+      language: string;
+      username: string;
+    }) => {
+      await $authService?.signUp(username, email);
+    }
+  );
 }
 </script>

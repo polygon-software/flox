@@ -14,7 +14,7 @@ const loginCard = new FormCard(
     auth.moduleConfig().emailAsUsername ? FIELDS.EMAIL : FIELDS.USERNAME,
     FIELDS.PASSWORD,
   ],
-  i18n.global.t('cardTitles.login')
+  i18n.global.t('card_titles.login')
 );
 
 // Login form pages with respective cards
