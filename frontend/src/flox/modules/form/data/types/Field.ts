@@ -1,3 +1,5 @@
+import { ValidationRule } from 'quasar';
+
 /**
  * This type represents a field used in forms.
  */
@@ -7,7 +9,7 @@ export interface Field<ComponentType = any, ComponentProps = any> {
   prependIcon?: string;
   appendIcon?: string;
   attributes: {
-    rules: Array<(val: any) => boolean | string>;
+    rules: ValidationRule[];
     [key: string]: unknown;
   } & Omit<ComponentProps, 'modelValue'>;
 }

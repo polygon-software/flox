@@ -23,17 +23,12 @@
             ? [
                 (val) =>
                   (!!val && val.length === 0) ||
-                  IS_VALID_PHONE_NUMBER(
-                    (selectedCode.value + val).replaceAll(' ', '')
-                  ) ||
-                  $t('errors.invalid_phone_number'),
+                  IS_VALID_PHONE_NUMBER(selectedCode.code),
               ]
-            : [
-                (val) =>
-                  IS_VALID_PHONE_NUMBER(
-                    (selectedCode.value + val).replaceAll(' ', '')
-                  ) || $t('errors.invalid_phone_number'),
-              ]
+            : [(val) => IS_VALID_PHONE_NUMBER(selectedCode.code)]
+        "
+        @change="
+          phoneInput = (selectedCode.value + phoneInput).replaceAll(' ', '')
         "
       >
       </q-input>
@@ -43,6 +38,7 @@
 
 <script setup lang="ts">
 import { onBeforeMount, ref, Ref, watch } from 'vue';
+import { isPhoneNumber } from 'class-validator';
 
 import { IS_VALID_PHONE_NUMBER } from '../../../data/RULES';
 import { FormStateKey, useFormStore } from '../../../stores/form';
@@ -121,7 +117,7 @@ watch(phoneInput, () => {
     );
 
     // Check validity (otherwise save null)
-    if (IS_VALID_PHONE_NUMBER(newInput)) {
+    if (isPhoneNumber(newInput, selectedCode.value.code)) {
       fieldValue.value = newInput;
     } else {
       fieldValue.value = null;

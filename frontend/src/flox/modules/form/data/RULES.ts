@@ -1,11 +1,14 @@
 import { isValid } from 'date-fns';
 import { date } from 'quasar';
+import { isEmail, isPhoneNumber } from 'class-validator';
+
+import { i18n } from 'boot/i18n';
+
+import { classValidatorRule } from '../helpers/validation-helpers';
+import { ValidationRule } from '../../../../tools/validation.tool';
 
 import {
-  EMAIL_REGEX,
-  IBAN_REGEX,
   PASSWORD_REGEX,
-  PHONE_NUMBER_REGEX,
   TIME_REGEX,
   URL_REGEX,
   VERIFICATION_CODE_REGEX,
@@ -15,30 +18,30 @@ import {
 /**
  * This file contains rules that can be applied to input forms.
  */
-
-const IS_EMAIL = (val: string): boolean => {
-  return EMAIL_REGEX.test(val);
-};
+const IS_EMAIL = classValidatorRule(
+  isEmail,
+  i18n.global.t('errors.invalid_email')
+);
 
 const IS_VALID_HOUSE_NUMBER = (val: string): boolean => {
   const number = parseInt(val, 10);
   return Number.isInteger(number) && number > 0;
 };
 
-const IS_VALID_IBAN = (val: string): boolean => {
-  return IBAN_REGEX.test(val);
-};
-
 const IS_NOT_NULL = (val: unknown): boolean => {
   return val !== null && val !== undefined;
 };
 
-const IS_VALID_PASSWORD = (val: string): boolean => {
-  return PASSWORD_REGEX.test(val);
+const IS_VALID_PASSWORD = (val: string): boolean | string => {
+  return PASSWORD_REGEX.test(val) || i18n.global.t('errors.invalid_password');
 };
 
-const IS_VALID_PHONE_NUMBER = (val: string): boolean => {
-  return PHONE_NUMBER_REGEX.test(val);
+const IS_VALID_PHONE_NUMBER = (region: string): ValidationRule => {
+  return classValidatorRule(
+    isPhoneNumber,
+    i18n.global.t('errors.invalid_phone_number'),
+    region
+  );
 };
 
 const IS_VALID_STRING = (val: string | undefined): boolean =>
@@ -116,7 +119,6 @@ const IS_VERIFICATION_CODE = (val: string): boolean => {
 export {
   IS_EMAIL,
   IS_VALID_HOUSE_NUMBER,
-  IS_VALID_IBAN,
   IS_NOT_NULL,
   IS_VALID_PASSWORD,
   IS_VALID_PHONE_NUMBER,

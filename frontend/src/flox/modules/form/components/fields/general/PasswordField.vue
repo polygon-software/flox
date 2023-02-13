@@ -6,7 +6,7 @@
         dense
         outlined
         :type="isPwd ? 'password' : 'text'"
-        :rules="[(val) => IS_NOT_NULL(val) || $t('errors.invalid_password')]"
+        :rules="[(val: string) => IS_VALID_PASSWORD(val)]"
         @change="saveValue"
       >
         <template #append>
@@ -26,7 +26,7 @@ import { ref } from 'vue';
 
 import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';
 
-import { IS_NOT_NULL } from '../../../data/RULES';
+import { IS_VALID_PASSWORD } from '../../../data/RULES';
 import { FormStateKey, useFormStore } from '../../../stores/form';
 import { MODULES } from '../../../../../enum/MODULES';
 

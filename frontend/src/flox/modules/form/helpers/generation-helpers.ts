@@ -1,8 +1,9 @@
 import { i18n } from 'boot/i18n';
-import DELIVERY_MEDIUMS from 'src/flox/enum/DELIVERY_MEDIUMS';
 
 import { GenericOption } from '../data/types/GenericOption';
+import { PhoneCountryCode } from '../data/types/PhoneCountryCode';
 import COUNTRY_CODES from '../../../enum/COUNTRIES';
+import DELIVERY_MEDIUMS from '../../../enum/DELIVERY_MEDIUMS';
 import LANGUAGES from '../../../enum/LANGUAGES';
 import ROLE from '../../../enum/USER_ROLES';
 
@@ -16,6 +17,23 @@ export function availableLanguageOptions(): GenericOption[] {
     { label: LANGUAGES.EN, value: COUNTRY_CODES.EN },
     { label: LANGUAGES.FR, value: COUNTRY_CODES.FR },
     { label: LANGUAGES.IT, value: COUNTRY_CODES.IT },
+  ];
+}
+
+/**
+ * Returns a list of phone number options for the PhoneNumberField
+ * @returns - Available phone number options
+ * TODO: Customize for specific application
+ */
+export function availablePhonenNumberOptions(): PhoneCountryCode[] {
+  return [
+    {
+      code: COUNTRY_CODES.CH,
+      label: '+41',
+      mask: '## ### ## ##',
+      value: '+41',
+    },
+    { code: COUNTRY_CODES.DE, label: '+49', mask: undefined, value: '+49' },
   ];
 }
 

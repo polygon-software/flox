@@ -5,7 +5,7 @@
     dense
     outlined
     type="text"
-    :rules="[(val: string) => IS_EMAIL(val) || $t('errors.invalid_email')]"
+    :rules="[IS_EMAIL]"
     @change="
       (val) => (typeof val === 'string' ? (fieldValue.email = val) : null)
     "
@@ -28,10 +28,11 @@
 <script setup lang="ts">
 import { ref, watch, defineProps, Ref } from 'vue';
 
+import { IS_EMAIL } from 'src/flox/modules/form/data/RULES';
+
 import EmailRepeat from '../../../data/types/EmailRepeat';
-import { IS_EMAIL } from '../../../data/RULES';
-import { FormStateKey, useFormStore } from '../../../stores/form';
 import { fetchByKey } from '../../../helpers/form-helpers';
+import { FormStateKey, useFormStore } from '../../../stores/form';
 
 import GenericInputField from './GenericInputField.vue';
 

@@ -1,4 +1,5 @@
 import { markRaw } from 'vue';
+import { isString } from 'class-validator';
 
 import { i18n } from 'boot/i18n';
 
@@ -14,7 +15,11 @@ import PasswordRepeat from '../components/fields/general/PasswordRepeatField.vue
 import PhoneNumberField from '../components/fields/general/PhoneNumberField.vue';
 import UserRoleField from '../components/fields/general/UserRoleField.vue';
 import SelectLanguageField from '../components/fields/general/SelectLanguageField.vue';
-import { inviteOptions } from '../helpers/generation-helpers';
+import { classValidatorRule } from '../helpers/validation-helpers';
+import {
+  availablePhonenNumberOptions,
+  inviteOptions,
+} from '../helpers/generation-helpers';
 
 import { Field } from './types/Field';
 import FullName from './types/FullName';
@@ -41,20 +46,14 @@ const FIELDS: Record<string, Field> = {
     attributes: {
       type: 'email',
       label: i18n.global.t('authentication.email'),
-      rules: [
-        (val: string): boolean | string =>
-          IS_EMAIL(val) || i18n.global.t('errors.invalid_email'),
-      ],
+      rules: [IS_EMAIL],
     },
   },
   EMAIL_REPEAT: {
     key: 'emailRepeat',
     component: markRaw(EmailRepeatField),
     attributes: {
-      rules: [
-        (val: string): boolean | string =>
-          IS_EMAIL(val) || i18n.global.t('errors.invalid_email'),
-      ],
+      rules: [IS_EMAIL],
     },
   },
   USERNAME: {
@@ -65,8 +64,7 @@ const FIELDS: Record<string, Field> = {
       type: 'text',
       label: i18n.global.t('authentication.username'),
       rules: [
-        (val: string): boolean | string =>
-          IS_VALID_STRING(val) || i18n.global.t('errors.invalid_username'),
+        classValidatorRule(isString, i18n.global.t('errors.invalid_username')),
       ],
     },
   },
@@ -74,7 +72,7 @@ const FIELDS: Record<string, Field> = {
     key: 'password',
     component: markRaw(Password),
     attributes: {
-      rules: [],
+      rules: [IS_VALID_PASSWORD],
     },
   },
   OLD_PASSWORD: {
@@ -161,12 +159,8 @@ const FIELDS: Record<string, Field> = {
     key: 'phoneNumber',
     component: markRaw(PhoneNumberField),
     attributes: {
-      countryCodes: [{ label: '+41', value: '+41', mask: '## ### ## ##' }],
-      rules: [
-        (val: string): boolean | string =>
-          IS_VALID_PHONE_NUMBER(val) ||
-          i18n.global.t('errors.invalid_phone_number'),
-      ],
+      countryCodes: availablePhonenNumberOptions(),
+      rules: [IS_NOT_NULL],
     },
   },
   SELECT_LANGUAGE: {
