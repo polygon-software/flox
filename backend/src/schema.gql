@@ -41,6 +41,14 @@ input AddUsersToUserGroupInput {
   userUuids: [ID!]!
 }
 
+input AdminCreateUserInput {
+  deliveryMediums: [DeliveryMediums!]!
+  email: String!
+  lang: String
+  role: Role!
+  username: String!
+}
+
 type BoundingBox {
   """Creation date"""
   createdAt: DateTime!
@@ -118,6 +126,11 @@ scalar DateTime
 
 input DeleteInput {
   uuid: ID!
+}
+
+enum DeliveryMediums {
+  EMAIL
+  SMS
 }
 
 type FileSearchOutput {
@@ -308,6 +321,7 @@ type Mutation {
   UpdateFile(updateFileInput: UpdateFileInput!): S3File!
   UpdateUser(updateUserInput: UpdateUserInput!): User!
   UpdateUserGroup(updateUserGroupInput: UpdateUserGroupInput!): UserGroup!
+  adminCreateUser(adminCreateUserInput: AdminCreateUserInput!): User!
 }
 
 type Notification {
@@ -761,6 +775,11 @@ input RemoveUserFromUserGroupInput {
 
   """Uuid of user that shall be removed from group"""
   userUuid: ID!
+}
+
+enum Role {
+  ADMIN
+  USER
 }
 
 type S3File {

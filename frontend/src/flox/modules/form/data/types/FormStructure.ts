@@ -7,7 +7,7 @@ import FormCard from './FormCard';
 import { Field } from './Field';
 
 /**
- * A class representing a form's structure (pages, cards, fields). Used to store data in Pinia store
+ * A class representing a formPages's structure (pages, cards, fields). Used to store data in Pinia store
  */
 export default class FormStructure {
   key: string;
@@ -27,7 +27,7 @@ export default class FormStructure {
 
   /**
    * Determines whether the current page is filled with valid data
-   * (used to determine whether to allow going to next step within form)
+   * (used to determine whether to allow going to next step within formPages)
    */
   pageValid = computed(() => {
     // If page structure does not exist, page can't be valid

@@ -10,19 +10,22 @@ import { QVueGlobals, useQuasar } from 'quasar';
 
 import { i18n } from 'boot/i18n';
 import Env from 'src/env';
-import { createUser } from 'src/flox/modules/auth/services/user.service';
-import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
-import ROUTES from 'src/router/routes';
-import ErrorService from 'src/services/ErrorService';
-import RouterService from 'src/services/RouterService';
-import { showSuccessNotification } from 'src/tools/notification.tool';
-import ForgotPasswordDialog from 'src/flox/modules/auth/components/dialogs/ForgotPasswordDialog.vue';
 
+import { useAuthStore } from '../stores/auth.store';
+import ROUTES from '../../../../router/routes';
+import ErrorService from '../../../../services/ErrorService';
+import RouterService from '../../../../services/RouterService';
+import { showSuccessNotification } from '../../../../tools/notification.tool';
+import ForgotPasswordDialog from '../components/dialogs/ForgotPasswordDialog.vue';
 import ChangePasswordDialog from '../components/dialogs/ChangePasswordDialog.vue';
 import EmailConfirmationDialog from '../components/dialogs/EmailConfirmationDialog.vue';
 import QrCodeDialog from '../components/dialogs/QrCodeDialog.vue';
 import ResetPasswordDialog from '../components/dialogs/ResetPasswordDialog.vue';
 import MFADialog from '../components/dialogs/MFADialog.vue';
+import DELIVERY_MEDIUMS from '../../../enum/DELIVERY_MEDIUMS';
+import ROLE from '../../../enum/USER_ROLES';
+
+import { adminCreateUser, createUser } from './user.service';
 
 const userNotDefinedError = i18n.global.t('errors.user_not_defined');
 
@@ -226,6 +229,26 @@ export default class AuthenticationService {
   }
 
   /**
+   * Lets an admin create a new user
+   * @param username - the chosen username
+   * @param email - the authentication's e-mail address
+   * @param role - the user's role
+   * @param deliveryMediums - medium to use to deliver user's new login information (sms, email, both or none)
+   * @param [locale] - the chosen language locale
+   * @returns void
+   */
+  async adminCreateUser(
+    username: string,
+    email: string,
+    role: ROLE,
+    deliveryMediums: [DELIVERY_MEDIUMS],
+    locale?: string
+  ): Promise<void> {
+    // Register in database TODO application specific: apply any other attributes here as well
+    await adminCreateUser(username, email, role, deliveryMediums, locale);
+  }
+
+  /**
    * Signs up by creating a new authentication using the given Username, e-mail, password and language.
    *
    * @param username - the chosen username
@@ -392,7 +415,7 @@ export default class AuthenticationService {
   }
 
   /**
-   * Show actual password reset form dialog
+   * Show actual password reset formPages dialog
    */
   showResetPasswordFormDialog(): void {
     this.$q
@@ -506,7 +529,7 @@ export default class AuthenticationService {
   /**
    * Shows a dialog containing a QR code for setting up two factor authentication
    *
-   * @param secretCode - the authenticator code to encode in QR code form
+   * @param secretCode - the authenticator code to encode in QR code formPages
    * @param cognitoUser - the cognito user to show the dialog for
    * @param identifier - identifier (username of email)
    * @returns void

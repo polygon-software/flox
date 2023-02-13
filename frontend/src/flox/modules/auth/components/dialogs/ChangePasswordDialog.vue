@@ -18,11 +18,11 @@
 <script setup lang="ts">
 import { useDialogPluginComponent } from 'quasar';
 
-import { changePasswordFormKey } from '../../../form/data/form/FormKeys';
+import { changePasswordFormKey } from '../../../form/data/FORM_KEYS';
 import GenericForm from '../../../form/components/GenericForm.vue';
-import ChangePasswordFormPages from '../../../form/data/form/ChangePasswordFormPages';
+import ChangePasswordFormPages from '../../../form/data/formPages/ChangePasswordFormPages';
 import { fetchByKey } from '../../../form/helpers/form-helpers';
-import { FIELDS } from '../../../form/data/form/FIELDS';
+import { FIELDS } from '../../../form/data/FIELDS';
 import { useFormStore } from '../../../form/stores/form';
 
 const { dialogRef, onDialogOK, onDialogCancel } = useDialogPluginComponent();

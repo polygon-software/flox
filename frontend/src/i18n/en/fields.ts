@@ -11,11 +11,18 @@ export default {
       additional_address: 'Additional Address',
     },
     authentication: {
+      roles: {
+        admin: 'Admin',
+        user: 'User',
+      },
+      send_invite: 'Send invitation by e-mail',
+      send_no_invite: 'Contact user by yourself',
+      user_role: 'User role',
       verification_code: 'Verification code',
     },
     create_user: {
       generate_password: 'Generate password',
-      send_invite: 'Send invite',
+      send_invite: 'Send invite by e-mail',
       set_password: 'Set password',
     },
     personal_data: {

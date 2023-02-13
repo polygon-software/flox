@@ -2,9 +2,8 @@ import { i18n } from 'boot/i18n';
 
 import FormPage from '../types/FormPage';
 import FormCard from '../types/FormCard';
-
-import { FIELDS } from './FIELDS';
-import { changePasswordFormKey } from './FormKeys';
+import { FIELDS } from '../FIELDS';
+import { changePasswordFormKey } from '../FORM_KEYS';
 
 // Change password
 const changePasswordCard = new FormCard(
@@ -13,7 +12,7 @@ const changePasswordCard = new FormCard(
   i18n.global.t('card_titles.change_password')
 );
 
-// Change password form pages with respective cards
+// Change password formPages pages with respective cards
 export default [
   new FormPage(
     changePasswordFormKey.pageKey,

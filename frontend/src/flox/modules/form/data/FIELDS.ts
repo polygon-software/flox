@@ -2,6 +2,22 @@ import { markRaw } from 'vue';
 
 import { i18n } from 'boot/i18n';
 
+import AddressField from '../components/fields/general/AddressField.vue';
+import DateField from '../components/fields/general/DateField.vue';
+import EmailRepeatField from '../components/fields/general/EmailRepeatField.vue';
+import FullNameField from '../components/fields/general/FullNameField.vue';
+import GeneratedPasswordField from '../components/fields/general/GeneratedPasswordField.vue';
+import GenericInputField from '../components/fields/general/GenericInputField.vue';
+import GenericOptionGroupField from '../components/fields/general/GenericOptionGroupField.vue';
+import Password from '../components/fields/general/PasswordField.vue';
+import PasswordRepeat from '../components/fields/general/PasswordRepeatField.vue';
+import PhoneNumberField from '../components/fields/general/PhoneNumberField.vue';
+import UserRoleField from '../components/fields/general/UserRoleField.vue';
+import SelectLanguageField from '../components/fields/general/SelectLanguageField.vue';
+import { inviteOptions } from '../helpers/generation-helpers';
+
+import { Field } from './types/Field';
+import FullName from './types/FullName';
 import {
   IS_EMAIL,
   IS_NOT_NULL,
@@ -10,19 +26,7 @@ import {
   IS_VALID_PHONE_NUMBER,
   IS_VALID_STRING,
   IS_VERIFICATION_CODE,
-} from '../RULES';
-import AddressField from '../../components/fields/general/AddressField.vue';
-import CognitoOptionsField from '../../../auth/components/forms/fields/CognitoOptionsField.vue';
-import DateField from '../../components/fields/general/DateField.vue';
-import EmailRepeatField from '../../components/fields/general/EmailRepeatField.vue';
-import FullNameField from '../../components/fields/general/FullNameField.vue';
-import GenericInputField from '../../components/fields/general/GenericInputField.vue';
-import Password from '../../components/fields/general/PasswordField.vue';
-import PasswordRepeat from '../../components/fields/general/PasswordRepeatField.vue';
-import PhoneNumberField from '../../components/fields/general/PhoneNumberField.vue';
-import SelectLanguageField from '../../components/fields/general/SelectLanguageField.vue';
-import { Field } from '../types/Field';
-import FullName from '../types/FullName';
+} from './RULES';
 
 /**
  * This file contains bootstrap configurations for sign up and sign in input fields. With these, the corresponding forms can be built modularly.
@@ -199,11 +203,30 @@ const FIELDS: Record<string, Field> = {
       ],
     },
   },
-  COGNITO_OPTIONS: {
-    key: 'cognitoOptions',
-    component: markRaw(CognitoOptionsField),
+  USER_ROLE: {
+    key: 'userRole',
+    component: markRaw(UserRoleField),
     attributes: {
-      rules: [], // TODO: add rules
+      rules: [
+        (val: string): boolean | string => IS_NOT_NULL(val) || selectionError,
+      ],
+    },
+  },
+  SEND_INVITE: {
+    key: 'sendInvite',
+    component: markRaw(GenericOptionGroupField),
+    attributes: {
+      options: inviteOptions(),
+      rules: [
+        (val: string): boolean | string => IS_NOT_NULL(val) || selectionError,
+      ],
+    },
+  },
+  GENERATED_PASSWORD: {
+    key: 'generatedPassword',
+    component: markRaw(GeneratedPasswordField),
+    attributes: {
+      rules: [],
     },
   },
 };

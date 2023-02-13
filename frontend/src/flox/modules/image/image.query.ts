@@ -1,7 +1,8 @@
 import { gql } from '@apollo/client/core';
 
 import { QueryObject } from 'src/apollo/query';
-import { TABLES } from 'src/flox/TABLES';
+
+import { TABLES } from '../../enum/TABLES';
 
 export const GET_IMAGE: QueryObject = {
   query: gql`

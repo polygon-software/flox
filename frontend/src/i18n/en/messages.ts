@@ -3,6 +3,7 @@
 
 export default {
   messages: {
+    copied_to_clipboard: 'Copied to clipboard',
     success: 'Success',
     failure: 'Failure',
     login_failed: 'Login failed',
@@ -23,16 +24,5 @@ export default {
     account_created: 'Successfully created account',
     entry_edited: 'Edit saved',
     entry_deleted: 'Entry deleted',
-    notifications: {
-      notifications: 'Notifications',
-      no_notifications: 'No new notifications',
-      invalid_title: 'Length of title invalid',
-      invalid_content: 'Length of content invalid',
-      send_notificaton: 'Send notification',
-      notification_title: 'Notification Title',
-      notification_content: 'Notification Content',
-      notification_link: 'Notification Link (optional)',
-      sent: 'Notification sent!',
-    },
   },
 };

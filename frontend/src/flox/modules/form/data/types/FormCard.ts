@@ -1,7 +1,7 @@
 import { Field } from './Field';
 
 /**
- * A class representing a card of a form. Holds multiple fields that belong logically together.
+ * A class representing a card of a formPages. Holds multiple fields that belong logically together.
  */
 export default class FormCard {
   key: string;

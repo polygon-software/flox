@@ -33,15 +33,15 @@ import { i18n } from 'boot/i18n';
 
 import { fetchByKey } from '../../../form/helpers/form-helpers';
 import * as auth from '../..';
-import { MODULES } from '../../../../MODULES';
+import { MODULES } from '../../../../enum/MODULES';
 import FloxWrapper from '../../../../core/components/FloxWrapper.vue';
 import { showErrorNotification } from '../../../form/helpers/notification-helpers';
-import LoginFormPages from '../../../form/data/form/LoginFormPages';
+import LoginFormPages from '../../../form/data/formPages/LoginFormPages';
 import { useFormStore } from '../../../form/stores/form';
 import GenericForm from '../../../form/components/GenericForm.vue';
 import AuthenticationService from '../../services/auth.service';
-import { loginFormKey } from '../../../form/data/form/FormKeys';
-import { FIELDS } from '../../../form/data/form/FIELDS';
+import { loginFormKey } from '../../../form/data/FORM_KEYS';
+import { FIELDS } from '../../../form/data/FIELDS';
 
 const $authService: AuthenticationService | undefined = inject('$authService');
 const $q = useQuasar();

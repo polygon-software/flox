@@ -31,7 +31,7 @@
         :label="$t('buttons.create_user')"
         no-caps
         style="width: 200px"
-        @click="openCreateUserDialog"
+        @click="createUser"
       />
     </div>
   </div>
@@ -40,7 +40,6 @@
 <script setup lang="ts">
 import Joi from 'joi';
 import { inject, ref, Ref } from 'vue';
-import { useQuasar } from 'quasar';
 
 import {
   joiSchemaToValidationRule,
@@ -54,16 +53,14 @@ import UserEntity from '../flox/modules/auth/entities/user.entity';
 import { DELETE_USER, UPDATE_USER } from '../flox/modules/auth/user.mutation';
 import { SEARCH_USERS } from '../flox/modules/auth/user.query';
 import { avatarForUser } from '../flox/modules/auth/services/user.service';
-import CreateUserDialog from '../flox/modules/auth/components/dialogs/CreateUserDialog.vue';
 import {
   DEFAULT_BUTTON_CLASS,
   DEFAULT_BUTTON_STYLE,
 } from '../css/defaultStyles';
-import CognitoOptions from '../flox/modules/form/data/types/CognitoOptions';
-import AuthenticationService from '../flox/modules/auth/services/auth.service';
+import RouterService from '../services/RouterService';
+import ROUTES from '../router/routes';
 
-const $authService: AuthenticationService | undefined = inject('$authService');
-const $q = useQuasar();
+const $routerService: RouterService | undefined = inject('$routerService');
 
 const emailRules: ValidationRule[] = [
   joiSchemaToValidationRule(
@@ -99,26 +96,10 @@ const columns: Ref<ColumnInterface<UserEntity>[]> = ref([
 ]);
 
 /**
- * Open the form to create a new user
+ * Redirect to the create user page
  * @returns void
  */
-function openCreateUserDialog(): void {
-  $q.dialog({
-    component: CreateUserDialog,
-  }).onOk(
-    async ({
-      email,
-      cognitoOptions,
-      language,
-      username,
-    }: {
-      email: string;
-      cognitoOptions: CognitoOptions;
-      language: string;
-      username: string;
-    }) => {
-      await $authService?.signUp(username, email);
-    }
-  );
+async function createUser(): Promise<void> {
+  await $routerService?.routeTo(ROUTES.CREATE_USERS);
 }
 </script>

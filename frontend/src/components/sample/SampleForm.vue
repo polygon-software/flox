@@ -12,20 +12,20 @@ import { useQuasar } from 'quasar';
 import { fetchByKey } from '../../flox/modules/form/helpers/form-helpers';
 import GenericForm from '../../flox/modules/form/components/GenericForm.vue';
 import { showSuccessNotification } from '../../flox/modules/form/helpers/notification-helpers';
-import SampleFormPages from '../../flox/modules/form/data/form/SampleFormPages';
-import { sampleFormKey } from '../../flox/modules/form/data/form/FormKeys';
-import { FIELDS } from '../../flox/modules/form/data/form/FIELDS';
+import SampleFormPages from '../../flox/modules/form/data/formPages/SampleFormPages';
+import { sampleFormKey } from '../../flox/modules/form/data/FORM_KEYS';
+import { FIELDS } from '../../flox/modules/form/data/FIELDS';
 import { useFormStore } from '../../flox/modules/form/stores/form';
 
 /**
- * This is a sample form component that uses the GenericForm helper component.
+ * This is a sample formPages component that uses the GenericForm helper component.
  */
 
 const $q = useQuasar();
 const store = useFormStore();
 
 /**
- * Fetches and logs the form's data from the store
+ * Fetches and logs the formPages's data from the store
  * @returns void
  */
 function onSubmit(): void {

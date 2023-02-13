@@ -16,7 +16,7 @@ import { i18n } from 'boot/i18n';
 
 import { FormStateKey, useFormStore } from '../../../stores/form';
 import { IS_NOT_NULL } from '../../../data/RULES';
-import { availableLanguageOptions } from '../../../helpers/generation-helpers';
+import { availableUserRoles } from '../../../helpers/generation-helpers';
 import { fetchByKey } from '../../../helpers/form-helpers';
 import { GenericOption } from '../../../data/types/GenericOption';
 
@@ -29,8 +29,8 @@ const props = withDefaults(
     options?: GenericOption[];
   }>(),
   {
-    label: i18n.global.t('fields.personal_data.language'),
-    options: () => availableLanguageOptions(),
+    label: i18n.global.t('fields.authentication.user_role'),
+    options: () => availableUserRoles(),
   }
 );
 

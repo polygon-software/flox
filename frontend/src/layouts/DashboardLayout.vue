@@ -172,10 +172,11 @@ import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
 import AliasIndicator from 'src/flox/modules/alias/components/AliasIndicator.vue';
 import { i18n } from 'boot/i18n';
 import { invalidateTables } from 'src/apollo/invalidation';
-import { ALL_TABLES } from 'src/flox/TABLES';
 import NotificationBell from 'src/flox/modules/notification/components/NotificationBell.vue';
 import LocaleSwitcher from 'components/locale/LocaleSwitcher.vue';
 import AuthenticationService from 'src/flox/modules/auth/services/auth.service';
+
+import { ALL_TABLES } from '../flox/enum/TABLES';
 
 const $routerService: RouterService | undefined = inject('$routerService');
 const $authService: AuthenticationService | undefined = inject('$authService');

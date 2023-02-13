@@ -3,9 +3,8 @@ import { i18n } from 'boot/i18n';
 import * as auth from '../../../auth';
 import FormPage from '../types/FormPage';
 import FormCard from '../types/FormCard';
-
-import { FIELDS } from './FIELDS';
-import { loginFormKey } from './FormKeys';
+import { FIELDS } from '../FIELDS';
+import { loginFormKey } from '../FORM_KEYS';
 
 // Login
 const loginCard = new FormCard(
@@ -17,7 +16,7 @@ const loginCard = new FormCard(
   i18n.global.t('card_titles.login')
 );
 
-// Login form pages with respective cards
+// Login formPages pages with respective cards
 export default [
   new FormPage(loginFormKey.pageKey, i18n.global.t('authentication.login'), [
     loginCard,

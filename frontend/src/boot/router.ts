@@ -1,12 +1,11 @@
 import { boot } from 'quasar/wrappers';
 import { Router, RouteRecordRaw } from 'vue-router';
 
-import { isModuleActive } from 'src/flox';
-import { MODULES } from 'src/flox/MODULES';
-import UserEntity from 'src/flox/modules/auth/entities/user.entity';
-import { fetchMyUser } from 'src/flox/modules/auth/services/user.service';
-import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
-
+import { isModuleActive } from '../flox';
+import { MODULES } from '../flox/enum/MODULES';
+import UserEntity from '../flox/modules/auth/entities/user.entity';
+import { fetchMyUser } from '../flox/modules/auth/services/user.service';
+import { useAuthStore } from '../flox/modules/auth/stores/auth.store';
 import ROUTES, { CONSTRAINED_ROUTES, PUBLIC_ROUTES } from '../router/routes';
 
 // eslint-disable-next-line import/no-mutable-exports

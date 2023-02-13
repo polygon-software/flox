@@ -2,9 +2,8 @@ import { i18n } from 'boot/i18n';
 
 import FormPage from '../types/FormPage';
 import FormCard from '../types/FormCard';
-
-import { FIELDS } from './FIELDS';
-import { resetPasswordFormKey } from './FormKeys';
+import { FIELDS } from '../FIELDS';
+import { resetPasswordFormKey } from '../FORM_KEYS';
 
 // Reset password
 const resetPasswordCard = new FormCard(
@@ -13,7 +12,7 @@ const resetPasswordCard = new FormCard(
   i18n.global.t('card_titles.set_new_password')
 );
 
-// Reset password form pages with respective cards
+// Reset password formPages pages with respective cards
 export default [
   new FormPage(
     resetPasswordFormKey.pageKey,

@@ -14,16 +14,16 @@
 </template>
 
 <script setup lang="ts">
-import { FIELDS } from '../../../form/data/form/FIELDS';
+import { FIELDS } from '../../../form/data/FIELDS';
 import FloxWrapper from '../../../../core/components/FloxWrapper.vue';
 import * as auth from '../..';
-import SignupFormPages from '../../../form/data/form/SignupFormPages';
+import SignupFormPages from '../../../form/data/formPages/SignupFormPages';
 import GenericForm from '../../../form/components/GenericForm.vue';
 import { fetchByKey } from '../../../form/helpers/form-helpers';
 import { useFormStore } from '../../../form/stores/form';
-import { signupFormKey } from '../../../form/data/form/FormKeys';
-import COUNTRY_CODES from '../../../../COUNTRIES';
-import { MODULES } from '../../../../MODULES';
+import { signupFormKey } from '../../../form/data/FORM_KEYS';
+import COUNTRY_CODES from '../../../../enum/COUNTRIES';
+import { MODULES } from '../../../../enum/MODULES';
 
 const emit = defineEmits<{
   (

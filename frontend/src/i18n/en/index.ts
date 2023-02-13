@@ -9,6 +9,7 @@ import fieldTranslations from './fields';
 import fileTranslations from './files';
 import layoutTranslations from './layout';
 import messageTranslations from './messages';
+import notificationsTranslations from './notifications';
 import objectRecognitionTranslations from './objectRecognition';
 import pageTranslations from './pages';
 import paymentTranslations from './payment';
@@ -26,6 +27,7 @@ export default {
   ...fileTranslations,
   ...layoutTranslations,
   ...messageTranslations,
+  ...notificationsTranslations,
   ...objectRecognitionTranslations,
   ...pageTranslations,
   ...paymentTranslations,
@@ -48,6 +50,8 @@ export default {
     search: 'Search',
     display: 'Display',
     sample: 'Sample',
+    yes: 'Yes',
+    no: 'No',
   },
   locales: {
     de: 'German',

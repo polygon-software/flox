@@ -1,19 +1,22 @@
-import { executeMutation } from 'src/apollo/mutation';
-import { executeQuery } from 'src/apollo/query';
-import UserEntity from 'src/flox/modules/auth/entities/user.entity';
+import DELIVERY_MEDIUMS from '../../../enum/DELIVERY_MEDIUMS';
+import ROLE from '../../../enum/USER_ROLES';
+import { executeMutation } from '../../../../apollo/mutation';
+import { executeQuery } from '../../../../apollo/query';
+import UserEntity from '../entities/user.entity';
 import {
+  ADMIN_CREATE_USER,
   CREATE_USER,
   DELETE_USER,
   UPDATE_USER,
-} from 'src/flox/modules/auth/user.mutation';
+} from '../user.mutation';
 import {
   GET_ALL_USERS,
   GET_MULTIPLE_USERS,
   GET_MY_USER,
   SEARCH_USERS,
   GET_USER,
-} from 'src/flox/modules/auth/user.query';
-import CountQuery from 'src/flox/modules/interfaces/entities/count.entity';
+} from '../user.query';
+import CountQuery from '../../interfaces/entities/count.entity';
 
 /**
  * Fetch the logged-in user
@@ -95,9 +98,36 @@ export async function searchUsers(
 }
 
 /**
+ * Creates a user as an admin
+ *
+ * @param username - user's username (might be identical to e-mail)
+ * @param email - user's e-mail address
+ * @param role - the user's role
+ * @param deliveryMediums - medium to use to deliver user's new login information (sms, email, both or none)
+ * @param [lang] - user's language
+ * @returns the newly created user
+ */
+export async function adminCreateUser(
+  username: string,
+  email: string,
+  role: ROLE,
+  deliveryMediums: [DELIVERY_MEDIUMS],
+  lang?: string
+): Promise<UserEntity | null> {
+  const { data } = await executeMutation<UserEntity>(ADMIN_CREATE_USER, {
+    username,
+    email,
+    role,
+    deliveryMediums,
+    lang,
+  });
+  return data ?? null;
+}
+
+/**
  * Creates a user
  *
- * @param username - user's username (may be identical to e-mail)
+ * @param username - user's username (might be identical to e-mail)
  * @param email - user's e-mail address
  * @param cognitoUuid - user's Cognito UUID
  * @param [lang] - user's language

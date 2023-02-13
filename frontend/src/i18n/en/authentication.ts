@@ -6,6 +6,8 @@ export default {
     account: 'Account',
     authentication: 'Authentication',
     create_user: 'Create user',
+    created_users_password: 'Generated password',
+    created_users_password_hint: "This password can't be accessed again!",
     welcome_back: 'Welcome back!',
     welcome_text: 'You can sign in to access your existing account',
     login: 'Log in',

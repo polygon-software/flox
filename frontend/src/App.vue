@@ -10,9 +10,9 @@ import { provide, reactive } from 'vue';
 import { routerInstance } from 'boot/router';
 import Env from 'src/env';
 import { isModuleActive } from 'src/flox';
-import { MODULES } from 'src/flox/MODULES';
 import RouterService from 'src/services/RouterService';
 
+import { MODULES } from './flox/enum/MODULES';
 import AuthenticationService from './flox/modules/auth/services/auth.service';
 import ErrorService from './services/ErrorService';
 

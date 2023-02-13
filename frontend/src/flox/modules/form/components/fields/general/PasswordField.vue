@@ -28,7 +28,7 @@ import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';
 
 import { IS_NOT_NULL } from '../../../data/RULES';
 import { FormStateKey, useFormStore } from '../../../stores/form';
-import { MODULES } from '../../../../../MODULES';
+import { MODULES } from '../../../../../enum/MODULES';
 
 import LabelWrapper from './wrappers/LabelWrapper.vue';
 

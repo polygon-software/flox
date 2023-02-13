@@ -9,6 +9,7 @@ import { AdminOnly, CurrentUser } from '../roles/authorization.decorator';
 import UpdateInput from '../abstracts/crud/inputs/update.input';
 
 import GetUserArgs from './dto/args/get-user.args';
+import AdminCreateUserInput from './dto/input/admin-create-user.input';
 import CreateUserInput from './dto/input/create-user.input';
 import UpdateUserInput from './dto/input/update-user.input';
 import User from './entities/user.entity';
@@ -97,6 +98,31 @@ export default class UserResolver extends AbstractSearchResolver<
   @Query(() => UserSearchOutput, { name: 'SearchUsers' })
   searchUsers(@Args() queryArgs: SearchArgs): Promise<UserSearchOutput> {
     return super.search(queryArgs);
+  }
+
+  /**
+   * Creates a User with a corresponding Cognito account
+   *
+   * @param adminCreateUserInput - contains all user data
+   * @returns the newly created user
+   */
+  @AdminOnly()
+  @Mutation(() => User, { name: 'adminCreateUser' })
+  async adminCreateUser(
+    @Args('adminCreateUserInput') adminCreateUserInput: AdminCreateUserInput,
+  ): Promise<User> {
+    // Create Cognito account
+    const cognitoUser = await createCognitoAccount(
+      adminCreateUserInput.email,
+      undefined,
+      adminCreateUserInput.deliveryMediums,
+    );
+
+    // Create & return database entry
+    return super.create({
+      ...adminCreateUserInput,
+      cognitoUuid: cognitoUser.cognitoUuid,
+    });
   }
 
   /**

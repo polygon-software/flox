@@ -21,10 +21,10 @@ import { useDialogPluginComponent } from 'quasar';
 import { useFormStore } from 'src/flox/modules/form/stores/form';
 
 import GenericForm from '../../../form/components/GenericForm.vue';
-import { resetPasswordFormKey } from '../../../form/data/form/FormKeys';
-import ResetPasswordFormPages from '../../../form/data/form/ResetPasswordFormPages';
+import { resetPasswordFormKey } from '../../../form/data/FORM_KEYS';
+import ResetPasswordFormPages from '../../../form/data/formPages/ResetPasswordFormPages';
 import { fetchByKey } from '../../../form/helpers/form-helpers';
-import { FIELDS } from '../../../form/data/form/FIELDS';
+import { FIELDS } from '../../../form/data/FIELDS';
 
 const { dialogRef, onDialogOK, onDialogCancel } = useDialogPluginComponent();
 

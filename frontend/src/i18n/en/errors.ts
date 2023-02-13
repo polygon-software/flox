@@ -2,6 +2,7 @@
 /* eslint-disable camelcase */
 export default {
   errors: {
+    copy_failed: 'Copy failed',
     error: 'Error',
     file_upload_failed: 'An error occurred while uploading the file',
     module_error: "Error: Module '{module}' is not active",

@@ -1,11 +1,44 @@
 import { gql } from '@apollo/client/core';
 
 import { MutationObject, MutationTypes } from 'src/apollo/mutation';
-import { TABLES } from 'src/flox/TABLES';
+
+import { TABLES } from '../../enum/TABLES';
 
 /**
  * User-related mutations
  */
+export const ADMIN_CREATE_USER: MutationObject = {
+  mutation: gql`
+    mutation AdminCreateUser(
+      $username: String!
+      $email: String!
+      $role: String!
+      $deliveryMediums: [String!]!
+      $lang: String
+    ) {
+      CreateUser(
+        createAdminUserInput: {
+          username: $username
+          email: $email
+          role: $role
+          sendInvite: sendInvite
+          lang: $lang
+        }
+      ) {
+        uuid
+        username
+        lang
+        email
+        cognitoUuid
+        __typename
+      }
+    }
+  `,
+  tables: [TABLES.USER],
+  type: MutationTypes.CREATE,
+  cacheLocation: 'AdminCreateUser',
+};
+
 export const CREATE_USER: MutationObject = {
   mutation: gql`
     mutation CreateUser(

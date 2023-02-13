@@ -1,6 +1,6 @@
 import { floxModuleOptions, mergeConfigurations } from 'src/flox';
 
-import { MODULES } from '../../MODULES';
+import { MODULES } from '../../enum/MODULES';
 
 /**
  * The file module handles file upload and management.

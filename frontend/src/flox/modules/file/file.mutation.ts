@@ -1,7 +1,8 @@
 import { gql } from '@apollo/client/core';
 
 import { MutationObject, MutationTypes } from 'src/apollo/mutation';
-import { TABLES } from 'src/flox/TABLES';
+
+import { TABLES } from '../../enum/TABLES';
 
 export const CREATE_FILE: MutationObject = {
   mutation: gql`

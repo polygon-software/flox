@@ -70,6 +70,14 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/UsersPage.vue') }],
   },
 
+  CREATE_USERS: {
+    path: '/users/create',
+    component: () => import('layouts/DashboardLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/CreateUsersPage.vue') },
+    ],
+  },
+
   OBJECT_RECOGNITION: {
     path: '/object-recognition',
     component: () => import('layouts/DashboardLayout.vue'),

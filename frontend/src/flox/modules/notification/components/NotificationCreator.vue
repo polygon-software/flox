@@ -39,20 +39,20 @@
                 <q-input
                   v-model="message.title"
                   outlined
-                  :label="$t('messages.notifications.notification_title')"
+                  :label="$t('notifications.notification_title')"
                   :rules="titleRules"
                 />
                 <q-input
                   v-model="message.content"
                   outlined
                   type="textarea"
-                  :label="$t('messages.notifications.notification_content')"
+                  :label="$t('notifications.notification_content')"
                   :rules="contentRules"
                 />
                 <q-input
                   v-model="message.link"
                   outlined
-                  :label="$t('messages.notifications.notification_link')"
+                  :label="$t('notifications.notification_link')"
                 />
               </q-tab-panel>
             </q-tab-panels>
@@ -63,7 +63,7 @@
         <q-btn
           unelevated
           color="primary"
-          :label="$t('messages.notifications.send_notificaton')"
+          :label="$t('notifications.send_notificaton')"
           icon-right="send"
           @click="submitNotificationBroadcast"
         />
@@ -103,13 +103,13 @@ const formRef: Ref<QForm | null> = ref(null);
 const titleRules: ValidationRule[] = [
   joiSchemaToValidationRule(
     Joi.string().required().min(5).max(60),
-    i18n.global.t('messages.notifications.invalid_title')
+    i18n.global.t('notifications.invalid_title')
   ),
 ];
 const contentRules: ValidationRule[] = [
   joiSchemaToValidationRule(
     Joi.string().required().min(20).max(500),
-    i18n.global.t('messages.notifications.invalid_content')
+    i18n.global.t('notifications.invalid_content')
   ),
 ];
 
@@ -137,7 +137,7 @@ async function submitNotificationBroadcast(): Promise<void> {
     return;
   }
   await sendNotificationToEveryone(messages.value);
-  showSuccessNotification($q, i18n.global.t('messages.notifications.sent'));
+  showSuccessNotification($q, i18n.global.t('notifications.sent'));
   messages.value = messages.value.map((msg) => ({
     ...msg,
     title: '',

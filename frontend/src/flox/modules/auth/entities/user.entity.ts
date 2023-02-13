@@ -2,7 +2,7 @@ import { IsOptional, IsString } from 'class-validator';
 
 import BaseEntity from 'src/flox/core/base-entity/entities/BaseEntity';
 
-import { ROLE } from '../enums/role.enum';
+import ROLE from '../../../enum/USER_ROLES';
 
 /**
  * A class representing a user data object

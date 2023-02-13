@@ -21,11 +21,11 @@
 <script setup lang="ts">
 import { useDialogPluginComponent } from 'quasar';
 
-import { MFAFormKey } from '../../../form/data/form/FormKeys';
+import { MFAFormKey } from '../../../form/data/FORM_KEYS';
 import GenericForm from '../../../form/components/GenericForm.vue';
-import MFAFormPages from '../../../form/data/form/MFAFormPages';
+import MFAFormPages from '../../../form/data/formPages/MFAFormPages';
 import { fetchByKey } from '../../../form/helpers/form-helpers';
-import { FIELDS } from '../../../form/data/form/FIELDS';
+import { FIELDS } from '../../../form/data/FIELDS';
 import { useFormStore } from '../../../form/stores/form';
 
 const { dialogRef, onDialogOK, onDialogCancel } = useDialogPluginComponent();

@@ -60,7 +60,7 @@
 <script setup lang="ts">
 import { ref, watch, defineProps, Ref } from 'vue';
 
-import { MODULES } from '../../../../../MODULES';
+import { MODULES } from '../../../../../enum/MODULES';
 import { fetchByKey } from '../../../helpers/form-helpers';
 import { FormStateKey, useFormStore } from '../../../stores/form';
 import { IS_VALID_PASSWORD } from '../../../data/RULES';

@@ -2,11 +2,12 @@ import axios from 'axios';
 
 import { invalidateTables } from 'src/apollo/invalidation';
 import FileEntity from 'src/flox/modules/file/entities/file.entity';
-import { TABLES } from 'src/flox/TABLES';
 import {
   createFile,
   FileInputs,
 } from 'src/flox/modules/file/services/file.service';
+
+import { TABLES } from '../../../enum/TABLES';
 
 export type SelectedFile = {
   content: File;

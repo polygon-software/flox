@@ -39,7 +39,7 @@ export const OptionalUser = createParamDecorator(
   },
 );
 
-// Access to cognito user from request in the form { userId: string, username: string }
+// Access to cognito user from request in the formPages { userId: string, username: string }
 export const CognitoUser = createParamDecorator(
   (data, req: ExecutionContext) => {
     return getRequest(req).user;

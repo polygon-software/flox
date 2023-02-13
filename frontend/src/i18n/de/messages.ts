@@ -3,6 +3,7 @@
 
 export default {
   messages: {
+    copied_to_clipboard: 'In die Zwischenablage kopiert',
     success: 'Erfolgreich',
     failure: 'Fehlgeschlagen',
     login_failed: 'Login hat fehlgeschlagen',
@@ -23,16 +24,5 @@ export default {
     account_created: 'Konto erfolgreich erstellt',
     entry_edited: 'Änderung gespeichert',
     entry_deleted: 'Eintrag gelöscht',
-    notifications: {
-      notifications: 'Benachrichtigungen',
-      no_notifications: 'Keine neuen Benachrichtigungen',
-      invalid_title: 'Die Länge des Titels ist ungültig',
-      invalid_content: 'Die Länge des Inhalts ist ungültig',
-      send_notificaton: 'Benachrichtigungen absenden',
-      notification_title: 'Nachricht Titel',
-      notification_content: 'Nachricht Inhalt',
-      notification_link: 'Nachricht Link (optional)',
-      sent: 'Benachrichtigung gesendet!',
-    },
   },
 };
