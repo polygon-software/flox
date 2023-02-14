@@ -1,6 +1,3 @@
-import { randomInt } from 'crypto';
-
-import shuffle from 'lodash/shuffle';
 import {
   AdminCreateUserCommand,
   AdminDeleteUserCommand,

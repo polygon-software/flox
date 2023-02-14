@@ -94,15 +94,11 @@ async function onSubmit(): Promise<void> {
           componentProps: {
             password: result.password,
           },
-        }).onOk(() => {
-          void (async (): Promise<void> => {
-            await $routerService?.routeTo(ROUTES.USERS);
-          })();
-        });
-      } else {
-        // Empty store state
-        store.clearForm(createUserFormKey.formKey);
+        }).onOk(() => {});
       }
+      // Clear the store and route back to users page
+      store.clearForm(createUserFormKey.formKey);
+      await $routerService?.routeTo(ROUTES.USERS);
     } else {
       showErrorNotification($q, i18n.global.t('errors.user_creation_failed'));
     }

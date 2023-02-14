@@ -3,7 +3,8 @@ import { I18nService } from 'nestjs-i18n';
 import { ConfigService } from '@nestjs/config';
 import { render } from 'squirrelly';
 
-import mailTemplate from '../../../templates/email/PasswordResetEmail';
+import resetTemplate from '../../../templates/email/PasswordResetEmail';
+import inviteTemplate from '../../../templates/email/Invitation';
 
 import { Credentials, sendEmail } from './helpers/email-helpers';
 import { moduleConfig } from './config';
@@ -31,12 +32,12 @@ export default class EmailService {
    *
    * @param recipient - e-mail of the new user
    * @param lang - user's language
-   * @param [password] - user's password
+   * @param [tempPassword] - user's temporary password
    */
   async sendCustomInviteEmail(
     recipient: string,
     lang: string,
-    password?: string,
+    tempPassword?: string,
   ): Promise<void> {
     // TODO: Implemenet application specific
 
@@ -52,9 +53,9 @@ export default class EmailService {
         lang,
       }),
       // E-mail contents from HTML template
-      render(mailTemplate, {
+      render(inviteTemplate, {
         lang,
-        password,
+        password: tempPassword,
       }) as string,
     );
   }
@@ -83,7 +84,7 @@ export default class EmailService {
         lang,
       }),
       // E-mail contents from HTML template
-      render(mailTemplate, {
+      render(resetTemplate, {
         lang,
         password: tempPassword,
       }) as string,

@@ -150,6 +150,7 @@ export default class UserResolver extends AbstractSearchResolver<
       await this.emailService.sendCustomInviteEmail(
         adminCreateUserInput.email,
         adminCreateUserInput.lang,
+        cognitoUser.password,
       );
     } else {
       // Create Cognito account
