@@ -18,7 +18,6 @@ import { classValidatorRule } from '../helpers/validation-helpers';
 import {
   PASSWORD_REGEX,
   TIME_REGEX,
-  URL_REGEX,
   VERIFICATION_CODE_REGEX,
   ZIP_REGEX,
 } from './REGEX';
@@ -146,18 +145,8 @@ const IS_VALID_DATE_STRING = (val: string, format: string): boolean => {
   return IS_VALID_DATE(date.extractDate(val, format));
 };
 
-const IS_VALID_NUMBER = (val: number): boolean => !!val;
-
-const IS_VALID_POSITIVE_NUMBER = (val: number): boolean => {
-  return val !== null && val >= 0;
-};
-
 const IS_SELECTED = (val: unknown): boolean | string => {
   return IS_NOT_NULL(val) || i18n.global.t('errors.no_selection');
-};
-
-const IS_VALID_URL = (val: string): boolean => {
-  return URL_REGEX.test(val);
 };
 
 const IS_VERIFICATION_CODE = (val: string): boolean | string => {
@@ -183,9 +172,6 @@ export {
   IS_VALID_DATE_STRING,
   IS_VALID_FUTURE_DATE,
   IS_VALID_DATE,
-  IS_VALID_NUMBER,
-  IS_VALID_POSITIVE_NUMBER,
   IS_SELECTED,
-  IS_VALID_URL,
   IS_VERIFICATION_CODE,
 };
