@@ -1,6 +1,14 @@
 import { isValid } from 'date-fns';
 import { date } from 'quasar';
-import { isDate, isEmail, isPhoneNumber, isString } from 'class-validator';
+import {
+  isDate,
+  isEmail,
+  isInt,
+  isNotEmpty,
+  isPhoneNumber,
+  isPositive,
+  isString,
+} from 'class-validator';
 import { CountryCode } from 'libphonenumber-js';
 
 import { i18n } from 'boot/i18n';
@@ -23,9 +31,27 @@ const IS_EMAIL = classValidatorRule(
   i18n.global.t('errors.invalid_email')
 );
 
-const IS_VALID_HOUSE_NUMBER = (val: string): boolean => {
-  const number = parseInt(val, 10);
-  return Number.isInteger(number) && number > 0;
+const IS_VALID_STREET = (val: string): boolean | string => {
+  return (
+    (isNotEmpty(val) && isString(val)) || i18n.global.t('errors.invalid_street')
+  );
+};
+
+const IS_VALID_HOUSE_NUMBER = (val: string): boolean | string => {
+  return (
+    (isInt(parseInt(val, 10)) && isPositive(parseInt(val, 10))) ||
+    i18n.global.t('errors.invalid_number')
+  );
+};
+
+const IS_VALID_ZIP = (val: string): boolean | string => {
+  return ZIP_REGEX.test(val) || i18n.global.t('errors.invalid_zip_code');
+};
+
+const IS_VALID_CITY = (val: string): boolean | string => {
+  return (
+    (isNotEmpty(val) && isString(val)) || i18n.global.t('errors.invalid_city')
+  );
 };
 
 const IS_NOT_NULL = (val: unknown): boolean => {
@@ -63,10 +89,6 @@ const IS_VALID_PHONE_NUMBER = (
 
 const IS_VALID_STRING = (val: string | undefined): boolean =>
   !!(val && val.length > 0);
-
-const IS_VALID_ZIP = (val: string): boolean => {
-  return ZIP_REGEX.test(val);
-};
 
 const IS_VALID_TIME = (val: string): boolean => {
   return TIME_REGEX.test(val);
@@ -147,14 +169,16 @@ const IS_VERIFICATION_CODE = (val: string): boolean | string => {
 
 export {
   IS_EMAIL,
+  IS_VALID_STREET,
   IS_VALID_HOUSE_NUMBER,
+  IS_VALID_ZIP,
+  IS_VALID_CITY,
   IS_NOT_NULL,
   IS_VALID_NAME,
   IS_VALID_PASSWORD,
   IS_OPTIONAL_PHONE_NUMBER,
   IS_VALID_PHONE_NUMBER,
   IS_VALID_STRING,
-  IS_VALID_ZIP,
   IS_VALID_TIME,
   IS_VALID_DATE_STRING,
   IS_VALID_FUTURE_DATE,
