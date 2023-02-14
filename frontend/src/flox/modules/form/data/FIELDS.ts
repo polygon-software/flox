@@ -22,22 +22,19 @@ import {
 } from '../helpers/generation-helpers';
 
 import { Field } from './types/Field';
-import FullName from './types/FullName';
 import {
   IS_EMAIL,
   IS_NOT_NULL,
+  IS_SELECTED,
   IS_VALID_DATE,
+  IS_VALID_NAME,
   IS_VALID_PASSWORD,
-  IS_VALID_PHONE_NUMBER,
-  IS_VALID_STRING,
   IS_VERIFICATION_CODE,
 } from './RULES';
 
 /**
  * This file contains bootstrap configurations for sign up and sign in input fields. With these, the corresponding forms can be built modularly.
  */
-
-const selectionError = i18n.global.t('errors.no_selection');
 
 const FIELDS: Record<string, Field> = {
   EMAIL: {
@@ -81,8 +78,10 @@ const FIELDS: Record<string, Field> = {
     attributes: {
       label: i18n.global.t('authentication.old_password'),
       rules: [
-        (val: string): boolean | string =>
-          IS_VALID_STRING(val || i18n.global.t('errors.invalid_old_password')),
+        classValidatorRule(
+          isString,
+          i18n.global.t('errors.invalid_old_password')
+        ),
       ],
     },
   },
@@ -91,10 +90,7 @@ const FIELDS: Record<string, Field> = {
     component: markRaw(PasswordRepeat),
     attributes: {
       newPassword: false,
-      rules: [
-        (val: string): boolean | string =>
-          IS_VALID_PASSWORD(val) || i18n.global.t('errors.invalid_password'),
-      ],
+      rules: [IS_VALID_PASSWORD],
     },
   },
   PASSWORD_REPEAT_NEW: {
@@ -102,10 +98,7 @@ const FIELDS: Record<string, Field> = {
     component: markRaw(PasswordRepeat),
     attributes: {
       newPassword: true,
-      rules: [
-        (val: string): boolean | string =>
-          IS_VALID_PASSWORD(val) || i18n.global.t('errors.invalid_password'),
-      ],
+      rules: [IS_VALID_PASSWORD],
     },
   },
   NAME: {
@@ -115,11 +108,7 @@ const FIELDS: Record<string, Field> = {
       dense: true,
       type: 'text',
       label: i18n.global.t('fields.personal_data.name'),
-      rules: [
-        (val: string): boolean | string =>
-          // eslint-disable-next-line sonarjs/no-duplicate-string
-          IS_VALID_STRING(val) || i18n.global.t('errors.invalid_name'),
-      ],
+      rules: [IS_VALID_NAME],
       width: 100,
     },
   },
@@ -128,10 +117,7 @@ const FIELDS: Record<string, Field> = {
     component: markRaw(FullNameField),
     attributes: {
       dense: true,
-      rules: [
-        (val: FullName): boolean | string =>
-          (!!val && val.isComplete()) || selectionError,
-      ],
+      rules: [IS_SELECTED],
     },
   },
   ADDRESS: {
@@ -149,10 +135,7 @@ const FIELDS: Record<string, Field> = {
     key: 'date',
     component: markRaw(DateField),
     attributes: {
-      rules: [
-        (val: Date): boolean | string =>
-          IS_VALID_DATE(val) || i18n.global.t('errors.invalid_date'),
-      ],
+      rules: [IS_VALID_DATE],
     },
   },
   PHONE_NUMBER: {
@@ -167,9 +150,7 @@ const FIELDS: Record<string, Field> = {
     key: 'selectLanguage',
     component: markRaw(SelectLanguageField),
     attributes: {
-      rules: [
-        (val: string): boolean | string => IS_NOT_NULL(val) || selectionError,
-      ],
+      rules: [IS_SELECTED],
     },
   },
   VERIFICATION_CODE: {
@@ -178,11 +159,7 @@ const FIELDS: Record<string, Field> = {
     attributes: {
       label: i18n.global.t('fields.authentication.verification_code'),
       mask: '######',
-      rules: [
-        (val: string): boolean | string =>
-          IS_VERIFICATION_CODE(val) ||
-          i18n.global.t('errors.no_verification_code'),
-      ],
+      rules: [IS_VERIFICATION_CODE],
     },
   },
   MFA: {
@@ -190,20 +167,14 @@ const FIELDS: Record<string, Field> = {
     component: markRaw(GenericInputField),
     attributes: {
       mask: '######',
-      rules: [
-        (val: string): boolean | string =>
-          IS_VERIFICATION_CODE(val) ||
-          i18n.global.t('errors.no_verification_code'),
-      ],
+      rules: [IS_VERIFICATION_CODE],
     },
   },
   USER_ROLE: {
     key: 'userRole',
     component: markRaw(UserRoleField),
     attributes: {
-      rules: [
-        (val: string): boolean | string => IS_NOT_NULL(val) || selectionError,
-      ],
+      rules: [IS_SELECTED],
     },
   },
   SEND_INVITE: {
@@ -211,9 +182,7 @@ const FIELDS: Record<string, Field> = {
     component: markRaw(GenericOptionGroupField),
     attributes: {
       options: inviteOptions(),
-      rules: [
-        (val: string): boolean | string => IS_NOT_NULL(val) || selectionError,
-      ],
+      rules: [IS_SELECTED],
     },
   },
   GENERATED_PASSWORD: {

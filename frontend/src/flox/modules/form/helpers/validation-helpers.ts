@@ -1,4 +1,4 @@
-import { ValidationRule } from 'src/tools/validation.tool';
+import { ValidationRule } from '../../../../tools/validation.tool';
 
 /**
  * Generates a Quasar validation rule from a class-validator one.

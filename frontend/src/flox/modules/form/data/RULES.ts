@@ -1,11 +1,11 @@
 import { isValid } from 'date-fns';
 import { date } from 'quasar';
-import { isEmail, isPhoneNumber } from 'class-validator';
+import { isDate, isEmail, isPhoneNumber, isString } from 'class-validator';
+import { CountryCode } from 'libphonenumber-js';
 
 import { i18n } from 'boot/i18n';
 
 import { classValidatorRule } from '../helpers/validation-helpers';
-import { ValidationRule } from '../../../../tools/validation.tool';
 
 import {
   PASSWORD_REGEX,
@@ -32,15 +32,32 @@ const IS_NOT_NULL = (val: unknown): boolean => {
   return val !== null && val !== undefined;
 };
 
+const IS_VALID_NAME = classValidatorRule(
+  isString,
+  i18n.global.t('errors.invalid_name')
+);
+
 const IS_VALID_PASSWORD = (val: string): boolean | string => {
   return PASSWORD_REGEX.test(val) || i18n.global.t('errors.invalid_password');
 };
 
-const IS_VALID_PHONE_NUMBER = (region: string): ValidationRule => {
-  return classValidatorRule(
-    isPhoneNumber,
-    i18n.global.t('errors.invalid_phone_number'),
-    region
+const IS_OPTIONAL_PHONE_NUMBER = (
+  val: string,
+  region: CountryCode
+): string | boolean => {
+  return (
+    (isString(val) && val.length === 0) ||
+    isPhoneNumber(val, region) ||
+    i18n.global.t('errors.invalid_phone_number')
+  );
+};
+
+const IS_VALID_PHONE_NUMBER = (
+  val: string,
+  region: CountryCode
+): boolean | string => {
+  return (
+    isPhoneNumber(val, region) || i18n.global.t('errors.invalid_phone_number')
   );
 };
 
@@ -64,7 +81,12 @@ const IS_VALID_FUTURE_DATE = (val: Date): boolean => {
 };
 
 const IS_VALID_DATE = (val: Date): boolean => {
-  return isValid(val) && val.getFullYear() > 1900 && val.getFullYear() < 2100;
+  return (
+    classValidatorRule(isDate, i18n.global.t('errors.invalid_date')) &&
+    isValid(val) &&
+    val.getFullYear() > 1900 &&
+    val.getFullYear() < 2100
+  );
 };
 
 const IS_VALID_DATE_STRING = (val: string, format: string): boolean => {
@@ -108,19 +130,28 @@ const IS_VALID_POSITIVE_NUMBER = (val: number): boolean => {
   return val !== null && val >= 0;
 };
 
+const IS_SELECTED = (val: unknown): boolean | string => {
+  return IS_NOT_NULL(val) || i18n.global.t('errors.no_selection');
+};
+
 const IS_VALID_URL = (val: string): boolean => {
   return URL_REGEX.test(val);
 };
 
-const IS_VERIFICATION_CODE = (val: string): boolean => {
-  return VERIFICATION_CODE_REGEX.test(val);
+const IS_VERIFICATION_CODE = (val: string): boolean | string => {
+  return (
+    VERIFICATION_CODE_REGEX.test(val) ||
+    i18n.global.t('errors.no_verification_code')
+  );
 };
 
 export {
   IS_EMAIL,
   IS_VALID_HOUSE_NUMBER,
   IS_NOT_NULL,
+  IS_VALID_NAME,
   IS_VALID_PASSWORD,
+  IS_OPTIONAL_PHONE_NUMBER,
   IS_VALID_PHONE_NUMBER,
   IS_VALID_STRING,
   IS_VALID_ZIP,
@@ -130,6 +161,7 @@ export {
   IS_VALID_DATE,
   IS_VALID_NUMBER,
   IS_VALID_POSITIVE_NUMBER,
+  IS_SELECTED,
   IS_VALID_URL,
   IS_VERIFICATION_CODE,
 };

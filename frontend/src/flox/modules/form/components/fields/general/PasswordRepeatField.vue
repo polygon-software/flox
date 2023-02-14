@@ -15,9 +15,7 @@
         dense
         outlined
         :type="showPassword ? 'text' : 'password'"
-        :rules="[
-          (val) => IS_VALID_PASSWORD(val) || $t('errors.invalid_password'),
-        ]"
+        :rules="[IS_VALID_PASSWORD]"
       >
         <template #append>
           <q-icon

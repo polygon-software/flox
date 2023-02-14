@@ -8,7 +8,7 @@ import { sampleFormKey } from '../FORM_KEYS';
 // Sample card
 const sampleCard = new FormCard(
   sampleFormKey.cardKey,
-  [FIELDS.PHONE_NUMBER],
+  [FIELDS.DATE],
   i18n.global.t('card_titles.sample')
 );
 

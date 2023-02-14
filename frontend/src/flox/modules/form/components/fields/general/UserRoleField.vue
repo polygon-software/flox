@@ -2,7 +2,7 @@
   <GenericSelectField
     :initial-value="fieldValue"
     :options="options"
-    :rules="[(val) => IS_NOT_NULL(val) || i18n.global.t('errors.no_selection')]"
+    :rules="[IS_SELECTED]"
     :label="label"
     @change="(val) => (typeof val === 'string' ? saveValue(val) : null)"
   >
@@ -15,7 +15,7 @@ import { Ref, ref } from 'vue';
 import { i18n } from 'boot/i18n';
 
 import { FormStateKey, useFormStore } from '../../../stores/form';
-import { IS_NOT_NULL } from '../../../data/RULES';
+import { IS_SELECTED } from '../../../data/RULES';
 import { availableUserRoles } from '../../../helpers/generation-helpers';
 import { fetchByKey } from '../../../helpers/form-helpers';
 import { GenericOption } from '../../../data/types/GenericOption';

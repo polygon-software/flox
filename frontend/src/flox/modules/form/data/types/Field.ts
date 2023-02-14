@@ -1,4 +1,4 @@
-import { ValidationRule } from 'quasar';
+import { ValidationRule } from '../../../../../tools/validation.tool';
 
 /**
  * This type represents a field used in forms.

@@ -1,6 +1,7 @@
 import { computed, ref, Ref } from 'vue';
 
 import { useFormStore } from '../../stores/form';
+import { ValidationRule } from '../../../../../tools/validation.tool';
 
 import FormPage from './FormPage';
 import FormCard from './FormCard';
@@ -42,7 +43,7 @@ export default class FormStructure {
     return currentPage.cards.every((card: FormCard) => {
       return card.fields.every((field: Field) => {
         const { rules } = field.attributes;
-        return rules.every((rule: (valueElement: any) => boolean | string) => {
+        return rules.every((rule: ValidationRule) => {
           // Get relevant value from store
           const fieldValue =
             this.store.data[this.key]?.[currentPage.key]?.[card.key]?.[
