@@ -37,5 +37,6 @@ export default {
       "Passwords must contain at least one capital letter, number and one of the following special characters (#?!{'@'}$%^&*-)",
     reset_password_description:
       "You'll receive a verification code at {email}.",
+    invite: 'Welcome to Flox',
   },
 };

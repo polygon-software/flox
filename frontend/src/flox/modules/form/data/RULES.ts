@@ -66,17 +66,6 @@ const IS_VALID_PASSWORD = (val: string): boolean | string => {
   return PASSWORD_REGEX.test(val) || i18n.global.t('errors.invalid_password');
 };
 
-const IS_OPTIONAL_PHONE_NUMBER = (
-  val: string,
-  region: CountryCode
-): string | boolean => {
-  return (
-    (isString(val) && val.length === 0) ||
-    isPhoneNumber(val, region) ||
-    i18n.global.t('errors.invalid_phone_number')
-  );
-};
-
 const IS_VALID_PHONE_NUMBER = (
   val: string,
   region: CountryCode
@@ -165,7 +154,6 @@ export {
   IS_NOT_NULL,
   IS_VALID_NAME,
   IS_VALID_PASSWORD,
-  IS_OPTIONAL_PHONE_NUMBER,
   IS_VALID_PHONE_NUMBER,
   IS_VALID_STRING,
   IS_VALID_TIME,

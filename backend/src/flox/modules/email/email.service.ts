@@ -27,6 +27,39 @@ export default class EmailService {
   };
 
   /**
+   * Send a custom e-mail invitation to a newly created user.
+   *
+   * @param recipient - e-mail of the new user
+   * @param lang - user's language
+   * @param [password] - user's password
+   */
+  async sendCustomInviteEmail(
+    recipient: string,
+    lang: string,
+    password?: string,
+  ): Promise<void> {
+    // TODO: Implemenet application specific
+
+    // Get sender from module configuration
+    const sender = moduleConfig().emailAddress;
+
+    // Send actual e-mail
+    await sendEmail(
+      this.credentials,
+      sender,
+      recipient,
+      this.i18nService.t('authentication.invitation', {
+        lang,
+      }),
+      // E-mail contents from HTML template
+      render(mailTemplate, {
+        lang,
+        password,
+      }) as string,
+    );
+  }
+
+  /**
    * Sends an e-mail notifying the user that their password was reset, containing their new temporary password
    *
    * @param recipient - e-mail recipient

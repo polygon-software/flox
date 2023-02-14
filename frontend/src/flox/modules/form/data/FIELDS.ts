@@ -9,17 +9,14 @@ import EmailRepeatField from '../components/fields/general/EmailRepeatField.vue'
 import FullNameField from '../components/fields/general/FullNameField.vue';
 import GeneratedPasswordField from '../components/fields/general/GeneratedPasswordField.vue';
 import GenericInputField from '../components/fields/general/GenericInputField.vue';
-import GenericOptionGroupField from '../components/fields/general/GenericOptionGroupField.vue';
 import Password from '../components/fields/general/PasswordField.vue';
 import PasswordRepeat from '../components/fields/general/PasswordRepeatField.vue';
 import PhoneNumberField from '../components/fields/general/PhoneNumberField.vue';
 import UserRoleField from '../components/fields/general/UserRoleField.vue';
 import SelectLanguageField from '../components/fields/general/SelectLanguageField.vue';
+import SendInviteField from '../components/fields/general/SendInviteField.vue';
 import { classValidatorRule } from '../helpers/validation-helpers';
-import {
-  availablePhonenNumberOptions,
-  inviteOptions,
-} from '../helpers/generation-helpers';
+import { availablePhonenNumberOptions } from '../helpers/generation-helpers';
 
 import { Field } from './types/Field';
 import {
@@ -179,9 +176,8 @@ const FIELDS: Record<string, Field> = {
   },
   SEND_INVITE: {
     key: 'sendInvite',
-    component: markRaw(GenericOptionGroupField),
+    component: markRaw(SendInviteField),
     attributes: {
-      options: inviteOptions(),
       rules: [IS_SELECTED],
     },
   },

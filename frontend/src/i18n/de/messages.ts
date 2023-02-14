@@ -24,5 +24,6 @@ export default {
     account_created: 'Konto erfolgreich erstellt',
     entry_edited: 'Änderung gespeichert',
     entry_deleted: 'Eintrag gelöscht',
+    user_created: 'Benutzer erfolgreich erstellt',
   },
 };

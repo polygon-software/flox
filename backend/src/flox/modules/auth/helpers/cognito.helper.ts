@@ -17,12 +17,14 @@ import {
   UserStatusType,
 } from '@aws-sdk/client-cognito-identity-provider';
 import { isEmail } from 'class-validator';
+import RandExp from 'randexp';
 
 import Env from '../../../../env';
+import DELIVERY_MEDIUMS from '../../../enum/DELIVERY_MEDIUMS';
+import { PASSWORD_REGEX } from '../../../REGEX';
 
-// Default length for Cognito passwords
+// Minimum length for Cognito passwords
 const MINIMUM_COGNITO_PASSWORD_LENGTH = 8;
-const DEFAULT_COGNITO_PASSWORD_LENGTH = 16;
 
 // Set up cognito admin provider
 const provider = new CognitoIdentityProviderClient({
@@ -34,53 +36,20 @@ const provider = new CognitoIdentityProviderClient({
 });
 
 /**
- * Generates a random number in given range
- *
- * @param min - start of the range (inclusive)
- * @param max - end of the range (exclusive)
- * @returns random number in given range
- */
-function randomNumber(min: number, max: number): number {
-  return randomInt(min, max);
-}
-
-/**
- * Generates a random password that is valid for AWS Cognito of at least the given length
- *
- * @param minLength - min length
- * @returns a random string
- */
-export function randomPassword(minLength: number): string {
-  const charsLower = 'abcdefghijklmnopqrstuvwxyz';
-  const charsUpper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  const numbers = '0123456789';
-  const specialCharacters = '!?+'; // Limited to known working characters due to base-64 encoding
-  const requiredChars = [charsLower, charsUpper, numbers, specialCharacters];
-  let password = '';
-  requiredChars.forEach((requiredChar) => {
-    for (let i = 0; i < Math.ceil(minLength / requiredChars.length); i += 1) {
-      password += requiredChar[randomNumber(0, requiredChar.length)];
-    }
-  });
-  // Note that the shuffle method is not cryptographically secure, but not problematic since the characters themselves are randomized as well
-  // (and this is usually used for temporary passwords only)
-  password = shuffle(password.split('')).join('');
-  return password;
-}
-
-/**
  * Create a new Cognito Account with the given email address and password.
  *
  * @param email - The email of the new user
- * @param [password] - Initial password, if needed (random if not given)
+ * @param password - Initial password
  * @param [deliveryMediums] - medium to use to deliver user's new login information (sms, email, both or none)
+ * @param [phoneNumber] - user's phone number (needed if sms was selected)
  * @param [verified] - whether to mark the user's e-mail as verified
  * @returns Cognito ID
  */
 export async function createCognitoAccount(
   email: string,
-  password?: string,
-  deliveryMediums = ['EMAIL'],
+  password: string,
+  deliveryMediums = [DELIVERY_MEDIUMS.EMAIL],
+  phoneNumber?: string,
   verified = true,
 ): Promise<{ cognitoUuid: string; password: string }> {
   // Ensure password satisfies minimum length requirement
@@ -95,28 +64,28 @@ export async function createCognitoAccount(
     throw new Error(`${email} is not a valid e-mail address`);
   }
 
-  // Ensure delivery mediums are valid
-  if (
-    deliveryMediums.length > 0 &&
-    deliveryMediums.some((medium) => {
-      return !['EMAIL', 'SMS'].includes(medium);
-    })
-  ) {
-    throw new Error(`Invalid delivery medium in ${deliveryMediums.join(',')}`);
-  }
-
-  const pw = password || randomPassword(DEFAULT_COGNITO_PASSWORD_LENGTH);
   const params = {
     UserPoolId: Env.USER_POOL_ID,
     Username: email,
-    TemporaryPassword: pw,
+    TemporaryPassword: password,
     DesiredDeliveryMediums: deliveryMediums,
-    UserAttributes: [
-      {
-        Name: 'email',
-        Value: email,
-      },
-    ],
+    UserAttributes: phoneNumber
+      ? [
+          {
+            Name: 'email',
+            Value: email,
+          },
+          {
+            Name: 'phone_number',
+            Value: phoneNumber,
+          },
+        ]
+      : [
+          {
+            Name: 'email',
+            Value: email,
+          },
+        ],
   };
   const createUserCommand = new AdminCreateUserCommand(params);
   const resp = await provider.send(createUserCommand);
@@ -142,7 +111,7 @@ export async function createCognitoAccount(
 
   return {
     cognitoUuid: resp.User.Username,
-    password: pw,
+    password,
   };
 }
 
@@ -259,7 +228,7 @@ export async function checkIfUserExists(email: string): Promise<boolean> {
  * @returns the temporary password that was set for the user
  */
 export async function forceUserPasswordChange(email: string): Promise<string> {
-  const tempPassword = randomPassword(DEFAULT_COGNITO_PASSWORD_LENGTH);
+  const tempPassword = new RandExp(PASSWORD_REGEX).gen();
   // Request parameters
   const params = {
     UserPoolId: Env.USER_POOL_ID,

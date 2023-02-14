@@ -18,20 +18,10 @@
         dense
         outlined
         :mask="selectedCode.mask"
-        :rules="
-          optional
-            ? [
-                (val) =>
-                  IS_OPTIONAL_PHONE_NUMBER(
-                    selectedCode + val,
-                    selectedCode.code
-                  ),
-              ]
-            : [
-                (val) =>
-                  IS_VALID_PHONE_NUMBER(selectedCode + val, selectedCode.code),
-              ]
-        "
+        :rules="[
+          (val) =>
+            IS_VALID_PHONE_NUMBER(selectedCode.value + val, selectedCode.code),
+        ]"
       >
       </q-input>
     </LabelWrapper>
@@ -42,10 +32,7 @@
 import { onBeforeMount, ref, Ref, watch } from 'vue';
 import { isPhoneNumber } from 'class-validator';
 
-import {
-  IS_OPTIONAL_PHONE_NUMBER,
-  IS_VALID_PHONE_NUMBER,
-} from '../../../data/RULES';
+import { IS_VALID_PHONE_NUMBER } from '../../../data/RULES';
 import { FormStateKey, useFormStore } from '../../../stores/form';
 import { fetchByKey } from '../../../helpers/form-helpers';
 import { PhoneCountryCode } from '../../../data/types/PhoneCountryCode';
@@ -57,12 +44,10 @@ const props = withDefaults(
     countryCodes: PhoneCountryCode[];
     stateKey?: FormStateKey;
     initialValue?: string; // Only considered when stateKey is null, so this field can be a non-saving subfield of other fields
-    optional?: boolean; // Will disable mandatory checks
   }>(),
   {
     stateKey: undefined,
     initialValue: undefined,
-    optional: true,
   }
 );
 

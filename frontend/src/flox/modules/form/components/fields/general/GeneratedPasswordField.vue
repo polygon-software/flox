@@ -3,25 +3,28 @@
   <q-input
     v-if="fieldValue"
     v-model="fieldValue"
-    :label="$t('authentication.created_users_password')"
-    :hint="$t('authentication.created_users_password_hint')"
-    type="password"
+    :type="showPassword ? 'text' : 'password'"
     readonly
   >
     <template #prepend>
-      <q-icon name="content_copy" @click="copy" />
+      <q-icon
+        :name="showPassword ? 'visibility_off' : 'visibility'"
+        style="cursor: pointer"
+        @click="showPassword = !showPassword"
+      />
+    </template>
+    <template #append>
+      <q-icon name="content_copy" style="cursor: pointer" @click="copy" />
     </template>
   </q-input>
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps } from 'vue';
+import { defineProps, ref } from 'vue';
 import { useQuasar } from 'quasar';
 
 import { i18n } from 'boot/i18n';
 
-import { FormStateKey } from '../../../stores/form';
-import { fetchByKey } from '../../../helpers/form-helpers';
 import {
   showErrorNotification,
   showSuccessNotification,
@@ -29,24 +32,16 @@ import {
 
 const props = withDefaults(
   defineProps<{
-    // The generated password for the user, only if no invitation has been sent
-    password?: string | null;
-    // Used to fetch data from the store
-    stateKey: FormStateKey;
+    password: string;
   }>(),
-  {
-    password: null,
-  }
+  {}
 );
 
 const $q = useQuasar();
 
-const fieldValue = computed(() => {
-  return fetchByKey({ ...props.stateKey, fieldKey: 'generatedPassword' }) as
-    | string
-    | null;
-});
+const fieldValue = ref(props.password);
 
+const showPassword = ref(false);
 /**
  * Copies the generated password to the clipboard.
  * @returns void

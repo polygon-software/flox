@@ -1,4 +1,9 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import RandExp from 'randexp';
+
+import DELIVERY_MEDIUMS from 'src/flox/enum/DELIVERY_MEDIUMS';
+import EmailService from 'src/flox/modules/email/email.service';
+import NewUser from 'src/flox/modules/auth/entities/newUser.entity';
 
 import GetAllArgs from '../abstracts/crud/dto/get-all.args';
 import GetMultipleArgs from '../abstracts/crud/dto/get-multiple.args';
@@ -7,6 +12,7 @@ import AbstractSearchResolver from '../abstracts/search/abstract-search.resolver
 import SearchArgs from '../abstracts/search/dto/args/search.args';
 import { AdminOnly, CurrentUser } from '../roles/authorization.decorator';
 import UpdateInput from '../abstracts/crud/inputs/update.input';
+import { PASSWORD_REGEX } from '../../REGEX';
 
 import GetUserArgs from './dto/args/get-user.args';
 import AdminCreateUserInput from './dto/input/admin-create-user.input';
@@ -27,7 +33,10 @@ export default class UserResolver extends AbstractSearchResolver<
   User,
   UserService
 > {
-  constructor(private readonly userService: UserService) {
+  constructor(
+    private readonly userService: UserService,
+    private readonly emailService: EmailService,
+  ) {
     super(['username', 'email', 'role']);
   }
 
@@ -107,22 +116,62 @@ export default class UserResolver extends AbstractSearchResolver<
    * @returns the newly created user
    */
   @AdminOnly()
-  @Mutation(() => User, { name: 'adminCreateUser' })
+  @Mutation(() => NewUser, { name: 'AdminCreateUser' })
   async adminCreateUser(
     @Args('adminCreateUserInput') adminCreateUserInput: AdminCreateUserInput,
-  ): Promise<User> {
-    // Create Cognito account
-    const cognitoUser = await createCognitoAccount(
-      adminCreateUserInput.email,
-      undefined,
-      adminCreateUserInput.deliveryMediums,
-    );
+  ): Promise<NewUser> {
+    // Check if input data is valid
+    if (
+      adminCreateUserInput.deliveryMediums.includes(DELIVERY_MEDIUMS.SMS) &&
+      !adminCreateUserInput.phoneNumber
+    ) {
+      throw new Error(
+        "New user can't be created because the phone number is missing and no invitation can be sent",
+      );
+    }
+
+    let cognitoUser;
+
+    // In case a custom e-mail invitation should be sent
+    if (
+      adminCreateUserInput.deliveryMediums.includes(
+        DELIVERY_MEDIUMS.CUSTOM_EMAIL,
+      ) &&
+      adminCreateUserInput.deliveryMediums.length === 1
+    ) {
+      // Create Cognito account
+      cognitoUser = await createCognitoAccount(
+        adminCreateUserInput.email,
+        new RandExp(PASSWORD_REGEX).gen(),
+        [],
+        adminCreateUserInput.phoneNumber,
+      );
+
+      await this.emailService.sendCustomInviteEmail(
+        adminCreateUserInput.email,
+        adminCreateUserInput.lang,
+      );
+    } else {
+      // Create Cognito account
+      cognitoUser = await createCognitoAccount(
+        adminCreateUserInput.email,
+        new RandExp(PASSWORD_REGEX).gen(),
+        adminCreateUserInput.deliveryMediums,
+        adminCreateUserInput.phoneNumber,
+      );
+    }
 
     // Create & return database entry
-    return super.create({
+    const newUser = (await super.create({
       ...adminCreateUserInput,
       cognitoUuid: cognitoUser.cognitoUuid,
-    });
+    })) as NewUser;
+
+    // If no delivery mediums are selected, return the password as well
+    if (adminCreateUserInput.deliveryMediums.length === 0) {
+      newUser.password = cognitoUser.password;
+    }
+    return newUser;
   }
 
   /**
@@ -137,7 +186,10 @@ export default class UserResolver extends AbstractSearchResolver<
     @Args('createUserInput') createUserInput: CreateUserInput,
   ): Promise<User> {
     // Create Cognito account
-    const cognitoUser = await createCognitoAccount(createUserInput.email);
+    const cognitoUser = await createCognitoAccount(
+      createUserInput.email,
+      new RandExp(PASSWORD_REGEX).gen(),
+    );
 
     // Create & return database entry
     return super.create({

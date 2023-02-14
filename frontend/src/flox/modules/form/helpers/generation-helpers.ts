@@ -74,6 +74,10 @@ export function inviteOptions(): GenericOption[] {
       value: [DELIVERY_MEDIUMS.EMAIL, DELIVERY_MEDIUMS.SMS],
     },
     {
+      label: `${i18n.global.t('fields.authentication.send_custom_email')}`,
+      value: [DELIVERY_MEDIUMS.CUSTOM_EMAIL],
+    },
+    {
       label: `${i18n.global.t('fields.authentication.send_no_invite')}`,
       value: [],
     },

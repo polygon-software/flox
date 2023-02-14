@@ -10,6 +10,8 @@ import { QVueGlobals, useQuasar } from 'quasar';
 
 import { i18n } from 'boot/i18n';
 import Env from 'src/env';
+import UserEntity from 'src/flox/modules/auth/entities/user.entity';
+import NewUserEntity from 'src/flox/modules/auth/entities/newUser.entity';
 
 import { useAuthStore } from '../stores/auth.store';
 import ROUTES from '../../../../router/routes';
@@ -234,18 +236,27 @@ export default class AuthenticationService {
    * @param email - the authentication's e-mail address
    * @param role - the user's role
    * @param deliveryMediums - medium to use to deliver user's new login information (sms, email, both or none)
+   * @param [phoneNumber] - number to send the SMS invitation to
    * @param [locale] - the chosen language locale
-   * @returns void
+   * @returns - the newly created user
    */
   async adminCreateUser(
     username: string,
     email: string,
     role: ROLE,
-    deliveryMediums: [DELIVERY_MEDIUMS],
+    deliveryMediums: DELIVERY_MEDIUMS[],
+    phoneNumber?: string,
     locale?: string
-  ): Promise<void> {
+  ): Promise<NewUserEntity | null> {
     // Register in database TODO application specific: apply any other attributes here as well
-    await adminCreateUser(username, email, role, deliveryMediums, locale);
+    return adminCreateUser(
+      username,
+      email,
+      role,
+      deliveryMediums,
+      phoneNumber,
+      locale
+    );
   }
 
   /**

@@ -12,16 +12,18 @@ export const ADMIN_CREATE_USER: MutationObject = {
     mutation AdminCreateUser(
       $username: String!
       $email: String!
-      $role: String!
-      $deliveryMediums: [String!]!
+      $role: Role!
+      $deliveryMediums: [DeliveryMediums!]!
+      $phoneNumber: String
       $lang: String
     ) {
-      CreateUser(
-        createAdminUserInput: {
+      AdminCreateUser(
+        adminCreateUserInput: {
           username: $username
           email: $email
           role: $role
-          sendInvite: sendInvite
+          deliveryMediums: $deliveryMediums
+          phoneNumber: $phoneNumber
           lang: $lang
         }
       ) {
@@ -30,6 +32,7 @@ export const ADMIN_CREATE_USER: MutationObject = {
         lang
         email
         cognitoUuid
+        password
         __typename
       }
     }

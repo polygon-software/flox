@@ -61,5 +61,6 @@ export default {
       'User password cannot be reset in the current state. Please contact a system administrator.',
     no_verification_code:
       'Please enter your verifiction code, which you received by e-mail.',
+    user_creation_failed: 'User could not be created.',
   },
 };

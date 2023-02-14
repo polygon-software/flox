@@ -1,3 +1,5 @@
+import NewUserEntity from 'src/flox/modules/auth/entities/newUser.entity';
+
 import DELIVERY_MEDIUMS from '../../../enum/DELIVERY_MEDIUMS';
 import ROLE from '../../../enum/USER_ROLES';
 import { executeMutation } from '../../../../apollo/mutation';
@@ -104,6 +106,7 @@ export async function searchUsers(
  * @param email - user's e-mail address
  * @param role - the user's role
  * @param deliveryMediums - medium to use to deliver user's new login information (sms, email, both or none)
+ * @param [phoneNumber] - number to send the SMS invitation to
  * @param [lang] - user's language
  * @returns the newly created user
  */
@@ -111,14 +114,16 @@ export async function adminCreateUser(
   username: string,
   email: string,
   role: ROLE,
-  deliveryMediums: [DELIVERY_MEDIUMS],
+  deliveryMediums: DELIVERY_MEDIUMS[],
+  phoneNumber?: string,
   lang?: string
-): Promise<UserEntity | null> {
+): Promise<NewUserEntity | null> {
   const { data } = await executeMutation<UserEntity>(ADMIN_CREATE_USER, {
     username,
     email,
     role,
     deliveryMediums,
+    phoneNumber,
     lang,
   });
   return data ?? null;

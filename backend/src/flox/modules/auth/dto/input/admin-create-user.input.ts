@@ -7,6 +7,7 @@ import {
   IsLowercase,
   IsNotEmpty,
   IsOptional,
+  IsPhoneNumber,
   IsString,
   MaxLength,
   MinLength,
@@ -44,4 +45,9 @@ export default class AdminCreateUserInput extends CreateInput {
   @Field(() => [DELIVERY_MEDIUMS])
   @IsArray()
   deliveryMediums: DELIVERY_MEDIUMS[];
+
+  @Field(() => String, { nullable: true })
+  @IsPhoneNumber()
+  @IsOptional()
+  phoneNumber: string;
 }

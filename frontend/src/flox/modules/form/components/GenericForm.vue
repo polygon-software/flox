@@ -114,7 +114,7 @@
           :label="!loading ? finishLabel : loadingLabel"
           :class="`${ALTERNATE_BUTTON_CLASS} q-mt-md`"
           :style="`${DEFAULT_BUTTON_STYLE}`"
-          :disable="loading"
+          :disable="loading || !form.pageValid"
           @click="onSubmit"
         >
           <q-inner-loading :showing="loading" />

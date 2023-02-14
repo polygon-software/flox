@@ -45,6 +45,7 @@ input AdminCreateUserInput {
   deliveryMediums: [DeliveryMediums!]!
   email: String!
   lang: String
+  phoneNumber: String
   role: Role!
   username: String!
 }
@@ -129,6 +130,7 @@ input DeleteInput {
 }
 
 enum DeliveryMediums {
+  CUSTOM_EMAIL
   EMAIL
   SMS
 }
@@ -301,6 +303,7 @@ input MessageInput {
 type Mutation {
   AddUserToUserGroup(addUserToUserGroupInput: AddUserToUserGroupInput!): UserGroup!
   AddUsersToUserGroup(addUsersToUserGroupInput: AddUsersToUserGroupInput!): UserGroup!
+  AdminCreateUser(adminCreateUserInput: AdminCreateUserInput!): NewUser!
   CreateFile(createFileInput: CreateFileInput!): S3File!
   CreateImage(createImageInput: CreateImageInput!): Image!
   CreateUser(createUserInput: CreateUserInput!): User!
@@ -321,7 +324,41 @@ type Mutation {
   UpdateFile(updateFileInput: UpdateFileInput!): S3File!
   UpdateUser(updateUserInput: UpdateUserInput!): User!
   UpdateUserGroup(updateUserGroupInput: UpdateUserGroupInput!): UserGroup!
-  adminCreateUser(adminCreateUserInput: AdminCreateUserInput!): User!
+}
+
+type NewUser {
+  """Cognito UUID"""
+  cognitoUuid: String!
+
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """E-mail address"""
+  email: String!
+
+  """User groups this user belongs to"""
+  groups: [UserGroup!]!
+
+  """Preferred language of user"""
+  lang: String!
+
+  """password"""
+  password: String
+
+  """User role"""
+  role: String
+
+  """Last modification date"""
+  updatedAt: DateTime
+
+  """Username"""
+  username: String!
+
+  """UUID"""
+  uuid: ID!
 }
 
 type Notification {

@@ -38,5 +38,6 @@ export default {
       "Passwörter müssen mindestens einen Grossbuchstaben, eine Zahl und eines der Sonderzeichen (#?!{'@'}$%^&*-) enthalten",
     reset_password_description:
       'Sie erhalten einen Verifizierungscode an {email}.',
+    invite: 'Willkommen bei Flox',
   },
 };

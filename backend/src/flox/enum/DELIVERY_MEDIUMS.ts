@@ -3,6 +3,7 @@
 import { registerEnumType } from '@nestjs/graphql';
 
 enum DELIVERY_MEDIUMS {
+  CUSTOM_EMAIL = 'CUSTOM_EMAIL',
   EMAIL = 'EMAIL',
   SMS = 'SMS',
 }
