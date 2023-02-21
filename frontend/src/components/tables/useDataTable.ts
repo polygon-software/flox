@@ -170,7 +170,7 @@ export function useDataTable<T extends BaseEntity>(
       descending: paginationDescending,
     } = dataProps.pagination;
 
-    const paginationTake = rowsPerPage || 500;
+    const paginationTake = paginationRowsPerPage || 500;
 
     loading.value = true;
 
