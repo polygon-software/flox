@@ -1,4 +1,4 @@
-import NewUserEntity from 'src/flox/modules/auth/entities/newUser.entity';
+import NewUser from 'src/flox/modules/auth/data/types/NewUser';
 
 import DELIVERY_MEDIUMS from '../../../enum/DELIVERY_MEDIUMS';
 import ROLE from '../../../enum/USER_ROLES';
@@ -15,8 +15,8 @@ import {
   GET_ALL_USERS,
   GET_MULTIPLE_USERS,
   GET_MY_USER,
-  SEARCH_USERS,
   GET_USER,
+  SEARCH_USERS,
 } from '../user.query';
 import CountQuery from '../../interfaces/entities/count.entity';
 
@@ -117,7 +117,7 @@ export async function adminCreateUser(
   deliveryMediums: DELIVERY_MEDIUMS[],
   phoneNumber?: string,
   lang?: string
-): Promise<NewUserEntity | null> {
+): Promise<NewUser | null> {
   const { data } = await executeMutation<UserEntity>(ADMIN_CREATE_USER, {
     username,
     email,

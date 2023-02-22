@@ -3,7 +3,6 @@ import RandExp from 'randexp';
 
 import DELIVERY_MEDIUMS from 'src/flox/enum/DELIVERY_MEDIUMS';
 import EmailService from 'src/flox/modules/email/email.service';
-import NewUser from 'src/flox/modules/auth/entities/newUser.entity';
 
 import GetAllArgs from '../abstracts/crud/dto/get-all.args';
 import GetMultipleArgs from '../abstracts/crud/dto/get-multiple.args';
@@ -27,6 +26,7 @@ import {
   createCognitoAccount,
   deleteCognitoAccount,
 } from './helpers/cognito.helper';
+import AdminCreateUserOutput from './dto/output/admin-create-user.output';
 
 @Resolver(() => User)
 export default class UserResolver extends AbstractSearchResolver<
@@ -116,10 +116,10 @@ export default class UserResolver extends AbstractSearchResolver<
    * @returns the newly created user
    */
   @AdminOnly()
-  @Mutation(() => NewUser, { name: 'AdminCreateUser' })
+  @Mutation(() => AdminCreateUserOutput, { name: 'AdminCreateUser' })
   async adminCreateUser(
     @Args('adminCreateUserInput') adminCreateUserInput: AdminCreateUserInput,
-  ): Promise<NewUser> {
+  ): Promise<AdminCreateUserOutput> {
     // Check if input data is valid
     if (
       adminCreateUserInput.deliveryMediums.includes(DELIVERY_MEDIUMS.SMS) &&
@@ -163,10 +163,10 @@ export default class UserResolver extends AbstractSearchResolver<
     }
 
     // Create & return database entry
-    const newUser = (await super.create({
+    const newUser = {
       ...adminCreateUserInput,
       cognitoUuid: cognitoUser.cognitoUuid,
-    })) as NewUser;
+    } as AdminCreateUserOutput;
 
     // If no delivery mediums are selected, return the password as well
     if (adminCreateUserInput.deliveryMediums.length === 0) {

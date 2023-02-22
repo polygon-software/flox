@@ -3,7 +3,7 @@
 /node_modules
 /backend/src/schema.gql
 
-# Generated script outputs
+# Generated script output
 /scripts/support/flox.tfvars
 /scripts/outputs/*.zip
 /scripts/**/*.zip
