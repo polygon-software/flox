@@ -22,7 +22,7 @@ import CreateFileInput from './dto/input/create-file.input';
 import UpdateFileInput from './dto/input/update-file.input';
 import S3File from './entities/file.entity';
 import FileService from './file.service';
-import FileSearchOutput from './dto/outputs/file-search.output';
+import FileSearchOutput from './dto/output/file-search.output';
 import FolderOutput from './dto/output/folder.output';
 import GetAllFoldersArgs from './dto/args/get-all-folders.args';
 
