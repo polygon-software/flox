@@ -1,7 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
-import SearchQueryOutputInterface from '../../abstracts/search/outputs/search-interface.output';
-import UserGroup from '../entities/user-group.entity';
+import SearchQueryOutputInterface from '../../../abstracts/search/dto/output/search-interface.output';
+import UserGroup from '../../entities/user-group.entity';
 
 @ObjectType()
 export default class UserGroupSearchOutput

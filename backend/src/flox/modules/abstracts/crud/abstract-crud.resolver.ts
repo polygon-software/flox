@@ -2,12 +2,12 @@ import { FindOneOptions } from 'typeorm';
 
 import BaseEntity from '../../../core/base-entity/entities/base-entity.entity';
 
-import GetAllArgs from './dto/get-all.args';
-import GetMultipleArgs from './dto/get-multiple.args';
-import GetOneArgs from './dto/get-one.args';
-import CreateInput from './inputs/create.input';
-import DeleteInput from './inputs/delete.input';
-import UpdateInput from './inputs/update.input';
+import GetAllArgs from './dto/args/get-all.args';
+import GetMultipleArgs from './dto/args/get-multiple.args';
+import GetOneArgs from './dto/args/get-one.args';
+import CreateInput from './dto/input/create.input';
+import DeleteInput from './dto/input/delete.input';
+import UpdateInput from './dto/input/update.input';
 import AbstractCrudService from './abstract-crud.service';
 
 export default abstract class AbstractCrudResolver<

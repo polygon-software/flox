@@ -1,7 +1,7 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
-import UpdateInput from '../../../abstracts/crud/inputs/update.input';
+import UpdateInput from '../../../abstracts/crud/dto/input/update.input';
 
 @InputType()
 export default class UpdateFileInput extends UpdateInput {

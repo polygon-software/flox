@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import AbstractSearchService from '../abstracts/search/abstract-search.service';
-import UpdateInput from '../abstracts/crud/inputs/update.input';
+import UpdateInput from '../abstracts/crud/dto/input/update.input';
 import EmailService from '../email/email.service';
 
 import User from './entities/user.entity';
@@ -19,7 +19,6 @@ export default class UserService extends AbstractSearchService<User> {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-
     private readonly emailService: EmailService,
   ) {
     super();

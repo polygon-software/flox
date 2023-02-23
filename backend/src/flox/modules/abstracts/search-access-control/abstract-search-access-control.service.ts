@@ -11,39 +11,13 @@ import AccessControlledEntity from '../../access-control/entities/access-control
 import User from '../../auth/entities/user.entity';
 import AbstractCrudAccessControlService from '../crud-access-control/abstract-crud-access-control.service';
 import SearchArgs from '../search/dto/args/search.args';
-import SearchQueryOutputInterface from '../search/outputs/search-interface.output';
+import SearchQueryOutputInterface from '../search/dto/output/search-interface.output';
 import { mixWhere } from '../crud/helpers/crud.helper';
 
 export default abstract class AbstractSearchAccessControlService<
   Entity extends AccessControlledEntity,
 > extends AbstractCrudAccessControlService<Entity> {
   abstract get repository(): Repository<Entity>;
-
-  /**
-   * Assembles options to search provided filter on given keys
-   *
-   * @param searchKeys - list of search  keys that are scanned
-   * @param filter - value that is searched on keys
-   * @returns where options including Like-searches
-   */
-  private nestedSearch(
-    searchKeys: (keyof Entity | string)[],
-    filter: string,
-  ): FindOptionsWhere<Entity>[] {
-    return searchKeys.map((key) => {
-      if ((key as string).includes('.')) {
-        const [entity, value] = (key as string).split('.');
-        return {
-          [entity]: {
-            [value]: Like(`%${filter}%`),
-          },
-        } as FindOptionsWhere<Entity>;
-      }
-      return {
-        [key]: Like(`%${filter}%`),
-      } as FindOptionsWhere<Entity>;
-    });
-  }
 
   /**
    * Queries for all entities that fit query criteria. It only returns the entities that are marked with
@@ -207,5 +181,31 @@ export default abstract class AbstractSearchAccessControlService<
       take: queryArgs.take,
     });
     return { data, count };
+  }
+
+  /**
+   * Assembles options to search provided filter on given keys
+   *
+   * @param searchKeys - list of search  keys that are scanned
+   * @param filter - value that is searched on keys
+   * @returns where options including Like-searches
+   */
+  private nestedSearch(
+    searchKeys: (keyof Entity | string)[],
+    filter: string,
+  ): FindOptionsWhere<Entity>[] {
+    return searchKeys.map((key) => {
+      if ((key as string).includes('.')) {
+        const [entity, value] = (key as string).split('.');
+        return {
+          [entity]: {
+            [value]: Like(`%${filter}%`),
+          },
+        } as FindOptionsWhere<Entity>;
+      }
+      return {
+        [key]: Like(`%${filter}%`),
+      } as FindOptionsWhere<Entity>;
+    });
   }
 }

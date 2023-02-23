@@ -4,13 +4,13 @@ import RandExp from 'randexp';
 import DELIVERY_MEDIUMS from 'src/flox/enum/DELIVERY_MEDIUMS';
 import EmailService from 'src/flox/modules/email/email.service';
 
-import GetAllArgs from '../abstracts/crud/dto/get-all.args';
-import GetMultipleArgs from '../abstracts/crud/dto/get-multiple.args';
-import DeleteInput from '../abstracts/crud/inputs/delete.input';
+import GetAllArgs from '../abstracts/crud/dto/args/get-all.args';
+import GetMultipleArgs from '../abstracts/crud/dto/args/get-multiple.args';
+import DeleteInput from '../abstracts/crud/dto/input/delete.input';
 import AbstractSearchResolver from '../abstracts/search/abstract-search.resolver';
 import SearchArgs from '../abstracts/search/dto/args/search.args';
 import { AdminOnly, CurrentUser } from '../roles/authorization.decorator';
-import UpdateInput from '../abstracts/crud/inputs/update.input';
+import UpdateInput from '../abstracts/crud/dto/input/update.input';
 import { PASSWORD_REGEX } from '../../REGEX';
 
 import GetUserArgs from './dto/args/get-user.args';
@@ -18,7 +18,7 @@ import AdminCreateUserInput from './dto/input/admin-create-user.input';
 import CreateUserInput from './dto/input/create-user.input';
 import UpdateUserInput from './dto/input/update-user.input';
 import User from './entities/user.entity';
-import UserSearchOutput from './output/user-search.output';
+import UserSearchOutput from './dto/output/user-search.output';
 import { LoggedIn } from './authentication.decorator';
 import UserService from './user.service';
 import { assertIsAllowedToManipulate } from './helpers/auth.helper';

@@ -13,7 +13,7 @@ import {
   MinLength,
 } from 'class-validator';
 
-import CreateInput from '../../../abstracts/crud/inputs/create.input';
+import CreateInput from '../../../abstracts/crud/dto/input/create.input';
 import DELIVERY_MEDIUMS from '../../../../enum/DELIVERY_MEDIUMS';
 import ROLE from '../../../../enum/USER_ROLES';
 

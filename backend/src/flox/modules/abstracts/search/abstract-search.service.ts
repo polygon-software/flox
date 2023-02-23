@@ -10,38 +10,12 @@ import BaseEntity from '../../../core/base-entity/entities/base-entity.entity';
 import AbstractCrudService from '../crud/abstract-crud.service';
 
 import SearchArgs from './dto/args/search.args';
-import SearchQueryOutputInterface from './outputs/search-interface.output';
+import SearchQueryOutputInterface from './dto/output/search-interface.output';
 
 export default abstract class AbstractSearchService<
   Entity extends BaseEntity,
 > extends AbstractCrudService<Entity> {
   abstract get repository(): Repository<Entity>;
-
-  /**
-   * Assembles options to search provided filter on given keys
-   *
-   * @param searchKeys - list of search  keys that are scanned
-   * @param filter - value that is searched on keys
-   * @returns where options including Like-searches
-   */
-  private nestedSearch(
-    searchKeys: (keyof Entity | string)[],
-    filter: string,
-  ): FindOptionsWhere<Entity>[] {
-    return searchKeys.map((key) => {
-      if ((key as string).includes('.')) {
-        const [entity, value] = (key as string).split('.');
-        return {
-          [entity]: {
-            [value]: Like(`%${filter}%`),
-          },
-        } as FindOptionsWhere<Entity>;
-      }
-      return {
-        [key]: Like(`%${filter}%`),
-      } as FindOptionsWhere<Entity>;
-    });
-  }
 
   /**
    * Queries for all rows that fit query criteria, best used in combination with the DataTable
@@ -87,5 +61,31 @@ export default abstract class AbstractSearchService<
         : undefined,
     });
     return { data, count };
+  }
+
+  /**
+   * Assembles options to search provided filter on given keys
+   *
+   * @param searchKeys - list of search  keys that are scanned
+   * @param filter - value that is searched on keys
+   * @returns where options including Like-searches
+   */
+  private nestedSearch(
+    searchKeys: (keyof Entity | string)[],
+    filter: string,
+  ): FindOptionsWhere<Entity>[] {
+    return searchKeys.map((key) => {
+      if ((key as string).includes('.')) {
+        const [entity, value] = (key as string).split('.');
+        return {
+          [entity]: {
+            [value]: Like(`%${filter}%`),
+          },
+        } as FindOptionsWhere<Entity>;
+      }
+      return {
+        [key]: Like(`%${filter}%`),
+      } as FindOptionsWhere<Entity>;
+    });
   }
 }

@@ -15,7 +15,7 @@ import AbstractSearchAccessControlService from '../abstracts/search-access-contr
 import AccessControlService from '../access-control/access-control.service';
 
 import S3File from './entities/file.entity';
-import FolderOutput from './outputs/folder.output';
+import FolderOutput from './dto/output/folder.output';
 
 @Injectable()
 export default class FileService extends AbstractSearchAccessControlService<S3File> {

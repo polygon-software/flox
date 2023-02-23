@@ -10,7 +10,7 @@ import {
   MinLength,
 } from 'class-validator';
 
-import CreateInput from '../../../abstracts/crud/inputs/create.input';
+import CreateInput from '../../../abstracts/crud/dto/input/create.input';
 
 @InputType()
 export default class CreateUserInput extends CreateInput {

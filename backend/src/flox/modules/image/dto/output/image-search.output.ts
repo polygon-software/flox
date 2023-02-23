@@ -1,7 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
-import Image from '../entities/image.entity';
-import SearchQueryOutputInterface from '../../abstracts/search/outputs/search-interface.output';
+import Image from '../../entities/image.entity';
+import SearchQueryOutputInterface from '../../../abstracts/search/dto/output/search-interface.output';
 
 @ObjectType()
 export default class ImageSearchOutput

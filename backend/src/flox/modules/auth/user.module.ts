@@ -5,7 +5,7 @@ import UserGroup from '../access-control/entities/user-group.entity';
 import EmailService from '../email/email.service';
 
 import User from './entities/user.entity';
-import UserSearchOutput from './output/user-search.output';
+import UserSearchOutput from './dto/output/user-search.output';
 import UserResolver from './user.resolver';
 import UserService from './user.service';
 

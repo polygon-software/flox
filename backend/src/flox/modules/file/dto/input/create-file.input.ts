@@ -1,7 +1,7 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
 import { IsInt, IsNotEmpty, IsString, Min } from 'class-validator';
 
-import CreateAccessControlledInput from '../../../abstracts/crud-access-control/dto/inputs/create-access-controlled.input';
+import CreateAccessControlledInput from '../../../abstracts/crud-access-control/dto/input/create-access-controlled.input';
 
 @InputType()
 export default class CreateFileInput extends CreateAccessControlledInput {

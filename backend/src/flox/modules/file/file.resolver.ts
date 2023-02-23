@@ -9,10 +9,10 @@ import {
 import User from '../auth/entities/user.entity';
 import { LoggedIn, Public } from '../auth/authentication.decorator';
 import AbstractSearchAccessControlResolver from '../abstracts/search-access-control/abstract-search-access-control.resolver';
-import DeleteInput from '../abstracts/crud/inputs/delete.input';
+import DeleteInput from '../abstracts/crud/dto/input/delete.input';
 import UserGroup from '../access-control/entities/user-group.entity';
-import GetOneArgs from '../abstracts/crud/dto/get-one.args';
-import ManipulateAccessGroupsInput from '../abstracts/crud-access-control/dto/inputs/manipulate-access-groups.input';
+import GetOneArgs from '../abstracts/crud/dto/args/get-one.args';
+import ManipulateAccessGroupsInput from '../abstracts/crud-access-control/dto/input/manipulate-access-groups.input';
 
 import GetAllFilesArgs from './dto/args/get-all-files.args';
 import GetFileArgs from './dto/args/get-file.args';
@@ -23,7 +23,7 @@ import UpdateFileInput from './dto/input/update-file.input';
 import S3File from './entities/file.entity';
 import FileService from './file.service';
 import FileSearchOutput from './dto/outputs/file-search.output';
-import FolderOutput from './outputs/folder.output';
+import FolderOutput from './dto/output/folder.output';
 import GetAllFoldersArgs from './dto/args/get-all-folders.args';
 
 @Resolver(() => S3File)
