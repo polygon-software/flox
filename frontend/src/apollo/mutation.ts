@@ -5,6 +5,7 @@ import { DocumentNode } from 'graphql';
 
 import { invalidateTables } from 'src/apollo/invalidation';
 import BaseEntity from 'src/flox/core/base-entity/entities/BaseEntity';
+import ExtendedEntity from 'src/flox/modules/interfaces/entities/extended.entity';
 
 export interface MutationObject {
   mutation: DocumentNode; // Actual GraphQL mutation
@@ -27,7 +28,9 @@ export enum MutationTypes {
  * @param variables - any variables that shall be passed to the mutation
  * @returns Returns the values defined by the mutation
  */
-export async function executeMutation<T extends BaseEntity>(
+export async function executeMutation<
+  T extends BaseEntity | ExtendedEntity<any>
+>(
   updateObject: MutationObject,
   variables: OperationVariables
 ): Promise<FetchResult<T | null>> {

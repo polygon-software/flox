@@ -163,16 +163,18 @@ export default class UserResolver extends AbstractSearchResolver<
     }
 
     // Create & return database entry
-    const newUser = {
+    const newUser = await super.create({
       ...adminCreateUserInput,
       cognitoUuid: cognitoUser.cognitoUuid,
-    } as AdminCreateUserOutput;
+    });
+
+    const userOutput = { data: newUser } as AdminCreateUserOutput;
 
     // If no delivery mediums are selected, return the password as well
     if (adminCreateUserInput.deliveryMediums.length === 0) {
-      newUser.password = cognitoUser.password;
+      userOutput.password = cognitoUser.password;
     }
-    return newUser;
+    return userOutput;
   }
 
   /**

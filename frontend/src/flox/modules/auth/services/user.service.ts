@@ -1,4 +1,4 @@
-import NewUser from 'src/flox/modules/auth/data/types/NewUser';
+import AdminCreatedUser from 'src/flox/modules/auth/data/types/AdminCreatedUser';
 
 import DELIVERY_MEDIUMS from '../../../enum/DELIVERY_MEDIUMS';
 import ROLE from '../../../enum/USER_ROLES';
@@ -117,8 +117,8 @@ export async function adminCreateUser(
   deliveryMediums: DELIVERY_MEDIUMS[],
   phoneNumber?: string,
   lang?: string
-): Promise<NewUser | null> {
-  const { data } = await executeMutation<UserEntity>(ADMIN_CREATE_USER, {
+): Promise<AdminCreatedUser | null> {
+  const { data } = await executeMutation<AdminCreatedUser>(ADMIN_CREATE_USER, {
     username,
     email,
     role,

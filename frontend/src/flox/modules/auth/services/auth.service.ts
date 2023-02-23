@@ -10,7 +10,7 @@ import { QVueGlobals, useQuasar } from 'quasar';
 
 import { i18n } from 'boot/i18n';
 import Env from 'src/env';
-import NewUser from 'src/flox/modules/auth/data/types/NewUser';
+import AdminCreatedUser from 'src/flox/modules/auth/data/types/AdminCreatedUser';
 
 import { useAuthStore } from '../stores/auth.store';
 import ROUTES from '../../../../router/routes';
@@ -239,7 +239,6 @@ export default class AuthenticationService {
    * @param [locale] - the chosen language locale
    * @returns - the newly created user
    */
-  // eslint-disable-next-line class-methods-use-this
   async adminCreateUser(
     username: string,
     email: string,
@@ -247,7 +246,7 @@ export default class AuthenticationService {
     deliveryMediums: DELIVERY_MEDIUMS[],
     phoneNumber?: string,
     locale?: string
-  ): Promise<NewUser | null> {
+  ): Promise<AdminCreatedUser | null> {
     // Register in database TODO application specific: apply any other attributes here as well
     return adminCreateUser(
       username,

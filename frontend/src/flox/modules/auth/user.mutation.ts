@@ -27,11 +27,14 @@ export const ADMIN_CREATE_USER: MutationObject = {
           lang: $lang
         }
       ) {
-        uuid
-        username
-        lang
-        email
-        cognitoUuid
+        data {
+          uuid
+          username
+          lang
+          email
+          cognitoUuid
+          __typename
+        }
         password
         __typename
       }
