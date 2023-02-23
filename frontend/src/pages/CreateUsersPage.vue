@@ -1,31 +1,21 @@
 <template>
   <q-card class="q-pa-md" style="width: 500px">
     <h4>{{ $t('authentication.create_user') }}</h4>
-    <GenericForm
-      :pages="CreateUserPages"
-      :form-key="createUserFormKey.formKey"
-      text-position="center"
-      @submit="onSubmit"
-    />
+    <CreateUserForm @submit="onSubmit" />
   </q-card>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { inject } from 'vue';
 import { useQuasar } from 'quasar';
 
 import SendInvite from 'src/flox/modules/form/data/types/SendInvite';
 import { i18n } from 'boot/i18n';
+import CreateUserForm from 'src/flox/modules/auth/components/forms/CreateUserForm.vue';
 
-import COUNTRY_CODES from '../flox/enum/COUNTRIES';
 import ROLE from '../flox/enum/USER_ROLES';
 import { createUserFormKey } from '../flox/modules/form/data/FORM_KEYS';
-import GenericForm from '../flox/modules/form/components/GenericForm.vue';
-import CreateUserPages from '../flox/modules/form/data/formPages/CreateUserPages';
-import { fetchByKey } from '../flox/modules/form/helpers/form-helpers';
-import { FIELDS } from '../flox/modules/form/data/FIELDS';
 import { useFormStore } from '../flox/modules/form/stores/form';
-import * as auth from '../flox/modules/auth';
 import AuthenticationService from '../flox/modules/auth/services/auth.service';
 import {
   showErrorNotification,
@@ -44,40 +34,22 @@ const store = useFormStore();
  * Upon submit, pass entered values outwards
  * @returns void
  */
-async function onSubmit(): Promise<void> {
-  let username;
-
-  const email = fetchByKey({
-    ...createUserFormKey,
-    fieldKey: FIELDS.EMAIL.key,
-  }) as string;
-
-  const sendInviteInfo = fetchByKey({
-    ...createUserFormKey,
-    fieldKey: FIELDS.SEND_INVITE.key,
-  }) as SendInvite;
-
-  const locale = (
-    fetchByKey({
-      ...createUserFormKey,
-      fieldKey: FIELDS.SELECT_LANGUAGE.key,
-    }) as COUNTRY_CODES
-  ).toLowerCase();
-
-  const role = fetchByKey({
-    ...createUserFormKey,
-    fieldKey: FIELDS.USER_ROLE.key,
-  }) as ROLE;
-
-  if (auth.moduleConfig().emailAsUsername) {
-    username = fetchByKey({
-      ...createUserFormKey,
-      fieldKey: FIELDS.USERNAME.key,
-    }) as string;
-  }
+async function onSubmit({
+  username,
+  email,
+  locale,
+  sendInviteInfo,
+  role,
+}: {
+  username: string;
+  email: string;
+  locale: string;
+  sendInviteInfo: SendInvite;
+  role: ROLE;
+}): Promise<void> {
   try {
     const result = await $authService?.adminCreateUser(
-      username ?? email,
+      username,
       email,
       role,
       sendInviteInfo.mediums ?? [],
@@ -103,6 +75,7 @@ async function onSubmit(): Promise<void> {
       showErrorNotification($q, i18n.global.t('errors.user_creation_failed'));
     }
   } catch (e) {
+    showErrorNotification($q, i18n.global.t('errors.account_creation_failed'));
     console.error(e);
   }
 }

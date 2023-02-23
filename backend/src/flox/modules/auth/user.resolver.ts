@@ -116,10 +116,10 @@ export default class UserResolver extends AbstractSearchResolver<
    * @returns the newly created user
    */
   @AdminOnly()
-  @Mutation(() => AdminCreateUserOutput, { name: 'AdminCreateUser' })
+  @Mutation(() => User, { name: 'AdminCreateUser' })
   async adminCreateUser(
     @Args('adminCreateUserInput') adminCreateUserInput: AdminCreateUserInput,
-  ): Promise<AdminCreateUserOutput> {
+  ): Promise<User> {
     // Check if input data is valid
     if (
       adminCreateUserInput.deliveryMediums.includes(DELIVERY_MEDIUMS.SMS) &&
@@ -188,16 +188,9 @@ export default class UserResolver extends AbstractSearchResolver<
   async createUser(
     @Args('createUserInput') createUserInput: CreateUserInput,
   ): Promise<User> {
-    // Create Cognito account
-    const cognitoUser = await createCognitoAccount(
-      createUserInput.email,
-      new RandExp(PASSWORD_REGEX).gen(),
-    );
-
     // Create & return database entry
     return super.create({
       ...createUserInput,
-      cognitoUuid: cognitoUser.cognitoUuid,
     });
   }
 

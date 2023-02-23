@@ -8,14 +8,14 @@
         style="height: 100%; align-items: stretch"
       >
         <div class="col-12 col-md-5 form-container q-px-lg">
-          <SignupForm @submit="onSignup" @cancel="onCancel" />
+          <SignupForm @cancel="onCancel" @submit="onSignup" />
         </div>
       </div>
     </q-card>
   </q-page>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { useQuasar } from 'quasar';
 import { inject } from 'vue';
 
@@ -39,21 +39,21 @@ const $routerService: RouterService | undefined = inject('$routerService');
  * @param user.username - the authentication's username (might be identical to the e-mail)
  * @param user.email - the authentication's email
  * @param user.password - the authentication's password
- * @param user.language - the user's selected language
+ * @param user.locale - the user's selected language
  */
 async function onSignup({
   username,
   email,
   password,
-  language,
+  locale,
 }: {
   username: string;
   email: string;
   password: string;
-  language?: string;
+  locale?: string;
 }): Promise<void> {
   try {
-    await $authService?.signUp(username, email, password, language);
+    await $authService?.signUp(username, email, password, locale);
     // Show success notification
     showSuccessNotification($q, i18n.global.t('messages.account_created'));
 
@@ -73,7 +73,7 @@ async function onCancel(): Promise<void> {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .blurred-background {
   position: fixed;
   width: 100vw;
@@ -87,6 +87,7 @@ async function onCancel(): Promise<void> {
   background-repeat: no-repeat;
   background-size: cover;
 }
+
 .bg-gradient {
   background: #388087; /* fallback for old browsers */
   background: -webkit-linear-gradient(
@@ -100,6 +101,7 @@ async function onCancel(): Promise<void> {
     rgba(194, 237, 206, 0.5)
   );
 }
+
 .signup-container {
   width: 800px;
   max-width: calc(100% - 20px);
@@ -107,6 +109,7 @@ async function onCancel(): Promise<void> {
   border-radius: 25px;
   overflow: hidden;
 }
+
 .color-container {
   height: 100%;
   display: flex;
@@ -132,6 +135,7 @@ async function onCancel(): Promise<void> {
     font-weight: 300;
   }
 }
+
 .form-container {
   height: 100%;
   display: flex;

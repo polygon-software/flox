@@ -3,8 +3,8 @@
     <div class="column q-pa-sm text-center justify-center">
       <GenericForm
         :finish-label="$t('buttons.login')"
-        :form-key="signupFormKey.formKey"
-        :pages="SignupFormPages"
+        :form-key="createUserFormKey.formKey"
+        :pages="CreateUserPages"
         submit-on-enter
         text-position="center"
         @submit="onSubmit"
@@ -14,14 +14,17 @@
 </template>
 
 <script lang="ts" setup>
+import CreateUserPages from 'src/flox/modules/form/data/formPages/CreateUserPages';
+import SendInvite from 'src/flox/modules/form/data/types/SendInvite';
+import ROLE from 'src/flox/enum/USER_ROLES';
+
 import { FIELDS } from '../../../form/data/FIELDS';
 import FloxWrapper from '../../../../core/components/FloxWrapper.vue';
 import * as auth from '../..';
-import SignupFormPages from '../../../form/data/formPages/SignupFormPages';
 import GenericForm from '../../../form/components/GenericForm.vue';
 import { fetchByKey } from '../../../form/helpers/form-helpers';
 import { useFormStore } from '../../../form/stores/form';
-import { signupFormKey } from '../../../form/data/FORM_KEYS';
+import { createUserFormKey, signupFormKey } from '../../../form/data/FORM_KEYS';
 import COUNTRY_CODES from '../../../../enum/COUNTRIES';
 import { MODULES } from '../../../../enum/MODULES';
 
@@ -31,8 +34,9 @@ const emit = defineEmits<{
     value: {
       username: string;
       email: string;
-      password: string;
-      locale?: string;
+      locale: string;
+      sendInviteInfo: SendInvite;
+      role: ROLE;
     }
   ): void;
 }>();
@@ -45,32 +49,36 @@ const store = useFormStore();
  */
 function onSubmit(): void {
   const email = fetchByKey({
-    ...signupFormKey,
+    ...createUserFormKey,
     fieldKey: FIELDS.EMAIL.key,
   }) as string;
 
-  const password = fetchByKey({
-    ...signupFormKey,
-    fieldKey: FIELDS.PASSWORD_REPEAT.key,
-  }) as string;
+  const sendInviteInfo = fetchByKey({
+    ...createUserFormKey,
+    fieldKey: FIELDS.SEND_INVITE.key,
+  }) as SendInvite;
 
-  const locale =
-    (
-      fetchByKey({
-        ...signupFormKey,
-        fieldKey: FIELDS.SELECT_LANGUAGE.key,
-      }) as COUNTRY_CODES
-    ).toLowerCase() ?? undefined;
+  const locale = (
+    fetchByKey({
+      ...createUserFormKey,
+      fieldKey: FIELDS.SELECT_LANGUAGE.key,
+    }) as COUNTRY_CODES
+  ).toLowerCase();
+
+  const role = fetchByKey({
+    ...createUserFormKey,
+    fieldKey: FIELDS.USER_ROLE.key,
+  }) as ROLE;
 
   if (auth.moduleConfig().emailAsUsername) {
-    emit('submit', { username: email, email, password, locale });
+    emit('submit', { username: email, email, locale, sendInviteInfo, role });
   } else {
     const username = fetchByKey({
       ...signupFormKey,
       fieldKey: FIELDS.USERNAME.key,
     }) as string;
 
-    emit('submit', { username, email, password, locale });
+    emit('submit', { username, email, locale, sendInviteInfo, role });
   }
   // Empty store state
   store.clearForm(signupFormKey.formKey);
