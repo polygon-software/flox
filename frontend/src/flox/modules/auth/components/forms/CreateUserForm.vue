@@ -5,7 +5,6 @@
         :finish-label="$t('buttons.create')"
         :form-key="createUserFormKey.formKey"
         :pages="CreateUserPages"
-        submit-on-enter
         text-position="center"
         @submit="onSubmit"
       />

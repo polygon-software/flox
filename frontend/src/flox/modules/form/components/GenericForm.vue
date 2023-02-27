@@ -1,21 +1,27 @@
 <template>
-  <QForm v-if="form" ref="formRef" :class="`q-gutter-md text-${textPosition}`">
+  <QForm
+    v-if="form"
+    ref="formRef"
+    :class="`q-gutter-md text-${textPosition}`"
+    @reset="onCancel"
+    @submit="onSubmit"
+  >
     <!-- Stepper (for multi-page forms) -->
     <QStepper
       v-if="form.pages.length > 1"
       ref="stepper"
       v-model="form.step"
       active-color="primary"
-      done-icon="done"
       animated
+      done-icon="done"
     >
       <q-step
         v-for="(page, index) in form.pages"
         :key="page.key"
+        :done="form.step.value > index"
         :name="index + 1"
         :prefix="index + 1"
         :title="page.label"
-        :done="form.step.value > index"
       >
         <FormCard
           v-for="card in page.cards"
@@ -50,25 +56,25 @@
         <q-stepper-navigation>
           <q-btn
             v-if="form.step.value > 1"
-            color="primary"
-            :label="$t('buttons.back')"
             :flat="flat"
-            style="margin-right: 30px"
+            :label="$t('buttons.back')"
             class="q-ml-sm"
+            color="primary"
+            style="margin-right: 30px"
             @click="toPrevious"
           />
           <q-btn
             v-if="form.step.value < form.pages.length"
-            color="primary"
-            :label="$t('buttons.next')"
             :disable="!form.pageValid"
+            :label="$t('buttons.next')"
+            color="primary"
             @click="toNext"
           />
           <q-btn
             v-if="form.step.value === form.pages.length"
-            color="primary"
-            :label="finishLabel"
             :disable="!form.pageValid"
+            :label="finishLabel"
+            color="primary"
             @click="onSubmit"
           />
         </q-stepper-navigation>
@@ -98,24 +104,23 @@
         <!-- Cancel button -->
         <q-btn
           v-if="showCancel"
-          :label="!loading ? cancelLabel : loadingLabel"
           :class="`${ALTERNATE_BUTTON_CLASS} q-mt-md`"
-          :style="`${DEFAULT_BUTTON_STYLE}`"
           :disable="loading"
-          flat
-          @click="onCancel"
+          :label="!loading ? cancelLabel : loadingLabel"
+          :style="`${DEFAULT_BUTTON_STYLE}`"
+          type="reset"
         >
           <q-inner-loading :showing="loading" />
         </q-btn>
 
         <!-- Finish button -->
         <q-btn
-          color="primary"
-          :label="!loading ? finishLabel : loadingLabel"
           :class="`${ALTERNATE_BUTTON_CLASS} q-mt-md`"
-          :style="`${DEFAULT_BUTTON_STYLE}`"
           :disable="loading || !form.pageValid"
-          @click="onSubmit"
+          :label="!loading ? finishLabel : loadingLabel"
+          :style="`${DEFAULT_BUTTON_STYLE}`"
+          color="primary"
+          type="submit"
         >
           <q-inner-loading :showing="loading" />
         </q-btn>
@@ -124,7 +129,7 @@
   </QForm>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 /**
  * This component defines a generic formPages that can have a single or multiple pages.
  */

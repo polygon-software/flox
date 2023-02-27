@@ -2,11 +2,10 @@
   <FloxWrapper :module="MODULES.AUTH">
     <div class="column q-pa-sm text-center justify-center" style="margin: 50px">
       <GenericForm
+        :finish-label="$t('buttons.login')"
         :form-key="loginFormKey.formKey"
         :pages="LoginFormPages"
         text-position="center"
-        :finish-label="$t('buttons.login')"
-        submit-on-enter
         @submit="onLogin"
       />
     </div>
@@ -14,8 +13,8 @@
       <q-btn
         :label="$t('authentication.forgot_password')"
         class="primary"
-        flat
         dense
+        flat
         no-caps
         style="text-decoration: underline"
         @click="forgotPassword"
@@ -25,15 +24,15 @@
   </FloxWrapper>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { inject } from 'vue';
 import { useQuasar } from 'quasar';
 
 import { i18n } from 'boot/i18n';
+import { MODULES } from 'src/flox/enum/MODULES';
 
 import { fetchByKey } from '../../../form/helpers/form-helpers';
 import * as auth from '../..';
-import { MODULES } from '../../../../enum/MODULES';
 import FloxWrapper from '../../../../core/components/FloxWrapper.vue';
 import { showErrorNotification } from '../../../form/helpers/notification-helpers';
 import LoginFormPages from '../../../form/data/formPages/LoginFormPages';

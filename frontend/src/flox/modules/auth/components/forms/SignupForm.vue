@@ -5,7 +5,6 @@
         :finish-label="$t('buttons.login')"
         :form-key="signupFormKey.formKey"
         :pages="SignupFormPages"
-        submit-on-enter
         text-position="center"
         @submit="onSubmit"
       />
@@ -14,6 +13,8 @@
 </template>
 
 <script lang="ts" setup>
+import { MODULES } from 'src/flox/enum/MODULES';
+
 import { FIELDS } from '../../../form/data/FIELDS';
 import FloxWrapper from '../../../../core/components/FloxWrapper.vue';
 import * as auth from '../..';
@@ -23,7 +24,6 @@ import { fetchByKey } from '../../../form/helpers/form-helpers';
 import { useFormStore } from '../../../form/stores/form';
 import { signupFormKey } from '../../../form/data/FORM_KEYS';
 import COUNTRY_CODES from '../../../../enum/COUNTRIES';
-import { MODULES } from '../../../../enum/MODULES';
 
 const emit = defineEmits<{
   (
