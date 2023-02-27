@@ -2,7 +2,7 @@
   <FloxWrapper :module="MODULES.AUTH">
     <div class="column q-pa-sm text-center justify-center">
       <GenericForm
-        :finish-label="$t('buttons.login')"
+        :finish-label="$t('buttons.create')"
         :form-key="createUserFormKey.formKey"
         :pages="CreateUserPages"
         submit-on-enter
@@ -24,7 +24,7 @@ import * as auth from '../..';
 import GenericForm from '../../../form/components/GenericForm.vue';
 import { fetchByKey } from '../../../form/helpers/form-helpers';
 import { useFormStore } from '../../../form/stores/form';
-import { createUserFormKey, signupFormKey } from '../../../form/data/FORM_KEYS';
+import { createUserFormKey } from '../../../form/data/FORM_KEYS';
 import COUNTRY_CODES from '../../../../enum/COUNTRIES';
 import { MODULES } from '../../../../enum/MODULES';
 
@@ -74,13 +74,13 @@ function onSubmit(): void {
     emit('submit', { username: email, email, locale, sendInviteInfo, role });
   } else {
     const username = fetchByKey({
-      ...signupFormKey,
+      ...createUserFormKey,
       fieldKey: FIELDS.USERNAME.key,
     }) as string;
 
     emit('submit', { username, email, locale, sendInviteInfo, role });
   }
   // Empty store state
-  store.clearForm(signupFormKey.formKey);
+  store.clearForm(createUserFormKey.formKey);
 }
 </script>
