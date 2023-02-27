@@ -11,12 +11,12 @@ import { QVueGlobals, useQuasar } from 'quasar';
 import { i18n } from 'boot/i18n';
 import Env from 'src/env';
 import AdminCreatedUser from 'src/flox/modules/auth/data/types/AdminCreatedUser';
+import { showSuccessNotification } from 'src/tools/notification.tool';
 
 import { useAuthStore } from '../stores/auth.store';
 import ROUTES from '../../../../router/routes';
 import ErrorService from '../../../../services/ErrorService';
 import RouterService from '../../../../services/RouterService';
-import { showSuccessNotification } from '../../../../tools/notification.tool';
 import ForgotPasswordDialog from '../components/dialogs/ForgotPasswordDialog.vue';
 import ChangePasswordDialog from '../components/dialogs/ChangePasswordDialog.vue';
 import EmailConfirmationDialog from '../components/dialogs/EmailConfirmationDialog.vue';
@@ -239,6 +239,7 @@ export default class AuthenticationService {
    * @param [locale] - the chosen language locale
    * @returns - the newly created user
    */
+  // eslint-disable-next-line class-methods-use-this
   async adminCreateUser(
     username: string,
     email: string,
@@ -274,51 +275,51 @@ export default class AuthenticationService {
     locale?: string,
     attributes?: Record<string, string>
   ): Promise<void> {
-    const cognitoUserWrapper: ISignUpResult = await new Promise(
-      (resolve, reject) => {
-        const userAttributes = [];
+    const signUpResult: ISignUpResult = await new Promise((resolve, reject) => {
+      const userAttributes = [];
 
-        // Add e-mail to attributes
-        userAttributes.push(
-          new AmazonCognitoIdentity.CognitoUserAttribute({
-            Name: 'email',
-            Value: email,
-          })
-        );
+      // Add e-mail to attributes
+      userAttributes.push(
+        new AmazonCognitoIdentity.CognitoUserAttribute({
+          Name: 'email',
+          Value: email,
+        })
+      );
 
-        // Handle custom attributes
-        if (attributes) {
-          Object.keys(attributes).forEach((attributeKey) => {
-            userAttributes.push(
-              new AmazonCognitoIdentity.CognitoUserAttribute({
-                Name: attributeKey,
-                Value: attributes[attributeKey],
-              })
-            );
-          });
-        }
-
-        // Trigger signup
-        this.$authStore.userPool?.signUp(
-          username,
-          password,
-          userAttributes,
-          [],
-          (err?: Error, result?: ISignUpResult) => {
-            if (err) {
-              this.$errorService.showErrorDialog(err);
-              reject();
-            }
-            if (result) {
-              resolve(result);
-            }
-          }
-        );
+      // Handle custom attributes
+      if (attributes) {
+        Object.keys(attributes).forEach((attributeKey) => {
+          userAttributes.push(
+            new AmazonCognitoIdentity.CognitoUserAttribute({
+              Name: attributeKey,
+              Value: attributes[attributeKey],
+            })
+          );
+        });
       }
-    );
+
+      // Trigger signup
+      this.$authStore.userPool?.signUp(
+        username,
+        password,
+        userAttributes,
+        [],
+        (err?: Error, result?: ISignUpResult) => {
+          if (err) {
+            this.$errorService.showErrorDialog(err);
+            reject();
+          }
+          if (result) {
+            resolve(result);
+          }
+        }
+      );
+    });
+
+    this.$authStore.setCognitoUser(signUpResult.user);
 
     // Register in database TODO application specific: apply any other attributes here as well
-    await createUser(username, email, cognitoUserWrapper.userSub, locale);
+    await createUser(username, email, signUpResult.userSub, locale);
   }
 
   /**

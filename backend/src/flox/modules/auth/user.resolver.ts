@@ -5,7 +5,11 @@ import GetMultipleArgs from '../abstracts/crud/dto/args/get-multiple.args';
 import DeleteInput from '../abstracts/crud/dto/input/delete.input';
 import AbstractSearchResolver from '../abstracts/search/abstract-search.resolver';
 import SearchArgs from '../abstracts/search/dto/args/search.args';
-import { AdminOnly, CurrentUser } from '../roles/authorization.decorator';
+import {
+  AdminOnly,
+  CognitoUser,
+  CurrentUser,
+} from '../roles/authorization.decorator';
 import UpdateInput from '../abstracts/crud/dto/input/update.input';
 
 import GetUserArgs from './dto/args/get-user.args';
@@ -14,7 +18,7 @@ import CreateUserInput from './dto/input/create-user.input';
 import UpdateUserInput from './dto/input/update-user.input';
 import User from './entities/user.entity';
 import UserSearchOutput from './dto/output/user-search.output';
-import { LoggedIn } from './authentication.decorator';
+import { LoggedIn, Public } from './authentication.decorator';
 import UserService from './user.service';
 import { assertIsAllowedToManipulate } from './helpers/auth.helper';
 import { deleteCognitoAccount } from './helpers/cognito.helper';
@@ -132,17 +136,21 @@ export default class UserResolver extends AbstractSearchResolver<
    * Creates a User with a corresponding Cognito account
    *
    * @param user - logged-in user
+   * @param cognitoUser - logged-in cognito user
    * @param createUserInput - contains all user data
    * @returns the newly created user
    */
-  @LoggedIn()
+  @Public()
   @Mutation(() => User, { name: 'CreateUser' })
   async createUser(
     @CurrentUser() user: User,
+    @CognitoUser() cognitoUser: any,
     @Args('createUserInput') createUserInput: CreateUserInput,
   ): Promise<User> {
     // eslint-disable-next-line no-console
-    console.log('User:', user);
+    console.log('User:', user); // TODO
+    // eslint-disable-next-line no-console
+    console.log('Cognito:', cognitoUser); // TODO
     // Create & return database entry
     return super.create({
       ...createUserInput,

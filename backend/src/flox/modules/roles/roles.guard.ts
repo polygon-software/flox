@@ -84,7 +84,7 @@ export default class RolesGuard implements CanActivate {
   }
 
   /**
-   * Checks if the user is logged in and the access control is "loggedIn", allowing access to all logged in users
+   * Checks if the user is logged in and the access control is "loggedIn", allowing access to all logged-in users
    *
    * @param context - context
    * @param roles - whitelisted roles

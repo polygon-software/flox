@@ -2,7 +2,7 @@
   <FloxWrapper :module="MODULES.AUTH">
     <div class="column q-pa-sm text-center justify-center">
       <GenericForm
-        :finish-label="$t('buttons.login')"
+        :finish-label="$t('authentication.signup')"
         :form-key="signupFormKey.formKey"
         :pages="SignupFormPages"
         text-position="center"
