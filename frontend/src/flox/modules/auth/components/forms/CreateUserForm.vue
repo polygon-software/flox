@@ -17,6 +17,7 @@
 import CreateUserPages from 'src/flox/modules/form/data/formPages/CreateUserPages';
 import SendInvite from 'src/flox/modules/form/data/types/SendInvite';
 import ROLE from 'src/flox/enum/USER_ROLES';
+import { MODULES } from 'src/flox/enum/MODULES';
 
 import { FIELDS } from '../../../form/data/FIELDS';
 import FloxWrapper from '../../../../core/components/FloxWrapper.vue';
@@ -26,7 +27,6 @@ import { fetchByKey } from '../../../form/helpers/form-helpers';
 import { useFormStore } from '../../../form/stores/form';
 import { createUserFormKey } from '../../../form/data/FORM_KEYS';
 import COUNTRY_CODES from '../../../../enum/COUNTRIES';
-import { MODULES } from '../../../../enum/MODULES';
 
 const emit = defineEmits<{
   (
