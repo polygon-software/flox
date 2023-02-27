@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 
 import { MockType, repositoryMockFactory } from '../../testing/testUtils';
 import { DefaultRoles } from '../roles/config';
+import EmailService from '../email/email.service';
 
 import CreateUserInput from './dto/input/create-user.input';
 import User from './entities/user.entity';
@@ -12,6 +13,7 @@ import UserService from './user.service';
 
 describe('UserResolver', () => {
   let userService: UserService;
+  let emailService: EmailService;
   let userResolver: UserResolver;
   let userRepository: MockType<Repository<User>>;
 
@@ -27,8 +29,9 @@ describe('UserResolver', () => {
       ],
     }).compile();
     userService = module.get<UserService>(UserService);
+    emailService = module.get<EmailService>(EmailService);
     userRepository = module.get(getRepositoryToken(User));
-    userResolver = new UserResolver(userService);
+    userResolver = new UserResolver(userService, emailService);
   });
 
   it('repository should be defined', () => {

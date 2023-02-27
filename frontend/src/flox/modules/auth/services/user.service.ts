@@ -1,5 +1,4 @@
-import AdminCreatedUser from 'src/flox/modules/auth/data/types/AdminCreatedUser';
-
+import AdminCreatedUser from '../data/types/AdminCreatedUser';
 import DELIVERY_MEDIUMS from '../../../enum/DELIVERY_MEDIUMS';
 import ROLE from '../../../enum/USER_ROLES';
 import { executeMutation } from '../../../../apollo/mutation';

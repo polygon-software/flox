@@ -1,9 +1,8 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import RandExp from 'randexp';
 
-import DELIVERY_MEDIUMS from 'src/flox/enum/DELIVERY_MEDIUMS';
-import EmailService from 'src/flox/modules/email/email.service';
-
+import DELIVERY_MEDIUMS from '../../enum/DELIVERY_MEDIUMS';
+import EmailService from '../email/email.service';
 import GetAllArgs from '../abstracts/crud/dto/args/get-all.args';
 import GetMultipleArgs from '../abstracts/crud/dto/args/get-multiple.args';
 import DeleteInput from '../abstracts/crud/dto/input/delete.input';
@@ -116,10 +115,10 @@ export default class UserResolver extends AbstractSearchResolver<
    * @returns the newly created user
    */
   @AdminOnly()
-  @Mutation(() => User, { name: 'AdminCreateUser' })
+  @Mutation(() => AdminCreateUserOutput, { name: 'AdminCreateUser' })
   async adminCreateUser(
     @Args('adminCreateUserInput') adminCreateUserInput: AdminCreateUserInput,
-  ): Promise<User> {
+  ): Promise<AdminCreateUserOutput> {
     // Check if input data is valid
     if (
       adminCreateUserInput.deliveryMediums.includes(DELIVERY_MEDIUMS.SMS) &&

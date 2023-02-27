@@ -13,5 +13,5 @@ export default class AdminCreateUserOutput {
   @IsString()
   @IsOptional()
   @Matches(PASSWORD_REGEX)
-  password: string;
+  password?: string;
 }
