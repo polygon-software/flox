@@ -1,8 +1,5 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import RandExp from 'randexp';
 
-import DELIVERY_MEDIUMS from '../../enum/DELIVERY_MEDIUMS';
-import EmailService from '../email/email.service';
 import GetAllArgs from '../abstracts/crud/dto/args/get-all.args';
 import GetMultipleArgs from '../abstracts/crud/dto/args/get-multiple.args';
 import DeleteInput from '../abstracts/crud/dto/input/delete.input';
@@ -10,7 +7,6 @@ import AbstractSearchResolver from '../abstracts/search/abstract-search.resolver
 import SearchArgs from '../abstracts/search/dto/args/search.args';
 import { AdminOnly, CurrentUser } from '../roles/authorization.decorator';
 import UpdateInput from '../abstracts/crud/dto/input/update.input';
-import { PASSWORD_REGEX } from '../../REGEX';
 
 import GetUserArgs from './dto/args/get-user.args';
 import AdminCreateUserInput from './dto/input/admin-create-user.input';
@@ -21,10 +17,7 @@ import UserSearchOutput from './dto/output/user-search.output';
 import { LoggedIn } from './authentication.decorator';
 import UserService from './user.service';
 import { assertIsAllowedToManipulate } from './helpers/auth.helper';
-import {
-  createCognitoAccount,
-  deleteCognitoAccount,
-} from './helpers/cognito.helper';
+import { deleteCognitoAccount } from './helpers/cognito.helper';
 import AdminCreateUserOutput from './dto/output/admin-create-user.output';
 
 @Resolver(() => User)
@@ -32,10 +25,7 @@ export default class UserResolver extends AbstractSearchResolver<
   User,
   UserService
 > {
-  constructor(
-    private readonly userService: UserService,
-    private readonly emailService: EmailService,
-  ) {
+  constructor(private readonly userService: UserService) {
     super(['username', 'email', 'role']);
   }
 
@@ -119,47 +109,9 @@ export default class UserResolver extends AbstractSearchResolver<
   async adminCreateUser(
     @Args('adminCreateUserInput') adminCreateUserInput: AdminCreateUserInput,
   ): Promise<AdminCreateUserOutput> {
-    // Check if input data is valid
-    if (
-      adminCreateUserInput.deliveryMediums.includes(DELIVERY_MEDIUMS.SMS) &&
-      !adminCreateUserInput.phoneNumber
-    ) {
-      throw new Error(
-        "New user can't be created because the phone number is missing and no invitation can be sent",
-      );
-    }
-
-    let cognitoUser;
-
-    // In case a custom e-mail invitation should be sent
-    if (
-      adminCreateUserInput.deliveryMediums.includes(
-        DELIVERY_MEDIUMS.CUSTOM_EMAIL,
-      ) &&
-      adminCreateUserInput.deliveryMediums.length === 1
-    ) {
-      // Create Cognito account
-      cognitoUser = await createCognitoAccount(
-        adminCreateUserInput.email,
-        new RandExp(PASSWORD_REGEX).gen(),
-        [],
-        adminCreateUserInput.phoneNumber,
-      );
-
-      await this.emailService.sendCustomInviteEmail(
-        adminCreateUserInput.email,
-        adminCreateUserInput.lang,
-        cognitoUser.password,
-      );
-    } else {
-      // Create Cognito account
-      cognitoUser = await createCognitoAccount(
-        adminCreateUserInput.email,
-        new RandExp(PASSWORD_REGEX).gen(),
-        adminCreateUserInput.deliveryMediums,
-        adminCreateUserInput.phoneNumber,
-      );
-    }
+    const cognitoUser = await this.userService.adminCreateCognitoUser(
+      adminCreateUserInput,
+    );
 
     // Create & return database entry
     const newUser = await super.create({
@@ -179,14 +131,18 @@ export default class UserResolver extends AbstractSearchResolver<
   /**
    * Creates a User with a corresponding Cognito account
    *
+   * @param user - logged-in user
    * @param createUserInput - contains all user data
    * @returns the newly created user
    */
-  @AdminOnly()
+  @LoggedIn()
   @Mutation(() => User, { name: 'CreateUser' })
   async createUser(
+    @CurrentUser() user: User,
     @Args('createUserInput') createUserInput: CreateUserInput,
   ): Promise<User> {
+    // eslint-disable-next-line no-console
+    console.log('User:', user);
     // Create & return database entry
     return super.create({
       ...createUserInput,

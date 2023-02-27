@@ -1,18 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import RandExp from 'randexp';
 
 import AbstractSearchService from '../abstracts/search/abstract-search.service';
 import UpdateInput from '../abstracts/crud/dto/input/update.input';
 import EmailService from '../email/email.service';
+import DELIVERY_MEDIUMS from '../../enum/DELIVERY_MEDIUMS';
+import { PASSWORD_REGEX } from '../../REGEX';
 
 import User from './entities/user.entity';
 import {
+  createCognitoAccount,
   disableCognitoAccount,
   enableCognitoAccount,
   forceUserPasswordChange,
   isUserEnabled,
 } from './helpers/cognito.helper';
+import AdminCreateUserInput from './dto/input/admin-create-user.input';
 
 @Injectable()
 export default class UserService extends AbstractSearchService<User> {
@@ -149,5 +154,59 @@ export default class UserService extends AbstractSearchService<User> {
     );
 
     return user;
+  }
+
+  /**
+   * Creates a User with a corresponding Cognito account
+   *
+   * @param adminCreateUserInput - contains all user data
+   * @returns the newly created user
+   */
+  async adminCreateCognitoUser(
+    adminCreateUserInput: AdminCreateUserInput,
+  ): Promise<{ cognitoUuid: string; password?: string }> {
+    // Check if input data is valid
+    if (
+      adminCreateUserInput.deliveryMediums.includes(DELIVERY_MEDIUMS.SMS) &&
+      !adminCreateUserInput.phoneNumber
+    ) {
+      throw new Error(
+        "New user can't be created because the phone number is missing and no invitation can be sent",
+      );
+    }
+
+    let cognitoUser;
+
+    // In case a custom e-mail invitation should be sent
+    if (
+      adminCreateUserInput.deliveryMediums.includes(
+        DELIVERY_MEDIUMS.CUSTOM_EMAIL,
+      ) &&
+      adminCreateUserInput.deliveryMediums.length === 1
+    ) {
+      // Create Cognito account
+      cognitoUser = await createCognitoAccount(
+        adminCreateUserInput.email,
+        new RandExp(PASSWORD_REGEX).gen(),
+        [],
+        adminCreateUserInput.phoneNumber,
+      );
+
+      await this.emailService.sendCustomInviteEmail(
+        adminCreateUserInput.email,
+        adminCreateUserInput.lang,
+        cognitoUser.password,
+      );
+    } else {
+      // Create Cognito account
+      cognitoUser = await createCognitoAccount(
+        adminCreateUserInput.email,
+        new RandExp(PASSWORD_REGEX).gen(),
+        adminCreateUserInput.deliveryMediums,
+        adminCreateUserInput.phoneNumber,
+      );
+    }
+
+    return cognitoUser;
   }
 }
