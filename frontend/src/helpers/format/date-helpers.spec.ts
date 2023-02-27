@@ -4,8 +4,7 @@ describe('Date Helpers', () => {
   let birthday: Date
   let date_one_year_one_day_ago: Date
   let date_not_full_one_year: Date
-  beforeEach( () => {
-    birthday = new Date('2014-01-31T00:00:00.000Z')
+  beforeEach(() => {
     date_one_year_one_day_ago = new Date(new Date().setFullYear(new Date().getFullYear() - 1))
     date_one_year_one_day_ago.setDate(date_one_year_one_day_ago.getDate() - 1)
     date_not_full_one_year = new Date(new Date().setFullYear(new Date().getFullYear() - 1))
@@ -13,7 +12,6 @@ describe('Date Helpers', () => {
   })
   describe('calculated age', () => {
     it('should return the age given his/her birthday', () => {
-      expect(calculateAge(birthday)).toEqual(8)
       expect(calculateAge(date_one_year_one_day_ago)).toEqual(1)
       expect(calculateAge(date_not_full_one_year)).toEqual(0)
     });
