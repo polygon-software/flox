@@ -7,29 +7,44 @@
         <div class="col-7 color-container gt-sm">
           <!-- https://undraw.co/search make sure to change color on webpage to primary -->
           <img
-            src="../assets/images/undraw_working_re_ddwy.svg"
             alt="welcome graphics"
+            src="../assets/images/undraw_working_re_ddwy.svg"
           />
           <h4>{{ $t('authentication.welcome_back') }}</h4>
           <p>{{ $t('authentication.welcome_text') }}</p>
         </div>
         <div class="col-12 col-md-5 form-container q-px-lg">
           <LoginForm @submit="onLogin" />
+          <div class="col q-mt-md text-center">
+            <q-btn
+              :label="$t('authentication.signup')"
+              class="primary"
+              dense
+              flat
+              no-caps
+              style="text-decoration: underline"
+              @click="goToSignup"
+            >
+            </q-btn>
+          </div>
         </div>
       </div>
     </q-card>
   </q-page>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { inject } from 'vue';
 import { useQuasar } from 'quasar';
 
 import LoginForm from 'src/flox/modules/auth/components/forms/LoginForm.vue';
+import RouterService from 'src/services/RouterService';
+import ROUTES from 'src/router/routes';
 
 import AuthenticationService from '../flox/modules/auth/services/auth.service';
 
 const $authService: AuthenticationService | undefined = inject('$authService');
+const $routerService: RouterService | undefined = inject('$routerService');
 const $q = useQuasar();
 
 /**
@@ -48,9 +63,17 @@ async function onLogin({
 }): Promise<void> {
   await $authService?.login(identifier, password, $q);
 }
+
+/**
+ * Redirects to the signup page
+ * @returns void
+ */
+function goToSignup(): void {
+  $routerService?.routeTo(ROUTES.SIGNUP).catch((e) => console.error(e));
+}
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .blurred-background {
   position: fixed;
   width: 100vw;
@@ -64,6 +87,7 @@ async function onLogin({
   background-repeat: no-repeat;
   background-size: cover;
 }
+
 .bg-gradient {
   background: #388087; /* fallback for old browsers */
   background: -webkit-linear-gradient(
@@ -77,6 +101,7 @@ async function onLogin({
     rgba(194, 237, 206, 0.5)
   );
 }
+
 .login-container {
   width: 800px;
   max-width: calc(100% - 20px);
@@ -84,6 +109,7 @@ async function onLogin({
   border-radius: 25px;
   overflow: hidden;
 }
+
 .color-container {
   height: 100%;
   display: flex;
@@ -109,6 +135,7 @@ async function onLogin({
     font-weight: 300;
   }
 }
+
 .form-container {
   height: 100%;
   display: flex;
