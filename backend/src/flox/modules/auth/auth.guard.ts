@@ -2,6 +2,8 @@ import { ExecutionContext, Injectable } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Reflector } from '@nestjs/core';
 
+import { getRequest } from '../../core/flox-helpers';
+
 import { IS_PUBLIC_KEY } from './authentication.decorator';
 
 /**
@@ -32,6 +34,17 @@ export default class JwtAuthGuard extends AuthGuard('jwt') {
         context.getClass(),
       ]) ?? false
     );
+  }
+
+  /**
+   * Gets the request from context
+   * This method is required, do not remove!
+   *
+   * @param context - execution context of the request
+   * @returns the request
+   */
+  getRequest(context: ExecutionContext): ReturnType<typeof getRequest> {
+    return getRequest(context);
   }
 
   /**
