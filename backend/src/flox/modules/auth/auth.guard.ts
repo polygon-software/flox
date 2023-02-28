@@ -1,9 +1,6 @@
 import { ExecutionContext, Injectable } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { Observable } from 'rxjs';
 import { Reflector } from '@nestjs/core';
-
-import { getRequest } from '../../core/flox-helpers';
 
 import { IS_PUBLIC_KEY } from './authentication.decorator';
 
@@ -22,13 +19,19 @@ export default class JwtAuthGuard extends AuthGuard('jwt') {
   }
 
   /**
-   * Gets the request from context
+   * whether endpoint is Public
    *
-   * @param context - execution context of the request
-   * @returns the request
+   * @param context - context
+   * @returns  is public
    */
-  getRequest(context: ExecutionContext): ReturnType<typeof getRequest> {
-    return getRequest(context);
+  isPublic(context: ExecutionContext): boolean {
+    // Determine if resource is public
+    return (
+      this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
+        context.getHandler(),
+        context.getClass(),
+      ]) ?? false
+    );
   }
 
   /**
@@ -37,17 +40,15 @@ export default class JwtAuthGuard extends AuthGuard('jwt') {
    * @param  context - execution context
    * @returns - whether the user can activate
    */
-  public canActivate(
-    context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
-    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
-      context.getHandler(),
-      context.getClass(),
-    ]);
-    // For publicly accessible resources, allow access by default
-    if (isPublic) {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const validToken = await super.canActivate(context);
+
+    if (validToken) {
+      // Valid JSON web token
       return true;
     }
-    return super.canActivate(context);
+
+    // Only allow access without valid JWT if endpoint is public
+    return this.isPublic(context);
   }
 }
