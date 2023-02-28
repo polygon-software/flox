@@ -2,7 +2,3 @@
 # yarn lockfile v1
 
 
-"eslint-plugin-snakecasejs@^2.2.0":
-  "integrity" "sha512-vdQHT2VvzPpJHHPAVXjtyAZ/CfiJqNCa2d9kn6XMapWBN2Uio/nzL957TooNa6gumlHabBAhB5eSNmqwHgu8gA=="
-  "resolved" "https://registry.npmjs.org/eslint-plugin-snakecasejs/-/eslint-plugin-snakecasejs-2.2.0.tgz"
-  "version" "2.2.0"
