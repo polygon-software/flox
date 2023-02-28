@@ -91,6 +91,12 @@ export default {
     return asString(process.env.USER_POOL_ID);
   },
   /**
+   * @returns cognito user pool ID
+   */
+  get USER_POOL_CLIENT_ID(): string {
+    return asString(process.env.USER_POOL_CLIENT_ID);
+  },
+  /**
    * @returns glob describing where typeorm entities are found
    * @example dist/entities/*.entity.js
    */

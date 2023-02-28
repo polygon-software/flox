@@ -53,7 +53,7 @@ async function onSignup({
   locale?: string;
 }): Promise<void> {
   try {
-    await $authService?.signUp(username, email, password, locale);
+    await $authService?.signup(username, email, password, locale);
     // Show success notification
     showSuccessNotification($q, i18n.global.t('messages.account_created'));
 

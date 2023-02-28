@@ -6,18 +6,25 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
+  Matches,
   MaxLength,
   MinLength,
 } from 'class-validator';
 
 import CreateInput from '../../../abstracts/crud/dto/input/create.input';
+import { PASSWORD_REGEX } from '../../../../REGEX';
 
 @InputType()
-export default class CreateUserInput extends CreateInput {
+export default class SignupCreateUserInput extends CreateInput {
   @Field(() => String)
   @IsString()
   @IsNotEmpty()
   username: string;
+
+  @Field(() => String, { description: 'password' })
+  @IsString()
+  @Matches(PASSWORD_REGEX)
+  password: string;
 
   @Field(() => String)
   @IsString()
@@ -32,13 +39,4 @@ export default class CreateUserInput extends CreateInput {
   @IsLocale()
   @IsOptional()
   lang: string;
-
-  @Field(() => String)
-  @IsString()
-  @IsNotEmpty()
-  cognitoUuid: string;
-
-  @Field(() => String, { nullable: true })
-  @IsString()
-  role: string;
 }

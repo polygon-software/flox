@@ -15,7 +15,7 @@ export type JwtStrategyValidationPayload = {
   username: string;
 };
 
-export type JwtStrategyValidationResult = {
+export type CognitoUser = {
   userId: string;
   username: string;
 };
@@ -42,11 +42,11 @@ export default class JwtStrategy extends PassportStrategy(Strategy) {
    * @param payload - decoded JSON Web Token (JWT)
    * @returns object with Cognito userId and username
    */
-  validate(payload: JwtStrategyValidationPayload): JwtStrategyValidationResult {
+  validate(payload: JwtStrategyValidationPayload): CognitoUser {
     const username = payload['cognito:username'];
     return {
       userId: payload.sub,
       username,
-    } as JwtStrategyValidationResult;
+    } as CognitoUser;
   }
 }

@@ -6,19 +6,19 @@
         {{ $t('authentication.forgot_password_hint') }}
       </p>
       <GenericForm
-        style="min-width: 300px"
-        :pages="ForgotPasswordFormPages"
         :form-key="forgotPasswordFormKey.formKey"
-        text-position="center"
+        :pages="ForgotPasswordFormPages"
         show-cancel
-        @submit="onSubmit"
+        style="min-width: 300px"
+        text-position="center"
         @cancel="onDialogCancel"
+        @submit="onSubmit"
       />
     </q-card>
   </q-dialog>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { useDialogPluginComponent } from 'quasar';
 
 import { forgotPasswordFormKey } from '../../../form/data/FORM_KEYS';
@@ -37,14 +37,14 @@ const store = useFormStore();
  * @returns void
  */
 function onSubmit(): void {
-  const email = fetchByKey({
+  const username = fetchByKey({
     ...forgotPasswordFormKey,
-    fieldKey: FIELDS.EMAIL.key,
+    fieldKey: FIELDS.USERNAME.key,
   }) as string;
 
   // Empty store state
   store.clearForm(forgotPasswordFormKey.formKey);
 
-  onDialogOK(email);
+  onDialogOK(username);
 }
 </script>

@@ -5,14 +5,12 @@ import { Request } from 'express';
 import flox from '../../../flox.config.json';
 import Env from '../../env';
 import { MODULES } from '../MODULES';
+import { CognitoUser } from '../modules/auth/jwt.strategy';
 
 import type User from '../modules/auth/entities/user.entity';
 
 export interface FrontendRequest extends Request {
-  user?: {
-    userId: string;
-    cognitoId: string;
-  };
+  user?: CognitoUser;
   principal?: User;
 }
 

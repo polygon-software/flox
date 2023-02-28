@@ -5,23 +5,22 @@ import GetMultipleArgs from '../abstracts/crud/dto/args/get-multiple.args';
 import DeleteInput from '../abstracts/crud/dto/input/delete.input';
 import AbstractSearchResolver from '../abstracts/search/abstract-search.resolver';
 import SearchArgs from '../abstracts/search/dto/args/search.args';
-import {
-  AdminOnly,
-  CognitoUser,
-  CurrentUser,
-} from '../roles/authorization.decorator';
+import { AdminOnly, CurrentUser } from '../roles/authorization.decorator';
 import UpdateInput from '../abstracts/crud/dto/input/update.input';
 
 import GetUserArgs from './dto/args/get-user.args';
 import AdminCreateUserInput from './dto/input/admin-create-user.input';
-import CreateUserInput from './dto/input/create-user.input';
+import SignupCreateUserInput from './dto/input/signup-create-user.input';
 import UpdateUserInput from './dto/input/update-user.input';
 import User from './entities/user.entity';
 import UserSearchOutput from './dto/output/user-search.output';
 import { LoggedIn, Public } from './authentication.decorator';
 import UserService from './user.service';
 import { assertIsAllowedToManipulate } from './helpers/auth.helper';
-import { deleteCognitoAccount } from './helpers/cognito.helper';
+import {
+  deleteCognitoAccount,
+  signupCreateCognitoAccount,
+} from './helpers/cognito.helper';
 import AdminCreateUserOutput from './dto/output/admin-create-user.output';
 
 @Resolver(() => User)
@@ -135,25 +134,23 @@ export default class UserResolver extends AbstractSearchResolver<
   /**
    * Creates a User with a corresponding Cognito account
    *
-   * @param user - logged-in user
-   * @param cognitoUser - logged-in cognito user
-   * @param createUserInput - contains all user data
+   * @param signupCreateUserInput - contains all user data
    * @returns the newly created user
    */
   @Public()
-  @Mutation(() => User, { name: 'CreateUser' })
-  async createUser(
-    @CurrentUser() user: User,
-    @CognitoUser() cognitoUser: any,
-    @Args('createUserInput') createUserInput: CreateUserInput,
+  @Mutation(() => User, { name: 'SignupCreateUser' })
+  async signup(
+    @Args('signupCreateUserInput') signupCreateUserInput: SignupCreateUserInput,
   ): Promise<User> {
-    // eslint-disable-next-line no-console
-    console.log('User:', user); // TODO
-    // eslint-disable-next-line no-console
-    console.log('Cognito:', cognitoUser); // TODO
-    // Create & return database entry
+    // Create Cognito account
+    const cognitoUuid = await signupCreateCognitoAccount(
+      signupCreateUserInput.username,
+      signupCreateUserInput.email,
+      signupCreateUserInput.password,
+    );
     return super.create({
-      ...createUserInput,
+      cognitoUuid,
+      ...signupCreateUserInput,
     });
   }
 
@@ -161,7 +158,7 @@ export default class UserResolver extends AbstractSearchResolver<
    * Updates a given user
    *
    * @param updateUserInput - contains UUID and any new user data
-   * @param user - currently logged in user
+   * @param user - currently logged-in user
    * @returns the updated user
    */
   @LoggedIn()

@@ -1,13 +1,14 @@
+import { executeMutation } from 'src/apollo/mutation';
+import { executeQuery } from 'src/apollo/query';
+
 import AdminCreatedUser from '../data/types/AdminCreatedUser';
 import DELIVERY_MEDIUMS from '../../../enum/DELIVERY_MEDIUMS';
 import ROLE from '../../../enum/USER_ROLES';
-import { executeMutation } from '../../../../apollo/mutation';
-import { executeQuery } from '../../../../apollo/query';
 import UserEntity from '../entities/user.entity';
 import {
   ADMIN_CREATE_USER,
-  CREATE_USER,
   DELETE_USER,
+  SIGNUP_CREATE_USER,
   UPDATE_USER,
 } from '../user.mutation';
 import {
@@ -137,13 +138,13 @@ export async function adminCreateUser(
  * @param [lang] - user's language
  * @returns the newly created user
  */
-export async function createUser(
+export async function signup(
   username: string,
   email: string,
   cognitoUuid: string,
   lang?: string
 ): Promise<UserEntity | null> {
-  const { data } = await executeMutation<UserEntity>(CREATE_USER, {
+  const { data } = await executeMutation<UserEntity>(SIGNUP_CREATE_USER, {
     username,
     email,
     cognitoUuid,

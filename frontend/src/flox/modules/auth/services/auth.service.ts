@@ -26,7 +26,7 @@ import MFADialog from '../components/dialogs/MFADialog.vue';
 import DELIVERY_MEDIUMS from '../../../enum/DELIVERY_MEDIUMS';
 import ROLE from '../../../enum/USER_ROLES';
 
-import { adminCreateUser, createUser } from './user.service';
+import { adminCreateUser, signup } from './user.service';
 
 const userNotDefinedError = i18n.global.t('errors.user_not_defined');
 
@@ -268,7 +268,7 @@ export default class AuthenticationService {
    * @param locale - the chosen language locale
    * @param attributes - custom attributes to add (if any)
    */
-  async signUp(
+  async signup(
     username: string,
     email: string,
     password: string,
@@ -319,7 +319,7 @@ export default class AuthenticationService {
     this.$authStore.setCognitoUser(signUpResult.user);
 
     // Register in database TODO application specific: apply any other attributes here as well
-    await createUser(username, email, signUpResult.userSub, locale);
+    await signup(username, email, signUpResult.userSub, locale);
   }
 
   /**
@@ -400,11 +400,11 @@ export default class AuthenticationService {
       .dialog({
         component: ForgotPasswordDialog,
       })
-      .onOk((email: string) => {
+      .onOk((username: string) => {
         // Set up cognitoUser first
         this.$authStore.setCognitoUser(
           new CognitoUser({
-            Username: email,
+            Username: username,
             Pool: userPool,
           })
         );
@@ -462,10 +462,10 @@ export default class AuthenticationService {
 
   /**
    * Shows a dialog for requesting password reset. The verification code is sent to the given e-mail address
-   * @param email - the e-mail of the logged-in user
+   * @param username - the username of the logged-in user
    * @returns void
    */
-  showRequestNewPasswordDialog(email: string): void {
+  showRequestNewPasswordDialog(username: string): void {
     const { userPool } = this.$authStore;
 
     if (userPool === undefined) {
@@ -475,7 +475,7 @@ export default class AuthenticationService {
 
     this.$authStore.setCognitoUser(
       new CognitoUser({
-        Username: email,
+        Username: username,
         Pool: userPool,
       })
     );

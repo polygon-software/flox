@@ -11,14 +11,15 @@ import {
   AdminUpdateUserAttributesCommand,
   AdminUserGlobalSignOutCommand,
   CognitoIdentityProviderClient,
+  SignUpCommand,
   UserStatusType,
 } from '@aws-sdk/client-cognito-identity-provider';
 import { isEmail } from 'class-validator';
 import RandExp from 'randexp';
 
 import Env from '../../../../env';
-import DELIVERY_MEDIUMS from '../../../enum/DELIVERY_MEDIUMS';
 import { PASSWORD_REGEX } from '../../../REGEX';
+import DELIVERY_MEDIUMS from '../../../enum/DELIVERY_MEDIUMS';
 
 // Minimum length for Cognito passwords
 const MINIMUM_COGNITO_PASSWORD_LENGTH = 8;
@@ -33,24 +34,22 @@ const provider = new CognitoIdentityProviderClient({
 });
 
 /**
- * Create a new Cognito Account with the given email address and password.
+ * Signup a new Cognito Account.
  *
+ * @param username - The username of the new user
  * @param email - The email of the new user
  * @param password - Initial password
- * @param [deliveryMediums] - medium to use to deliver user's new login information (sms, email, both or none)
  * @param [phoneNumber] - user's phone number (needed if sms was selected)
- * @param [verified] - whether to mark the user's e-mail as verified
  * @returns Cognito ID
  */
-export async function createCognitoAccount(
+export async function signupCreateCognitoAccount(
+  username: string,
   email: string,
   password: string,
-  deliveryMediums = [DELIVERY_MEDIUMS.EMAIL],
   phoneNumber?: string,
-  verified = true,
-): Promise<{ cognitoUuid: string; password: string }> {
+): Promise<string> {
   // Ensure password satisfies minimum length requirement
-  if (!!password && password.length < MINIMUM_COGNITO_PASSWORD_LENGTH) {
+  if (password.length < MINIMUM_COGNITO_PASSWORD_LENGTH) {
     throw new Error(
       `Password failed to satisfy minimum length constraint (length: ${password.length})`,
     );
@@ -61,28 +60,90 @@ export async function createCognitoAccount(
     throw new Error(`${email} is not a valid e-mail address`);
   }
 
+  const userAttrs = [
+    {
+      Name: 'email',
+      Value: email,
+    },
+  ];
+
+  if (phoneNumber) {
+    userAttrs.push({
+      Name: 'phone_number',
+      Value: phoneNumber,
+    });
+  }
+
+  const params = {
+    ClientId: Env.USER_POOL_CLIENT_ID,
+    Username: username,
+    Password: password,
+    TemporaryPassword: password,
+    UserAttributes: userAttrs,
+  };
+  const signupCommand = new SignUpCommand(params);
+  const resp = await provider.send(signupCommand);
+
+  // Ensure user was created successfully, otherwise throw with request ID for traceability
+  if (!resp.UserConfirmed || !resp.UserSub) {
+    throw new Error(
+      `An error occurred while creating the Cognito user. Request ID: ${
+        resp.$metadata.requestId ?? '-'
+      }`,
+    );
+  }
+  return resp.UserSub;
+}
+
+/**
+ * Create a new Cognito Account..
+ *
+ * @param username - The username of the new user
+ * @param email - The email of the new user
+ * @param password - Initial password
+ * @param [phoneNumber] - user's phone number (needed if sms was selected)
+ * @param [deliveryMediums] - medium to use to deliver user's new login information (sms, email, both or none)
+ * @returns Cognito ID
+ */
+export async function adminCreateCognitoAccount(
+  username: string,
+  email: string,
+  password: string,
+  phoneNumber?: string,
+  deliveryMediums: DELIVERY_MEDIUMS[] = [],
+): Promise<string> {
+  // Ensure password satisfies minimum length requirement
+  if (password.length < MINIMUM_COGNITO_PASSWORD_LENGTH) {
+    throw new Error(
+      `Password failed to satisfy minimum length constraint (length: ${password.length})`,
+    );
+  }
+
+  // Ensure e-mail is valid
+  if (!isEmail(email)) {
+    throw new Error(`${email} is not a valid e-mail address`);
+  }
+
+  const userAttrs = [
+    {
+      Name: 'email',
+      Value: email,
+    },
+  ];
+
+  if (phoneNumber) {
+    userAttrs.push({
+      Name: 'phone_number',
+      Value: phoneNumber,
+    });
+  }
+
   const params = {
     UserPoolId: Env.USER_POOL_ID,
-    Username: email,
+    Username: username,
     TemporaryPassword: password,
     DesiredDeliveryMediums: deliveryMediums,
-    UserAttributes: phoneNumber
-      ? [
-          {
-            Name: 'email',
-            Value: email,
-          },
-          {
-            Name: 'phone_number',
-            Value: phoneNumber,
-          },
-        ]
-      : [
-          {
-            Name: 'email',
-            Value: email,
-          },
-        ],
+    UserAttributes: userAttrs,
   };
   const createUserCommand = new AdminCreateUserCommand(params);
   const resp = await provider.send(createUserCommand);
@@ -99,47 +160,42 @@ export async function createCognitoAccount(
   // Mark e-mail address as verified
   const updateUserAttributesCommand = new AdminUpdateUserAttributesCommand({
     UserPoolId: Env.USER_POOL_ID,
-    Username: email,
-    UserAttributes: [
-      { Name: 'email_verified', Value: verified ? 'true' : 'false' },
-    ],
+    Username: username,
+    UserAttributes: [{ Name: 'email_verified', Value: 'true' }],
   });
   await provider.send(updateUserAttributesCommand);
 
-  return {
-    cognitoUuid: resp.User.Username,
-    password,
-  };
+  return resp.User.Username;
 }
 
 /**
- * Disables (locks) a cognito account by email
+ * Disables (locks) a cognito account by username
  *
- * @param email - The account's email
+ * @param username - The account's username
  * @returns command output
  */
 export function disableCognitoAccount(
-  email: string,
+  username: string,
 ): Promise<AdminDisableUserCommandOutput> {
   const disableUserCommand = new AdminDisableUserCommand({
     UserPoolId: Env.USER_POOL_ID,
-    Username: email,
+    Username: username,
   });
   return provider.send(disableUserCommand);
 }
 
 /**
- * Re-enables (unlocks) a cognito account by email
+ * Re-enables (unlocks) a cognito account by username
  *
- * @param email - The account's email
+ * @param username - The account's username
  * @returns command output
  */
 export function enableCognitoAccount(
-  email: string,
+  username: string,
 ): Promise<AdminEnableUserCommandOutput> {
   const enableUserCommand = new AdminEnableUserCommand({
     UserPoolId: Env.USER_POOL_ID,
-    Username: email,
+    Username: username,
   });
   return provider.send(enableUserCommand);
 }
@@ -147,13 +203,13 @@ export function enableCognitoAccount(
 /**
  * Determines whether a user's account is currently enabled
  *
- * @param email - The account's email
+ * @param username - The account's username
  * @returns true if the account is enabled, false if it is disabled
  */
-export async function isUserEnabled(email: string): Promise<boolean> {
+export async function isUserEnabled(username: string): Promise<boolean> {
   const getUserCommand = new AdminGetUserCommand({
     UserPoolId: Env.USER_POOL_ID,
-    Username: email,
+    Username: username,
   });
   const result = await provider.send(getUserCommand);
 
@@ -163,13 +219,15 @@ export async function isUserEnabled(email: string): Promise<boolean> {
 /**
  * Determines a user's account status
  *
- * @param email - The account's email
+ * @param username - The account's username
  * @returns true if the account is enabled, false if it is disabled
  */
-export async function getAccountStatus(email: string): Promise<UserStatusType> {
+export async function getAccountStatus(
+  username: string,
+): Promise<UserStatusType> {
   const getUserCommand = new AdminGetUserCommand({
     UserPoolId: Env.USER_POOL_ID,
-    Username: email,
+    Username: username,
   });
   const result = await provider.send(getUserCommand);
 
@@ -182,17 +240,17 @@ export async function getAccountStatus(email: string): Promise<UserStatusType> {
 }
 
 /**
- * Deletes a cognito account by email
+ * Deletes a cognito account by username
  *
- * @param email - The account's email
+ * @param username - The account's username
  * @returns command output
  */
 export function deleteCognitoAccount(
-  email: string,
+  username: string,
 ): Promise<AdminDeleteUserCommandOutput> {
   const deleteUserCommand = new AdminDeleteUserCommand({
     UserPoolId: Env.USER_POOL_ID,
-    Username: email,
+    Username: username,
   });
   return provider.send(deleteUserCommand);
 }
@@ -200,14 +258,14 @@ export function deleteCognitoAccount(
 /**
  * Checks whether a Cognito account exists for a given e-mail
  *
- * @param email - The email of the new user
+ * @param username - The username of the new user
  * @returns whether the user already exists
  */
-export async function checkIfUserExists(email: string): Promise<boolean> {
+export async function checkIfUserExists(username: string): Promise<boolean> {
   // Request parameters
   const params = {
     UserPoolId: Env.USER_POOL_ID,
-    Username: email,
+    Username: username,
   };
 
   const getUserCommand = new AdminGetUserCommand(params);
@@ -218,18 +276,21 @@ export async function checkIfUserExists(email: string): Promise<boolean> {
 
 /**
  * Forces a user to change their password by setting a temporary password for them, forcing them into
- * FORCE_CHANGE_PASSWORD state. It is suggested to provide the new temporary password to the user via e-mail from the
+ * FORCE_CHANGE_PASSWORD state. It is required to provide the new temporary password to the user via e-mail from the
  * service that called this function.
  *
- * @param email - The email of the new user
+ * @param username - The username of the user
  * @returns the temporary password that was set for the user
  */
-export async function forceUserPasswordChange(email: string): Promise<string> {
-  const tempPassword = new RandExp(PASSWORD_REGEX).gen();
-  // Request parameters
+export async function forceUserPasswordChange(
+  username: string,
+): Promise<string> {
+  const randExp = new RandExp(PASSWORD_REGEX);
+  randExp.max = 16;
+  const tempPassword = randExp.gen(); // Request parameters
   const params = {
     UserPoolId: Env.USER_POOL_ID,
-    Username: email,
+    Username: username,
     Password: tempPassword,
     Permanent: false,
   };
@@ -241,7 +302,7 @@ export async function forceUserPasswordChange(email: string): Promise<string> {
   await provider.send(
     new AdminUserGlobalSignOutCommand({
       UserPoolId: Env.USER_POOL_ID,
-      Username: email,
+      Username: username,
     }),
   );
 

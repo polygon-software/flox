@@ -45,19 +45,19 @@ export const ADMIN_CREATE_USER: MutationObject = {
   cacheLocation: 'AdminCreateUser',
 };
 
-export const CREATE_USER: MutationObject = {
+export const SIGNUP_CREATE_USER: MutationObject = {
   mutation: gql`
-    mutation CreateUser(
+    mutation SignupCreateUser(
       $username: String!
+      $password: String!
       $email: String!
-      $cognitoUuid: String!
       $lang: String
     ) {
-      CreateUser(
-        createUserInput: {
+      SignupCreateUser(
+        signupCreateUserInput: {
           username: $username
+          password: $password
           email: $email
-          cognitoUuid: $cognitoUuid
           lang: $lang
         }
       ) {

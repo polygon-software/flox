@@ -11,7 +11,7 @@ import { PASSWORD_REGEX } from '../../REGEX';
 
 import User from './entities/user.entity';
 import {
-  createCognitoAccount,
+  adminCreateCognitoAccount,
   disableCognitoAccount,
   enableCognitoAccount,
   forceUserPasswordChange,
@@ -175,7 +175,11 @@ export default class UserService extends AbstractSearchService<User> {
       );
     }
 
-    let cognitoUser;
+    const randExp = new RandExp(PASSWORD_REGEX);
+    randExp.max = 16;
+    const password = randExp.gen();
+
+    let cognitoUuid;
 
     // In case a custom e-mail invitation should be sent
     if (
@@ -185,28 +189,29 @@ export default class UserService extends AbstractSearchService<User> {
       adminCreateUserInput.deliveryMediums.length === 1
     ) {
       // Create Cognito account
-      cognitoUser = await createCognitoAccount(
+      cognitoUuid = await adminCreateCognitoAccount(
+        adminCreateUserInput.username,
         adminCreateUserInput.email,
-        new RandExp(PASSWORD_REGEX).gen(),
-        [],
+        password,
         adminCreateUserInput.phoneNumber,
       );
 
       await this.emailService.sendCustomInviteEmail(
         adminCreateUserInput.email,
         adminCreateUserInput.lang,
-        cognitoUser.password,
+        password,
       );
     } else {
       // Create Cognito account
-      cognitoUser = await createCognitoAccount(
+      cognitoUuid = await adminCreateCognitoAccount(
+        adminCreateUserInput.username,
         adminCreateUserInput.email,
-        new RandExp(PASSWORD_REGEX).gen(),
-        adminCreateUserInput.deliveryMediums,
+        password,
         adminCreateUserInput.phoneNumber,
+        adminCreateUserInput.deliveryMediums,
       );
     }
 
-    return cognitoUser;
+    return { cognitoUuid, password };
   }
 }

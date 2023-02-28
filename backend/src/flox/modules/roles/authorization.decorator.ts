@@ -7,6 +7,7 @@ import {
 
 import { getRequest } from '../../core/flox-helpers';
 import User from '../auth/entities/user.entity';
+import { CognitoUser } from '../auth/jwt.strategy';
 
 import { DefaultRoles } from './config';
 
@@ -40,8 +41,9 @@ export const OptionalUser = createParamDecorator(
 );
 
 // Access to cognito user from request in the formPages { userId: string, username: string }
-export const CognitoUser = createParamDecorator(
-  (data, req: ExecutionContext) => {
-    return getRequest(req).user;
+export const OptionalCognitoUser = createParamDecorator(
+  (data, req: ExecutionContext): CognitoUser | null => {
+    const { user } = getRequest(req);
+    return user ?? null;
   },
 );

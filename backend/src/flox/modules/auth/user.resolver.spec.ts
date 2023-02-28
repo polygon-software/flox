@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { MockType, repositoryMockFactory } from '../../testing/testUtils';
 import { DefaultRoles } from '../roles/config';
 
-import CreateUserInput from './dto/input/create-user.input';
+import SignupCreateUserInput from './dto/input/signup-create-user.input';
 import User from './entities/user.entity';
 import UserResolver from './user.resolver';
 import UserService from './user.service';
@@ -44,17 +44,18 @@ describe('UserResolver', () => {
   });
 
   it('should create a user', async () => {
-    const input: CreateUserInput = {
+    const input: SignupCreateUserInput = {
       username: 'Test User',
       email: 'test@test.com',
-      cognitoUuid: '1234-abcd-4567',
+      password: 'qweR123?',
       lang: 'en',
-      role: DefaultRoles.ADMIN,
     };
 
     const date = new Date();
 
     const user: User = {
+      cognitoUuid: '1234-abcd-4567',
+      role: DefaultRoles.ADMIN,
       uuid: 'test-UUID-1234',
       createdAt: date,
       updatedAt: date,
@@ -68,6 +69,6 @@ describe('UserResolver', () => {
     jest.spyOn(userResolver, 'create').mockImplementation(async () => user);
 
     // Create user
-    expect(await userResolver.createUser(user, input)).toBe(user);
+    expect(await userResolver.signup(input)).toBe(user);
   });
 });
