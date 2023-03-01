@@ -148,15 +148,10 @@ export default class UserResolver extends AbstractSearchResolver<
       signupCreateUserInput.email,
       signupCreateUserInput.password,
     );
-    // eslint-disable-next-line no-console
-    console.log(cognitoUuid);
-    const user = super.create({
+    return super.create({
       cognitoUuid,
       ...signupCreateUserInput,
     });
-    // eslint-disable-next-line no-console
-    console.log(user);
-    return user;
   }
 
   /**
