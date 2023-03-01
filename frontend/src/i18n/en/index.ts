@@ -243,7 +243,7 @@ export default {
     search_groups: 'Search User Group',
     no_access_groups: 'No access groups yet',
     read: 'Read',
-    write: 'Wrute',
+    write: 'Write',
     create_description:
       'Create a new access group by providing a group name and specifying users that belong to this group. You can always add/remove users later on.',
   },
