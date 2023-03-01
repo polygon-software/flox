@@ -182,6 +182,7 @@ describe('UserResolver', () => {
           return;
         }
       }
+      // The test should fail when this part is reached, because no error was thrown
       expect(false).toBe(true);
     });
     await Promise.all(promiseList);
