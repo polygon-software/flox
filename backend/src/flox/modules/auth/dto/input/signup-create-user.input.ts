@@ -3,7 +3,6 @@ import {
   IsEmail,
   IsLocale,
   IsLowercase,
-  IsNotEmpty,
   IsOptional,
   IsString,
   Matches,
@@ -18,7 +17,8 @@ import { PASSWORD_REGEX } from '../../../../REGEX';
 export default class SignupCreateUserInput extends CreateInput {
   @Field(() => String)
   @IsString()
-  @IsNotEmpty()
+  @MinLength(6)
+  @MaxLength(50)
   username: string;
 
   @Field(() => String, { description: 'password' })

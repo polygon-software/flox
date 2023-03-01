@@ -134,20 +134,20 @@ export async function adminCreateUser(
  *
  * @param username - user's username (might be identical to e-mail)
  * @param email - user's e-mail address
- * @param cognitoUuid - user's Cognito UUID
+ * @param password - user's chosen password
  * @param [lang] - user's language
  * @returns the newly created user
  */
 export async function signup(
   username: string,
   email: string,
-  cognitoUuid: string,
+  password: string,
   lang?: string
 ): Promise<UserEntity | null> {
   const { data } = await executeMutation<UserEntity>(SIGNUP_CREATE_USER, {
     username,
     email,
-    cognitoUuid,
+    password,
     lang,
   });
   return data ?? null;

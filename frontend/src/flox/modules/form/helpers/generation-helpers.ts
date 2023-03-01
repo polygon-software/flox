@@ -2,7 +2,7 @@ import { i18n } from 'boot/i18n';
 
 import { GenericOption } from '../data/types/GenericOption';
 import { PhoneCountryCode } from '../data/types/PhoneCountryCode';
-import COUNTRY_CODES from '../../../enum/COUNTRIES';
+import COUNTRY_CODES from '../../../enum/COUNTRY_CODES';
 import DELIVERY_MEDIUMS from '../../../enum/DELIVERY_MEDIUMS';
 import LANGUAGES from '../../../enum/LANGUAGES';
 import ROLE from '../../../enum/USER_ROLES';

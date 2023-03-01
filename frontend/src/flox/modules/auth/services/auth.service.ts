@@ -1,10 +1,6 @@
 import { useApolloClient } from '@vue/apollo-composable';
 import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js';
-import {
-  CognitoUser,
-  CognitoUserSession,
-  ISignUpResult,
-} from 'amazon-cognito-identity-js';
+import { CognitoUser, CognitoUserSession } from 'amazon-cognito-identity-js';
 import cloneDeep from 'lodash/cloneDeep';
 import { QVueGlobals, useQuasar } from 'quasar';
 
@@ -12,6 +8,7 @@ import { i18n } from 'boot/i18n';
 import Env from 'src/env';
 import AdminCreatedUser from 'src/flox/modules/auth/data/types/AdminCreatedUser';
 import { showSuccessNotification } from 'src/tools/notification.tool';
+import UserEntity from 'src/flox/modules/auth/entities/user.entity';
 
 import { useAuthStore } from '../stores/auth.store';
 import ROUTES from '../../../../router/routes';
@@ -248,7 +245,6 @@ export default class AuthenticationService {
     phoneNumber?: string,
     locale?: string
   ): Promise<AdminCreatedUser | null> {
-    // Register in database TODO application specific: apply any other attributes here as well
     return adminCreateUser(
       username,
       email,
@@ -265,61 +261,16 @@ export default class AuthenticationService {
    * @param username - the chosen username
    * @param email - the authentication's e-mail address
    * @param password - the new authentication's chosen password. Must fulfill the set password conditions
-   * @param locale - the chosen language locale
-   * @param attributes - custom attributes to add (if any)
+   * @param [lang] - the chosen language
    */
+  // eslint-disable-next-line class-methods-use-this
   async signup(
     username: string,
     email: string,
     password: string,
-    locale?: string,
-    attributes?: Record<string, string>
-  ): Promise<void> {
-    const signUpResult: ISignUpResult = await new Promise((resolve, reject) => {
-      const userAttributes = [];
-
-      // Add e-mail to attributes
-      userAttributes.push(
-        new AmazonCognitoIdentity.CognitoUserAttribute({
-          Name: 'email',
-          Value: email,
-        })
-      );
-
-      // Handle custom attributes
-      if (attributes) {
-        Object.keys(attributes).forEach((attributeKey) => {
-          userAttributes.push(
-            new AmazonCognitoIdentity.CognitoUserAttribute({
-              Name: attributeKey,
-              Value: attributes[attributeKey],
-            })
-          );
-        });
-      }
-
-      // Trigger signup
-      this.$authStore.userPool?.signUp(
-        username,
-        password,
-        userAttributes,
-        [],
-        (err?: Error, result?: ISignUpResult) => {
-          if (err) {
-            this.$errorService.showErrorDialog(err);
-            reject();
-          }
-          if (result) {
-            resolve(result);
-          }
-        }
-      );
-    });
-
-    this.$authStore.setCognitoUser(signUpResult.user);
-
-    // Register in database TODO application specific: apply any other attributes here as well
-    await signup(username, email, signUpResult.userSub, locale);
+    lang?: string
+  ): Promise<UserEntity | null> {
+    return signup(username, email, password, lang);
   }
 
   /**

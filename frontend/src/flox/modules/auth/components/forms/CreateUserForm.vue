@@ -25,7 +25,7 @@ import GenericForm from '../../../form/components/GenericForm.vue';
 import { fetchByKey } from '../../../form/helpers/form-helpers';
 import { useFormStore } from '../../../form/stores/form';
 import { createUserFormKey } from '../../../form/data/FORM_KEYS';
-import COUNTRY_CODES from '../../../../enum/COUNTRIES';
+import COUNTRY_CODES from '../../../../enum/COUNTRY_CODES';
 
 const emit = defineEmits<{
   (

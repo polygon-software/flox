@@ -14,6 +14,7 @@
 
 <script lang="ts" setup>
 import { MODULES } from 'src/flox/enum/MODULES';
+import COUNTRY_CODES from 'src/flox/enum/COUNTRY_CODES';
 
 import { FIELDS } from '../../../form/data/FIELDS';
 import FloxWrapper from '../../../../core/components/FloxWrapper.vue';
@@ -23,7 +24,6 @@ import GenericForm from '../../../form/components/GenericForm.vue';
 import { fetchByKey } from '../../../form/helpers/form-helpers';
 import { useFormStore } from '../../../form/stores/form';
 import { signupFormKey } from '../../../form/data/FORM_KEYS';
-import COUNTRY_CODES from '../../../../enum/COUNTRIES';
 
 const emit = defineEmits<{
   (
@@ -32,7 +32,7 @@ const emit = defineEmits<{
       username: string;
       email: string;
       password: string;
-      locale?: string;
+      lang?: string;
     }
   ): void;
 }>();
@@ -54,7 +54,7 @@ function onSubmit(): void {
     fieldKey: FIELDS.PASSWORD_REPEAT.key,
   }) as string;
 
-  const locale =
+  const lang =
     (
       fetchByKey({
         ...signupFormKey,
@@ -63,14 +63,14 @@ function onSubmit(): void {
     ).toLowerCase() ?? undefined;
 
   if (auth.moduleConfig().emailAsUsername) {
-    emit('submit', { username: email, email, password, locale });
+    emit('submit', { username: email, email, password, lang });
   } else {
     const username = fetchByKey({
       ...signupFormKey,
       fieldKey: FIELDS.USERNAME.key,
     }) as string;
 
-    emit('submit', { username, email, password, locale });
+    emit('submit', { username, email, password, lang });
   }
   // Empty store state
   store.clearForm(signupFormKey.formKey);
