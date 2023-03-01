@@ -69,6 +69,6 @@ describe('UserResolver', () => {
     jest.spyOn(userResolver, 'create').mockImplementation(async () => user);
 
     // Create user
-    expect(await userResolver.signup(input)).toBe(user);
+    expect(await userResolver.signupCreateUser(input)).toBe(user);
   });
 });

@@ -95,13 +95,15 @@ export default class UserService extends AbstractSearchService<User> {
       },
     });
 
-    const isEnabled = await isUserEnabled(user.email);
+    const isEnabled = await isUserEnabled(user.username);
     if (!isEnabled) {
-      throw new Error(`User with email ${user.email} is already disabled`);
+      throw new Error(
+        `User with username ${user.username} is already disabled`,
+      );
     }
 
     // Disable on cognito
-    await disableCognitoAccount(user.email);
+    await disableCognitoAccount(user.username);
 
     return user;
   }
@@ -119,13 +121,13 @@ export default class UserService extends AbstractSearchService<User> {
       },
     });
 
-    const isEnabled = await isUserEnabled(user.email);
+    const isEnabled = await isUserEnabled(user.username);
     if (isEnabled) {
-      throw new Error(`User with email ${user.email} is already enabled`);
+      throw new Error(`User with username ${user.username} is already enabled`);
     }
 
     // Enable on cognito
-    await enableCognitoAccount(user.email);
+    await enableCognitoAccount(user.username);
 
     return user;
   }
@@ -144,7 +146,7 @@ export default class UserService extends AbstractSearchService<User> {
     });
 
     // Force password change & get temporary password
-    const tempPassword = await forceUserPasswordChange(user.email);
+    const tempPassword = await forceUserPasswordChange(user.username);
 
     // Send e-mail notifying user that their password was reset
     await this.emailService.sendPasswordResetEmail(
@@ -181,13 +183,13 @@ export default class UserService extends AbstractSearchService<User> {
 
     let cognitoUuid;
 
-    // In case a custom e-mail invitation should be sent
     if (
       adminCreateUserInput.deliveryMediums.includes(
         DELIVERY_MEDIUMS.CUSTOM_EMAIL,
       ) &&
       adminCreateUserInput.deliveryMediums.length === 1
     ) {
+      // In case a custom e-mail invitation should be sent
       // Create Cognito account
       cognitoUuid = await adminCreateCognitoAccount(
         adminCreateUserInput.username,
@@ -196,13 +198,14 @@ export default class UserService extends AbstractSearchService<User> {
         adminCreateUserInput.phoneNumber,
       );
 
+      // Send custom email
       await this.emailService.sendCustomInviteEmail(
         adminCreateUserInput.email,
         adminCreateUserInput.lang,
         password,
       );
     } else {
-      // Create Cognito account
+      // Create cognito account and let cognito send default email or SMS
       cognitoUuid = await adminCreateCognitoAccount(
         adminCreateUserInput.username,
         adminCreateUserInput.email,

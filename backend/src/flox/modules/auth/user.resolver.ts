@@ -139,7 +139,7 @@ export default class UserResolver extends AbstractSearchResolver<
    */
   @Public()
   @Mutation(() => User, { name: 'SignupCreateUser' })
-  async signup(
+  async signupCreateUser(
     @Args('signupCreateUserInput') signupCreateUserInput: SignupCreateUserInput,
   ): Promise<User> {
     // Create Cognito account
