@@ -14,6 +14,7 @@ export function isAllowedToManipulate(
   editor: User,
   editedUuid: string,
 ): boolean {
+  // is only allowed to edit himself or as admin
   if (editor.role === DefaultRoles.ADMIN) {
     return true;
   }
