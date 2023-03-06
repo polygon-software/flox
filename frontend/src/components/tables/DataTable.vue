@@ -91,7 +91,7 @@
                     noCaps: true,
                   }"
                   :confirm-label="$t('general.confirm')"
-                  :label="removeLabel"
+                  :label="removeLabel ?? $t('general.remove')"
                   @click="() => deleteRow(cellProps.row)"
                 />
               </div>
@@ -179,9 +179,9 @@
           <slot :selected="selected" name="actions" />
           <q-btn
             v-if="selected.length > 0 && exportSelection"
+            :label="$t('general.export')"
             color="primary"
             icon-right="file_download"
-            label="Export"
             no-caps
             @click="exportTable"
           />
@@ -193,7 +193,7 @@
               noCaps: true,
             }"
             :confirm-label="$t('general.confirm')"
-            :label="removeLabel"
+            :label="removeLabel ?? $t('general.remove')"
             @click="deleteActiveRows"
           />
         </div>
@@ -262,7 +262,7 @@ const props = withDefaults(
     appendSlot: false,
     hideColumnSelector: false,
     removeIcon: 'delete',
-    removeLabel: 'Remove',
+    removeLabel: undefined,
     appendName: '',
     prependName: '',
     tableProps: () => ({}),

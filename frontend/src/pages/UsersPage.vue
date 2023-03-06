@@ -25,21 +25,37 @@
         <template #actions="{ selected }">
           <q-btn
             v-if="selected.length > 0"
-            icon-right="no_accounts"
-            label="Disable"
+            :label="$t('general.disable')"
+            icon-right="remove_circle"
             no-caps
             no-wrap
             @click="() => disableUsers(selected)"
           ></q-btn>
+          <q-btn
+            v-if="selected.length > 0"
+            :label="$t('general.enable')"
+            icon-right="check_circle"
+            no-caps
+            no-wrap
+            @click="() => enableUsers(selected)"
+          ></q-btn>
         </template>
         <template #options="{ row }">
           <q-btn
+            :label="$t('general.disable')"
             flat
-            icon-right="no_accounts"
-            label="Disable"
+            icon-right="remove_circle"
             no-caps
             no-wrap
             @click="() => disableUsers([row])"
+          ></q-btn>
+          <q-btn
+            :label="$t('general.enable')"
+            flat
+            icon-right="check_circle"
+            no-caps
+            no-wrap
+            @click="() => enableUsers([row])"
           ></q-btn>
         </template>
       </DataTable>
@@ -61,6 +77,7 @@
 <script lang="ts" setup>
 import Joi from 'joi';
 import { inject, ref, Ref } from 'vue';
+import { useQuasar } from 'quasar';
 
 import {
   joiSchemaToValidationRule,
@@ -70,6 +87,10 @@ import { ColumnAlign, ColumnInterface } from 'components/tables/useDataTable';
 import DataTable from 'components/tables/DataTable.vue';
 import { i18n } from 'boot/i18n';
 import AuthenticationService from 'src/flox/modules/auth/services/auth.service';
+import {
+  showErrorNotification,
+  showSuccessNotification,
+} from 'src/tools/notification.tool';
 
 import UserEntity from '../flox/modules/auth/entities/user.entity';
 import { DELETE_USER, UPDATE_USER } from '../flox/modules/auth/user.mutation';
@@ -84,6 +105,8 @@ import ROUTES from '../router/routes';
 
 const $routerService: RouterService | undefined = inject('$routerService');
 const $authService: AuthenticationService | undefined = inject('$authService');
+
+const $q = useQuasar();
 
 const emailRules: ValidationRule[] = [
   joiSchemaToValidationRule(
@@ -127,10 +150,46 @@ async function createUser(): Promise<void> {
 }
 
 /**
- * Redirect to the create user page
+ * TODO
  * @returns void
  */
 async function disableUsers(users: UserEntity[]): Promise<void> {
-  await $authService?.disableUsers(users);
+  await $authService
+    ?.disableUsers(users)
+    .then(() => {
+      showSuccessNotification(
+        $q,
+        i18n.global.t('authentication.users_disabled')
+      );
+    })
+    .catch((e) => {
+      console.error(e);
+      showErrorNotification(
+        $q,
+        i18n.global.t('authentication.users_disable_failed')
+      );
+    });
+}
+
+/**
+ * TODO
+ * @returns void
+ */
+async function enableUsers(users: UserEntity[]): Promise<void> {
+  await $authService
+    ?.enableUsers(users)
+    .then(() => {
+      showSuccessNotification(
+        $q,
+        i18n.global.t('authentication.users_enabled')
+      );
+    })
+    .catch((e) => {
+      console.error(e);
+      showErrorNotification(
+        $q,
+        i18n.global.t('authentication.users_enable_failed')
+      );
+    });
 }
 </script>
