@@ -364,7 +364,7 @@ export function useDataTable<T extends BaseEntity>(
   /**
    * TODO
    */
-  async function deleteRow(row: T): Promise<T | null | undefined | void> {
+  async function deleteRow(row: T): Promise<T | null | void> {
     if (!deletionObject) {
       throw new Error('Unable to delete row - delete query not provided');
     }
@@ -395,7 +395,7 @@ export function useDataTable<T extends BaseEntity>(
    * @returns updated rows
    */
   function deleteActiveRows(): Promise<
-    PromiseSettledResult<Awaited<T> | void | null | undefined>[]
+    PromiseSettledResult<Awaited<T> | void | null>[]
   > {
     if (!deletionObject) {
       throw new Error('Unable to delete row - delete query not provided');

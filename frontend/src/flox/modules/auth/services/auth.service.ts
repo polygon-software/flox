@@ -23,7 +23,7 @@ import MFADialog from '../components/dialogs/MFADialog.vue';
 import DELIVERY_MEDIUMS from '../../../enum/DELIVERY_MEDIUMS';
 import ROLE from '../../../enum/USER_ROLES';
 
-import { adminCreateUser, signup } from './user.service';
+import { adminCreateUser, disableUser, signup } from './user.service';
 
 const userNotDefinedError = i18n.global.t('errors.user_not_defined');
 
@@ -271,6 +271,21 @@ export default class AuthenticationService {
     lang?: string
   ): Promise<UserEntity | null> {
     return signup(username, email, password, lang);
+  }
+
+  /**
+   * TODO
+   *
+   * @param users
+   */
+  // eslint-disable-next-line class-methods-use-this
+  async disableUsers(
+    users: UserEntity[]
+  ): Promise<PromiseSettledResult<Awaited<UserEntity> | null>[]> {
+    const disableRequests = users.map((user: UserEntity) =>
+      disableUser(user.uuid)
+    );
+    return Promise.allSettled(disableRequests);
   }
 
   /**

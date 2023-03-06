@@ -81,19 +81,20 @@
             @click.stop
           >
             <q-menu>
-              <q-list style="min-width: 100px">
-                <q-item
+              <div class="column">
+                <slot :row="cellProps.row" name="options" />
+                <ConfirmButton
                   v-if="deleteSelection && deleteMutation"
-                  v-close-popup
-                  clickable
-                  @click.stop="() => deleteRow(cellProps.row)"
-                >
-                  <q-item-section>{{ removeLabel }}</q-item-section>
-                  <q-item-section avatar>
-                    <q-icon :name="removeIcon" color="grey" size="large" />
-                  </q-item-section>
-                </q-item>
-              </q-list>
+                  :button-props="{
+                    color: 'negative',
+                    iconRight: removeIcon,
+                    noCaps: true,
+                  }"
+                  :confirm-label="$t('general.confirm')"
+                  :label="removeLabel"
+                  @click="() => deleteRow(cellProps.row)"
+                />
+              </div>
             </q-menu>
           </q-btn>
         </q-td>
@@ -175,6 +176,7 @@
       </div>
       <div class="col">
         <div class="row justify-end" style="gap: 10px">
+          <slot :selected="selected" name="actions" />
           <q-btn
             v-if="selected.length > 0 && exportSelection"
             color="primary"
@@ -194,7 +196,6 @@
             :label="removeLabel"
             @click="deleteActiveRows"
           />
-          <slot :selected="selected" name="actions" />
         </div>
       </div>
     </div>

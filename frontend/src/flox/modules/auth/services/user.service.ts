@@ -8,6 +8,7 @@ import UserEntity from '../entities/user.entity';
 import {
   ADMIN_CREATE_USER,
   DELETE_USER,
+  DISABLE_USER,
   SIGNUP_CREATE_USER,
   UPDATE_USER,
 } from '../user.mutation';
@@ -192,6 +193,19 @@ export async function updateUser(
  */
 export async function deleteUser(uuid: string): Promise<UserEntity | null> {
   const { data } = await executeMutation<UserEntity>(DELETE_USER, {
+    uuid,
+  });
+  return data ?? null;
+}
+
+/**
+ * Disable a user by its uuid
+ *
+ * @param uuid - uuid of user to disable
+ * @returns disabled user
+ */
+export async function disableUser(uuid: string): Promise<UserEntity | null> {
+  const { data } = await executeMutation<UserEntity>(DISABLE_USER, {
     uuid,
   });
   return data ?? null;
