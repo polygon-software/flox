@@ -112,21 +112,20 @@ export default class UserResolver extends AbstractSearchResolver<
   async adminCreateUser(
     @Args('adminCreateUserInput') adminCreateUserInput: AdminCreateUserInput,
   ): Promise<AdminCreateUserOutput> {
-    const cognitoUser = await this.userService.adminCreateCognitoUser(
-      adminCreateUserInput,
-    );
+    const { cognitoUuid, password } =
+      await this.userService.adminCreateCognitoUser(adminCreateUserInput);
 
     // Create & return database entry
     const newUser = await super.create({
       ...adminCreateUserInput,
-      cognitoUuid: cognitoUser.cognitoUuid,
+      cognitoUuid,
     });
 
     const userOutput = { data: newUser } as AdminCreateUserOutput;
 
     // If no delivery mediums are selected, return the password as well
     if (adminCreateUserInput.deliveryMediums.length === 0) {
-      userOutput.password = cognitoUser.password;
+      userOutput.password = password;
     }
     return userOutput;
   }

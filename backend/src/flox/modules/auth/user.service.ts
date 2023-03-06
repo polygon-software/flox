@@ -1,13 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import RandExp from 'randexp';
 
 import AbstractSearchService from '../abstracts/search/abstract-search.service';
 import UpdateInput from '../abstracts/crud/dto/input/update.input';
 import EmailService from '../email/email.service';
 import DELIVERY_MEDIUMS from '../../enum/DELIVERY_MEDIUMS';
-import { PASSWORD_REGEX } from '../../REGEX';
 
 import User from './entities/user.entity';
 import {
@@ -15,6 +13,7 @@ import {
   disableCognitoAccount,
   enableCognitoAccount,
   forceUserPasswordChange,
+  generatePassword,
   isUserEnabled,
 } from './helpers/cognito.helper';
 import AdminCreateUserInput from './dto/input/admin-create-user.input';
@@ -166,7 +165,7 @@ export default class UserService extends AbstractSearchService<User> {
    */
   async adminCreateCognitoUser(
     adminCreateUserInput: AdminCreateUserInput,
-  ): Promise<{ cognitoUuid: string; password?: string }> {
+  ): Promise<{ cognitoUuid: string; password: string }> {
     // Check if input data is valid
     if (
       adminCreateUserInput.deliveryMediums.includes(DELIVERY_MEDIUMS.SMS) &&
@@ -177,11 +176,8 @@ export default class UserService extends AbstractSearchService<User> {
       );
     }
 
-    const randExp = new RandExp(PASSWORD_REGEX);
-    randExp.max = 16;
-    const password = randExp.gen();
-
     let cognitoUuid;
+    const password = generatePassword();
 
     if (
       adminCreateUserInput.deliveryMediums.includes(

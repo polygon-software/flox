@@ -5,6 +5,8 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 
 import Env from '../../../env';
 
+import { CognitoUserType } from './types/cognito-user.type';
+
 /**
  * Validation strategy for JSON web tokens from Cognito
  */
@@ -12,11 +14,6 @@ import Env from '../../../env';
 export type JwtStrategyValidationPayload = {
   'cognito:username': string;
   sub: string;
-  username: string;
-};
-
-export type CognitoUser = {
-  userId: string;
   username: string;
 };
 
@@ -42,11 +39,11 @@ export default class JwtStrategy extends PassportStrategy(Strategy) {
    * @param payload - decoded JSON Web Token (JWT)
    * @returns object with Cognito userId and username
    */
-  validate(payload: JwtStrategyValidationPayload): CognitoUser {
+  validate(payload: JwtStrategyValidationPayload): CognitoUserType {
     const username = payload['cognito:username'];
     return {
-      userId: payload.sub,
+      UUID: payload.sub,
       username,
-    } as CognitoUser;
+    } as CognitoUserType;
   }
 }

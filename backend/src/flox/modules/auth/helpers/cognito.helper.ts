@@ -273,6 +273,15 @@ export async function checkIfUserExists(email: string): Promise<boolean> {
 }
 
 /**
+ *
+ */
+export function generatePassword(): string {
+  const randExp = new RandExp(PASSWORD_REGEX);
+  randExp.max = 16;
+  return randExp.gen();
+}
+
+/**
  * Forces a user to change their password by setting a temporary password for them, forcing them into
  * FORCE_CHANGE_PASSWORD state. It is required to provide the new temporary password to the user via e-mail from the
  * service that called this function.
@@ -281,9 +290,7 @@ export async function checkIfUserExists(email: string): Promise<boolean> {
  * @returns the temporary password that was set for the user
  */
 export async function forceUserPasswordChange(email: string): Promise<string> {
-  const randExp = new RandExp(PASSWORD_REGEX);
-  randExp.max = 16;
-  const tempPassword = randExp.gen(); // Request parameters
+  const tempPassword = generatePassword();
   const params = {
     UserPoolId: Env.USER_POOL_ID,
     Username: email,
