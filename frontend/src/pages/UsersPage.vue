@@ -3,16 +3,17 @@
     <h4>{{ $t('users.users') }}</h4>
     <div class="col">
       <DataTable
-        :title="$t('users.all_users')"
-        prepend-slot
-        export-selection
-        delete-selection
-        multi
-        :prepend-name="$t('users.avatar')"
         :columns="columns"
-        :query="SEARCH_USERS"
-        :update-mutation="UPDATE_USER"
         :delete-mutation="DELETE_USER"
+        :prepend-name="$t('users.avatar')"
+        :query="SEARCH_USERS"
+        :title="$t('users.all_users')"
+        :update-mutation="UPDATE_USER"
+        delete-selection
+        export-selection
+        multi
+        options-menu
+        prepend-slot
       >
         <template #prepend="slotProps">
           <q-td :props="slotProps">
@@ -25,11 +26,11 @@
       <!-- Create new users -->
       <q-btn
         :class="`${DEFAULT_BUTTON_CLASS} q-my-md`"
-        :style="`${DEFAULT_BUTTON_STYLE}; width: 200px`"
-        outline
-        color="primary"
         :label="$t('buttons.create_user')"
+        :style="`${DEFAULT_BUTTON_STYLE}; width: 200px`"
+        color="primary"
         no-caps
+        outline
         style="width: 200px"
         @click="createUser"
       />
@@ -37,7 +38,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import Joi from 'joi';
 import { inject, ref, Ref } from 'vue';
 

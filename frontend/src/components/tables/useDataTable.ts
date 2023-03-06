@@ -5,7 +5,7 @@ import { exportFile, QInputProps, useQuasar } from 'quasar';
 import { computed, ComputedRef, nextTick, Ref, ref, toRaw, watch } from 'vue';
 
 import { i18n } from 'boot/i18n';
-import { MutationObject, executeMutation } from 'src/apollo/mutation';
+import { executeMutation, MutationObject } from 'src/apollo/mutation';
 import { executeQuery, QueryObject } from 'src/apollo/query';
 import BaseEntity from 'src/flox/core/base-entity/entities/BaseEntity';
 import CountQuery from 'src/flox/modules/interfaces/entities/count.entity';
@@ -39,6 +39,7 @@ export enum ColumnAlign {
   left = 'left',
   right = 'right',
 }
+
 export enum ColumnSortOrder {
   ascending = 'ad',
   descending = 'da',
@@ -108,6 +109,7 @@ export function useDataTable<T extends BaseEntity>(
   deleteActiveRows: () => Promise<
     PromiseSettledResult<Awaited<T> | void | null | undefined>[]
   >;
+  deleteRow: (row: T) => Promise<T | null | undefined | void>;
 } {
   const $q = useQuasar();
   let storedSelectedRow: T;
@@ -360,6 +362,34 @@ export function useDataTable<T extends BaseEntity>(
   }
 
   /**
+   * TODO
+   */
+  async function deleteRow(row: T): Promise<T | null | undefined | void> {
+    if (!deletionObject) {
+      throw new Error('Unable to delete row - delete query not provided');
+    }
+
+    return executeMutation<T>(
+      deletionObject,
+      toRaw(row) as Record<string, unknown>
+    )
+      .then((data) => {
+        showSuccessNotification($q, i18n.global.t('messages.entry_deleted'), {
+          position: 'top-right',
+          timeout: 500,
+        });
+        return data.data;
+      })
+      .catch((e) => {
+        console.error(e);
+        showErrorNotification($q, i18n.global.t('errors.entry_delete_failed'), {
+          position: 'top-right',
+          timeout: 500,
+        });
+      });
+  }
+
+  /**
    * Deletes all selected rows
    *
    * @returns updated rows
@@ -371,30 +401,7 @@ export function useDataTable<T extends BaseEntity>(
       throw new Error('Unable to delete row - delete query not provided');
     }
     const deletionUuids = selected.value.map((val) => val.uuid);
-    const deletionRequests = selected.value.map((selectedRow: T) => {
-      return executeMutation<T>(
-        deletionObject,
-        toRaw(selectedRow) as Record<string, unknown>
-      )
-        .then((data) => {
-          showSuccessNotification($q, i18n.global.t('messages.entry_deleted'), {
-            position: 'top-right',
-            timeout: 500,
-          });
-          return data.data;
-        })
-        .catch((e) => {
-          console.error(e);
-          showErrorNotification(
-            $q,
-            i18n.global.t('errors.entry_delete_failed'),
-            {
-              position: 'top-right',
-              timeout: 500,
-            }
-          );
-        });
-    });
+    const deletionRequests = selected.value.map(deleteRow);
     rows.value = rows.value.filter((row) => !deletionUuids.includes(row.uuid));
     selected.value = [];
     return Promise.allSettled(deletionRequests);
@@ -414,5 +421,6 @@ export function useDataTable<T extends BaseEntity>(
     handleSelection,
     updateRow,
     deleteActiveRows,
+    deleteRow,
   };
 }

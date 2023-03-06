@@ -1,19 +1,19 @@
 <template>
-  <q-card class="q-pa-md" flat bordered>
+  <q-card bordered class="q-pa-md" flat>
     <QTable
       ref="tableRef"
-      v-bind="tableProps"
       v-model:pagination="pagination"
       v-model:selected="selected"
-      :title="title"
-      :rows="rows"
       :columns="extendedColumns"
-      row-key="uuid"
-      :loading="loading"
       :filter="filter"
-      binary-state-sort
+      :loading="loading"
+      :rows="rows"
       :selection="multi ? 'multiple' : 'single'"
+      :title="title"
       :visible-columns="extendedVisibleColumnNames"
+      binary-state-sort
+      row-key="uuid"
+      v-bind="tableProps"
       @request="onRequest"
       @selection="handleSelection"
     >
@@ -49,24 +49,53 @@
               }
             "
             v-slot="scope"
-            buttons
-            :validate="validateInput(cellProps.col)"
-            :model-value="cellProps.row[cellProps.col.field]"
-            :label-set="$t('general.save')"
             :label-cancel="$t('general.cancel')"
+            :label-set="$t('general.save')"
+            :model-value="cellProps.row[cellProps.col.field]"
+            :validate="validateInput(cellProps.col)"
+            buttons
+            @save="updateRow(cellProps.row, cellProps.col.field, $event)"
             @keyup.enter="
               popupRefs[getPopupEditKey(cellProps.row, cellProps.col)].set()
             "
-            @save="updateRow(cellProps.row, cellProps.col.field, $event)"
           >
             <q-input
               v-model="scope.value"
-              v-bind="cellProps.col.qInputProps"
-              dense
               autofocus
               counter
+              dense
+              v-bind="cellProps.col.qInputProps"
             />
           </QPopupEdit>
+        </q-td>
+      </template>
+      <template #body-cell-options="cellProps">
+        <q-td :props="cellProps">
+          <q-btn
+            v-if="optionsMenu"
+            :disable="selected.length > 0"
+            color="grey"
+            flat
+            icon="more_vert"
+            square
+            @click.stop
+          >
+            <q-menu>
+              <q-list style="min-width: 100px">
+                <q-item
+                  v-if="deleteSelection && deleteMutation"
+                  v-close-popup
+                  clickable
+                  @click.stop="() => deleteRow(cellProps.row)"
+                >
+                  <q-item-section>{{ removeLabel }}</q-item-section>
+                  <q-item-section avatar>
+                    <q-icon :name="removeIcon" color="grey" size="large" />
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+          </q-btn>
         </q-td>
       </template>
       <template #header-selection="scope">
@@ -83,11 +112,11 @@
         <q-input
           v-if="!hideSearch"
           v-model="filter"
-          borderless
-          hide-bottom-space
-          dense
-          debounce="300"
           :placeholder="$t('general.search')"
+          borderless
+          debounce="300"
+          dense
+          hide-bottom-space
         >
           <template #append>
             <q-icon name="search" />
@@ -96,16 +125,16 @@
         <q-select
           v-if="!hideColumnSelector"
           v-model="visibleColumnNames"
-          borderless
-          multiple
-          dense
-          hide-bottom-space
           :display-value="$t('general.display')"
-          emit-value
-          map-options
           :options="columns"
-          option-value="name"
+          borderless
           class="q-mx-lg"
+          dense
+          emit-value
+          hide-bottom-space
+          map-options
+          multiple
+          option-value="name"
         >
           <template
             #option="{ itemProps, opt, selected: isSelected, toggleOption }"
@@ -127,11 +156,11 @@
         </q-select>
         <q-btn
           v-if="!hideFullscreen"
-          flat
-          round
-          dense
           :icon="headerProps.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
           class="q-ml-md"
+          dense
+          flat
+          round
           @click="headerProps.toggleFullscreen"
         />
       </template>
@@ -156,23 +185,23 @@
           />
           <ConfirmButton
             v-if="selected.length > 0 && deleteSelection && deleteMutation"
-            :label="removeLabel"
-            :confirm-label="$t('general.confirm')"
             :button-props="{
               color: 'negative',
               iconRight: removeIcon,
               noCaps: true,
             }"
+            :confirm-label="$t('general.confirm')"
+            :label="removeLabel"
             @click="deleteActiveRows"
           />
-          <slot name="actions" :selected="selected" />
+          <slot :selected="selected" name="actions" />
         </div>
       </div>
     </div>
   </q-card>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { QPopupEdit, QTable, QTableProps } from 'quasar';
 import {
   computed,
@@ -217,6 +246,7 @@ const props = withDefaults(
     multi?: boolean;
     removeIcon?: string;
     removeLabel?: string;
+    optionsMenu?: boolean;
   }>(),
   {
     updateMutation: undefined,
@@ -235,6 +265,7 @@ const props = withDefaults(
     appendName: '',
     prependName: '',
     tableProps: () => ({}),
+    optionsMenu: false,
   }
 );
 
@@ -272,6 +303,7 @@ const {
   handleSelection,
   updateRow,
   deleteActiveRows,
+  deleteRow,
 } = useDataTable<BaseEntity>(
   props.query,
   props.updateMutation,
@@ -319,10 +351,16 @@ const extendedColumns: ComputedRef<ColumnInterface<BaseEntity>[]> = computed(
       field: 'append',
       label: props.appendName ?? '',
     };
+    const options = {
+      name: 'options',
+      field: 'options',
+      label: '',
+    };
     return [
       ...(props.prependSlot ? [prependContent] : []),
       ...props.columns,
       ...(props.appendSlot ? [appendContent] : []),
+      ...(props.optionsMenu ? [options] : []),
     ];
   }
 );
@@ -331,6 +369,7 @@ const extendedVisibleColumnNames: ComputedRef<string[]> = computed(() => {
     ...(props.prependSlot ? ['prepend'] : []),
     ...visibleColumnNames.value,
     ...(props.appendSlot ? ['append'] : []),
+    ...(props.optionsMenu ? ['options'] : []),
   ];
 });
 
