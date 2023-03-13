@@ -874,6 +874,9 @@ type User {
   """E-mail address"""
   email: String!
 
+  """User enabled or not"""
+  enabled: Boolean
+
   """User groups this user belongs to"""
   groups: [UserGroup!]!
 

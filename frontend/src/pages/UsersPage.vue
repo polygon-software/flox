@@ -3,8 +3,10 @@
     <h4>{{ $t('users.users') }}</h4>
     <div class="col">
       <DataTable
+        ref="dataTableRef"
         :columns="columns"
         :delete-mutation="DELETE_USER"
+        :entity-type="typeof UserEntity"
         :prepend-name="$t('users.avatar')"
         :query="SEARCH_USERS"
         :title="$t('users.all_users')"
@@ -93,6 +95,7 @@ import {
   showErrorNotification,
   showSuccessNotification,
 } from 'src/tools/notification.tool';
+import BaseEntity from 'src/flox/core/base-entity/entities/BaseEntity';
 
 import UserEntity from '../flox/modules/auth/entities/user.entity';
 import { DELETE_USER, UPDATE_USER } from '../flox/modules/auth/user.mutation';
@@ -116,6 +119,8 @@ const emailRules: ValidationRule[] = [
     i18n.global.t('validation.email')
   ),
 ];
+
+const dataTableRef: Ref<InstanceType<typeof DataTable> | null> = ref(null);
 
 const columns: Ref<ColumnInterface<UserEntity>[]> = ref([
   {
@@ -141,6 +146,12 @@ const columns: Ref<ColumnInterface<UserEntity>[]> = ref([
     field: 'role',
     sortable: true,
   },
+  {
+    name: 'enabled',
+    label: i18n.global.t('users.enabled'),
+    field: (user) => i18n.global.t(user.enabled ? 'general.yes' : 'general.no'),
+    sortable: true,
+  },
 ]);
 
 /**
@@ -152,21 +163,41 @@ async function createUser(): Promise<void> {
 }
 
 /**
+ *
+ */
+function updateUsersEnabledStatus(users: UserEntity[], value: boolean): void {
+  if (dataTableRef.value) {
+    users.forEach((user) =>
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
+      dataTableRef.value?.updateRowLocally(
+        user,
+        'enabled' as keyof BaseEntity,
+        value
+      )
+    );
+  }
+}
+
+/**
  * TODO
  * @returns void
  */
 async function disableUsers(users: UserEntity[]): Promise<void> {
+  const enabledUsers = users.filter((user) => user.enabled === true);
   await $authService
-    ?.disableUsers(users)
+    ?.disableUsers(enabledUsers)
     .then((responses) => {
       if (responses.every((res) => res.status === 'fulfilled')) {
         showSuccessNotification(
           $q,
           i18n.global.t('authentication.users_disabled')
         );
+        updateUsersEnabledStatus(enabledUsers, false);
       } else {
+        const fulfilledValues: { uuid: string }[] = [];
         responses.forEach((res) => {
           if (res.status === 'fulfilled' && res.value) {
+            fulfilledValues.push(res.value);
             showSuccessNotification(
               $q,
               i18n.global.t('authentication.user_disabled', {
@@ -177,6 +208,7 @@ async function disableUsers(users: UserEntity[]): Promise<void> {
             console.error(res.reason);
             showErrorNotification($q, `${res.reason as string}`);
           }
+          updateUsersEnabledStatus(fulfilledValues, false);
         });
       }
     })
@@ -194,17 +226,21 @@ async function disableUsers(users: UserEntity[]): Promise<void> {
  * @returns void
  */
 async function enableUsers(users: UserEntity[]): Promise<void> {
+  const disabledUsers = users.filter((user) => user.enabled === false);
   await $authService
-    ?.enableUsers(users)
+    ?.enableUsers(disabledUsers)
     .then((responses) => {
       if (responses.every((res) => res.status === 'fulfilled')) {
         showSuccessNotification(
           $q,
           i18n.global.t('authentication.users_enabled')
         );
+        updateUsersEnabledStatus(disabledUsers, true);
       } else {
+        const fulfilledValues: { uuid: string }[] = [];
         responses.forEach((res) => {
           if (res.status === 'fulfilled' && res.value) {
+            fulfilledValues.push(res.value);
             showSuccessNotification(
               $q,
               i18n.global.t('authentication.user_enabled', {
@@ -216,6 +252,7 @@ async function enableUsers(users: UserEntity[]): Promise<void> {
             showErrorNotification($q, `${res.reason as string}`);
           }
         });
+        updateUsersEnabledStatus(fulfilledValues, true);
       }
     })
     .catch((e) => {

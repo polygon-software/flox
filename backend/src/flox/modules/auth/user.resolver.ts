@@ -86,7 +86,12 @@ export default class UserResolver extends AbstractSearchResolver<
   @AdminOnly()
   @Query(() => [User], { name: 'AllUsers' })
   async getAllUsers(@Args() getAll: GetAllArgs): Promise<User[]> {
-    return super.getAll(getAll);
+    const users = await super.getAll(getAll);
+    const cognitoRequests = users.map(async (user) => {
+      user.enabled = await this.userService.isUserEnabled(user);
+      return user;
+    });
+    return Promise.all(cognitoRequests);
   }
 
   /**
@@ -97,8 +102,14 @@ export default class UserResolver extends AbstractSearchResolver<
    */
   @AdminOnly()
   @Query(() => UserSearchOutput, { name: 'SearchUsers' })
-  searchUsers(@Args() queryArgs: SearchArgs): Promise<UserSearchOutput> {
-    return super.search(queryArgs);
+  async searchUsers(@Args() queryArgs: SearchArgs): Promise<UserSearchOutput> {
+    const searchRes = await super.search(queryArgs);
+    const cognitoRequests = searchRes.data.map(async (user) => {
+      user.enabled = await this.userService.isUserEnabled(user);
+      return user;
+    });
+    searchRes.data = await Promise.all(cognitoRequests);
+    return searchRes;
   }
 
   /**

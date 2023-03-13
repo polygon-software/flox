@@ -31,7 +31,9 @@
                   get(cellProps.row, cellProps.col.field),
                   cellProps.row
                 )
-              : get(cellProps.row, cellProps.col.field)
+              : isString(cellProps.col.field)
+              ? get(cellProps.row, cellProps.col.field)
+              : cellProps.col.field(cellProps.row)
           }}
           <!--
           If the column field path contains a dot, it is a property of a nested object
@@ -216,6 +218,7 @@ import {
   watchEffect,
 } from 'vue';
 import get from 'lodash/get';
+import { isString } from 'lodash-es';
 
 import {
   ColumnAlign,
@@ -304,13 +307,10 @@ const {
   exportTable,
   handleSelection,
   updateRow,
+  updateRowLocally,
   deleteActiveRows,
   deleteRow,
-} = useDataTable<BaseEntity>(
-  props.query,
-  props.updateMutation,
-  props.deleteMutation
-);
+} = useDataTable(props.query, props.updateMutation, props.deleteMutation);
 
 /**
  * Validates an input for qPopupEdit
@@ -393,5 +393,6 @@ function refresh(): void {
 defineExpose({
   refresh,
   rows,
+  updateRowLocally,
 });
 </script>

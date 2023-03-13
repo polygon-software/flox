@@ -72,6 +72,7 @@ export const GET_ALL_USERS: QueryObject = {
         cognitoUuid
         email
         role
+        enabled
         __typename
       }
     }
@@ -103,6 +104,7 @@ export const SEARCH_USERS: QueryObject = {
           lang
           email
           role
+          enabled
         }
         __typename
       }

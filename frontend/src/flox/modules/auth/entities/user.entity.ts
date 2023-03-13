@@ -1,4 +1,4 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsOptional, IsString } from 'class-validator';
 
 import BaseEntity from 'src/flox/core/base-entity/entities/BaseEntity';
 
@@ -22,4 +22,8 @@ export default class UserEntity extends BaseEntity {
   @IsOptional()
   @IsString()
   email?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  enabled?: boolean;
 }

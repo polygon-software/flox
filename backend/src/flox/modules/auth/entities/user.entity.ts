@@ -8,6 +8,7 @@ import {
   ManyToMany,
 } from 'typeorm';
 import {
+  IsBoolean,
   IsEmail,
   IsLocale,
   IsLowercase,
@@ -60,6 +61,10 @@ export default class User extends BaseEntity {
   @Column({ nullable: true })
   @IsString()
   role: string;
+
+  @Field(() => Boolean, { description: 'User enabled or not', nullable: true })
+  @IsBoolean()
+  enabled?: boolean;
 
   @Field(() => [UserGroup], {
     description: 'User groups this user belongs to',

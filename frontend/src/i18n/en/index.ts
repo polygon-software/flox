@@ -67,6 +67,7 @@ export default {
     username: 'Username',
     email: 'E-Mail',
     role: 'Role',
+    enabled: 'Enabled',
   },
   date: {
     date_format: 'MM.DD.YYYY',

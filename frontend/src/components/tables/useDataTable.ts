@@ -74,7 +74,7 @@ export interface ColumnInterface<T = any> {
  * @param multi - Whether multi-selection of rows is allowed
  * @returns complete setup for a data table
  */
-export function useDataTable<T extends BaseEntity>(
+export function useDataTable(
   queryObject: QueryObject,
   updateObject?: MutationObject,
   deletionObject?: MutationObject,
@@ -83,10 +83,10 @@ export function useDataTable<T extends BaseEntity>(
   rowsPerPage = 10,
   multi = false
 ): {
-  rows: Ref<T[]>;
-  columns: Ref<ColumnInterface<T>[]>;
-  visibleColumns: ComputedRef<ColumnInterface<T>[]>;
-  selected: Ref<T[]>;
+  rows: Ref<BaseEntity[]>;
+  columns: Ref<ColumnInterface<BaseEntity>[]>;
+  visibleColumns: ComputedRef<ColumnInterface<BaseEntity>[]>;
+  selected: Ref<BaseEntity[]>;
   visibleColumnNames: Ref<string[]>;
   filter: Ref<string>;
   loading: Ref<boolean>;
@@ -101,28 +101,31 @@ export function useDataTable<T extends BaseEntity>(
     added,
     evt,
   }: {
-    rows: readonly T[];
+    rows: readonly BaseEntity[];
     added: boolean;
     evt: Event;
   }) => Promise<void>;
-  updateRow: (row: T, path: keyof T, value: any) => Promise<void>;
+  updateRow: (row: BaseEntity, path: string, value: any) => Promise<void>;
+  updateRowLocally: (row: BaseEntity, path: string, value: any) => BaseEntity;
   deleteActiveRows: () => Promise<
-    PromiseSettledResult<Awaited<T> | void | null | undefined>[]
+    PromiseSettledResult<Awaited<BaseEntity> | void | null | undefined>[]
   >;
-  deleteRow: (row: T) => Promise<T | null | undefined | void>;
+  deleteRow: (row: BaseEntity) => Promise<BaseEntity | null | undefined | void>;
 } {
   const $q = useQuasar();
-  let storedSelectedRow: T;
+  let storedSelectedRow: BaseEntity;
 
-  const rows: Ref<T[]> = ref([]);
-  const selected: Ref<T[]> = ref([]);
-  const columns: Ref<ColumnInterface<T>[]> = ref([]);
+  const rows: Ref<BaseEntity[]> = ref([]);
+  const selected: Ref<BaseEntity[]> = ref([]);
+  const columns: Ref<ColumnInterface<BaseEntity>[]> = ref([]);
   const visibleColumnNames: Ref<string[]> = ref([]);
-  const visibleColumns: ComputedRef<ColumnInterface<T>[]> = computed(() => {
-    return columns.value.filter((column) =>
-      visibleColumnNames.value.includes(column.name)
-    );
-  });
+  const visibleColumns: ComputedRef<ColumnInterface<BaseEntity>[]> = computed(
+    () => {
+      return columns.value.filter((column) =>
+        visibleColumnNames.value.includes(column.name)
+      );
+    }
+  );
   const filter: Ref<string> = ref('');
   const loading: Ref<boolean> = ref(false);
   const pagination: Ref<PaginationConfig> = ref({
@@ -145,8 +148,8 @@ export function useDataTable<T extends BaseEntity>(
    */
   async function fetchFromServer(
     pageRequest: PageParameters
-  ): Promise<{ data: T[]; count: number }> {
-    const queryResult = await executeQuery<CountQuery<T>>(
+  ): Promise<{ data: BaseEntity[]; count: number }> {
+    const queryResult = await executeQuery<CountQuery<BaseEntity>>(
       queryObject,
       pageRequest
     );
@@ -209,8 +212,8 @@ export function useDataTable<T extends BaseEntity>(
    */
   function wrapCsvValue(
     val: any,
-    formatFn?: (val: any, row?: T) => string,
-    row?: T
+    formatFn?: (val: any, row?: BaseEntity) => string,
+    row?: BaseEntity
   ): string {
     let formatted = formatFn !== void 0 ? formatFn(val, row) : String(val);
 
@@ -275,7 +278,7 @@ export function useDataTable<T extends BaseEntity>(
     added,
     evt,
   }: {
-    rows: readonly T[];
+    rows: readonly BaseEntity[];
     added: boolean;
     evt: Event;
   }): Promise<void> {
@@ -314,11 +317,43 @@ export function useDataTable<T extends BaseEntity>(
 
       selected.value = added
         ? selectedRows.concat(
-            rangeRows.filter((row: T) => !selectedRows.includes(row))
+            rangeRows.filter((row: BaseEntity) => !selectedRows.includes(row))
           )
-        : selectedRows.filter((row: T) => !rangeRows.includes(row));
+        : selectedRows.filter((row: BaseEntity) => !rangeRows.includes(row));
     } else if (!ctrlKey && added) {
       selected.value = [newSelectedRow];
+    }
+  }
+
+  /**
+   * Handles local row updates
+   *
+   * @param row - row to be updated
+   * @param path - path to key that must be updated
+   * @param value - new value at key location
+   * @returns updated copy of the given row
+   */
+  function updateRowLocally(
+    row: BaseEntity,
+    path: string,
+    value: any
+  ): BaseEntity {
+    const correctRowIndex = rows.value.findIndex((r) => row.uuid === r.uuid);
+    if (correctRowIndex === -1) {
+      throw new Error('Row to be updated could not be identified');
+    } else {
+      const rawRow = toRaw(rows.value[correctRowIndex]);
+      const rowCopy = cloneDeep(rawRow);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      set(rowCopy, path, value);
+      rows.value.splice(correctRowIndex, 1, rowCopy);
+      const selectedRowIndex = selected.value.findIndex(
+        (r) => row.uuid === r.uuid
+      );
+      if (selectedRowIndex > -1) {
+        selected.value.splice(selectedRowIndex, 1, rowCopy);
+      }
+      return rowCopy;
     }
   }
 
@@ -329,50 +364,42 @@ export function useDataTable<T extends BaseEntity>(
    * @param path - path to key that must be updated
    * @param value - new value at key location
    */
-  async function updateRow(row: T, path: keyof T, value: any): Promise<void> {
+  async function updateRow(
+    row: BaseEntity,
+    path: string,
+    value: any
+  ): Promise<void> {
     if (!updateObject) {
       throw new Error('Unable to update row - update query not provided');
     }
-    const correctRowIndex = rows.value.findIndex((r) => row.uuid === r.uuid);
-    if (correctRowIndex > -1) {
-      const rawRow = toRaw(rows.value[correctRowIndex]);
-      const rowCopy = cloneDeep(rawRow);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      set(rowCopy, path, value);
-      rows.value.splice(correctRowIndex, 1, rowCopy);
-      try {
-        const mutationVariables = entityToMutationVariables(
-          rowCopy,
-          updateObject
-        );
-        await executeMutation(updateObject, mutationVariables);
-        showSuccessNotification($q, i18n.global.t('messages.entry_edited'), {
-          position: 'top-right',
-          timeout: 500,
-        });
-      } catch (e) {
-        showErrorNotification($q, i18n.global.t('errors.entry_edit_failed'), {
-          position: 'top-right',
-          timeout: 500,
-        });
-      }
-    } else {
-      throw new Error('Row to be updated could not be identified');
+    const updatedRowCopy = updateRowLocally(row, path, value);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    try {
+      const mutationVariables = entityToMutationVariables(
+        updatedRowCopy,
+        updateObject
+      );
+      await executeMutation(updateObject, mutationVariables);
+      showSuccessNotification($q, i18n.global.t('messages.entry_edited'), {
+        position: 'top-right',
+        timeout: 500,
+      });
+    } catch (e) {
+      showErrorNotification($q, i18n.global.t('errors.entry_edit_failed'), {
+        position: 'top-right',
+        timeout: 500,
+      });
     }
   }
 
   /**
    * TODO
    */
-  async function deleteRow(row: T): Promise<T | null | void> {
+  async function deleteRow(row: BaseEntity): Promise<BaseEntity | null | void> {
     if (!deletionObject) {
       throw new Error('Unable to delete row - delete query not provided');
     }
-
-    return executeMutation<T>(
-      deletionObject,
-      toRaw(row) as Record<string, unknown>
-    )
+    return executeMutation<BaseEntity>(deletionObject, toRaw(row))
       .then((data) => {
         showSuccessNotification($q, i18n.global.t('messages.entry_deleted'), {
           position: 'top-right',
@@ -395,7 +422,7 @@ export function useDataTable<T extends BaseEntity>(
    * @returns updated rows
    */
   function deleteActiveRows(): Promise<
-    PromiseSettledResult<Awaited<T> | void | null>[]
+    PromiseSettledResult<Awaited<BaseEntity> | void | null>[]
   > {
     if (!deletionObject) {
       throw new Error('Unable to delete row - delete query not provided');
@@ -420,6 +447,7 @@ export function useDataTable<T extends BaseEntity>(
     exportTable,
     handleSelection,
     updateRow,
+    updateRowLocally,
     deleteActiveRows,
     deleteRow,
   };
