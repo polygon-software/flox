@@ -163,7 +163,7 @@ async function createUser(): Promise<void> {
 }
 
 /**
- *
+ * Update the enabled status of the local user object in the data table.
  */
 function updateUsersEnabledStatus(users: UserEntity[], value: boolean): void {
   if (dataTableRef.value) {
