@@ -9,6 +9,7 @@
   "scripts": {
     "lint": "eslint --ext .js,.ts,.vue ./ --fix",
     "test": "echo \"See package.json => scripts for available tests.\" && exit 0",
+    "format": "prettier --write \"src/**/*.ts\"",
     "dev": "quasar dev",
     "dev:ssr": "quasar dev -m ssr",
     "dev:pwa": "quasar dev -m pwa",
