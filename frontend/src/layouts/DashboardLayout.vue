@@ -1,29 +1,29 @@
 <template>
-  <q-layout view="hHh lpR fFf" class="bg-grey-1">
+  <q-layout class="bg-grey-1" view="hHh lpR fFf">
     <!-- Header with toolbar -->
-    <q-header class="bg-white text-grey-8 q-py-xs" height-hint="58" bordered>
+    <q-header bordered class="bg-white text-grey-8 q-py-xs" height-hint="58">
       <q-toolbar>
         <q-btn
-          flat
-          dense
-          round
           aria-label="Menu"
+          dense
+          flat
           icon="menu"
+          round
           @click="leftDrawerOpen = !leftDrawerOpen"
         />
 
         <q-btn
           v-if="$q.screen.gt.xs"
+          class="q-ml-xs"
           flat
           no-caps
           no-wrap
-          class="q-ml-xs"
           @click="$routerService?.routeTo(ROUTES.HOME)"
         >
           <q-avatar size="28px">
-            <img src="/icon.svg" alt="avatar" />
+            <img alt="avatar" src="/icon.svg" />
           </q-avatar>
-          <q-toolbar-title shrink class="text-weight-bold">
+          <q-toolbar-title class="text-weight-bold" shrink>
             Dashboard
           </q-toolbar-title>
         </q-btn>
@@ -33,14 +33,14 @@
         <div class="YL__toolbar-input-container row no-wrap">
           <q-input
             v-model="search"
+            class="bg-white col"
             dense
             outlined
-            rounded
             placeholder="Search"
-            class="bg-white col"
+            rounded
           >
             <template #append>
-              <q-icon name="search" class="cursor-pointer" color="primary" />
+              <q-icon class="cursor-pointer" color="primary" name="search" />
             </template>
           </q-input>
         </div>
@@ -50,11 +50,11 @@
         <div class="q-gutter-sm row items-center no-wrap">
           <q-btn
             v-if="$q.screen.gt.sm"
-            round
+            color="grey-8"
             dense
             flat
-            color="grey-8"
             icon="apps"
+            round
           >
             <q-tooltip>Apps</q-tooltip>
           </q-btn>
@@ -65,7 +65,7 @@
           <NotificationBell />
 
           <!-- Avatar / account menu -->
-          <q-btn round flat @click="accountMenuOpen = !accountMenuOpen">
+          <q-btn flat round @click="accountMenuOpen = !accountMenuOpen">
             <q-avatar size="26px">
               <img :src="$authStore.avatar" alt="avatar" />
             </q-avatar>
@@ -73,7 +73,7 @@
             <q-menu>
               <q-list class="column" item-separator link>
                 <q-item clickable>
-                  <q-item-section @click="Account">
+                  <q-item-section @click="goToAccount">
                     <q-item-label>
                       {{ $t('authentication.account') }}
                     </q-item-label>
@@ -96,18 +96,18 @@
     <!-- Left-side menu drawer -->
     <q-drawer
       v-model="leftDrawerOpen"
-      show-if-above
+      :width="240"
       bordered
       class="drawer-bg"
-      :width="240"
+      show-if-above
     >
       <q-scroll-area class="fit">
         <q-list padding>
           <template v-for="(group, index) in sideMenu" :key="index">
             <q-item-label
               v-if="group.title"
-              header
               class="text-weight-bold text-uppercase"
+              header
             >
               {{ group.title }}
             </q-item-label>
@@ -120,7 +120,7 @@
               @click="link.click"
             >
               <q-item-section avatar>
-                <q-icon color="grey" :name="link.icon" />
+                <q-icon :name="link.icon" color="grey" />
               </q-item-section>
               <q-item-section>
                 <q-item-label>{{ link.text }}</q-item-label>
@@ -163,7 +163,7 @@
   <AliasIndicator />
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { computed, ComputedRef, inject, Ref, ref } from 'vue';
 
 import RouterService from 'src/services/RouterService';
@@ -309,11 +309,11 @@ const bottomLinks: ComputedRef<LinkType[]> = computed(() => [
 ]);
 
 /**
- * Logs out the user
+ * Reroute to account page
  *
  * @async
  */
-async function Account(): Promise<void> {
+async function goToAccount(): Promise<void> {
   await $routerService?.routeTo(ROUTES.ACCOUNT);
 }
 
@@ -342,7 +342,7 @@ async function logout(): Promise<void> {
     border-radius: 0
     border-style: solid
     border-width: 1px 1px 1px 0
-    border-color: rgba(0,0,0,.24)
+    border-color: rgba(0, 0, 0, .24)
     max-width: 60px
     width: 100%
 
