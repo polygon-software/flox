@@ -3,10 +3,10 @@
     <LabelWrapper :label="$t('authentication.password')">
       <q-input
         v-model="password"
+        :rules="[IS_VALID_PASSWORD]"
+        :type="isPwd ? 'password' : 'text'"
         dense
         outlined
-        :type="isPwd ? 'password' : 'text'"
-        :rules="[(val: string) => IS_VALID_PASSWORD(val)]"
         @change="saveValue"
       >
         <template #append>
@@ -21,14 +21,14 @@
   </FloxWrapper>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { ref } from 'vue';
 
 import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';
+import { MODULES } from 'src/flox/enum/MODULES';
 
 import { IS_VALID_PASSWORD } from '../../../data/RULES';
 import { FormStateKey, useFormStore } from '../../../stores/form';
-import { MODULES } from '../../../../../enum/MODULES';
 
 import LabelWrapper from './wrappers/LabelWrapper.vue';
 
