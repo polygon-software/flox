@@ -195,6 +195,7 @@ export default class AuthenticationService {
 
         // MFA code required (NOT part of normal flow)
         mfaRequired() {
+          // eslint-disable-next-line no-alert
           const verificationCode = prompt(
             i18n.global.t('messages.enter_verification_code', '')
           );
@@ -279,7 +280,7 @@ export default class AuthenticationService {
   }
 
   /**
-   * TODO
+   * Disable all users in the given list
    *
    * @param users
    */
@@ -294,7 +295,7 @@ export default class AuthenticationService {
   }
 
   /**
-   * TODO
+   * Enable all users in the given list
    *
    * @param users
    */

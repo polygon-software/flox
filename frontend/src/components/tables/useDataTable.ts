@@ -401,19 +401,18 @@ export function useDataTable(
   }
 
   /**
-   * TODO
+   * Delete a single row.
    */
-  async function deleteRow(row: BaseEntity): Promise<BaseEntity | null | void> {
+  async function deleteRow(row: BaseEntity): Promise<void> {
     if (!deletionObject) {
       throw new Error('Unable to delete row - delete query not provided');
     }
     return executeMutation<BaseEntity>(deletionObject, toRaw(row))
-      .then((data) => {
+      .then(() => {
         showSuccessNotification($q, i18n.global.t('messages.entry_deleted'), {
           position: 'top-right',
           timeout: 500,
         });
-        return data.data;
       })
       .catch((e) => {
         console.error(e);
@@ -425,13 +424,9 @@ export function useDataTable(
   }
 
   /**
-   * Deletes all selected rows
-   *
-   * @returns updated rows
+   * Deletes all selected rows.
    */
-  function deleteActiveRows(): Promise<
-    PromiseSettledResult<Awaited<BaseEntity> | void | null>[]
-  > {
+  async function deleteActiveRows(): Promise<PromiseSettledResult<void>[]> {
     if (!deletionObject) {
       throw new Error('Unable to delete row - delete query not provided');
     }

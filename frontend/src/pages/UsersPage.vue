@@ -179,7 +179,7 @@ function updateUsersEnabledStatus(users: UserEntity[], value: boolean): void {
 }
 
 /**
- * TODO
+ * Disable all users in the given list.
  * @returns void
  */
 async function disableUsers(users: UserEntity[]): Promise<void> {
@@ -222,7 +222,7 @@ async function disableUsers(users: UserEntity[]): Promise<void> {
 }
 
 /**
- * TODO
+ * Enable all users in the given list.
  * @returns void
  */
 async function enableUsers(users: UserEntity[]): Promise<void> {

@@ -307,7 +307,8 @@ const {
 } = useDataTable(props.query, props.updateMutation, props.deleteMutation);
 
 /**
- * TODO
+ * Content to be displayed in the cell. Depends on the type of the field and executes format function if given.
+ * @returns the computed content
  */
 function cellContent(cellProps: {
   col: ColumnInterface<BaseEntity>;
@@ -329,7 +330,9 @@ function cellContent(cellProps: {
 }
 
 /**
- * TODO
+ * The type of the cell. We distinguish between editable string and boolean values,
+ * not editable boolean values and any other values (e.g. not editable string).
+ * @returns the cell type
  */
 function cellType(cellProps: {
   col: ColumnInterface<BaseEntity>;
@@ -357,8 +360,9 @@ function cellType(cellProps: {
 }
 
 /**
- * TODO
- * @param cellProps
+ * Returns true if the cell type is a boolean type. In that case, a checkbox will be rendered.
+ * @param cellProps the cell props from the table cell
+ * @returns true if cell type is boolean or editBoolean, false otherwise
  */
 function isBooleanContent(cellProps: {
   col: ColumnInterface<BaseEntity>;
