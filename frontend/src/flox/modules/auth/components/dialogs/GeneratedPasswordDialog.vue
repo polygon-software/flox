@@ -7,25 +7,25 @@
       </p>
       <GeneratedPasswordField :password="password" />
       <q-btn
-        color="primary"
-        :label="$t('buttons.ok')"
         :class="`${ALTERNATE_BUTTON_CLASS} q-mt-xl`"
+        :label="$t('buttons.ok')"
         :style="`${DEFAULT_BUTTON_STYLE}`"
+        color="primary"
         @click="onDialogOK"
       />
     </q-card>
   </q-dialog>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { useDialogPluginComponent } from 'quasar';
-import { defineProps } from 'vue';
 
-import GeneratedPasswordField from '../../../form/components/fields/general/GeneratedPasswordField.vue';
 import {
   ALTERNATE_BUTTON_CLASS,
   DEFAULT_BUTTON_STYLE,
-} from '../../../../../css/defaultStyles';
+} from 'src/css/defaultStyles';
+
+import GeneratedPasswordField from '../../../form/components/fields/general/GeneratedPasswordField.vue';
 
 const props = withDefaults(
   defineProps<{

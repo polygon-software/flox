@@ -19,8 +19,8 @@
   </q-input>
 </template>
 
-<script setup lang="ts">
-import { defineProps, ref } from 'vue';
+<script lang="ts" setup>
+import { ref } from 'vue';
 import { useQuasar } from 'quasar';
 
 import { i18n } from 'boot/i18n';
@@ -42,6 +42,7 @@ const $q = useQuasar();
 const fieldValue = ref(props.password);
 
 const showPassword = ref(false);
+
 /**
  * Copies the generated password to the clipboard.
  * @returns void

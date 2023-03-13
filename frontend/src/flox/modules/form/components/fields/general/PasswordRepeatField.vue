@@ -12,10 +12,10 @@
       </q-tooltip>
       <q-input
         v-model="fieldValue.password"
+        :rules="[IS_VALID_PASSWORD]"
+        :type="showPassword ? 'text' : 'password'"
         dense
         outlined
-        :type="showPassword ? 'text' : 'password'"
-        :rules="[IS_VALID_PASSWORD]"
       >
         <template #append>
           <q-icon
@@ -35,13 +35,13 @@
     >
       <q-input
         v-model="fieldValue.passwordRepeat"
-        dense
-        outlined
-        :type="showRepeatedPassword ? 'text' : 'password'"
         :rules="[
           (val) =>
             val === fieldValue.password || $t('errors.non_matching_password'),
         ]"
+        :type="showRepeatedPassword ? 'text' : 'password'"
+        dense
+        outlined
       >
         <template #append>
           <q-icon
@@ -55,10 +55,11 @@
   </FloxWrapper>
 </template>
 
-<script setup lang="ts">
-import { ref, watch, defineProps, Ref } from 'vue';
+<script lang="ts" setup>
+import { ref, Ref, watch } from 'vue';
 
-import { MODULES } from '../../../../../enum/MODULES';
+import { MODULES } from 'src/flox/enum/MODULES';
+
 import { fetchByKey } from '../../../helpers/form-helpers';
 import { FormStateKey, useFormStore } from '../../../stores/form';
 import { IS_VALID_PASSWORD } from '../../../data/RULES';

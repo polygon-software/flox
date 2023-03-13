@@ -2,9 +2,9 @@
   <LabelWrapper :label="label">
     <q-input
       v-model="fieldValue"
-      v-bind="inputProps"
-      outlined
       dense
+      outlined
+      v-bind="inputProps"
       @change="saveValue"
     >
       <q-tooltip v-if="tooltip" :anchor="tooltip.anchor" :self="tooltip.self">
@@ -14,8 +14,8 @@
   </LabelWrapper>
 </template>
 
-<script setup lang="ts">
-import { computed, defineProps, onBeforeMount, ref, watch } from 'vue';
+<script lang="ts" setup>
+import { computed, onBeforeMount, ref, watch } from 'vue';
 import { ValidationRule } from 'quasar';
 
 import { FormStateKey, useFormStore } from '../../../stores/form';

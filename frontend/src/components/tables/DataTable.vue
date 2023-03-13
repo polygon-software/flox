@@ -203,7 +203,6 @@ import { QPopupEdit, QTable, QTableProps } from 'quasar';
 import {
   computed,
   ComputedRef,
-  defineProps,
   onMounted,
   Ref,
   ref,

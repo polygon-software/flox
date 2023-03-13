@@ -2,10 +2,10 @@
   <GenericInputField
     :initial-value="fieldValue.email"
     :label="$t('authentication.email')"
+    :rules="[IS_EMAIL]"
     dense
     outlined
     type="text"
-    :rules="[IS_EMAIL]"
     @change="
       (val) => (typeof val === 'string' ? (fieldValue.email = val) : null)
     "
@@ -13,20 +13,20 @@
   <GenericInputField
     :initial-value="fieldValue.emailRepeat"
     :label="$t('authentication.email_repeat')"
-    dense
-    outlined
-    type="text"
     :rules="[
       (val: string) => val === fieldValue.email || $t('errors.non_matching_email'),
     ]"
+    dense
+    outlined
+    type="text"
     @change="
       (val) => (typeof val === 'string' ? (fieldValue.emailRepeat = val) : null)
     "
   />
 </template>
 
-<script setup lang="ts">
-import { ref, watch, defineProps, Ref } from 'vue';
+<script lang="ts" setup>
+import { ref, Ref, watch } from 'vue';
 
 import { IS_EMAIL } from 'src/flox/modules/form/data/RULES';
 
