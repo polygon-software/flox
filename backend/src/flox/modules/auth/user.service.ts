@@ -133,9 +133,10 @@ export default class UserService extends AbstractSearchService<User> {
   }
 
   /**
-   * TODO
+   * Returns true if the users cognito account is enabled, false otherwise.
    *
-   * @param getUserArgs
+   * @param getUserArgs - object containing user uuid
+   * @returns true if enabled, false otherwise
    */
   async isUserEnabled(getUserArgs: GetUserArgs): Promise<boolean> {
     const user = await this.getUser(getUserArgs);
@@ -223,5 +224,21 @@ export default class UserService extends AbstractSearchService<User> {
     }
 
     return { cognitoUuid, password };
+  }
+
+  /**
+   * Set the enabled flag for all users in the given list.
+   * This function mutates the given objects and returns the list of mutated objects.
+   *
+   * @param users - list of users
+   * @returns list of mutated users
+   */
+  async setEnabledFlag(users: User[]): Promise<User[]> {
+    const cognitoRequests = users.map(async (user) => {
+      user.enabled = await this.isUserEnabled(user);
+      return user;
+    });
+    users = await Promise.all(cognitoRequests);
+    return users;
   }
 }

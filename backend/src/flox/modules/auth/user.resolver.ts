@@ -48,7 +48,7 @@ export default class UserResolver extends AbstractSearchResolver<
   @LoggedIn()
   @Query(() => User, { name: 'MyUser' })
   async myUser(@CurrentUser() user: User): Promise<User> {
-    return this.userService.getMyUser(user);
+    return this.getOne(user);
   }
 
   /**
@@ -60,7 +60,7 @@ export default class UserResolver extends AbstractSearchResolver<
   @LoggedIn()
   @Query(() => User, { name: 'User' })
   async getUser(@Args() getUserArgs: GetUserArgs): Promise<User> {
-    return this.userService.getUser(getUserArgs);
+    return this.getOne(getUserArgs);
   }
 
   /**
@@ -74,7 +74,7 @@ export default class UserResolver extends AbstractSearchResolver<
   async getMultipleUsers(
     @Args() getMultiple: GetMultipleArgs,
   ): Promise<User[]> {
-    return super.getMultiple(getMultiple);
+    return this.getMultiple(getMultiple);
   }
 
   /**
@@ -86,12 +86,8 @@ export default class UserResolver extends AbstractSearchResolver<
   @AdminOnly()
   @Query(() => [User], { name: 'AllUsers' })
   async getAllUsers(@Args() getAll: GetAllArgs): Promise<User[]> {
-    const users = await super.getAll(getAll);
-    const cognitoRequests = users.map(async (user) => {
-      user.enabled = await this.userService.isUserEnabled(user);
-      return user;
-    });
-    return Promise.all(cognitoRequests);
+    const users = await this.getAll(getAll);
+    return this.service.setEnabledFlag(users);
   }
 
   /**
@@ -104,18 +100,15 @@ export default class UserResolver extends AbstractSearchResolver<
   @Query(() => UserSearchOutput, { name: 'SearchUsers' })
   async searchUsers(@Args() queryArgs: SearchArgs): Promise<UserSearchOutput> {
     const searchRes = await super.search(queryArgs);
-    const cognitoRequests = searchRes.data.map(async (user) => {
-      user.enabled = await this.userService.isUserEnabled(user);
-      return user;
-    });
-    searchRes.data = await Promise.all(cognitoRequests);
+    searchRes.data = await this.service.setEnabledFlag(searchRes.data);
     return searchRes;
   }
 
   /**
-   * TODO
+   * Returns true if the users cognito account is enabled, false otherwise.
    *
-   * @param getUserArgs
+   * @param getUserArgs - object containing user uuid
+   * @returns true if enabled, false otherwise
    */
   @AdminOnly()
   @Query(() => Boolean, { name: 'IsUserEnabled' })
