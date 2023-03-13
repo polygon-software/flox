@@ -9,9 +9,10 @@
 import { inject } from 'vue';
 import { useQuasar } from 'quasar';
 
-import SendInvite from 'src/flox/modules/form/data/types/SendInvite';
 import { i18n } from 'boot/i18n';
 import CreateUserForm from 'src/flox/modules/auth/components/forms/CreateUserForm.vue';
+import SendInvite from 'src/flox/modules/form/data/types/SendInvite';
+import GeneratedPasswordDialog from 'src/flox/modules/auth/components/dialogs/GeneratedPasswordDialog.vue';
 
 import ROLE from '../flox/enum/USER_ROLES';
 import { createUserFormKey } from '../flox/modules/form/data/FORM_KEYS';
@@ -23,7 +24,6 @@ import {
 } from '../flox/modules/form/helpers/notification-helpers';
 import RouterService from '../services/RouterService';
 import ROUTES from '../router/routes';
-import GeneratedPasswordDialog from '../flox/modules/auth/components/dialogs/GeneratedPasswordDialog.vue';
 
 const $authService: AuthenticationService | undefined = inject('$authService');
 const $routerService: RouterService | undefined = inject('$routerService');
