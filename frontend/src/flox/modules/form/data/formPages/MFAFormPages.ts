@@ -12,7 +12,7 @@ const MFACard = new FormCard(
   i18n.global.t('card_titles.mfa')
 );
 
-// MFA formPages pages with respective cards
+// MFA form pages with respective cards
 export default [
   new FormPage(MFAFormKey.pageKey, i18n.global.t('authentication.mfa'), [
     MFACard,

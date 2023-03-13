@@ -4,9 +4,9 @@ import { FormStateKey, useFormStore } from '../stores/form';
 import FormPage from '../data/types/FormPage';
 
 /**
- * Set up an empty store sub-structure for a given formPages structure
- * @param formKey - formPages name
- * @param pages - formPages pages
+ * Set up an empty store sub-structure for a given form structure
+ * @param formKey - form name
+ * @param pages - form pages
  * @param preserveState - whether to maintain any preexisting store values
  */
 export function buildStoreSubstructure(
@@ -47,7 +47,7 @@ export function buildStoreSubstructure(
         const preexistingValue =
           store.data[formKey][page.key][card.key]?.[field.key];
 
-        // Initialize all fields to null if not given (or if formPages doesn't require them to be preserved)
+        // Initialize all fields to null if not given (or if form doesn't require them to be preserved)
         if (
           !preserveState ||
           preexistingValue === null ||
@@ -62,7 +62,7 @@ export function buildStoreSubstructure(
 
 /**
  * Gets values from store, if present
- * @param key - formPages field access key
+ * @param key - form field access key
  * @returns data if it exists, null otherwise
  */
 export function fetchByKey(key: FormStateKey): unknown | null {

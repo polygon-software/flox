@@ -12,7 +12,7 @@ const changePasswordCard = new FormCard(
   i18n.global.t('card_titles.change_password')
 );
 
-// Change password formPages pages with respective cards
+// Change password form pages with respective cards
 export default [
   new FormPage(
     changePasswordFormKey.pageKey,

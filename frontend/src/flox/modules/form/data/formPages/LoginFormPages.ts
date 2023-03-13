@@ -16,7 +16,7 @@ const loginCard = new FormCard(
   i18n.global.t('card_titles.login')
 );
 
-// Login formPages pages with respective cards
+// Login form pages with respective cards
 export default [
   new FormPage(loginFormKey.pageKey, i18n.global.t('authentication.login'), [
     loginCard,

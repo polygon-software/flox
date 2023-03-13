@@ -12,7 +12,7 @@ const resetPasswordCard = new FormCard(
   i18n.global.t('card_titles.set_new_password')
 );
 
-// Reset password formPages pages with respective cards
+// Reset password form pages with respective cards
 export default [
   new FormPage(
     resetPasswordFormKey.pageKey,

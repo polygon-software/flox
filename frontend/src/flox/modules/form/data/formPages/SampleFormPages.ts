@@ -12,7 +12,7 @@ const sampleCard = new FormCard(
   i18n.global.t('card_titles.sample')
 );
 
-// Sample formPages pages with respective cards
+// Sample form pages with respective cards
 export default [
   new FormPage(sampleFormKey.pageKey, i18n.global.t('general.sample'), [
     sampleCard,

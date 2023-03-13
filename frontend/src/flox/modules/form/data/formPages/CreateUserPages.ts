@@ -30,7 +30,7 @@ const createUserCard = new FormCard(
   i18n.global.t('card_titles.create_user')
 );
 
-// Create user formPages pages with respective cards
+// Create user form pages with respective cards
 export default [
   new FormPage(
     createUserFormKey.pageKey,

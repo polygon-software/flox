@@ -22,7 +22,7 @@ const signupCard = new FormCard(
   i18n.global.t('card_titles.signup')
 );
 
-// Signup formPages pages with respective cards
+// Signup form pages with respective cards
 export default [
   new FormPage(signupFormKey.pageKey, i18n.global.t('authentication.signup'), [
     signupCard,

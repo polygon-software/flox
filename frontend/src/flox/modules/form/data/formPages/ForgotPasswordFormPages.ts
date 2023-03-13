@@ -12,7 +12,7 @@ const forgotPasswordCard = new FormCard(
   i18n.global.t('card_titles.forgot_password')
 );
 
-// Forgot password formPages pages with respective cards
+// Forgot password form pages with respective cards
 export default [
   new FormPage(
     forgotPasswordFormKey.pageKey,

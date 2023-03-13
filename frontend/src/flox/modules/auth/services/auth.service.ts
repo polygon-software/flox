@@ -413,7 +413,7 @@ export default class AuthenticationService {
   }
 
   /**
-   * Show actual password reset formPages dialog
+   * Show actual password reset form dialog
    */
   showResetPasswordFormDialog(): void {
     this.$q

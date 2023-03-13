@@ -22,7 +22,7 @@ export interface FormState {
   data: FormStoreContents;
 }
 
-// Access key for a formPages value
+// Access key for a form value
 export type FormStateKey = {
   formKey: string;
   pageKey: string;
@@ -47,8 +47,8 @@ export const useFormStore = defineStore('formState', {
     },
 
     /**
-     * Clears all data for the given formPages from the store
-     * @param {string} formKey - formPages key
+     * Clears all data for the given form from the store
+     * @param {string} formKey - form key
      * @returns void
      */
     clearForm(formKey: string) {

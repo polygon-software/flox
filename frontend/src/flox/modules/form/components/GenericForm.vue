@@ -131,7 +131,7 @@
 
 <script lang="ts" setup>
 /**
- * This component defines a generic formPages that can have a single or multiple pages.
+ * This component defines a generic form that can have a single or multiple pages.
  */
 import { onBeforeMount, Ref, ref } from 'vue';
 import { QForm, QStepper } from 'quasar';
@@ -163,7 +163,7 @@ const props = withDefaults(
     textPosition?: string;
     // The pages to show, each containing fields, label and key
     pages: FormPage[];
-    // Whether the formPages should be a flat Q-Card (no borders) or not
+    // Whether the form should be a flat Q-Card (no borders) or not
     flat?: boolean;
     // Whether the store state should be preserved when rebuilding the formPages
     preserveState?: boolean;
@@ -197,7 +197,7 @@ const stepper: Ref<QStepper | null> = ref(null);
 const store = useFormStore();
 
 onBeforeMount(() => {
-  // Initialize formPages structure
+  // Initialize form structure
   form.value = new FormStructure(props.formKey, props.pages);
 
   // Set up store structure
@@ -205,7 +205,7 @@ onBeforeMount(() => {
 });
 
 /**
- * Validates and, if valid, submits the formPages with all entered values
+ * Validates and, if valid, submits the form with all entered values
  * @returns {Promise<void>} - done
  */
 async function onSubmit(): Promise<void> {
