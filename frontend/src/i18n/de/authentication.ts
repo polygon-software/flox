@@ -41,6 +41,8 @@ export default {
     invite: 'Willkommen bei Flox',
     user_enabled: 'Benutzer {username} aktiviert',
     user_disabled: 'Benutzer {username} deaktiviert',
+    user_already_enabled: 'Benutzer {username} ist bereits aktiviert',
+    user_already_disabled: 'Benutzer {username} ist bereits deaktiviert',
     users_enabled: 'Benutzer aktiviert',
     users_disabled: 'Benutzer deaktiviert',
     users_enable_failed: 'Aktivieren der Benutzer fehlgeschlagen',

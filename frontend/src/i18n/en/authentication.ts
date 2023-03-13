@@ -40,6 +40,8 @@ export default {
     invite: 'Welcome to Flox',
     user_enabled: 'User {username} enabled',
     user_disabled: 'User {username} disabled',
+    user_already_enabled: 'User {username} is already enabled',
+    user_already_disabled: 'User {username} is already disabled',
     users_enabled: 'Users enabled',
     users_disabled: 'Users disabled',
     users_enable_failed: 'Enabling users failed',
