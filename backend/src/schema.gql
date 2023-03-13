@@ -533,6 +533,7 @@ type Query {
     expires: Int
     uuids: [ID!] = []
   ): [Image!]!
+  IsUserEnabled(cognitoUuid: ID, uuid: ID!): Boolean!
   MyFiles(
     """URL expiration duration (in seconds)"""
     expires: Int

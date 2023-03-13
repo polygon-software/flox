@@ -102,6 +102,17 @@ export default class UserResolver extends AbstractSearchResolver<
   }
 
   /**
+   * TODO
+   *
+   * @param getUserArgs
+   */
+  @AdminOnly()
+  @Query(() => Boolean, { name: 'IsUserEnabled' })
+  async isUserEnabled(@Args() getUserArgs: GetUserArgs): Promise<boolean> {
+    return this.userService.isUserEnabled(getUserArgs);
+  }
+
+  /**
    * Creates a User with a corresponding Cognito account
    *
    * @param adminCreateUserInput - contains all user data

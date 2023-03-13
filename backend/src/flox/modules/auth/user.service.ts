@@ -17,6 +17,7 @@ import {
   isUserEnabled,
 } from './helpers/cognito.helper';
 import AdminCreateUserInput from './dto/input/admin-create-user.input';
+import GetUserArgs from './dto/args/get-user.args';
 
 @Injectable()
 export default class UserService extends AbstractSearchService<User> {
@@ -129,6 +130,16 @@ export default class UserService extends AbstractSearchService<User> {
     await enableCognitoAccount(user.username);
 
     return user;
+  }
+
+  /**
+   * TODO
+   *
+   * @param getUserArgs
+   */
+  async isUserEnabled(getUserArgs: GetUserArgs): Promise<boolean> {
+    const user = await this.getUser(getUserArgs);
+    return isUserEnabled(user.email);
   }
 
   /**

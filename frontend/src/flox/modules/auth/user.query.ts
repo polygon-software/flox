@@ -112,10 +112,21 @@ export const SEARCH_USERS: QueryObject = {
   cacheLocation: 'SearchUsers',
 };
 
+export const IS_USER_ENABLED: QueryObject = {
+  query: gql`
+    query IsUserEnabled($uuid: ID!) {
+      IsUserEnabled(uuid: $uuid)
+    }
+  `,
+  tables: [TABLES.USER],
+  cacheLocation: 'User',
+};
+
 export const USER_QUERIES: QueryObject[] = [
   GET_MY_USER,
   GET_USER,
   GET_MULTIPLE_USERS,
   GET_ALL_USERS,
   SEARCH_USERS,
+  IS_USER_ENABLED,
 ];
