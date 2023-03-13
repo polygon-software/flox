@@ -43,6 +43,7 @@
         <template #options="{ row }">
           <q-btn
             :label="$t('general.disable')"
+            align="right"
             flat
             icon-right="remove_circle"
             no-caps
@@ -51,6 +52,7 @@
           ></q-btn>
           <q-btn
             :label="$t('general.enable')"
+            align="right"
             flat
             icon-right="check_circle"
             no-caps
@@ -156,11 +158,27 @@ async function createUser(): Promise<void> {
 async function disableUsers(users: UserEntity[]): Promise<void> {
   await $authService
     ?.disableUsers(users)
-    .then(() => {
-      showSuccessNotification(
-        $q,
-        i18n.global.t('authentication.users_disabled')
-      );
+    .then((responses) => {
+      if (responses.every((res) => res.status === 'fulfilled')) {
+        showSuccessNotification(
+          $q,
+          i18n.global.t('authentication.users_disabled')
+        );
+      } else {
+        responses.forEach((res) => {
+          if (res.status === 'fulfilled' && res.value) {
+            showSuccessNotification(
+              $q,
+              i18n.global.t('authentication.user_disabled', {
+                username: res.value.username,
+              })
+            );
+          } else if (res.status === 'rejected' && res.reason) {
+            console.error(res.reason);
+            showErrorNotification($q, `${res.reason as string}`);
+          }
+        });
+      }
     })
     .catch((e) => {
       console.error(e);
@@ -178,11 +196,27 @@ async function disableUsers(users: UserEntity[]): Promise<void> {
 async function enableUsers(users: UserEntity[]): Promise<void> {
   await $authService
     ?.enableUsers(users)
-    .then(() => {
-      showSuccessNotification(
-        $q,
-        i18n.global.t('authentication.users_enabled')
-      );
+    .then((responses) => {
+      if (responses.every((res) => res.status === 'fulfilled')) {
+        showSuccessNotification(
+          $q,
+          i18n.global.t('authentication.users_enabled')
+        );
+      } else {
+        responses.forEach((res) => {
+          if (res.status === 'fulfilled' && res.value) {
+            showSuccessNotification(
+              $q,
+              i18n.global.t('authentication.user_enabled', {
+                username: res.value.username,
+              })
+            );
+          } else if (res.status === 'rejected' && res.reason) {
+            console.error(res.reason);
+            showErrorNotification($q, `${res.reason as string}`);
+          }
+        });
+      }
     })
     .catch((e) => {
       console.error(e);

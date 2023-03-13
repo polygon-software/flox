@@ -273,11 +273,13 @@ export async function checkIfUserExists(email: string): Promise<boolean> {
 }
 
 /**
+ * Generate a random password based on the password regex.
  *
+ * @returns [string] - random password
  */
 export function generatePassword(): string {
   const randExp = new RandExp(PASSWORD_REGEX);
-  randExp.max = 16;
+  randExp.max = 10;
   return randExp.gen();
 }
 

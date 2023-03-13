@@ -123,6 +123,8 @@ export const DISABLE_USER: MutationObject = {
     mutation DisableUser($uuid: ID!) {
       DisableUser(disableUserInput: { uuid: $uuid }) {
         uuid
+        email
+        username
       }
     }
   `,
@@ -136,6 +138,8 @@ export const ENABLE_USER: MutationObject = {
     mutation EnableUser($uuid: ID!) {
       EnableUser(enableUserInput: { uuid: $uuid }) {
         uuid
+        email
+        username
       }
     }
   `,

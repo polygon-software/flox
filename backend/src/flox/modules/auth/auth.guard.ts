@@ -54,11 +54,6 @@ export default class JwtAuthGuard extends AuthGuard('jwt') {
    * @returns - whether the user can activate
    */
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    // eslint-disable-next-line no-console
-    console.log('AUTH');
-    // eslint-disable-next-line no-console
-    console.log('public:', this.isPublic(context));
-
     try {
       await super.canActivate(context);
     } catch (e) {

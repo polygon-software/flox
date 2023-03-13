@@ -1,11 +1,8 @@
 <template>
-  <OnClickOutside @trigger="confirmed = false">
+  <OnClickOutside class="column" @trigger="confirmed = false">
     <q-btn
       :label="confirmed ? confirmLabel : label"
-      :outline="!confirmed"
-      color="negative"
-      no-caps
-      no-wrap
+      :outline="confirmed"
       v-bind="buttonProps"
       @click="confirmAction"
     />

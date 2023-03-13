@@ -89,6 +89,7 @@
                     color: 'negative',
                     iconRight: removeIcon,
                     noCaps: true,
+                    noWrap: true,
                   }"
                   :confirm-label="$t('general.confirm')"
                   :label="removeLabel ?? $t('general.remove')"

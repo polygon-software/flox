@@ -39,9 +39,11 @@ export default {
     reset_password_description:
       'Sie erhalten einen Verifizierungscode an {email}.',
     invite: 'Willkommen bei Flox',
+    user_enabled: 'Benutzer {username} aktiviert',
+    user_disabled: 'Benutzer {username} deaktiviert',
     users_enabled: 'Benutzer aktiviert',
-    users_enable_failed: 'Aktivieren der Benutzer fehlgeschlagen',
     users_disabled: 'Benutzer deaktiviert',
+    users_enable_failed: 'Aktivieren der Benutzer fehlgeschlagen',
     users_disable_failed: 'Deaktivieren der Benutzer fehlgeschlagen',
   },
 };
