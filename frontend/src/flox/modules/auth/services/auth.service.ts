@@ -527,7 +527,7 @@ export default class AuthenticationService {
   /**
    * Shows a dialog containing a QR code for setting up two factor authentication
    *
-   * @param secretCode - the authenticator code to encode in QR code formPages
+   * @param secretCode - the authenticator code to encode in QR code form
    * @param cognitoUser - the cognito user to show the dialog for
    * @param identifier - identifier (username of email)
    * @returns void

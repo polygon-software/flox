@@ -26,7 +26,7 @@ const $q = useQuasar();
 const store = useFormStore();
 
 /**
- * Fetches and logs the formPages's data from the store
+ * Fetches and logs the form's data from the store
  * @returns void
  */
 function onSubmit(): void {

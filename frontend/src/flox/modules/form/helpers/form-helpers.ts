@@ -16,7 +16,7 @@ export function buildStoreSubstructure(
 ): void {
   const store = useFormStore();
 
-  // Set up formPages
+  // Set up form
 
   if (!store.data[formKey]) {
     store.data[formKey] = {};

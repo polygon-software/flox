@@ -1,7 +1,7 @@
 import FormCard from './FormCard';
 
 /**
- * A class representing a page of a formPages. Can hold multiple cards
+ * A class representing a page of a form. Can hold multiple cards
  */
 export default class FormPage {
   key: string;

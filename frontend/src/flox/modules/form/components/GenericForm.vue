@@ -159,13 +159,13 @@ const props = withDefaults(
     loading?: boolean;
     // the label to show when loading
     loadingLabel?: string;
-    // Alignment of the text in the formPages
+    // Alignment of the text in the form
     textPosition?: string;
     // The pages to show, each containing fields, label and key
     pages: FormPage[];
     // Whether the form should be a flat Q-Card (no borders) or not
     flat?: boolean;
-    // Whether the store state should be preserved when rebuilding the formPages
+    // Whether the store state should be preserved when rebuilding the form
     preserveState?: boolean;
     // Manual override for field options (e.g. in GenericSelectFields): maps a field key to a list of options
     optionOverrides?: Record<string, unknown[]> | null;
