@@ -149,7 +149,7 @@ const columns: Ref<ColumnInterface<UserEntity>[]> = ref([
   {
     name: 'enabled',
     label: i18n.global.t('users.enabled'),
-    field: (user) => i18n.global.t(user.enabled ? 'general.yes' : 'general.no'),
+    field: 'enabled',
     sortable: true,
   },
 ]);

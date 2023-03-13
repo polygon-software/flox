@@ -25,26 +25,19 @@
       </template>
       <template #body-cell="cellProps">
         <q-td :props="cellProps">
-          {{
-            cellProps.col.format
-              ? cellProps.col.format(
-                  get(cellProps.row, cellProps.col.field),
-                  cellProps.row
-                )
-              : isString(cellProps.col.field)
-              ? get(cellProps.row, cellProps.col.field)
-              : cellProps.col.field(cellProps.row)
-          }}
-          <!--
-          If the column field path contains a dot, it is a property of a nested object
-          and should / can hence not be edited directly.
-          -->
-          <QPopupEdit
-            v-if="
-              cellProps.col.edit &&
-              updateMutation &&
-              !cellProps.col.field.includes('.')
+          <template v-if="!isBooleanContent(cellProps)"
+            >{{ cellContent(cellProps) }}
+          </template>
+          <q-checkbox
+            v-else
+            :disable="cellType(cellProps) === CellType.boolean"
+            :model-value="cellContent(cellProps)"
+            @update:model-value="
+              updateRow(cellProps.row, cellProps.col.field, $event)
             "
+          />
+          <QPopupEdit
+            v-if="cellType(cellProps) === CellType.editString"
             :ref="
               (el: any) => {
                 popupRefs[getPopupEditKey(cellProps.row, cellProps.col)] = el;
@@ -218,9 +211,10 @@ import {
   watchEffect,
 } from 'vue';
 import get from 'lodash/get';
-import { isString } from 'lodash-es';
+import { isBoolean, isFunction, isString } from 'lodash-es';
 
 import {
+  CellType,
   ColumnAlign,
   ColumnInterface,
   useDataTable,
@@ -311,6 +305,68 @@ const {
   deleteActiveRows,
   deleteRow,
 } = useDataTable(props.query, props.updateMutation, props.deleteMutation);
+
+/**
+ * TODO
+ */
+function cellContent(cellProps: {
+  col: ColumnInterface<BaseEntity>;
+  row: BaseEntity;
+}): any {
+  let content = null;
+  if (isString(cellProps.col.field)) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    content = get(cellProps.row, cellProps.col.field);
+  }
+  if (isFunction(cellProps.col.field)) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    content = cellProps.col.field(cellProps.row);
+  }
+  if (cellProps.col.format) {
+    return cellProps.col.format(content, cellProps.row);
+  }
+  return content;
+}
+
+/**
+ * TODO
+ */
+function cellType(cellProps: {
+  col: ColumnInterface<BaseEntity>;
+  row: BaseEntity;
+}): CellType {
+  if (
+    props.updateMutation &&
+    cellProps.col.edit &&
+    isString(cellProps.col.field) &&
+    !cellProps.col.field.includes('.')
+  ) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const content = get(cellProps.row, cellProps.col.field);
+    if (isString(content)) {
+      return CellType.editString;
+    }
+    if (isBoolean(content)) {
+      return CellType.editBoolean;
+    }
+  }
+  if (isBoolean(cellContent(cellProps))) {
+    return CellType.boolean;
+  }
+  return CellType.other;
+}
+
+/**
+ * TODO
+ * @param cellProps
+ */
+function isBooleanContent(cellProps: {
+  col: ColumnInterface<BaseEntity>;
+  row: BaseEntity;
+}): boolean {
+  const type: CellType = cellType(cellProps);
+  return type === CellType.boolean || type === CellType.editBoolean;
+}
 
 /**
  * Validates an input for qPopupEdit

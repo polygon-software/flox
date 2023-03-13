@@ -45,10 +45,17 @@ export enum ColumnSortOrder {
   descending = 'da',
 }
 
+export enum CellType {
+  editString = 'editString',
+  editBoolean = 'editBoolean',
+  boolean = 'boolean',
+  other = 'other',
+}
+
 export interface ColumnInterface<T = any> {
   name: string;
   label: string;
-  field: string | ((row: T) => string);
+  field: string | ((row: T) => any);
   required?: boolean;
   align?: ColumnAlign;
   sortable?: boolean;
@@ -240,6 +247,7 @@ export function useDataTable(
               }
               let fieldVal: any;
               if (typeof col.field === 'function') {
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                 fieldVal = col.field(row);
               } else {
                 const colHasField = col.field === void 0;
