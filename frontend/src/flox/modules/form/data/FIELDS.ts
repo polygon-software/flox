@@ -2,6 +2,7 @@ import { markRaw } from 'vue';
 import { isString } from 'class-validator';
 
 import { i18n } from 'boot/i18n';
+import SendInviteField from 'src/flox/modules/form/components/fields/general/SendInviteField.vue';
 
 import AddressField from '../components/fields/general/AddressField.vue';
 import DateField from '../components/fields/general/DateField.vue';
@@ -14,7 +15,6 @@ import PasswordRepeat from '../components/fields/general/PasswordRepeatField.vue
 import PhoneNumberField from '../components/fields/general/PhoneNumberField.vue';
 import UserRoleField from '../components/fields/general/UserRoleField.vue';
 import SelectLanguageField from '../components/fields/general/SelectLanguageField.vue';
-import SendInviteField from '../components/fields/general/SendInviteField.vue';
 import { classValidatorRule } from '../helpers/validation-helpers';
 import { availablePhonenNumberOptions } from '../helpers/generation-helpers';
 
