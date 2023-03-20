@@ -77,6 +77,7 @@ module "api_ebs" {
   api_source_code_object_id = aws_s3_object.api_source_code_object.id
   api_source_code_object_hash = aws_s3_object.api_source_code_object.source_hash
   aws_region = var.aws_region
+  aws_s3_region = var.aws_s3_region // Zurich (Switzerland) TODO
   api_security_group_id = aws_security_group.api_security_group.id
   admin_key_id = aws_iam_access_key.backend_admin_key.id
   admin_key_secret = aws_iam_access_key.backend_admin_key.secret
@@ -105,6 +106,7 @@ module "api_serverless" {
   api_source_code_object_key = aws_s3_object.api_source_code_object.key
   api_source_code_object_hash = aws_s3_object.api_source_code_object.source_hash
   aws_region = var.aws_region
+  aws_s3_region = var.aws_s3_region // Zurich (Switzerland) TODO
   database_name = var.database_name
   database_master_username = var.database_master_username
   database_master_password = var.database_master_password

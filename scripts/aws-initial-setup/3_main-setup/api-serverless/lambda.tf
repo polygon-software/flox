@@ -32,20 +32,20 @@ resource "aws_lambda_function" "api_lambda" {
 
       // Ports
       SERVER_PORT = 3000
-      NOCODB_PORT = 8000,
 
       // Run mode
       SERVERLESS = true,
 
       // AWS
       AWS_MAIN_REGION = var.aws_region
+      AWS_S3_REGION = var.aws_s3_region // region for s3 in Zurich (Switzerland) TODO
       AWS_PUBLIC_BUCKET_NAME = var.public_bucket_id,
       AWS_PRIVATE_BUCKET_NAME = var.private_bucket_id,
       PROJECT_NAME = var.project,
       USER_POOL_ID= var.user_pool_id,
       USER_POOL_CLIENT_ID = var.user_pool_client_id,
       BASE_URL = "https://${var.domain}",
-      DEV = "false",
+      DEV = var.type == "dev" || var.type == "stage" ? "true" : "false",
       CLOUDWATCH_GROUP_NAME = "${var.project}-${var.type}",
       CLOUDWATCH_STREAM_NAME = "API",
       AWS_LOG_BUCKET_NAME = var.log_bucket_id,

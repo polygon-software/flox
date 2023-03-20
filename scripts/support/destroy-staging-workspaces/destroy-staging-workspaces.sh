@@ -50,6 +50,7 @@ do
       # Other workspaces get regular deleted (prevents deletion if resources still present)
       terraform workspace delete "$workspace"
     fi
+
     # Increment counter
     ((destroyed_workspaces+=1))
   fi

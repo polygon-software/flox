@@ -26,6 +26,7 @@ cd ../../backend || exit
 rm -rf dist
 
 yarn
+
 if [[ $3 == "true" ]]
 then
   # Install node-prune for serverless build
@@ -73,6 +74,10 @@ rm -f ../../scripts/outputs/backend.zip
 
 # Zip contents of dist folder
 zip -r ../../scripts/outputs/backend.zip * -q
+
+# Re-install to ensure all dev dependencies exist
+yarn
+
 cd ..
 
 cd ../frontend || exit

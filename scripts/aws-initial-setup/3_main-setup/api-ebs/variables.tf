@@ -52,6 +52,12 @@ variable "aws_region" {
   type            = string
 }
 
+variable "aws_s3_region" {
+  default         = "eu-central-2" // Zurich (Switzerland) TODO
+  description     = "AWS Region of S3 buckets"
+  type            = string
+}
+
 variable "backend_certificate_arn" {
   description     = "Backend SSL certificate ARN"
   type            = string

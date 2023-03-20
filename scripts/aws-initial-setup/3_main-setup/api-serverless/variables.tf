@@ -74,6 +74,12 @@ variable "aws_region" {
   type            = string
 }
 
+variable "aws_s3_region" {
+  default         = "eu-central-2" // Zurich (Switzerland) TODO
+  description     = "AWS Region of S3 storage buckets"
+  type            = string
+}
+
 variable "user_pool_id" {
   type    = string
 }

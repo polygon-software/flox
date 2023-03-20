@@ -51,28 +51,15 @@ services:
       - webnet
     environment:
       POSTGRES_DB: ${DB_DATABASE}
-      POSTGRES_USER:  ${DB_USER}
+      POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - ${DB_PORT}:5432
     volumes:
       - dbdata:/var/lib/postgresql/data
 
-  #nocodb:
-  #  container_name: nocodb
-  #  image: nocodb/nocodb:latest
-  #  networks:
-  #    - webnet
-  #  ports:
-  #    - ${NOCODB_PORT}:${NOCODB_PORT}
-  #  volumes:
-  #    - nocodbdata:/usr/app/data
-  #  depends_on:
-  #    - database
-
 networks:
   webnet:
 volumes:
   dbdata:
-  #nocodbdata:
   data-frontend:

@@ -25,12 +25,19 @@ provider "aws" {
   access_key          = var.aws_access_key
 }
 
-// Define alternate region AWS as provider
+// Define alternate region AWS as providers
 provider "aws" {
-  region              = "us-east-1"
+  region              = "us-east-1" // N. Virginia (USA)
   secret_key          = var.aws_secret_access_key
   access_key          = var.aws_access_key
   alias               = "us-east-1"
+}
+
+provider "aws" {
+  region              = "eu-central-2" // Zurich (Switzerland)
+  secret_key          = var.aws_secret_access_key
+  access_key          = var.aws_access_key
+  alias               = "eu-central-2"
 }
 
 # Get workspace ID

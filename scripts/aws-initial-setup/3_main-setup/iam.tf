@@ -67,15 +67,15 @@ resource "aws_iam_role_policy_attachment" "api_translate" {
 
 resource "aws_iam_role_policy_attachment" "api_role" {
   role   = aws_iam_role.eb_api_role.name
-  policy_arn = aws_iam_policy.iamPolicy.arn
+  policy_arn = aws_iam_policy.backend_manager_policy.arn
 }
 
-resource "aws_iam_policy" "iamPolicy" {
+resource "aws_iam_policy" "backend_manager_policy" {
   name = "${var.project}-manager-${var.type}"
-  policy = data.aws_iam_policy_document.flox_manager_document.json
+  policy = data.aws_iam_policy_document.backend_manager_policy_document.json
 }
 
-data aws_iam_policy_document flox_manager_document {
+data aws_iam_policy_document backend_manager_policy_document {
   statement {
     effect = "Allow"
     actions = [
@@ -99,6 +99,13 @@ data aws_iam_policy_document flox_manager_document {
       "${aws_s3_bucket.public_files.arn}/*",
       "${aws_s3_bucket.log_files.arn}/*",
     ]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "ses:*"
+    ]
+    resources = ["*"]
   }
   statement {
     effect = "Allow"
@@ -133,15 +140,23 @@ resource "aws_iam_user_policy_attachment" "backend_admin_s3" {
   user      = aws_iam_user.backend_admin.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
 }
+
 // SES Access
 resource "aws_iam_user_policy_attachment" "backend_admin_ses" {
   user      = aws_iam_user.backend_admin.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSESFullAccess"
 }
+
 // Cognito Access
 resource "aws_iam_user_policy_attachment" "backend_admin_cognito" {
   user      = aws_iam_user.backend_admin.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonCognitoPowerUser"
+}
+
+// Attach policy to admin
+resource "aws_iam_user_policy_attachment" "backend_admin_custom" {
+  user      = aws_iam_user.backend_admin.name
+  policy_arn = aws_iam_policy.backend_manager_policy.arn
 }
 
 // Programmatic access key
@@ -251,4 +266,3 @@ data "aws_iam_policy_document" "log_bucket" {
     resources = [aws_s3_bucket.log_files.arn]
   }
 }
-
