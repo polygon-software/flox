@@ -11,11 +11,14 @@
   },
   "moduleOptions": {
     "auth": {
-      "emailAsUsername": true
+      "emailAsUsername": true,
+      "useTwoFactor": true
     },
     "roles": {
       "roles": [
-        "ADMIN", "SUPERUSER", "USER"
+        "ADMIN",
+        "SUPERUSER",
+        "USER"
       ]
     },
     "file": {},
@@ -29,7 +32,10 @@
   },
   "i18n": {
     "defaultLocale": "en",
-    "availableLocales": ["de", "en"]
+    "availableLocales": [
+      "de",
+      "en"
+    ]
   },
   "general": {
     "database_name": "floxdb",
