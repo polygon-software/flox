@@ -7,7 +7,7 @@ resource "aws_kms_key" "s3_encryption_key" {
   tags = {
     Name = "S3 Key"
   }
-  provider = aws.eu-central-2 // Zurich (Switzerland) TODO
+  provider = aws.aws_s3_region
 }
 
 resource "aws_kms_key" "rds_encryption_key" {

@@ -1,4 +1,3 @@
-
 # DNS-related
 output "ns_records" {
   description = "Nameserver records for customer hosted zone"
