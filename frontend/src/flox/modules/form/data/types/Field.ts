@@ -1,4 +1,4 @@
-import { ValidationRule } from '../../../../../tools/validation.tool';
+import { ValidationRule } from 'src/tools/validation.tool';
 
 /**
  * This type represents a field used in forms.
