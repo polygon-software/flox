@@ -266,7 +266,7 @@ fi
 
 # Apply main Terraform
 init_out=$(terraform init)
-if [[ $init_out == *"Error"* ]]
+if [[ $init_out == *"│ Error: "* ]]
 then
   echo $init_out
   echo "Error in Terraform init. Exiting..."
@@ -274,7 +274,7 @@ then
 fi
 
 apply_out=$(terraform apply -auto-approve -var-file="../../support/flox.tfvars")
-if [[ $apply_out == *"Error"* ]]
+if [[ $apply_out == *"│ Error: "* ]]
 then
   echo $apply_out
   echo "Error in Terraform apply. Exiting..."
