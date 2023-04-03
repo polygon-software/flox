@@ -1,8 +1,8 @@
 // S3 bucket for uploading dist to
 resource "aws_s3_bucket" "website_bucket" {
   bucket = var.domain
-  tags = {
-    Name          = "${var.project}-${var.type}-website-bucket"
+  tags   = {
+    Name = "${var.project}-${var.type}-website-bucket"
   }
 
   force_destroy = var.type == "test" ? true : false
@@ -15,11 +15,10 @@ resource "aws_s3_bucket" "website_bucket" {
 // Bucket with www. that redirects to main bucket
 resource "aws_s3_bucket" "redirect_bucket" {
   bucket = "www.${var.domain}"
-  tags = {
-    Name          = "${var.project}-${var.type}-website-bucket-redirect"
+  tags   = {
+    Name = "${var.project}-${var.type}-website-bucket-redirect"
   }
 
-  acl = "public-read"
   force_destroy = var.type == "test" ? true : false
 
   lifecycle {
@@ -27,12 +26,18 @@ resource "aws_s3_bucket" "redirect_bucket" {
   }
 }
 
+// Redirect S3 bucket ACL
+resource "aws_s3_bucket_acl" "redirect_bucket_acl" {
+  bucket = aws_s3_bucket.redirect_bucket.id
+  acl    = "public-read"
+}
+
 // Redirect S3 bucket config
 resource "aws_s3_bucket_website_configuration" "redirect_bucket_config" {
   bucket = aws_s3_bucket.redirect_bucket.bucket
   redirect_all_requests_to {
     host_name = var.domain
-    protocol = "https"
+    protocol  = "https"
   }
 }
 
@@ -72,15 +77,15 @@ resource "aws_s3_bucket_policy" "website_bucket_policy" {
 
 // Modularize files with proper types
 module "dist_files" {
-  source = "hashicorp/dir/template"
+  source   = "hashicorp/dir/template"
   base_dir = "${path.module}/frontend"
 }
 
 // Upload all dist resources to S3 Bucket
-resource "aws_s3_bucket_object" "file" {
-  for_each      = module.dist_files.files
-  bucket        = aws_s3_bucket.website_bucket.bucket
-  key           = each.key
-  content_type  = each.value.content_type
-  source        = each.value.source_path
+resource "aws_s3_object" "file" {
+  for_each     = module.dist_files.files
+  bucket       = aws_s3_bucket.website_bucket.bucket
+  key          = each.key
+  content_type = each.value.content_type
+  source       = each.value.source_path
 }
