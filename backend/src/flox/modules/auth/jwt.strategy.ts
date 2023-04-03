@@ -42,7 +42,7 @@ export default class JwtStrategy extends PassportStrategy(Strategy) {
   validate(payload: JwtStrategyValidationPayload): CognitoUserType {
     const username = payload['cognito:username'];
     return {
-      UUID: payload.sub,
+      uuid: payload.sub,
       username,
     } as CognitoUserType;
   }
