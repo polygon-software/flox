@@ -75,7 +75,7 @@ variable "aws_region" {
 }
 
 variable "aws_s3_region" {
-  default     = "eu-central-2" // Zurich (Switzerland)
+  default     = "eu-central-1" // Frankfurt (Germany)
   description = "AWS Region of S3 buckets"
   type        = string
 }

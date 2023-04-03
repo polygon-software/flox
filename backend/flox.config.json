@@ -63,6 +63,7 @@
   },
   "infrastructure_dev": {
     "aws_region": "eu-central-1",
+    "aws_s3_region": "eu-central-2",
     "serverless_api": true,
     "serverless_db": true,
     "serverless_db_version": "v1"
