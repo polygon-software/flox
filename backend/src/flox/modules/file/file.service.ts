@@ -146,7 +146,7 @@ export default class FileService extends AbstractSearchAccessControlService<S3Fi
    *
    * @param files - files for which folders should be extracted
    * @param path - base path from which on folder names should be determined
-   * @returns list of folder output
+   * @returns list of folder outputs
    * @example Assume the file paths to be the following: [/root/folderA/folder1, /root/folderB, /root/folderB/folder2]
    *          The function is called with a base path of /root would result in folder names /folderA and /folder2
    *          since these are the immediate successors for the /root path
