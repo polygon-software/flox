@@ -11,11 +11,6 @@ import { moduleConfig } from './config';
 
 @Injectable()
 export default class EmailService {
-  constructor(
-    private readonly i18nService: I18nService,
-    private readonly configService: ConfigService,
-  ) {}
-
   // SES credentials
   private readonly credentials: Credentials = {
     region: this.configService.getOrThrow<string>('AWS_MAIN_REGION'),
@@ -26,6 +21,11 @@ export default class EmailService {
       'AWS_ADMIN_SECRET_ACCESS_KEY',
     ),
   };
+
+  constructor(
+    private readonly i18nService: I18nService,
+    private readonly configService: ConfigService,
+  ) {}
 
   /**
    * Send a custom e-mail invitation to a newly created user.
@@ -43,7 +43,10 @@ export default class EmailService {
 
     // Get sender from module configuration
     const sender = moduleConfig().emailAddress;
-
+    const template: string | undefined = inviteTemplate[lang];
+    if (template === undefined) {
+      throw new Error(`No invite email template for language ${lang}`);
+    }
     // Send actual e-mail
     await sendEmail(
       this.credentials,
@@ -53,8 +56,7 @@ export default class EmailService {
         lang,
       }),
       // E-mail contents from HTML template
-      render(inviteTemplate, {
-        lang,
+      render(template, {
         password: tempPassword,
       }) as string,
     );
@@ -74,7 +76,11 @@ export default class EmailService {
   ): Promise<void> {
     // Get sender from module configuration
     const sender = moduleConfig().emailAddress;
+    const template: string | undefined = resetTemplate[lang];
 
+    if (template === undefined) {
+      throw new Error(`No password reset template for language ${lang}`);
+    }
     // Send actual e-mail
     await sendEmail(
       this.credentials,
@@ -84,8 +90,7 @@ export default class EmailService {
         lang,
       }),
       // E-mail contents from HTML template
-      render(resetTemplate, {
-        lang,
+      render(template, {
         password: tempPassword,
       }) as string,
     );
