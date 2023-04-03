@@ -107,7 +107,7 @@ export async function searchUsers(
  * @param username - user's username (might be identical to e-mail)
  * @param email - user's e-mail address
  * @param role - the user's role
- * @param deliveryMediums - medium to use to deliver user's new login information (sms, email, both or none)
+ * @param deliveryMediums - mediums to use to deliver user's new login information
  * @param [phoneNumber] - number to send the SMS invitation to
  * @param [lang] - user's language
  * @returns the newly created user
