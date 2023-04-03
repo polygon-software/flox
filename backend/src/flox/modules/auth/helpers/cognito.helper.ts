@@ -165,6 +165,8 @@ export async function adminCreateCognitoAccount(
   });
   await provider.send(updateUserAttributesCommand);
 
+  // eslint-disable-next-line no-console
+  console.log('User:', response.User); // TODO: Test with and without email as username
   return response.User.Username;
 }
 
