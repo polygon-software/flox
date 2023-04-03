@@ -200,7 +200,7 @@ export default class UserResolver extends AbstractSearchResolver<
     const user = await this.userService.getUser({ uuid: deleteInput.uuid });
 
     // Delete cognito account
-    await deleteCognitoAccount(user.email);
+    await deleteCognitoAccount(user.username);
 
     // Delete in database
     return super.delete(deleteInput);
