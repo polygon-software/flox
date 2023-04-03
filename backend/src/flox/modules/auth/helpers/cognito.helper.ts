@@ -103,7 +103,7 @@ export async function signupCreateCognitoAccount(
  * @param password - Initial password
  * @param [phoneNumber] - user's phone number (needed if sms was selected)
  * @param [deliveryMediums] - medium to use to deliver user's new login information (sms, email, both or none)
- * @returns Cognito ID
+ * @returns Cognito UUID
  */
 export async function adminCreateCognitoAccount(
   username: string,
@@ -140,19 +140,19 @@ export async function adminCreateCognitoAccount(
 
   const params = {
     UserPoolId: Env.USER_POOL_ID,
-    Username: email,
+    Username: username,
     TemporaryPassword: password,
     DesiredDeliveryMediums: deliveryMediums,
     UserAttributes: userAttrs,
   };
   const createUserCommand = new AdminCreateUserCommand(params);
-  const resp = await provider.send(createUserCommand);
+  const response = await provider.send(createUserCommand);
 
   // Ensure user was created successfully, otherwise throw with request ID for traceability
-  if (!resp.User || !resp.User.Username) {
+  if (!response.User || !response.User.Username) {
     throw new Error(
       `An error occurred while creating the Cognito user. Request ID: ${
-        resp.$metadata.requestId ?? '-'
+        response.$metadata.requestId ?? '-'
       }`,
     );
   }
@@ -165,37 +165,37 @@ export async function adminCreateCognitoAccount(
   });
   await provider.send(updateUserAttributesCommand);
 
-  return resp.User.Username;
+  return response.User.Username;
 }
 
 /**
- * Disables (locks) a cognito account by email
+ * Disables (locks) a cognito account by username
  *
- * @param email - The account's email
+ * @param username - The account's username
  * @returns command output
  */
 export function disableCognitoAccount(
-  email: string,
+  username: string,
 ): Promise<AdminDisableUserCommandOutput> {
   const disableUserCommand = new AdminDisableUserCommand({
     UserPoolId: Env.USER_POOL_ID,
-    Username: email,
+    Username: username,
   });
   return provider.send(disableUserCommand);
 }
 
 /**
- * Re-enables (unlocks) a cognito account by email
+ * Re-enables (unlocks) a cognito account by username
  *
- * @param email - The account's email
+ * @param username - The account's username
  * @returns command output
  */
 export function enableCognitoAccount(
-  email: string,
+  username: string,
 ): Promise<AdminEnableUserCommandOutput> {
   const enableUserCommand = new AdminEnableUserCommand({
     UserPoolId: Env.USER_POOL_ID,
-    Username: email,
+    Username: username,
   });
   return provider.send(enableUserCommand);
 }
@@ -203,13 +203,13 @@ export function enableCognitoAccount(
 /**
  * Determines whether a user's account is currently enabled
  *
- * @param email - The account's email
+ * @param username - The account's username
  * @returns true if the account is enabled, false if it is disabled
  */
-export async function isUserEnabled(email: string): Promise<boolean> {
+export async function isUserEnabled(username: string): Promise<boolean> {
   const getUserCommand = new AdminGetUserCommand({
     UserPoolId: Env.USER_POOL_ID,
-    Username: email,
+    Username: username,
   });
   const result = await provider.send(getUserCommand);
 
@@ -219,13 +219,15 @@ export async function isUserEnabled(email: string): Promise<boolean> {
 /**
  * Determines a user's account status
  *
- * @param email - The account's email
+ * @param username - The account's username
  * @returns true if the account is enabled, false if it is disabled
  */
-export async function getAccountStatus(email: string): Promise<UserStatusType> {
+export async function getAccountStatus(
+  username: string,
+): Promise<UserStatusType> {
   const getUserCommand = new AdminGetUserCommand({
     UserPoolId: Env.USER_POOL_ID,
-    Username: email,
+    Username: username,
   });
   const result = await provider.send(getUserCommand);
 
@@ -238,17 +240,17 @@ export async function getAccountStatus(email: string): Promise<UserStatusType> {
 }
 
 /**
- * Deletes a cognito account by email
+ * Deletes a cognito account by username
  *
- * @param email - The account's email
+ * @param username - The account's username
  * @returns command output
  */
 export function deleteCognitoAccount(
-  email: string,
+  username: string,
 ): Promise<AdminDeleteUserCommandOutput> {
   const deleteUserCommand = new AdminDeleteUserCommand({
     UserPoolId: Env.USER_POOL_ID,
-    Username: email,
+    Username: username,
   });
   return provider.send(deleteUserCommand);
 }
@@ -256,14 +258,14 @@ export function deleteCognitoAccount(
 /**
  * Checks whether a Cognito account exists for a given e-mail
  *
- * @param email - The email of the new user
+ * @param username - The username of the new user
  * @returns whether the user already exists
  */
-export async function checkIfUserExists(email: string): Promise<boolean> {
+export async function checkIfUserExists(username: string): Promise<boolean> {
   // Request parameters
   const params = {
     UserPoolId: Env.USER_POOL_ID,
-    Username: email,
+    Username: username,
   };
 
   const getUserCommand = new AdminGetUserCommand(params);
@@ -288,14 +290,16 @@ export function generatePassword(): string {
  * FORCE_CHANGE_PASSWORD state. It is required to provide the new temporary password to the user via e-mail from the
  * service that called this function.
  *
- * @param email - The email of the user
+ * @param username - The username of the user
  * @returns the temporary password that was set for the user
  */
-export async function forceUserPasswordChange(email: string): Promise<string> {
+export async function forceUserPasswordChange(
+  username: string,
+): Promise<string> {
   const tempPassword = generatePassword();
   const params = {
     UserPoolId: Env.USER_POOL_ID,
-    Username: email,
+    Username: username,
     Password: tempPassword,
     Permanent: false,
   };
@@ -307,7 +311,7 @@ export async function forceUserPasswordChange(email: string): Promise<string> {
   await provider.send(
     new AdminUserGlobalSignOutCommand({
       UserPoolId: Env.USER_POOL_ID,
-      Username: email,
+      Username: username,
     }),
   );
 
