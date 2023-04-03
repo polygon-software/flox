@@ -55,9 +55,6 @@ frontend_build_mode=${frontend_build_mode:1:-1}
 aws_region=$(jq ".infrastructure_$mode.aws_region" ../../../backend/flox.config.json)
 aws_region=${aws_region:1:-1}
 
-aws_s3_region=$(jq ".infrastructure_$mode.aws_s3_region" ../../../backend/flox.config.json)
-aws_s3_region=${aws_s3_region:1:-1}
-
 organisation=$(jq '.general.organisation' ../../../backend/flox.config.json)
 organisation=${organisation:1:-1}
 

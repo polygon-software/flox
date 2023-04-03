@@ -70,7 +70,7 @@ variable "source_code_bucket_id" {
 
 variable "aws_region" {
   default     = "eu-central-1" // Frankfurt (Germany)
-  description = "AWS region"
+  description = "AWS Region"
   type        = string
 }
 
