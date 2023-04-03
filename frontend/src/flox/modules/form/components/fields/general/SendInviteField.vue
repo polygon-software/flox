@@ -1,9 +1,9 @@
 <template>
   <GenericOptionGroupField
     :initial-value="fieldValue.mediums"
-    :options="options"
+    :label="$t('fields.authentication.send_invite')"
+    :options="inviteOptions()"
     :rules="[IS_SELECTED]"
-    :label="label"
     @change="(val) => (Array.isArray(val) ? (fieldValue.mediums = val) : null)"
   />
   <PhoneNumberField
@@ -15,10 +15,8 @@
   />
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { computed, Ref, ref, watch } from 'vue';
-
-import { i18n } from 'boot/i18n';
 
 import DELIVERY_MEDIUMS from '../../../../../enum/DELIVERY_MEDIUMS';
 import SendInvite from '../../../data/types/SendInvite';
@@ -29,7 +27,6 @@ import {
   inviteOptions,
 } from '../../../helpers/generation-helpers';
 import { fetchByKey } from '../../../helpers/form-helpers';
-import { GenericOption } from '../../../data/types/GenericOption';
 
 import GenericOptionGroupField from './GenericOptionGroupField.vue';
 import PhoneNumberField from './PhoneNumberField.vue';
@@ -37,13 +34,8 @@ import PhoneNumberField from './PhoneNumberField.vue';
 const props = withDefaults(
   defineProps<{
     stateKey: FormStateKey;
-    label?: string;
-    options?: GenericOption[];
   }>(),
-  {
-    label: i18n.global.t('fields.authentication.send_invite'),
-    options: () => inviteOptions(),
-  }
+  {}
 );
 
 const store = useFormStore();
