@@ -33,6 +33,14 @@ provider "aws" {
   alias               = "us-east-1"
 }
 
+// Define S3 region AWS as provider
+provider "aws" {
+  region              = var.aws_s3_region
+  secret_key          = var.aws_secret_access_key
+  access_key          = var.aws_access_key
+  alias               = "aws_s3_region"
+}
+
 # Get workspace ID
 data "tfe_workspace" "workspace" {
   name         = "##PROJECT##-##TYPE##"
