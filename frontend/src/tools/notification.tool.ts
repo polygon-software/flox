@@ -36,7 +36,7 @@ export function showNotification(
 ): void {
   q.notify({
     message,
-    position: options.position ?? 'bottom',
+    position: options.position ?? 'top-right',
     color: options.color ?? 'primary',
     textColor: options.textColor ?? 'white',
     icon: options.icon,
@@ -57,7 +57,11 @@ export function showSuccessNotification(
   message: string,
   options: NotificationOptions = {}
 ): void {
-  showNotification(q, message, { color: 'positive', icon: 'done', ...options });
+  showNotification(q, message, {
+    color: 'positive',
+    icon: 'done',
+    ...options,
+  });
 }
 
 /**

@@ -24,11 +24,10 @@ import { ref } from 'vue';
 import { useQuasar } from 'quasar';
 
 import { i18n } from 'boot/i18n';
-
 import {
   showErrorNotification,
   showSuccessNotification,
-} from '../../../helpers/notification-helpers';
+} from 'src/tools/notification.tool';
 
 const props = withDefaults(
   defineProps<{

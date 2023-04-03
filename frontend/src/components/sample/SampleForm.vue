@@ -10,10 +10,10 @@
 import { useQuasar } from 'quasar';
 
 import { fetchByKey } from 'src/flox/modules/form/helpers/form-helpers';
-import { showSuccessNotification } from 'src/flox/modules/form/helpers/notification-helpers';
 import { sampleFormKey } from 'src/flox/modules/form/data/FORM_KEYS';
 import { FIELDS } from 'src/flox/modules/form/data/FIELDS';
 import { useFormStore } from 'src/flox/modules/form/stores/form';
+import { showSuccessNotification } from 'src/tools/notification.tool';
 
 import SampleFormPages from '../../flox/modules/form/data/formPages/SampleFormPages';
 import GenericForm from '../../flox/modules/form/components/GenericForm.vue';
