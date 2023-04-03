@@ -145,15 +145,3 @@ resource "aws_s3_object" "api_source_code_object" {
   source      = "backend.zip"
   source_hash = filemd5("backend.zip")
 }
-
-// CORS config for direct frontend/backend access
-resource "aws_s3_bucket_cors_configuration" "example" {
-  bucket = aws_s3_bucket.private_files.id
-
-  cors_rule {
-    allowed_headers = ["*"]
-    allowed_methods = ["PUT"]
-    allowed_origins = ["https://${var.domain}", "https://api.${var.domain}", "https://localhost", "http://localhost"]
-    expose_headers  = []
-  }
-}
