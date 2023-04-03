@@ -282,7 +282,7 @@ export default class AuthenticationService {
   /**
    * Disable all users in the given list
    *
-   * @param users
+   * @param users - list of users to disable
    */
   // eslint-disable-next-line class-methods-use-this
   async disableUsers(
@@ -297,7 +297,7 @@ export default class AuthenticationService {
   /**
    * Enable all users in the given list
    *
-   * @param users
+   * @param users - list of users to enable
    */
   // eslint-disable-next-line class-methods-use-this
   async enableUsers(
