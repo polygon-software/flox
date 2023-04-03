@@ -47,8 +47,8 @@ variable "user_pool_client_id" {
 }
 
 variable "aws_region" {
-  default     = "eu-central-1"
-  description = "AWS Region"
+  default     = "eu-central-1" // Frankfurt (Germany)
+  description = "AWS region"
   type        = string
 }
 

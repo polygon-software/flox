@@ -4,7 +4,7 @@ resource "aws_s3_bucket_public_access_block" "private_files" {
   block_public_acls       = true
   block_public_policy     = true
   restrict_public_buckets = true
-  provider                = aws.aws_s3_region // Zurich (Switzerland)
+  provider                = aws.aws_s3_region
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "private_files" {

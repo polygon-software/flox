@@ -14,7 +14,14 @@ variable "project" {
 }
 
 variable "aws_region" {
+  default     = "eu-central-1" // Frankfurt (Germany)
   description = "AWS region"
+  type        = string
+}
+
+variable "aws_s3_region" {
+  default     = "eu-central-2" // Zurich (Switzerland)
+  description = "AWS Region of S3 buckets"
   type        = string
 }
 
