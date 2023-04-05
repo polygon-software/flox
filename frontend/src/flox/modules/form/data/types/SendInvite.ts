@@ -4,7 +4,7 @@ import DELIVERY_MEDIUMS from '../../../../enum/DELIVERY_MEDIUMS';
 
 /**
  * This class represnts the contents of a send invite field, used
- * when an adminc creates a new user.
+ * when an admin creates a new user.
  */
 export default class SendInvite {
   mediums?: string;
