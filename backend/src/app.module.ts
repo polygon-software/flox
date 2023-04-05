@@ -52,7 +52,6 @@ import env from './env';
         DB_HOST: Joi.string().required(),
 
         // Ports
-        NOCODB_PORT: Joi.number().required(),
         SERVER_PORT: Joi.number().required(),
         DB_PORT: Joi.number().required(),
 

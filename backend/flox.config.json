@@ -11,11 +11,14 @@
   },
   "moduleOptions": {
     "auth": {
-      "emailAsUsername": true
+      "emailAsUsername": true,
+      "useTwoFactor": true
     },
     "roles": {
       "roles": [
-        "ADMIN", "SUPERUSER", "USER"
+        "ADMIN",
+        "SUPERUSER",
+        "USER"
       ]
     },
     "file": {},
@@ -29,7 +32,10 @@
   },
   "i18n": {
     "defaultLocale": "en",
-    "availableLocales": ["de", "en"]
+    "availableLocales": [
+      "de",
+      "en"
+    ]
   },
   "general": {
     "database_name": "floxdb",
@@ -57,6 +63,7 @@
   },
   "infrastructure_dev": {
     "aws_region": "eu-central-1",
+    "aws_s3_region": "eu-central-2",
     "serverless_api": true,
     "serverless_db": true,
     "serverless_db_version": "v1"

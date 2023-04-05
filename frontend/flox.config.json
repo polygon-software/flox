@@ -16,7 +16,8 @@
       ]
     },
     "auth": {
-      "emailAsUsername": true
+      "emailAsUsername": true,
+      "useTwoFactor": true
     }
   },
   "general": {
