@@ -172,52 +172,54 @@ then
   terraform apply -auto-approve -var-file="../../support/flox.tfvars"
 
   cd ../2_cognito-setup || exit
-  else
-    cd ../scripts/aws-initial-setup/2_cognito-setup || exit
-  fi
-  # ==========================================
-  # ======     Step 2: Cognito & SES setup     ========
-  # ==========================================
-  if [[ $mode == "stage" ]]
-  then
-    sed -i -e "s/##TYPE##/$branch_name/g" config.tf
-  else
-    sed -i -e "s/##TYPE##/$mode/g" config.tf
-  fi
+else
+  cd ../scripts/aws-initial-setup/2_cognito-setup || exit
+fi
 
-  # Replace 'PROJECT' in config.tf with actual project name
-  sed -i -e "s/##PROJECT##/$project/g" config.tf
+# ==========================================
+# ==     Step 2: Cognito & SES setup     ===
+# ==========================================
+if [[ $mode == "stage" ]]
+then
+  sed -i -e "s/##TYPE##/$branch_name/g" config.tf
+else
+  sed -i -e "s/##TYPE##/$mode/g" config.tf
+fi
 
-  # Replace 'ORGANISATION' in config.tf with actual organisation name
-  sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
+# Replace 'PROJECT' in config.tf with actual project name
+sed -i -e "s/##PROJECT##/$project/g" config.tf
 
-  terraform init
-  terraform apply -auto-approve -var-file="../../support/flox.tfvars"
+# Replace 'ORGANISATION' in config.tf with actual organisation name
+sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
 
-  user_pool_id=$(terraform output user_pool_id)
-  user_pool_id=${user_pool_id:1:-1}
+terraform init
+terraform apply -auto-approve -var-file="../../support/flox.tfvars"
 
-  user_pool_client_id=$(terraform output user_pool_client_id)
-  user_pool_client_id=${user_pool_client_id:1:-1}
+user_pool_id=$(terraform output user_pool_id)
+user_pool_id=${user_pool_id:1:-1}
 
-  user_pool_arn=$(terraform output user_pool_arn)
-  user_pool_arn=${user_pool_arn:1:-1}
+user_pool_client_id=$(terraform output user_pool_client_id)
+user_pool_client_id=${user_pool_client_id:1:-1}
 
-  echo "VUE_APP_USER_POOL_ID=$user_pool_id" >> ../../../frontend/.env
-  echo "VUE_APP_USER_POOL_CLIENT_ID=$user_pool_client_id" >> ../../../frontend/.env
+user_pool_arn=$(terraform output user_pool_arn)
+user_pool_arn=${user_pool_arn:1:-1}
 
-  # Add Cognito outputs to flox.tfvars
-  echo "# ======== Cognito Config ========" >> ../../support/flox.tfvars
-  echo "cognito_arn=\"$user_pool_arn\"" >> ../../support/flox.tfvars
-  echo "user_pool_id=\"$user_pool_id\"" >> ../../support/flox.tfvars
-  echo "user_pool_client_id=\"$user_pool_client_id\"" >> ../../support/flox.tfvars
+echo "VUE_APP_USER_POOL_ID=$user_pool_id" >> ../../../frontend/.env
+echo "VUE_APP_USER_POOL_CLIENT_ID=$user_pool_client_id" >> ../../../frontend/.env
+
+# Add Cognito outputs to flox.tfvars
+echo "# ======== Cognito Config ========" >> ../../support/flox.tfvars
+echo "cognito_arn=\"$user_pool_arn\"" >> ../../support/flox.tfvars
+echo "user_pool_id=\"$user_pool_id\"" >> ../../support/flox.tfvars
+echo "user_pool_client_id=\"$user_pool_client_id\"" >> ../../support/flox.tfvars
 
 
-  cd ../3_main-setup || exit
+cd ../3_main-setup || exit
 
-  # ==========================================
-  # ======     Step 3: Main setup     ========
-  # ==========================================
+# ==========================================
+# ======     Step 3: Main setup     ========
+# ==========================================
+
 # Replace 'TYPE' in config.tf with actual type (live, test, stage-xx or dev)
 if [[ $mode == "stage" ]]
 then
@@ -263,11 +265,24 @@ then
 fi
 
 # Apply main Terraform
-terraform init
-terraform apply -auto-approve -var-file="../../support/flox.tfvars"
+init_out=$(terraform init)
+if [[ $init_out == *"│ Error: "* ]]
+then
+  echo $init_out
+  echo "Error in Terraform init. Exiting..."
+  exit 1
+fi
+
+apply_out=$(terraform apply -auto-approve -var-file="../../support/flox.tfvars")
+if [[ $apply_out == *"│ Error: "* ]]
+then
+  echo $apply_out
+  echo "Error in Terraform apply. Exiting..."
+  exit 1
+fi
 
 # ==========================================
-# ======      Step 3: Cleanup       ========
+# ======      Step 4: Cleanup       ========
 # ======    (only in local mode)    ========
 # ==========================================
 

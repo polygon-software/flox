@@ -161,12 +161,6 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
 
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
-    name      = "NOCODB_PORT"
-    value     = 8000
-  }
-
-  setting {
-    namespace = "aws:elasticbeanstalk:application:environment"
     name      = "ENTITIES"
     value     = "**/**.entity.js"
   }
@@ -185,14 +179,22 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
 
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
+    name      = "AWS_S3_REGION"
+    value     = var.aws_s3_region
+  }
+
+  setting {
+    namespace = "aws:elasticbeanstalk:application:environment"
     name      = "AWS_PUBLIC_BUCKET_NAME"
     value     = var.public_bucket_id
   }
+
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "AWS_PRIVATE_BUCKET_NAME"
     value     = var.private_bucket_id
   }
+
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "PROJECT_NAME"
@@ -204,6 +206,7 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
     name      = "USER_POOL_ID"
     value     = var.user_pool_id
   }
+
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "USER_POOL_CLIENT_ID"
@@ -215,16 +218,19 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
     name      = "BASE_URL"
     value     = "https://${var.domain}"
   }
+
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "DEV"
-    value     = "false"
+    value     = var.type == "dev" || var.type == "stage" ? "true" : "false"
   }
+
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "CLOUDWATCH_GROUP_NAME"
     value     = "${var.project}-${var.type}"
   }
+
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "CLOUDWATCH_STREAM_NAME"

@@ -4,13 +4,13 @@
 terraform {
   required_providers {
     aws = {
-      source            = "hashicorp/aws"
-      version           = "~> 4.00"
+      source  = "hashicorp/aws"
+      version = "~> 4.00"
     }
   }
-  required_version      = ">= 0.14.9"
+  required_version = ">= 0.14.9"
   cloud {
-    organization        = "##ORGANISATION##"
+    organization = "##ORGANISATION##"
 
     workspaces {
       name = "##PROJECT##-##TYPE##" # will be replaced in preprocessing
@@ -20,17 +20,24 @@ terraform {
 
 // Define AWS as provider
 provider "aws" {
-  region              = var.aws_region
-  secret_key          = var.aws_secret_access_key
-  access_key          = var.aws_access_key
+  region     = var.aws_region
+  secret_key = var.aws_secret_access_key
+  access_key = var.aws_access_key
 }
 
-// Define alternate region AWS as provider
+// Define alternate region AWS as providers
 provider "aws" {
-  region              = "us-east-1"
-  secret_key          = var.aws_secret_access_key
-  access_key          = var.aws_access_key
-  alias               = "us-east-1"
+  region     = "us-east-1" // N. Virginia (USA)
+  secret_key = var.aws_secret_access_key
+  access_key = var.aws_access_key
+  alias      = "us-east-1"
+}
+
+provider "aws" {
+  region     = var.aws_s3_region
+  secret_key = var.aws_secret_access_key
+  access_key = var.aws_access_key
+  alias      = "aws_s3_region"
 }
 
 # Get workspace ID

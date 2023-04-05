@@ -5,17 +5,18 @@ resource "aws_cognito_user_pool" "user_pool" {
   auto_verified_attributes   = var.auto_verified_attributes
   username_attributes        = var.username_attributes
   mfa_configuration = var.mfa_configuration
-  email_configuration {
-    email_sending_account = "DEVELOPER"
-    source_arn = aws_ses_domain_identity.ses_domain.arn
-    from_email_address = "noreply@${var.domain}"
-  }
   dynamic "software_token_mfa_configuration" {
     for_each = var.mfa_configuration == "OFF" ? [] : [1]
     content {
       enabled = true
     }
   }
+  email_configuration {
+    email_sending_account = "DEVELOPER"
+    from_email_address = "noreply@${var.domain}"
+    source_arn = aws_ses_domain_identity.ses_domain.arn
+  }
+  depends_on = [aws_ses_domain_identity_verification.ses_domain_verification]
   lifecycle {
     prevent_destroy = false
   }
