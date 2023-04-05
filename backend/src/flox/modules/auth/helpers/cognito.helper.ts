@@ -165,9 +165,13 @@ export async function adminCreateCognitoAccount(
   });
   await provider.send(updateUserAttributesCommand);
 
-  // eslint-disable-next-line no-console
-  console.log('User:', response.User); // TODO: Test with and without email as username
-  return response.User.Username;
+  const cognitoUUID = response.User.Attributes?.find(
+    (attr) => attr.Name === 'sub',
+  )?.Value;
+  if (cognitoUUID === undefined) {
+    throw new Error(`Cognito user ${username} has undefined UUID`);
+  }
+  return cognitoUUID;
 }
 
 /**
