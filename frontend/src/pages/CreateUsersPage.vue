@@ -17,6 +17,7 @@ import {
   showErrorNotification,
   showSuccessNotification,
 } from 'src/tools/notification.tool';
+import DELIVERY_MEDIUMS from 'src/flox/enum/DELIVERY_MEDIUMS';
 
 import ROLE from '../flox/enum/USER_ROLES';
 import { createUserFormKey } from '../flox/modules/form/data/FORM_KEYS';
@@ -52,7 +53,9 @@ async function onSubmit({
       username,
       email,
       role,
-      sendInviteInfo.mediums ?? [],
+      (sendInviteInfo.mediums
+        ? JSON.parse(sendInviteInfo.mediums)
+        : []) as DELIVERY_MEDIUMS[],
       sendInviteInfo.phoneNumber,
       locale
     );

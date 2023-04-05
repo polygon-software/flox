@@ -7,12 +7,12 @@ import DELIVERY_MEDIUMS from '../../../../enum/DELIVERY_MEDIUMS';
  * when an adminc creates a new user.
  */
 export default class SendInvite {
-  mediums?: DELIVERY_MEDIUMS[];
+  mediums?: string;
 
   phoneNumber?: string;
 
   // eslint-disable-next-line require-jsdoc
-  constructor(mediums?: DELIVERY_MEDIUMS[], phoneNumber?: string) {
+  constructor(mediums?: string, phoneNumber?: string) {
     this.mediums = mediums;
     this.phoneNumber = phoneNumber;
   }

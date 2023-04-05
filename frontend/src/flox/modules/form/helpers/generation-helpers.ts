@@ -63,23 +63,23 @@ export function inviteOptions(): GenericOption[] {
   return [
     {
       label: `${i18n.global.t('fields.authentication.send_email')}`,
-      value: [DELIVERY_MEDIUMS.EMAIL],
+      value: JSON.stringify([DELIVERY_MEDIUMS.EMAIL]),
     },
     {
       label: `${i18n.global.t('fields.authentication.send_sms')}`,
-      value: [DELIVERY_MEDIUMS.SMS],
+      value: JSON.stringify([DELIVERY_MEDIUMS.SMS]),
     },
     {
       label: `${i18n.global.t('fields.authentication.send_both')}`,
-      value: [DELIVERY_MEDIUMS.EMAIL, DELIVERY_MEDIUMS.SMS],
+      value: JSON.stringify([DELIVERY_MEDIUMS.EMAIL, DELIVERY_MEDIUMS.SMS]),
     },
     {
       label: `${i18n.global.t('fields.authentication.send_custom_email')}`,
-      value: [DELIVERY_MEDIUMS.CUSTOM_EMAIL],
+      value: JSON.stringify([DELIVERY_MEDIUMS.CUSTOM_EMAIL]),
     },
     {
       label: `${i18n.global.t('fields.authentication.send_no_invite')}`,
-      value: [],
+      value: JSON.stringify([]),
     },
   ];
 }

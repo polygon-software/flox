@@ -4,7 +4,9 @@
     :label="$t('fields.authentication.send_invite')"
     :options="inviteOptions()"
     :rules="[IS_SELECTED]"
-    @change="(val) => (Array.isArray(val) ? (fieldValue.mediums = val) : null)"
+    @change="
+      (val) => (typeof val === 'string' ? (fieldValue.mediums = val) : null)
+    "
   />
   <PhoneNumberField
     v-if="phoneNumberNeeded"
@@ -18,6 +20,8 @@
 <script lang="ts" setup>
 import { computed, Ref, ref, watch } from 'vue';
 
+import GenericOptionGroupField from 'src/flox/modules/form/components/fields/general/GenericOptionGroupField.vue';
+
 import DELIVERY_MEDIUMS from '../../../../../enum/DELIVERY_MEDIUMS';
 import SendInvite from '../../../data/types/SendInvite';
 import { FormStateKey, useFormStore } from '../../../stores/form';
@@ -28,7 +32,6 @@ import {
 } from '../../../helpers/generation-helpers';
 import { fetchByKey } from '../../../helpers/form-helpers';
 
-import GenericOptionGroupField from './GenericOptionGroupField.vue';
 import PhoneNumberField from './PhoneNumberField.vue';
 
 const props = withDefaults(
@@ -53,7 +56,6 @@ const phoneNumberNeeded = computed(() => {
 
 /**
  * Saves the updated value
- * @returns void
  */
 function saveValue(): void {
   if (fieldValue.value.isComplete()) {
