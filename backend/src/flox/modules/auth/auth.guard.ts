@@ -54,14 +54,14 @@ export default class JwtAuthGuard extends AuthGuard('jwt') {
    * @returns - whether the user can activate
    */
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const validToken = await super.canActivate(context);
-
-    if (validToken) {
-      // Valid JSON web token
-      return true;
+    try {
+      await super.canActivate(context);
+    } catch (e) {
+      // Only allow access without valid JWT if endpoint is public
+      if (!this.isPublic(context)) {
+        throw e;
+      }
     }
-
-    // Only allow access without valid JWT if endpoint is public
-    return this.isPublic(context);
+    return true;
   }
 }

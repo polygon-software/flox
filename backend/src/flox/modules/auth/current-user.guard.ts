@@ -1,8 +1,8 @@
 import {
-  Injectable,
-  ExecutionContext,
   BadRequestException,
   CanActivate,
+  ExecutionContext,
+  Injectable,
 } from '@nestjs/common';
 
 import { getRequest } from '../../core/flox-helpers';
@@ -49,7 +49,7 @@ export default class CurrentUserGuard implements CanActivate {
     // Set user in request object
     if (user) {
       dbUser = await this.userService.getUser({
-        cognitoUuid: user.userId,
+        cognitoUuid: user.uuid,
       } as GetUserArgs);
 
       // Handle the case in which an alias is provided in header

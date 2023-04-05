@@ -2,6 +2,8 @@
 /* eslint-disable camelcase */
 export default {
   errors: {
+    copy_failed: 'Kopieren fehlgeschlagen',
+    error: 'Fehler',
     file_upload_failed: 'Beim hochladen einer Datei ist ein Fehler aufgetreten',
     module_error: "Fehler: Modul '{module}' ist nicht aktiv",
     invalid_password: 'Bitte geben Sie ein gültiges Passwort ein',
@@ -53,5 +55,15 @@ export default {
       "Eine oder mehrere der folgenden Eigenschaften fehlen für die angegebene Mutation: 'mutation', 'tables', 'type', 'cacheLocation'",
     entry_edit_failed: 'Die Änderung konnte nicht gespeichert werden',
     entry_delete_failed: 'Eintrag konnte nicht gelöscht werden',
+    account_disabled:
+      'Ihr Account ist gesperrt. Bitte kontaktieren Sie einen Systemadministrator.',
+    account_creation_failed:
+      'Beim Erstellen des Accounts ist ein Fehler aufgetreten.',
+    incorrect_username_or_password: 'Falscher Benutzername oder Passwort',
+    cannot_reset_password:
+      'Das Passwort kann im aktuellen Zustand nicht zurückgesetzt werden. Bitte kontaktieren Sie einen Systemadministrator.',
+    no_verification_code:
+      'Bitte geben Sie den Bestätigungscode ein, den Sie per E-Maile erhalten haben.',
+    user_creation_failed: 'Der Benutzer konnte nicht erstellt werden.',
   },
 };

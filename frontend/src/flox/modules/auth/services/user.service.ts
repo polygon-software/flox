@@ -1,19 +1,26 @@
 import { executeMutation } from 'src/apollo/mutation';
 import { executeQuery } from 'src/apollo/query';
-import UserEntity from 'src/flox/modules/auth/entities/user.entity';
+
+import AdminCreatedUser from '../data/types/AdminCreatedUser';
+import DELIVERY_MEDIUMS from '../../../enum/DELIVERY_MEDIUMS';
+import ROLE from '../../../enum/USER_ROLES';
+import UserEntity from '../entities/user.entity';
 import {
-  CREATE_USER,
+  ADMIN_CREATE_USER,
   DELETE_USER,
+  DISABLE_USER,
+  ENABLE_USER,
+  SIGNUP_CREATE_USER,
   UPDATE_USER,
-} from 'src/flox/modules/auth/user.mutation';
+} from '../user.mutation';
 import {
   GET_ALL_USERS,
   GET_MULTIPLE_USERS,
   GET_MY_USER,
-  SEARCH_USERS,
   GET_USER,
-} from 'src/flox/modules/auth/user.query';
-import CountQuery from 'src/flox/modules/interfaces/entities/count.entity';
+  SEARCH_USERS,
+} from '../user.query';
+import CountQuery from '../../interfaces/entities/count.entity';
 
 /**
  * Fetch the logged-in user
@@ -95,24 +102,54 @@ export async function searchUsers(
 }
 
 /**
- * Creates a user
+ * Creates a user as an admin
  *
- * @param username - user's username (may be identical to e-mail)
+ * @param username - user's username (might be identical to e-mail)
  * @param email - user's e-mail address
- * @param cognitoUuid - user's Cognito UUID
+ * @param role - the user's role
+ * @param deliveryMediums - mediums to use to deliver user's new login information
+ * @param [phoneNumber] - number to send the SMS invitation to
  * @param [lang] - user's language
  * @returns the newly created user
  */
-export async function createUser(
+export async function adminCreateUser(
   username: string,
   email: string,
-  cognitoUuid: string,
+  role: ROLE,
+  deliveryMediums: DELIVERY_MEDIUMS[],
+  phoneNumber?: string,
   lang?: string
-): Promise<UserEntity | null> {
-  const { data } = await executeMutation<UserEntity>(CREATE_USER, {
+): Promise<AdminCreatedUser | null> {
+  const { data } = await executeMutation<AdminCreatedUser>(ADMIN_CREATE_USER, {
     username,
     email,
-    cognitoUuid,
+    role,
+    deliveryMediums,
+    phoneNumber,
+    lang,
+  });
+  return data ?? null;
+}
+
+/**
+ * Creates a user
+ *
+ * @param username - user's username (might be identical to e-mail)
+ * @param email - user's e-mail address
+ * @param password - user's chosen password
+ * @param [lang] - user's language
+ * @returns the newly created user
+ */
+export async function signup(
+  username: string,
+  email: string,
+  password: string,
+  lang?: string
+): Promise<UserEntity | null> {
+  const { data } = await executeMutation<UserEntity>(SIGNUP_CREATE_USER, {
+    username,
+    email,
+    password,
     lang,
   });
   return data ?? null;
@@ -157,6 +194,32 @@ export async function updateUser(
  */
 export async function deleteUser(uuid: string): Promise<UserEntity | null> {
   const { data } = await executeMutation<UserEntity>(DELETE_USER, {
+    uuid,
+  });
+  return data ?? null;
+}
+
+/**
+ * Disable a user by its uuid
+ *
+ * @param uuid - uuid of user to disable
+ * @returns disabled user
+ */
+export async function disableUser(uuid: string): Promise<UserEntity | null> {
+  const { data } = await executeMutation<UserEntity>(DISABLE_USER, {
+    uuid,
+  });
+  return data ?? null;
+}
+
+/**
+ * Enable a user by its uuid
+ *
+ * @param uuid - uuid of user to disable
+ * @returns disabled user
+ */
+export async function enableUser(uuid: string): Promise<UserEntity | null> {
+  const { data } = await executeMutation<UserEntity>(ENABLE_USER, {
     uuid,
   });
   return data ?? null;

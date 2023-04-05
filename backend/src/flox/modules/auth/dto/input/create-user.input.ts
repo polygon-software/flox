@@ -3,20 +3,20 @@ import {
   IsEmail,
   IsLocale,
   IsLowercase,
-  IsNotEmpty,
   IsOptional,
   IsString,
   MaxLength,
   MinLength,
 } from 'class-validator';
 
-import CreateInput from '../../../abstracts/crud/inputs/create.input';
+import CreateInput from '../../../abstracts/crud/dto/input/create.input';
 
 @InputType()
 export default class CreateUserInput extends CreateInput {
   @Field(() => String)
   @IsString()
-  @IsNotEmpty()
+  @MinLength(6)
+  @MaxLength(50)
   username: string;
 
   @Field(() => String)
@@ -32,13 +32,4 @@ export default class CreateUserInput extends CreateInput {
   @IsLocale()
   @IsOptional()
   lang: string;
-
-  @Field(() => String)
-  @IsString()
-  @IsNotEmpty()
-  cognitoUuid: string;
-
-  @Field(() => String, { nullable: true })
-  @IsString()
-  role: string;
 }

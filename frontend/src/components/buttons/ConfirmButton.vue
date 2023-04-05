@@ -1,17 +1,15 @@
 <template>
-  <OnClickOutside @trigger="confirmed = false">
+  <OnClickOutside class="column" @trigger="confirmed = false">
     <q-btn
-      color="negative"
-      :outline="!confirmed"
       :label="confirmed ? confirmLabel : label"
-      no-caps
+      :outline="confirmed"
       v-bind="buttonProps"
       @click="confirmAction"
     />
   </OnClickOutside>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { OnClickOutside } from '@vueuse/components';
 import { QBtnProps } from 'quasar';
 import { ref, Ref } from 'vue';

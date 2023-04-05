@@ -16,6 +16,7 @@ export default {
     settings: 'Einstellungen',
     save: 'Speichern',
     create: 'Erstellen',
+    create_user: 'Benutzer erstellen',
     archive: 'Archivieren',
     edit: 'Bearbeiten',
     reassign: 'Neu zuordnen',
@@ -25,5 +26,6 @@ export default {
     send: 'Senden',
     login: 'Login',
     filter: 'Filter',
+    request_code: 'Code anfordern',
   },
 };

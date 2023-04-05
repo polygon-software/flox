@@ -15,7 +15,7 @@ import AbstractSearchAccessControlService from '../abstracts/search-access-contr
 import AccessControlService from '../access-control/access-control.service';
 
 import S3File from './entities/file.entity';
-import FolderOutput from './outputs/folder.output';
+import FolderOutput from './dto/output/folder.output';
 
 @Injectable()
 export default class FileService extends AbstractSearchAccessControlService<S3File> {
@@ -23,19 +23,12 @@ export default class FileService extends AbstractSearchAccessControlService<S3Fi
   private readonly credentials = {
     region: this.configService.getOrThrow<string>('AWS_MAIN_REGION'),
     accessKeyId: this.configService.getOrThrow<string>(
-      'ADMIN_AWS_ACCESS_KEY_ID',
+      'AWS_ADMIN_ACCESS_KEY_ID',
     ),
     secretAccessKey: this.configService.getOrThrow<string>(
-      'ADMIN_AWS_SECRET_ACCESS_KEY',
+      'AWS_ADMIN_SECRET_ACCESS_KEY',
     ),
   };
-
-  /**
-   * @returns file repository
-   */
-  get repository(): Repository<S3File> {
-    return this.fileRepository;
-  }
 
   // AWS S3 instance
   private s3: S3 = new S3({
@@ -50,6 +43,13 @@ export default class FileService extends AbstractSearchAccessControlService<S3Fi
     protected readonly accessControlService: AccessControlService,
   ) {
     super();
+  }
+
+  /**
+   * @returns file repository
+   */
+  get repository(): Repository<S3File> {
+    return this.fileRepository;
   }
 
   /**

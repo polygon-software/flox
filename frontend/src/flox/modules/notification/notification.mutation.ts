@@ -1,7 +1,8 @@
 import { gql } from '@apollo/client/core';
 
 import { MutationObject, MutationTypes } from 'src/apollo/mutation';
-import { TABLES } from 'src/flox/TABLES';
+
+import { TABLES } from '../../enum/TABLES';
 
 export const MARK_NOTIFICATION_AS_READ: MutationObject = {
   mutation: gql`

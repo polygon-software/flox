@@ -3,10 +3,10 @@
     <LabelWrapper :label="$t('authentication.password')">
       <q-input
         v-model="password"
+        :rules="[IS_VALID_PASSWORD]"
+        :type="isPwd ? 'password' : 'text'"
         dense
         outlined
-        :type="isPwd ? 'password' : 'text'"
-        :rules="[(val) => IS_NOT_NULL(val) || $t('errors.invalid_password')]"
         @change="saveValue"
       >
         <template #append>
@@ -21,19 +21,28 @@
   </FloxWrapper>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { ref } from 'vue';
 
 import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';
+import { MODULES } from 'src/flox/enum/MODULES';
 
-import { IS_NOT_NULL } from '../../../data/RULES';
+import { IS_VALID_PASSWORD } from '../../../data/RULES';
 import { FormStateKey, useFormStore } from '../../../stores/form';
-import { MODULES } from '../../../../../MODULES';
 
 import LabelWrapper from './wrappers/LabelWrapper.vue';
 
-const props = defineProps<{
-  stateKey: FormStateKey;
+const props = withDefaults(
+  defineProps<{
+    stateKey?: FormStateKey | null;
+  }>(),
+  {
+    stateKey: null,
+  }
+);
+
+const emit = defineEmits<{
+  (e: 'change', value: string | null): void;
 }>();
 
 const store = useFormStore();
@@ -51,6 +60,10 @@ const isPwd = ref(true);
  * @returns void
  */
 function saveValue(value: string): void {
-  store.setValue(props.stateKey, value);
+  if (props.stateKey) {
+    store.setValue(props.stateKey, value);
+  } else {
+    emit('change', value);
+  }
 }
 </script>

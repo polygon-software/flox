@@ -1,10 +1,10 @@
 <template>
-  <q-dialog ref="dialogRef" seamless position="bottom" @hide="onDialogHide">
+  <q-dialog ref="dialogRef" position="bottom" seamless @hide="onDialogHide">
     <q-card style="width: 350px">
       <q-linear-progress
         :value="progress"
-        color="primary"
         animation-speed="250"
+        color="primary"
       />
 
       <q-card-section class="row items-center no-wrap">
@@ -15,30 +15,22 @@
 
         <q-space />
 
-        <q-btn flat round icon="skip_previous" @click="restart" />
+        <q-btn flat icon="skip_previous" round @click="restart" />
         <q-btn
+          :icon="playing ? 'pause' : 'play_arrow'"
           flat
           round
-          :icon="playing ? 'pause' : 'play_arrow'"
           @click="playPause"
         />
-        <q-btn flat round icon="close" @click="stop" />
+        <q-btn flat icon="close" round @click="stop" />
       </q-card-section>
     </q-card>
   </q-dialog>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { useDialogPluginComponent } from 'quasar';
-import {
-  computed,
-  ComputedRef,
-  defineProps,
-  onMounted,
-  onUnmounted,
-  Ref,
-  ref,
-} from 'vue';
+import { computed, ComputedRef, onMounted, onUnmounted, Ref, ref } from 'vue';
 
 import FileEntity from 'src/flox/modules/file/entities/file.entity';
 

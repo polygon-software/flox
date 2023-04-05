@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, onBeforeUnmount, ref, Ref, watch } from 'vue';
+import { onBeforeUnmount, ref, Ref, watch } from 'vue';
 import { QTableProps } from 'quasar';
 
 import UserEntity from 'src/flox/modules/auth/entities/user.entity';

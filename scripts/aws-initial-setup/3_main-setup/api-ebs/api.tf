@@ -245,13 +245,13 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
 
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
-    name      = "ADMIN_AWS_ACCESS_KEY_ID"
+    name      = "AWS_ADMIN_ACCESS_KEY_ID"
     value     = var.admin_key_id
   }
 
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
-    name      = "ADMIN_AWS_SECRET_ACCESS_KEY"
+    name      = "AWS_ADMIN_SECRET_ACCESS_KEY"
     value     = var.admin_key_secret
   }
 }

@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import User from '../auth/entities/user.entity';
 
 import Notification from './entities/notification.entity';
-import NotifyUsersInput from './dto/inputs/notify-users.input';
+import NotifyUsersInput from './dto/input/notify-users.input';
 import Message from './entities/message.entity';
 
 @Injectable()

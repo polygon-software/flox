@@ -1,20 +1,27 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
-import GetAllArgs from '../abstracts/crud/dto/get-all.args';
-import GetMultipleArgs from '../abstracts/crud/dto/get-multiple.args';
-import DeleteInput from '../abstracts/crud/inputs/delete.input';
+import GetAllArgs from '../abstracts/crud/dto/args/get-all.args';
+import GetMultipleArgs from '../abstracts/crud/dto/args/get-multiple.args';
+import DeleteInput from '../abstracts/crud/dto/input/delete.input';
 import AbstractSearchResolver from '../abstracts/search/abstract-search.resolver';
 import SearchArgs from '../abstracts/search/dto/args/search.args';
 import { AdminOnly, CurrentUser } from '../roles/authorization.decorator';
+import UpdateInput from '../abstracts/crud/dto/input/update.input';
 
 import GetUserArgs from './dto/args/get-user.args';
-import CreateUserInput from './dto/input/create-user.input';
+import AdminCreateUserInput from './dto/input/admin-create-user.input';
+import SignupCreateUserInput from './dto/input/signup-create-user.input';
 import UpdateUserInput from './dto/input/update-user.input';
 import User from './entities/user.entity';
-import UserSearchOutput from './output/user-search.output';
-import { LoggedIn } from './authentication.decorator';
+import UserSearchOutput from './dto/output/user-search.output';
+import { LoggedIn, Public } from './authentication.decorator';
 import UserService from './user.service';
 import { assertIsAllowedToManipulate } from './helpers/auth.helper';
+import {
+  deleteCognitoAccount,
+  signupCreateCognitoAccount,
+} from './helpers/cognito.helper';
+import AdminCreateUserOutput from './dto/output/admin-create-user.output';
 
 @Resolver(() => User)
 export default class UserResolver extends AbstractSearchResolver<
@@ -41,7 +48,7 @@ export default class UserResolver extends AbstractSearchResolver<
   @LoggedIn()
   @Query(() => User, { name: 'MyUser' })
   async myUser(@CurrentUser() user: User): Promise<User> {
-    return this.userService.getMyUser(user);
+    return this.getOne(user);
   }
 
   /**
@@ -53,7 +60,7 @@ export default class UserResolver extends AbstractSearchResolver<
   @LoggedIn()
   @Query(() => User, { name: 'User' })
   async getUser(@Args() getUserArgs: GetUserArgs): Promise<User> {
-    return this.userService.getUser(getUserArgs);
+    return this.getOne(getUserArgs);
   }
 
   /**
@@ -67,7 +74,7 @@ export default class UserResolver extends AbstractSearchResolver<
   async getMultipleUsers(
     @Args() getMultiple: GetMultipleArgs,
   ): Promise<User[]> {
-    return super.getMultiple(getMultiple);
+    return this.getMultiple(getMultiple);
   }
 
   /**
@@ -79,7 +86,8 @@ export default class UserResolver extends AbstractSearchResolver<
   @AdminOnly()
   @Query(() => [User], { name: 'AllUsers' })
   async getAllUsers(@Args() getAll: GetAllArgs): Promise<User[]> {
-    return super.getAll(getAll);
+    const users = await this.getAll(getAll);
+    return this.service.setEnabledFlag(users);
   }
 
   /**
@@ -90,29 +98,81 @@ export default class UserResolver extends AbstractSearchResolver<
    */
   @AdminOnly()
   @Query(() => UserSearchOutput, { name: 'SearchUsers' })
-  searchUsers(@Args() queryArgs: SearchArgs): Promise<UserSearchOutput> {
-    return super.search(queryArgs);
+  async searchUsers(@Args() queryArgs: SearchArgs): Promise<UserSearchOutput> {
+    const searchRes = await super.search(queryArgs);
+    searchRes.data = await this.service.setEnabledFlag(searchRes.data);
+    return searchRes;
   }
 
   /**
-   * Creates a User
+   * Returns true if the users cognito account is enabled, false otherwise.
    *
-   * @param createUserInput - contains all user data
+   * @param getUserArgs - object containing user uuid
+   * @returns true if enabled, false otherwise
+   */
+  @AdminOnly()
+  @Query(() => Boolean, { name: 'IsUserEnabled' })
+  async isUserEnabled(@Args() getUserArgs: GetUserArgs): Promise<boolean> {
+    return this.userService.isUserEnabled(getUserArgs);
+  }
+
+  /**
+   * Creates a User with a corresponding Cognito account
+   *
+   * @param adminCreateUserInput - contains all user data
    * @returns the newly created user
    */
   @AdminOnly()
-  @Mutation(() => User, { name: 'CreateUser' })
-  async createUser(
-    @Args('createUserInput') createUserInput: CreateUserInput,
+  @Mutation(() => AdminCreateUserOutput, { name: 'AdminCreateUser' })
+  async adminCreateUser(
+    @Args('adminCreateUserInput') adminCreateUserInput: AdminCreateUserInput,
+  ): Promise<AdminCreateUserOutput> {
+    const { cognitoUuid, password } =
+      await this.userService.adminCreateCognitoUser(adminCreateUserInput);
+
+    // Create & return database entry
+    const newUser = await super.create({
+      ...adminCreateUserInput,
+      cognitoUuid,
+    });
+
+    const userOutput = { data: newUser } as AdminCreateUserOutput;
+
+    // If no delivery mediums are selected, return the password as well
+    if (adminCreateUserInput.deliveryMediums.length === 0) {
+      userOutput.password = password;
+    }
+    return userOutput;
+  }
+
+  /**
+   * Creates a User with a corresponding Cognito account
+   *
+   * @param signupCreateUserInput - contains all user data
+   * @returns the newly created user
+   */
+  @Public()
+  @Mutation(() => User, { name: 'SignupCreateUser' })
+  async signupCreateUser(
+    @Args('signupCreateUserInput') signupCreateUserInput: SignupCreateUserInput,
   ): Promise<User> {
-    return super.create(createUserInput);
+    // Create Cognito account
+    const cognitoUuid = await signupCreateCognitoAccount(
+      signupCreateUserInput.username,
+      signupCreateUserInput.email,
+      signupCreateUserInput.password,
+    );
+    return super.create({
+      cognitoUuid,
+      ...signupCreateUserInput,
+    });
   }
 
   /**
    * Updates a given user
    *
    * @param updateUserInput - contains UUID and any new user data
-   * @param user - currently logged in user
+   * @param user - currently logged-in user
    * @returns the updated user
    */
   @LoggedIn()
@@ -126,7 +186,7 @@ export default class UserResolver extends AbstractSearchResolver<
   }
 
   /**
-   * Deletes a given user
+   * Deletes a given user, along with their Cognito account
    *
    * @param deleteInput - contains UUID
    * @returns the deleted user
@@ -136,6 +196,55 @@ export default class UserResolver extends AbstractSearchResolver<
   async deleteUser(
     @Args('deleteUserInput') deleteInput: DeleteInput,
   ): Promise<User> {
+    // Find corresponding user
+    const user = await this.userService.getUser({ uuid: deleteInput.uuid });
+
+    // Delete cognito account
+    await deleteCognitoAccount(user.username);
+
+    // Delete in database
     return super.delete(deleteInput);
+  }
+
+  /**
+   * Disables a given user's account
+   *
+   * @param disableInput - contains UUID
+   * @returns the disabled user
+   */
+  @AdminOnly()
+  @Mutation(() => User, { name: 'DisableUser' })
+  async disableUser(
+    @Args('disableUserInput') disableInput: UpdateInput,
+  ): Promise<User> {
+    return this.userService.disableUser(disableInput);
+  }
+
+  /**
+   * Re-enables a given user's account
+   *
+   * @param enableInput - contains UUID
+   * @returns the disabled user
+   */
+  @AdminOnly()
+  @Mutation(() => User, { name: 'EnableUser' })
+  async enableUser(
+    @Args('enableUserInput') enableInput: UpdateInput,
+  ): Promise<User> {
+    return this.userService.enableUser(enableInput);
+  }
+
+  /**
+   * Forces a user to change their password
+   *
+   * @param changeInput - contains UUID
+   * @returns the user whose password was force-changed
+   */
+  @AdminOnly()
+  @Mutation(() => User, { name: 'ForceUserPasswordChange' })
+  async forceUserPasswordChange(
+    @Args('forceUserPasswordChangeInput') changeInput: UpdateInput,
+  ): Promise<User> {
+    return this.userService.forceUserPasswordChange(changeInput);
   }
 }

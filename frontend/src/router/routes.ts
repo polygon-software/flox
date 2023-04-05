@@ -20,7 +20,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
 
   SIGNUP: {
     path: '/signup',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('layouts/ClearLayout.vue'),
     children: [{ path: '', component: () => import('pages/SignupPage.vue') }],
   },
 
@@ -68,6 +68,14 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     path: '/users',
     component: () => import('layouts/DashboardLayout.vue'),
     children: [{ path: '', component: () => import('pages/UsersPage.vue') }],
+  },
+
+  CREATE_USERS: {
+    path: '/users/create',
+    component: () => import('layouts/DashboardLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/CreateUsersPage.vue') },
+    ],
   },
 
   OBJECT_RECOGNITION: {

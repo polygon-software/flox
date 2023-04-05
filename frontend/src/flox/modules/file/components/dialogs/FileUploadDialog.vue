@@ -41,7 +41,7 @@
 
 <script setup lang="ts">
 import { QFile, useDialogPluginComponent } from 'quasar';
-import { defineProps, ref, Ref, unref } from 'vue';
+import { ref, Ref, unref } from 'vue';
 
 import useFileUpload from 'src/flox/modules/file/useFileUpload';
 import FileList from 'src/flox/modules/file/components/forms/fields/FileList.vue';

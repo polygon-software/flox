@@ -8,8 +8,8 @@ import {
 import { parse } from 'exifr';
 import { FindOneOptions, Repository } from 'typeorm';
 
-import GetOneArgs from '../abstracts/crud/dto/get-one.args';
-import DeleteInput from '../abstracts/crud/inputs/delete.input';
+import GetOneArgs from '../abstracts/crud/dto/args/get-one.args';
+import DeleteInput from '../abstracts/crud/dto/input/delete.input';
 import { assertReadAccess } from '../access-control/helpers/access-control.helper';
 import AbstractSearchAccessControlService from '../abstracts/search-access-control/abstract-search-access-control.service';
 import User from '../auth/entities/user.entity';
@@ -27,7 +27,7 @@ import BoundingBox from './entities/bounding-box.entity';
 import Image from './entities/image.entity';
 import Label from './entities/label.entity';
 import SearchImagesArgs from './dto/args/search-images.args';
-import ImageSearchOutput from './outputs/image-search.output';
+import ImageSearchOutput from './dto/output/image-search.output';
 
 @Injectable()
 export default class ImageService extends AbstractSearchAccessControlService<Image> {
@@ -35,10 +35,10 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
   private readonly credentials = {
     region: this.configService.getOrThrow<string>('AWS_MAIN_REGION'),
     accessKeyId: this.configService.getOrThrow<string>(
-      'ADMIN_AWS_ACCESS_KEY_ID',
+      'AWS_ADMIN_ACCESS_KEY_ID',
     ),
     secretAccessKey: this.configService.getOrThrow<string>(
-      'ADMIN_AWS_SECRET_ACCESS_KEY',
+      'AWS_ADMIN_SECRET_ACCESS_KEY',
     ),
   };
 
@@ -51,10 +51,8 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
   constructor(
     @InjectRepository(Image)
     private imageRepository: Repository<Image>,
-
     @InjectRepository(Label)
     private labelRepository: Repository<Label>,
-
     @InjectRepository(BoundingBox)
     private boundingBoxRepository: Repository<BoundingBox>,
     private readonly fileService: FileService,

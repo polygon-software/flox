@@ -2,7 +2,7 @@ import AccessControlledEntity from '../../access-control/entities/access-control
 import User from '../../auth/entities/user.entity';
 import AbstractCrudAccessControlResolver from '../crud-access-control/abstract-crud-access-control.resolver';
 import SearchArgs from '../search/dto/args/search.args';
-import SearchQueryOutputInterface from '../search/outputs/search-interface.output';
+import SearchQueryOutputInterface from '../search/dto/output/search-interface.output';
 import { DefaultRoles } from '../../roles/config';
 
 import AbstractSearchAccessControlService from './abstract-search-access-control.service';

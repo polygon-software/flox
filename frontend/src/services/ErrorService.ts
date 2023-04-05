@@ -1,5 +1,7 @@
 import { QVueGlobals } from 'quasar';
 
+import { i18n } from 'boot/i18n';
+
 /**
  * This is a service that is used globally throughout the application for error handling
  */
@@ -24,7 +26,10 @@ export default class ErrorService {
   showErrorDialog(error: Error): void {
     console.error(error);
     this.$q.dialog({
-      title: `Error: ${error.name}`,
+      title:
+        error.name !== 'Error'
+          ? `${i18n.global.t('errors.error')}: ${error.name}`
+          : i18n.global.t('errors.error'),
       message: error.message,
       cancel: false,
     });

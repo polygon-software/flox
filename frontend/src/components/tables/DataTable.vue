@@ -1,19 +1,19 @@
 <template>
-  <q-card class="q-pa-md" flat bordered>
+  <q-card bordered class="q-pa-md" flat>
     <QTable
       ref="tableRef"
-      v-bind="tableProps"
       v-model:pagination="pagination"
       v-model:selected="selected"
-      :title="title"
-      :rows="rows"
       :columns="extendedColumns"
-      row-key="uuid"
-      :loading="loading"
       :filter="filter"
-      binary-state-sort
+      :loading="loading"
+      :rows="rows"
       :selection="multi ? 'multiple' : 'single'"
+      :title="title"
       :visible-columns="extendedVisibleColumnNames"
+      binary-state-sort
+      row-key="uuid"
+      v-bind="tableProps"
       @request="onRequest"
       @selection="handleSelection"
     >
@@ -25,48 +25,74 @@
       </template>
       <template #body-cell="cellProps">
         <q-td :props="cellProps">
-          {{
-            cellProps.col.format
-              ? cellProps.col.format(
-                  get(cellProps.row, cellProps.col.field),
-                  cellProps.row
-                )
-              : get(cellProps.row, cellProps.col.field)
-          }}
-          <!--
-          If the column field path contains a dot, it is a property of a nested object
-          and should / can hence not be edited directly.
-          -->
-          <QPopupEdit
-            v-if="
-              cellProps.col.edit &&
-              updateMutation &&
-              !cellProps.col.field.includes('.')
+          <template v-if="!isBooleanContent(cellProps)"
+            >{{ cellContent(cellProps) }}
+          </template>
+          <q-checkbox
+            v-else
+            :disable="cellType(cellProps) === CellType.boolean"
+            :model-value="cellContent(cellProps)"
+            @update:model-value="
+              updateRow(cellProps.row, cellProps.col.field, $event)
             "
+          />
+          <QPopupEdit
+            v-if="cellType(cellProps) === CellType.editString"
             :ref="
               (el: any) => {
                 popupRefs[getPopupEditKey(cellProps.row, cellProps.col)] = el;
               }
             "
             v-slot="scope"
-            buttons
-            :validate="validateInput(cellProps.col)"
-            :model-value="cellProps.row[cellProps.col.field]"
-            :label-set="$t('general.save')"
             :label-cancel="$t('general.cancel')"
+            :label-set="$t('general.save')"
+            :model-value="cellProps.row[cellProps.col.field]"
+            :validate="validateInput(cellProps.col)"
+            buttons
+            @save="updateRow(cellProps.row, cellProps.col.field, $event)"
             @keyup.enter="
               popupRefs[getPopupEditKey(cellProps.row, cellProps.col)].set()
             "
-            @save="updateRow(cellProps.row, cellProps.col.field, $event)"
           >
             <q-input
               v-model="scope.value"
-              v-bind="cellProps.col.qInputProps"
-              dense
               autofocus
               counter
+              dense
+              v-bind="cellProps.col.qInputProps"
             />
           </QPopupEdit>
+        </q-td>
+      </template>
+      <template #body-cell-options="cellProps">
+        <q-td :props="cellProps">
+          <q-btn
+            v-if="optionsMenu"
+            :disable="selected.length > 0"
+            color="grey"
+            flat
+            icon="more_vert"
+            square
+            @click.stop
+          >
+            <q-menu>
+              <div class="column">
+                <slot :row="cellProps.row" name="options" />
+                <ConfirmButton
+                  v-if="deleteSelection && deleteMutation"
+                  :button-props="{
+                    color: 'negative',
+                    iconRight: removeIcon,
+                    noCaps: true,
+                    noWrap: true,
+                  }"
+                  :confirm-label="$t('general.confirm')"
+                  :label="removeLabel ?? $t('general.remove')"
+                  @click="() => deleteRow(cellProps.row)"
+                />
+              </div>
+            </q-menu>
+          </q-btn>
         </q-td>
       </template>
       <template #header-selection="scope">
@@ -83,11 +109,11 @@
         <q-input
           v-if="!hideSearch"
           v-model="filter"
-          borderless
-          hide-bottom-space
-          dense
-          debounce="300"
           :placeholder="$t('general.search')"
+          borderless
+          debounce="300"
+          dense
+          hide-bottom-space
         >
           <template #append>
             <q-icon name="search" />
@@ -96,16 +122,16 @@
         <q-select
           v-if="!hideColumnSelector"
           v-model="visibleColumnNames"
-          borderless
-          multiple
-          dense
-          hide-bottom-space
           :display-value="$t('general.display')"
-          emit-value
-          map-options
           :options="columns"
-          option-value="name"
+          borderless
           class="q-mx-lg"
+          dense
+          emit-value
+          hide-bottom-space
+          map-options
+          multiple
+          option-value="name"
         >
           <template
             #option="{ itemProps, opt, selected: isSelected, toggleOption }"
@@ -127,11 +153,11 @@
         </q-select>
         <q-btn
           v-if="!hideFullscreen"
-          flat
-          round
-          dense
           :icon="headerProps.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
           class="q-ml-md"
+          dense
+          flat
+          round
           @click="headerProps.toggleFullscreen"
         />
       </template>
@@ -146,38 +172,37 @@
       </div>
       <div class="col">
         <div class="row justify-end" style="gap: 10px">
+          <slot :selected="selected" name="actions" />
           <q-btn
             v-if="selected.length > 0 && exportSelection"
+            :label="$t('general.export')"
             color="primary"
             icon-right="file_download"
-            label="Export"
             no-caps
             @click="exportTable"
           />
           <ConfirmButton
             v-if="selected.length > 0 && deleteSelection && deleteMutation"
-            :label="removeLabel"
-            :confirm-label="$t('general.confirm')"
             :button-props="{
               color: 'negative',
               iconRight: removeIcon,
               noCaps: true,
             }"
+            :confirm-label="$t('general.confirm')"
+            :label="removeLabel ?? $t('general.remove')"
             @click="deleteActiveRows"
           />
-          <slot name="actions" :selected="selected" />
         </div>
       </div>
     </div>
   </q-card>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { QPopupEdit, QTable, QTableProps } from 'quasar';
 import {
   computed,
   ComputedRef,
-  defineProps,
   onMounted,
   Ref,
   ref,
@@ -185,8 +210,10 @@ import {
   watchEffect,
 } from 'vue';
 import get from 'lodash/get';
+import { isBoolean, isFunction, isString } from 'lodash-es';
 
 import {
+  CellType,
   ColumnAlign,
   ColumnInterface,
   useDataTable,
@@ -217,6 +244,7 @@ const props = withDefaults(
     multi?: boolean;
     removeIcon?: string;
     removeLabel?: string;
+    optionsMenu?: boolean;
   }>(),
   {
     updateMutation: undefined,
@@ -231,10 +259,11 @@ const props = withDefaults(
     appendSlot: false,
     hideColumnSelector: false,
     removeIcon: 'delete',
-    removeLabel: 'Remove',
+    removeLabel: undefined,
     appendName: '',
     prependName: '',
     tableProps: () => ({}),
+    optionsMenu: false,
   }
 );
 
@@ -271,12 +300,76 @@ const {
   exportTable,
   handleSelection,
   updateRow,
+  updateRowLocally,
   deleteActiveRows,
-} = useDataTable<BaseEntity>(
-  props.query,
-  props.updateMutation,
-  props.deleteMutation
-);
+  deleteRow,
+} = useDataTable(props.query, props.updateMutation, props.deleteMutation);
+
+/**
+ * Content to be displayed in the cell. Depends on the type of the field and executes format function if given.
+ * @returns the computed content
+ */
+function cellContent(cellProps: {
+  col: ColumnInterface<BaseEntity>;
+  row: BaseEntity;
+}): any {
+  let content = null;
+  if (isString(cellProps.col.field)) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    content = get(cellProps.row, cellProps.col.field);
+  }
+  if (isFunction(cellProps.col.field)) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    content = cellProps.col.field(cellProps.row);
+  }
+  if (cellProps.col.format) {
+    return cellProps.col.format(content, cellProps.row);
+  }
+  return content;
+}
+
+/**
+ * The type of the cell. We distinguish between editable string and boolean values,
+ * not editable boolean values and any other values (e.g. not editable string).
+ * @returns the cell type
+ */
+function cellType(cellProps: {
+  col: ColumnInterface<BaseEntity>;
+  row: BaseEntity;
+}): CellType {
+  if (
+    props.updateMutation &&
+    cellProps.col.edit &&
+    isString(cellProps.col.field) &&
+    !cellProps.col.field.includes('.')
+  ) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const content = get(cellProps.row, cellProps.col.field);
+    if (isString(content)) {
+      return CellType.editString;
+    }
+    if (isBoolean(content)) {
+      return CellType.editBoolean;
+    }
+  }
+  if (isBoolean(cellContent(cellProps))) {
+    return CellType.boolean;
+  }
+  return CellType.other;
+}
+
+/**
+ * Returns true if the cell type is a boolean type. In that case, a checkbox will be rendered.
+ * @param cellProps the cell props from the table cell
+ * @returns true if cell type is boolean or editBoolean, false otherwise
+ */
+function isBooleanContent(cellProps: {
+  col: ColumnInterface<BaseEntity>;
+  row: BaseEntity;
+}): boolean {
+  const type: CellType = cellType(cellProps);
+  return type === CellType.boolean || type === CellType.editBoolean;
+}
 
 /**
  * Validates an input for qPopupEdit
@@ -319,10 +412,16 @@ const extendedColumns: ComputedRef<ColumnInterface<BaseEntity>[]> = computed(
       field: 'append',
       label: props.appendName ?? '',
     };
+    const options = {
+      name: 'options',
+      field: 'options',
+      label: '',
+    };
     return [
       ...(props.prependSlot ? [prependContent] : []),
       ...props.columns,
       ...(props.appendSlot ? [appendContent] : []),
+      ...(props.optionsMenu ? [options] : []),
     ];
   }
 );
@@ -331,6 +430,7 @@ const extendedVisibleColumnNames: ComputedRef<string[]> = computed(() => {
     ...(props.prependSlot ? ['prepend'] : []),
     ...visibleColumnNames.value,
     ...(props.appendSlot ? ['append'] : []),
+    ...(props.optionsMenu ? ['options'] : []),
   ];
 });
 
@@ -352,5 +452,6 @@ function refresh(): void {
 defineExpose({
   refresh,
   rows,
+  updateRowLocally,
 });
 </script>

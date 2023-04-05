@@ -1,12 +1,12 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { LoggedIn } from '../auth/authentication.decorator';
-import GetOneArgs from '../abstracts/crud/dto/get-one.args';
-import GetMultipleArgs from '../abstracts/crud/dto/get-multiple.args';
-import GetAllArgs from '../abstracts/crud/dto/get-all.args';
+import GetOneArgs from '../abstracts/crud/dto/args/get-one.args';
+import GetMultipleArgs from '../abstracts/crud/dto/args/get-multiple.args';
+import GetAllArgs from '../abstracts/crud/dto/args/get-all.args';
 import { AdminOnly, CurrentUser } from '../roles/authorization.decorator';
 import User from '../auth/entities/user.entity';
-import DeleteInput from '../abstracts/crud/inputs/delete.input';
+import DeleteInput from '../abstracts/crud/dto/input/delete.input';
 import UserService from '../auth/user.service';
 import AbstractSearchResolver from '../abstracts/search/abstract-search.resolver';
 import SearchArgs from '../abstracts/search/dto/args/search.args';
@@ -14,12 +14,12 @@ import SearchArgs from '../abstracts/search/dto/args/search.args';
 import UserGroup from './entities/user-group.entity';
 import AccessControlService from './access-control.service';
 import GetAllOfUserArgs from './dto/args/get-all-of-user.args';
-import CreateUserGroupInput from './dto/inputs/create-user-group.input';
-import UpdateUserGroupInput from './dto/inputs/update-user-group.input';
-import AddUserToUserGroupInput from './dto/inputs/add-user-to-user-group-input';
-import RemoveUserFromUserGroupInput from './dto/inputs/remove-user-from-user-group.input';
-import UserGroupSearchOutput from './outputs/user-group-search.output';
-import AddUsersToUserGroupInput from './dto/inputs/add-users-to-user-group.input';
+import CreateUserGroupInput from './dto/input/create-user-group.input';
+import UpdateUserGroupInput from './dto/input/update-user-group.input';
+import AddUserToUserGroupInput from './dto/input/add-user-to-user-group-input';
+import RemoveUserFromUserGroupInput from './dto/input/remove-user-from-user-group.input';
+import UserGroupSearchOutput from './dto/output/user-group-search.output';
+import AddUsersToUserGroupInput from './dto/input/add-users-to-user-group.input';
 
 @Resolver(() => UserGroup)
 export default class AccessControlResolver extends AbstractSearchResolver<

@@ -6,7 +6,7 @@
     <!-- First name -->
     <GenericInputField
       :label="$t('fields.personal_data.first_name')"
-      :rules="[(val: string) => IS_VALID_STRING(val) || $t('errors.invalid_name')]"
+      :rules="[IS_VALID_NAME]"
       :initial-value="fieldValue.firstName"
       outlined
       dense
@@ -17,9 +17,7 @@
     <GenericInputField
       v-if="showOptionalFields"
       :label="$t('fields.personal_data.middle_name')"
-      :rules="[
-        (val: string) => !val || IS_VALID_STRING(val) || $t('errors.invalid_name'),
-      ]"
+      :rules="[IS_VALID_NAME]"
       :initial-value="fieldValue.middleName"
       outlined
       dense
@@ -30,7 +28,7 @@
     <!-- Last name -->
     <GenericInputField
       :label="$t('fields.personal_data.last_name')"
-      :rules="[(val: string) => IS_VALID_STRING(val) || $t('errors.invalid_name')]"
+      :rules="[IS_VALID_NAME]"
       :initial-value="fieldValue.lastName"
       outlined
       dense
@@ -42,9 +40,7 @@
       v-if="showOptionalFields"
       v-model="fieldValue.secondLastName"
       :label="$t('fields.personal_data.second_last_name')"
-      :rules="[
-        (val: string) => !val || IS_VALID_STRING(val) || $t('errors.invalid_name'),
-      ]"
+      :rules="[IS_VALID_NAME]"
       :initial-value="fieldValue.secondLastName"
       outlined
       dense
@@ -57,7 +53,7 @@
 import { ref, Ref, watch } from 'vue';
 
 import FullName from '../../../data/types/FullName';
-import { IS_VALID_STRING } from '../../../data/RULES';
+import { IS_VALID_NAME } from '../../../data/RULES';
 import { FormStateKey, useFormStore } from '../../../stores/form';
 import { fetchByKey } from '../../../helpers/form-helpers';
 

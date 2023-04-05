@@ -11,9 +11,7 @@
           dense
           outlined
           type="text"
-          :rules="[
-            (val) => IS_VALID_STRING(val) || $t('errors.invalid_address'),
-          ]"
+          :rules="[IS_VALID_STREET]"
           @change="saveValue"
         />
       </LabelWrapper>
@@ -25,9 +23,7 @@
           dense
           outlined
           type="text"
-          :rules="[
-            (val) => IS_VALID_HOUSE_NUMBER(val) || $t('errors.invalid_number'),
-          ]"
+          :rules="[IS_VALID_HOUSE_NUMBER]"
           @change="saveValue"
         />
       </LabelWrapper>
@@ -42,7 +38,7 @@
           dense
           outlined
           type="text"
-          :rules="[(val) => IS_VALID_ZIP(val) || $t('errors.invalid_zip_code')]"
+          :rules="[IS_VALID_ZIP]"
           mask="####"
           @change="saveValue"
         />
@@ -55,7 +51,7 @@
           dense
           outlined
           type="text"
-          :rules="[(val) => IS_VALID_STRING(val) || $t('errors.invalid_city')]"
+          :rules="[IS_VALID_CITY]"
           @change="saveValue"
         />
       </LabelWrapper>
@@ -89,6 +85,8 @@ import {
   IS_VALID_STRING,
   IS_VALID_HOUSE_NUMBER,
   IS_VALID_ZIP,
+  IS_VALID_STREET,
+  IS_VALID_CITY,
 } from '../../../data/RULES';
 import AddressInput from '../../../data/types/AddressInput';
 import { FormStateKey, useFormStore } from '../../../stores/form';

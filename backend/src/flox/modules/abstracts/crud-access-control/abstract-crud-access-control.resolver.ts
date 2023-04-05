@@ -2,17 +2,17 @@ import { DeepPartial, FindOneOptions } from 'typeorm';
 
 import AccessControlledEntity from '../../access-control/entities/access-controlled.entity';
 import User from '../../auth/entities/user.entity';
-import GetAllArgs from '../crud/dto/get-all.args';
-import GetMultipleArgs from '../crud/dto/get-multiple.args';
-import GetOneArgs from '../crud/dto/get-one.args';
-import DeleteInput from '../crud/inputs/delete.input';
-import UpdateInput from '../crud/inputs/update.input';
+import GetAllArgs from '../crud/dto/args/get-all.args';
+import GetMultipleArgs from '../crud/dto/args/get-multiple.args';
+import GetOneArgs from '../crud/dto/args/get-one.args';
+import DeleteInput from '../crud/dto/input/delete.input';
+import UpdateInput from '../crud/dto/input/update.input';
 import { DefaultRoles } from '../../roles/config';
 import UserGroup from '../../access-control/entities/user-group.entity';
 
-import CreateAccessControlledInput from './dto/inputs/create-access-controlled.input';
+import CreateAccessControlledInput from './dto/input/create-access-controlled.input';
 import AbstractCrudAccessControlService from './abstract-crud-access-control.service';
-import ManipulateAccessGroupsInput from './dto/inputs/manipulate-access-groups.input';
+import ManipulateAccessGroupsInput from './dto/input/manipulate-access-groups.input';
 
 export default abstract class AbstractCrudAccessControlResolver<
   Entity extends AccessControlledEntity,

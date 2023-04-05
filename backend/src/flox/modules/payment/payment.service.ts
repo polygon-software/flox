@@ -7,19 +7,12 @@ import User from '../auth/entities/user.entity';
 import AbstractSearchService from '../abstracts/search/abstract-search.service';
 
 import Payment from './entities/payment.entity';
-import PaymentIntentOutput from './dto/outputs/payment-intent.output';
+import PaymentIntentOutput from './dto/output/payment-intent.output';
 
 import type { Stripe } from 'stripe';
 
 @Injectable()
 export default class PaymentService extends AbstractSearchService<Payment> {
-  /**
-   * @returns article repository
-   */
-  get repository(): Repository<Payment> {
-    return this.paymentRepository;
-  }
-
   constructor(
     @InjectStripe()
     private readonly stripe: Stripe,
@@ -27,6 +20,13 @@ export default class PaymentService extends AbstractSearchService<Payment> {
     private paymentRepository: Repository<Payment>,
   ) {
     super();
+  }
+
+  /**
+   * @returns article repository
+   */
+  get repository(): Repository<Payment> {
+    return this.paymentRepository;
   }
 
   /**

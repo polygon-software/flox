@@ -1,11 +1,15 @@
+import { ValidationRule } from 'src/tools/validation.tool';
+
 /**
  * This type represents a field used in forms.
  */
-export type Field = {
+export interface Field<ComponentType = any, ComponentProps = any> {
   key: string;
-  component: unknown;
+  component: ComponentType;
+  prependIcon?: string;
+  appendIcon?: string;
   attributes: {
-    rules: Array<(val: any) => boolean | string>;
+    rules: ValidationRule[];
     [key: string]: unknown;
-  };
-};
+  } & Omit<ComponentProps, 'modelValue'>;
+}

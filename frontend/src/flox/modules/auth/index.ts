@@ -1,6 +1,6 @@
 import { floxModuleOptions, mergeConfigurations } from 'src/flox';
 
-import { MODULES } from '../../MODULES';
+import { MODULES } from '../../enum/MODULES';
 
 /**
  * The authentication module handles Cognito authentication and provides the related decorators for checking sign-in

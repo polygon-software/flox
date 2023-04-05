@@ -1,7 +1,8 @@
 import { gql } from '@apollo/client/core';
 
-import { ALL_TABLES } from 'src/flox/TABLES';
 import { MutationObject, MutationTypes } from 'src/apollo/mutation';
+
+import { ALL_TABLES } from '../../enum/TABLES';
 
 export const CREATE_USER_GROUP: MutationObject = {
   mutation: gql`

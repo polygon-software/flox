@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { I18nService } from 'nestjs-i18n';
 
 import User from '../auth/entities/user.entity';
-import GetAllArgs from '../abstracts/crud/dto/get-all.args';
+import GetAllArgs from '../abstracts/crud/dto/args/get-all.args';
 import AbstractSearchService from '../abstracts/search/abstract-search.service';
 import UserService from '../auth/user.service';
 import NotificationService from '../notifications/notification.service';

@@ -50,6 +50,21 @@ resource "aws_iam_role_policy_attachment" "api_ssm" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
+resource "aws_iam_role_policy_attachment" "api_rekognition_labels" {
+  role   = aws_iam_role.eb_api_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonRekognitionCustomLabelsFullAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "api_rekognition" {
+  role   = aws_iam_role.eb_api_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonRekognitionFullAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "api_translate" {
+  role   = aws_iam_role.eb_api_role.name
+  policy_arn = "arn:aws:iam::aws:policy/TranslateFullAccess"
+}
+
 resource "aws_iam_role_policy_attachment" "api_role" {
   role   = aws_iam_role.eb_api_role.name
   policy_arn = aws_iam_policy.iamPolicy.arn

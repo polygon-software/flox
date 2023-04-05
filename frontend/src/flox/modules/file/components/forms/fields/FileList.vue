@@ -52,8 +52,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue';
-
 import { SelectedFile } from 'src/flox/modules/file/tools/upload.tools';
 
 const props = defineProps<{

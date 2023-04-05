@@ -6,16 +6,17 @@
   />
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { useQuasar } from 'quasar';
 
-import { fetchByKey } from '../../flox/modules/form/helpers/form-helpers';
+import { fetchByKey } from 'src/flox/modules/form/helpers/form-helpers';
+import { sampleFormKey } from 'src/flox/modules/form/data/FORM_KEYS';
+import { FIELDS } from 'src/flox/modules/form/data/FIELDS';
+import { useFormStore } from 'src/flox/modules/form/stores/form';
+import { showSuccessNotification } from 'src/tools/notification.tool';
+
+import SampleFormPages from '../../flox/modules/form/data/formPages/SampleFormPages';
 import GenericForm from '../../flox/modules/form/components/GenericForm.vue';
-import { showSuccessNotification } from '../../flox/modules/form/helpers/notification-helpers';
-import SampleFormPages from '../../flox/modules/form/data/form/SampleFormPages';
-import { sampleFormKey } from '../../flox/modules/form/data/form/FormKeys';
-import { FIELDS } from '../../flox/modules/form/data/form/FIELDS';
-import { useFormStore } from '../../flox/modules/form/stores/form';
 
 /**
  * This is a sample form component that uses the GenericForm helper component.

@@ -10,6 +10,25 @@ export default {
       zip_code: 'PLZ',
       additional_address: 'Zusätzliche Adresse',
     },
+    authentication: {
+      roles: {
+        admin: 'Admin',
+        user: 'Nutzer',
+      },
+      send_invite: 'Einladung an Benutzer',
+      send_email: 'Einladung per E-Mail senden',
+      send_sms: 'Einladung per SMS senden',
+      send_both: 'Einladung per E-Mail und SMS senden',
+      send_custom_email: 'Benutzerdefinierte E-Mail senden',
+      send_no_invite: 'Benutzer selber kontaktieren',
+      user_role: 'Benutzerrolle',
+      verification_code: 'Bestätigungscode',
+    },
+    create_user: {
+      generate_password: 'Passwort generieren',
+      send_invite: 'Einladung per E-Mail senden',
+      set_password: 'Passwort setzen',
+    },
     personal_data: {
       sample_title: 'Beispiel Titel',
       first_name: 'Vorname',

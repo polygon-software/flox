@@ -16,7 +16,7 @@ import { i18n } from 'boot/i18n';
 
 import { FormStateKey, useFormStore } from '../../../stores/form';
 import { IS_NOT_NULL } from '../../../data/RULES';
-import availableLanguageOptions from '../../../helpers/generation-helpers';
+import { availableLanguageOptions } from '../../../helpers/generation-helpers';
 import { fetchByKey } from '../../../helpers/form-helpers';
 import { GenericOption } from '../../../data/types/GenericOption';
 

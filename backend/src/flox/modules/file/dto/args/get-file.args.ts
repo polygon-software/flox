@@ -1,7 +1,7 @@
 import { ArgsType, Field, Int } from '@nestjs/graphql';
 import { IsNumber, IsOptional, Max, Min } from 'class-validator';
 
-import GetOneArgs from '../../../abstracts/crud/dto/get-one.args';
+import GetOneArgs from '../../../abstracts/crud/dto/args/get-one.args';
 
 @ArgsType()
 export default class GetFileArgs extends GetOneArgs {

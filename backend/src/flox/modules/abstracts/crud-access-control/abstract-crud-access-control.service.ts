@@ -11,11 +11,11 @@ import { FindOptionsSelect } from 'typeorm/find-options/FindOptionsSelect';
 
 import AccessControlledEntity from '../../access-control/entities/access-controlled.entity';
 import User from '../../auth/entities/user.entity';
-import GetAllArgs from '../crud/dto/get-all.args';
-import GetMultipleArgs from '../crud/dto/get-multiple.args';
-import GetOneArgs from '../crud/dto/get-one.args';
-import DeleteInput from '../crud/inputs/delete.input';
-import UpdateInput from '../crud/inputs/update.input';
+import GetAllArgs from '../crud/dto/args/get-all.args';
+import GetMultipleArgs from '../crud/dto/args/get-multiple.args';
+import GetOneArgs from '../crud/dto/args/get-one.args';
+import DeleteInput from '../crud/dto/input/delete.input';
+import UpdateInput from '../crud/dto/input/update.input';
 import {
   assertReadAccess,
   assertWriteAccess,
@@ -28,14 +28,15 @@ import {
   mixWhere,
 } from '../crud/helpers/crud.helper';
 
-import CreateAccessControlledInput from './dto/inputs/create-access-controlled.input';
-import ManipulateAccessGroupsInput from './dto/inputs/manipulate-access-groups.input';
+import CreateAccessControlledInput from './dto/input/create-access-controlled.input';
+import ManipulateAccessGroupsInput from './dto/input/manipulate-access-groups.input';
 
 export default abstract class AbstractCrudAccessControlService<
   Entity extends AccessControlledEntity,
 > {
-  abstract get repository(): Repository<Entity>;
   protected abstract readonly accessControlService: AccessControlService;
+
+  abstract get repository(): Repository<Entity>;
 
   /**
    * @returns typeorm find options that are required to determine read and write access on the retrieved entities
@@ -80,167 +81,6 @@ export default abstract class AbstractCrudAccessControlService<
         },
       } as FindOptionsRelations<Entity>,
     };
-  }
-
-  /**
-   * Finds uuids of all entities that are marked for public read access
-   *
-   * @param options - typeorm find options that are mixed applied, can be used for pagination and such
-   * @protected
-   * @returns list of uuids
-   */
-  protected async findUuidsForPublicReadAccess(
-    options?: FindOneOptions<Entity>,
-  ): Promise<string[]> {
-    const entities = await this.repository.find({
-      ...options,
-      select: {
-        uuid: true,
-      } as FindOptionsSelect<Entity>,
-      where: mixWhere<Entity>(
-        [
-          {
-            publicReadAccess: true,
-          } as FindOptionsWhere<Entity>,
-        ],
-        extractWhere<Entity>(options),
-      ),
-    });
-    return entities.map((entity) => entity.uuid);
-  }
-
-  /**
-   * Finds uuids of all entities that are marked for read access by any logged-in users
-   *
-   * @param options - typeorm find options that are mixed applied, can be used for pagination and such
-   * @protected
-   * @returns list of uuids
-   */
-  protected async findUuidsForLoggedInReadAccess(
-    options?: FindOneOptions<Entity>,
-  ): Promise<string[]> {
-    const entities = await this.repository.find({
-      ...options,
-      select: {
-        uuid: true,
-      } as FindOptionsSelect<Entity>,
-      where: mixWhere<Entity>(
-        [
-          {
-            loggedInReadAccess: true,
-          } as FindOptionsWhere<Entity>,
-        ],
-        extractWhere<Entity>(options),
-      ),
-    });
-    return entities.map((entity) => entity.uuid);
-  }
-
-  /**
-   * Finds uuids of all entities for which the provided user is set as the entity owner
-   *
-   * @param owner - the owner of the entities
-   * @param options - typeorm find options that are mixed applied, can be used for pagination and such
-   * @protected
-   * @returns list of uuids
-   */
-  protected async findUuidsForOwner(
-    owner: User,
-    options?: FindOneOptions<Entity>,
-  ): Promise<string[]> {
-    const entities = await this.repository.find({
-      ...options,
-      select: {
-        uuid: true,
-      } as FindOptionsSelect<Entity>,
-      where: mixWhere<Entity>(
-        [
-          {
-            owner: {
-              uuid: owner.uuid,
-            },
-          } as FindOptionsWhere<Entity>,
-        ],
-        extractWhere<Entity>(options),
-      ),
-    });
-    return entities.map((entity) => entity.uuid);
-  }
-
-  /**
-   * Finds uuids of all entities for which the provided user is part of a user group that has read access to the item
-   *
-   * @param user - the user that must be part of the read access user group
-   * @param options - typeorm find options that are mixed applied
-   * @protected
-   * @returns list of uuids
-   */
-  protected async findUuidsWithReadAccess(
-    user: User,
-    options?: FindOneOptions<Entity>,
-  ): Promise<string[]> {
-    const userGroupsOfUser =
-      await this.accessControlService.getUserGroupsForUser(user.uuid, {
-        take: 5000,
-        skip: 0,
-      } as GetAllArgs);
-    const entities = await this.repository.find({
-      ...options,
-      select: {
-        uuid: true,
-      } as FindOptionsSelect<Entity>,
-      where: mixWhere<Entity>(
-        [
-          {
-            readAccess: {
-              uuid: In(userGroupsOfUser.map((group) => group.uuid)),
-            },
-          } as FindOptionsWhere<Entity>,
-        ],
-        extractWhere<Entity>(options),
-      ),
-      take: undefined,
-      skip: undefined,
-    });
-    return entities.map((entity) => entity.uuid);
-  }
-
-  /**
-   * Finds uuids of all entities for which the provided user is part of a user group that has write access to the item
-   *
-   * @param user - the user that must be part of the write access user group
-   * @param options - typeorm find options that are mixed applied
-   * @protected
-   * @returns list of uuids
-   */
-  protected async findUuidsWithWriteAccess(
-    user: User,
-    options?: FindOneOptions<Entity>,
-  ): Promise<string[]> {
-    const userGroupsOfUser =
-      await this.accessControlService.getUserGroupsForUser(user.uuid, {
-        take: 5000,
-        skip: 0,
-      } as GetAllArgs);
-    const entities = await this.repository.find({
-      ...options,
-      select: {
-        uuid: true,
-      } as FindOptionsSelect<Entity>,
-      where: mixWhere<Entity>(
-        [
-          {
-            writeAccess: {
-              uuid: In(userGroupsOfUser.map((group) => group.uuid)),
-            },
-          } as FindOptionsWhere<Entity>,
-        ],
-        extractWhere<Entity>(options),
-      ),
-      take: undefined,
-      skip: undefined,
-    });
-    return entities.map((entity) => entity.uuid);
   }
 
   /**
@@ -752,5 +592,166 @@ export default abstract class AbstractCrudAccessControlService<
     });
     assertWriteAccess(entity, user);
     return this.manipulateAccessUserGroupsAsAdmin(manipulateAccessGroups);
+  }
+
+  /**
+   * Finds uuids of all entities that are marked for public read access
+   *
+   * @param options - typeorm find options that are mixed applied, can be used for pagination and such
+   * @protected
+   * @returns list of uuids
+   */
+  protected async findUuidsForPublicReadAccess(
+    options?: FindOneOptions<Entity>,
+  ): Promise<string[]> {
+    const entities = await this.repository.find({
+      ...options,
+      select: {
+        uuid: true,
+      } as FindOptionsSelect<Entity>,
+      where: mixWhere<Entity>(
+        [
+          {
+            publicReadAccess: true,
+          } as FindOptionsWhere<Entity>,
+        ],
+        extractWhere<Entity>(options),
+      ),
+    });
+    return entities.map((entity) => entity.uuid);
+  }
+
+  /**
+   * Finds uuids of all entities that are marked for read access by any logged-in users
+   *
+   * @param options - typeorm find options that are mixed applied, can be used for pagination and such
+   * @protected
+   * @returns list of uuids
+   */
+  protected async findUuidsForLoggedInReadAccess(
+    options?: FindOneOptions<Entity>,
+  ): Promise<string[]> {
+    const entities = await this.repository.find({
+      ...options,
+      select: {
+        uuid: true,
+      } as FindOptionsSelect<Entity>,
+      where: mixWhere<Entity>(
+        [
+          {
+            loggedInReadAccess: true,
+          } as FindOptionsWhere<Entity>,
+        ],
+        extractWhere<Entity>(options),
+      ),
+    });
+    return entities.map((entity) => entity.uuid);
+  }
+
+  /**
+   * Finds uuids of all entities for which the provided user is set as the entity owner
+   *
+   * @param owner - the owner of the entities
+   * @param options - typeorm find options that are mixed applied, can be used for pagination and such
+   * @protected
+   * @returns list of uuids
+   */
+  protected async findUuidsForOwner(
+    owner: User,
+    options?: FindOneOptions<Entity>,
+  ): Promise<string[]> {
+    const entities = await this.repository.find({
+      ...options,
+      select: {
+        uuid: true,
+      } as FindOptionsSelect<Entity>,
+      where: mixWhere<Entity>(
+        [
+          {
+            owner: {
+              uuid: owner.uuid,
+            },
+          } as FindOptionsWhere<Entity>,
+        ],
+        extractWhere<Entity>(options),
+      ),
+    });
+    return entities.map((entity) => entity.uuid);
+  }
+
+  /**
+   * Finds uuids of all entities for which the provided user is part of a user group that has read access to the item
+   *
+   * @param user - the user that must be part of the read access user group
+   * @param options - typeorm find options that are mixed applied
+   * @protected
+   * @returns list of uuids
+   */
+  protected async findUuidsWithReadAccess(
+    user: User,
+    options?: FindOneOptions<Entity>,
+  ): Promise<string[]> {
+    const userGroupsOfUser =
+      await this.accessControlService.getUserGroupsForUser(user.uuid, {
+        take: 5000,
+        skip: 0,
+      } as GetAllArgs);
+    const entities = await this.repository.find({
+      ...options,
+      select: {
+        uuid: true,
+      } as FindOptionsSelect<Entity>,
+      where: mixWhere<Entity>(
+        [
+          {
+            readAccess: {
+              uuid: In(userGroupsOfUser.map((group) => group.uuid)),
+            },
+          } as FindOptionsWhere<Entity>,
+        ],
+        extractWhere<Entity>(options),
+      ),
+      take: undefined,
+      skip: undefined,
+    });
+    return entities.map((entity) => entity.uuid);
+  }
+
+  /**
+   * Finds uuids of all entities for which the provided user is part of a user group that has write access to the item
+   *
+   * @param user - the user that must be part of the write access user group
+   * @param options - typeorm find options that are mixed applied
+   * @protected
+   * @returns list of uuids
+   */
+  protected async findUuidsWithWriteAccess(
+    user: User,
+    options?: FindOneOptions<Entity>,
+  ): Promise<string[]> {
+    const userGroupsOfUser =
+      await this.accessControlService.getUserGroupsForUser(user.uuid, {
+        take: 5000,
+        skip: 0,
+      } as GetAllArgs);
+    const entities = await this.repository.find({
+      ...options,
+      select: {
+        uuid: true,
+      } as FindOptionsSelect<Entity>,
+      where: mixWhere<Entity>(
+        [
+          {
+            writeAccess: {
+              uuid: In(userGroupsOfUser.map((group) => group.uuid)),
+            },
+          } as FindOptionsWhere<Entity>,
+        ],
+        extractWhere<Entity>(options),
+      ),
+      take: undefined,
+      skip: undefined,
+    });
+    return entities.map((entity) => entity.uuid);
   }
 }

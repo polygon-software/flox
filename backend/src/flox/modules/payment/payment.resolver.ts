@@ -5,15 +5,15 @@ import { FindOneOptions } from 'typeorm';
 import { AdminOnly, CurrentUser } from '../roles/authorization.decorator';
 import User from '../auth/entities/user.entity';
 import { LoggedIn } from '../auth/authentication.decorator';
-import GetOneArgs from '../abstracts/crud/dto/get-one.args';
+import GetOneArgs from '../abstracts/crud/dto/args/get-one.args';
 import { DefaultRoles } from '../roles/config';
 import AbstractSearchResolver from '../abstracts/search/abstract-search.resolver';
 import SearchArgs from '../abstracts/search/dto/args/search.args';
 
 import Payment from './entities/payment.entity';
 import PaymentService from './payment.service';
-import PaymentIntentOutput from './dto/outputs/payment-intent.output';
-import PaymentSearchOutput from './dto/outputs/payment-search.output';
+import PaymentIntentOutput from './dto/output/payment-intent.output';
+import PaymentSearchOutput from './dto/output/payment-search.output';
 
 @Resolver(() => Payment)
 export default class PaymentResolver extends AbstractSearchResolver<

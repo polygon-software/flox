@@ -46,7 +46,7 @@
 
 <script setup lang="ts">
 import { QVueGlobals, useDialogPluginComponent } from 'quasar';
-import { defineEmits, defineProps, ref } from 'vue';
+import { ref } from 'vue';
 
 import { i18n } from 'boot/i18n';
 import AuthenticationService from 'src/flox/modules/auth/services/auth.service';

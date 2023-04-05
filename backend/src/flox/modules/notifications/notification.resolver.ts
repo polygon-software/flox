@@ -8,9 +8,9 @@ import UserService from '../auth/user.service';
 
 import NotificationService from './notification.service';
 import Notification from './entities/notification.entity';
-import MarkAsReadInput from './dto/inputs/mark-as-read.input';
-import NotifyUsersInput from './dto/inputs/notify-users.input';
-import NotifyInput from './dto/inputs/notify.input';
+import MarkAsReadInput from './dto/input/mark-as-read.input';
+import NotifyUsersInput from './dto/input/notify-users.input';
+import NotifyInput from './dto/input/notify.input';
 
 @Resolver(() => Notification)
 export default class NotificationResolver {

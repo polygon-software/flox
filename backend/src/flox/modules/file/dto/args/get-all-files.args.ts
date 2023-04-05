@@ -1,7 +1,7 @@
 import { ArgsType, Field, Int } from '@nestjs/graphql';
 import { IsNumber, IsOptional, IsString, Max, Min } from 'class-validator';
 
-import GetAllArgs from '../../../abstracts/crud/dto/get-all.args';
+import GetAllArgs from '../../../abstracts/crud/dto/args/get-all.args';
 
 @ArgsType()
 export default class GetAllFilesArgs extends GetAllArgs {

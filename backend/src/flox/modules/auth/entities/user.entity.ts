@@ -8,6 +8,7 @@ import {
   ManyToMany,
 } from 'typeorm';
 import {
+  IsBoolean,
   IsEmail,
   IsLocale,
   IsLowercase,
@@ -24,7 +25,7 @@ import UserGroup from '../../access-control/entities/user-group.entity';
 import { moduleConfig } from '../../roles/config';
 
 /**
- * A user registered within cognito, having a role and contact information
+ * A user registered within Cognito, having a role and contact information
  */
 @ObjectType()
 @Entity()
@@ -60,6 +61,10 @@ export default class User extends BaseEntity {
   @Column({ nullable: true })
   @IsString()
   role: string;
+
+  @Field(() => Boolean, { description: 'User enabled or not', nullable: true })
+  @IsBoolean()
+  enabled?: boolean;
 
   @Field(() => [UserGroup], {
     description: 'User groups this user belongs to',

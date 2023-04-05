@@ -91,6 +91,12 @@ export default {
     return asString(process.env.USER_POOL_ID);
   },
   /**
+   * @returns cognito user pool ID
+   */
+  get USER_POOL_CLIENT_ID(): string {
+    return asString(process.env.USER_POOL_CLIENT_ID);
+  },
+  /**
    * @returns glob describing where typeorm entities are found
    * @example dist/entities/*.entity.js
    */
@@ -133,5 +139,17 @@ export default {
    */
   get STRIPE_SECRET_KEY(): string {
     return asString(process.env.STRIPE_SECRET_KEY);
+  },
+  /**
+   * @returns AWS admin access key ID
+   */
+  get AWS_ADMIN_ACCESS_KEY_ID(): string {
+    return asString(process.env.AWS_ADMIN_ACCESS_KEY_ID);
+  },
+  /**
+   * @returns AWS admin secret access key
+   */
+  get AWS_ADMIN_SECRET_ACCESS_KEY(): string {
+    return asString(process.env.AWS_ADMIN_SECRET_ACCESS_KEY);
   },
 };

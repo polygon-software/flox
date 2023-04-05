@@ -7,7 +7,7 @@ import {
   MaxLength,
 } from 'class-validator';
 
-import GetAllArgs from '../../../crud/dto/get-all.args';
+import GetAllArgs from '../../../crud/dto/args/get-all.args';
 
 @ArgsType()
 export default class SearchArgs extends GetAllArgs {

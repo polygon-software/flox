@@ -1,35 +1,31 @@
 <template>
   <q-dialog ref="dialogRef" persistent>
-    <GenericForm
-      :pages="ChangePasswordFormPages"
-      :form-key="changePasswordFormKey.formKey"
-      @submit="onSubmit"
-    />
-    <q-btn
-      :class="`${ALTERNATE_BUTTON_CLASS} q-my-md`"
-      :style="`${DEFAULT_BUTTON_STYLE}; width: 150px;`"
-      :label="$t('buttons.cancel')"
-      @click="onDialogHide"
-    />
+    <q-card class="q-pa-md text-center">
+      <h5>{{ $t('authentication.set_new_password') }}</h5>
+      <GenericForm
+        style="min-width: 300px"
+        :pages="ChangePasswordFormPages"
+        :form-key="changePasswordFormKey.formKey"
+        text-position="center"
+        show-cancel
+        @submit="onSubmit"
+        @cancel="onDialogCancel"
+      />
+    </q-card>
   </q-dialog>
 </template>
 
 <script setup lang="ts">
 import { useDialogPluginComponent } from 'quasar';
 
-import {
-  ALTERNATE_BUTTON_CLASS,
-  DEFAULT_BUTTON_STYLE,
-} from 'src/css/defaultStyles';
-import { changePasswordFormKey } from 'src/flox/modules/form/data/form/FormKeys';
-
+import { changePasswordFormKey } from '../../../form/data/FORM_KEYS';
 import GenericForm from '../../../form/components/GenericForm.vue';
-import ChangePasswordFormPages from '../../../form/data/form/ChangePasswordFormPages';
+import ChangePasswordFormPages from '../../../form/data/formPages/ChangePasswordFormPages';
 import { fetchByKey } from '../../../form/helpers/form-helpers';
-import { FIELDS } from '../../../form/data/form/FIELDS';
+import { FIELDS } from '../../../form/data/FIELDS';
 import { useFormStore } from '../../../form/stores/form';
 
-const { dialogRef, onDialogOK, onDialogHide } = useDialogPluginComponent();
+const { dialogRef, onDialogOK, onDialogCancel } = useDialogPluginComponent();
 
 const store = useFormStore();
 
@@ -40,7 +36,7 @@ const store = useFormStore();
 function onSubmit(): void {
   const newPassword = fetchByKey({
     ...changePasswordFormKey,
-    fieldKey: FIELDS.PASSWORD_REAPEAT.key,
+    fieldKey: FIELDS.PASSWORD_REPEAT.key,
   });
 
   // Empty store state

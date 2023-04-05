@@ -1,7 +1,8 @@
 import { gql } from '@apollo/client/core';
 
 import { QueryObject } from 'src/apollo/query';
-import { TABLES } from 'src/flox/TABLES';
+
+import { TABLES } from '../../enum/TABLES';
 
 /**
  * User-related queries
@@ -71,6 +72,7 @@ export const GET_ALL_USERS: QueryObject = {
         cognitoUuid
         email
         role
+        enabled
         __typename
       }
     }
@@ -102,6 +104,7 @@ export const SEARCH_USERS: QueryObject = {
           lang
           email
           role
+          enabled
         }
         __typename
       }
@@ -111,10 +114,21 @@ export const SEARCH_USERS: QueryObject = {
   cacheLocation: 'SearchUsers',
 };
 
+export const IS_USER_ENABLED: QueryObject = {
+  query: gql`
+    query IsUserEnabled($uuid: ID!) {
+      IsUserEnabled(uuid: $uuid)
+    }
+  `,
+  tables: [TABLES.USER],
+  cacheLocation: 'User',
+};
+
 export const USER_QUERIES: QueryObject[] = [
   GET_MY_USER,
   GET_USER,
   GET_MULTIPLE_USERS,
   GET_ALL_USERS,
   SEARCH_USERS,
+  IS_USER_ENABLED,
 ];

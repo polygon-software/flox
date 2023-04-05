@@ -1,6 +1,6 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
-import DeleteInput from '../abstracts/crud/inputs/delete.input';
+import DeleteInput from '../abstracts/crud/dto/input/delete.input';
 import AbstractSearchAccessControlResolver from '../abstracts/search-access-control/abstract-search-access-control.resolver';
 import { LoggedIn, Public } from '../auth/authentication.decorator';
 import User from '../auth/entities/user.entity';
@@ -14,7 +14,7 @@ import Image from './entities/image.entity';
 import ImageService from './image.service';
 import GetMultipleImagesArgs from './dto/args/get-multiple-images.args';
 import SearchImagesArgs from './dto/args/search-images.args';
-import ImageSearchOutput from './outputs/image-search.output';
+import ImageSearchOutput from './dto/output/image-search.output';
 
 @Resolver(() => Image)
 export default class ImageResolver extends AbstractSearchAccessControlResolver<

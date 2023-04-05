@@ -18,23 +18,10 @@
         dense
         outlined
         :mask="selectedCode.mask"
-        :rules="
-          optional
-            ? [
-                (val) =>
-                  (!!val && val.length === 0) ||
-                  IS_VALID_PHONE_NUMBER(
-                    (selectedCode.value + val).replaceAll(' ', '')
-                  ) ||
-                  $t('errors.invalid_phone_number'),
-              ]
-            : [
-                (val) =>
-                  IS_VALID_PHONE_NUMBER(
-                    (selectedCode.value + val).replaceAll(' ', '')
-                  ) || $t('errors.invalid_phone_number'),
-              ]
-        "
+        :rules="[
+          (val) =>
+            IS_VALID_PHONE_NUMBER(selectedCode.value + val, selectedCode.code),
+        ]"
       >
       </q-input>
     </LabelWrapper>
@@ -43,6 +30,7 @@
 
 <script setup lang="ts">
 import { onBeforeMount, ref, Ref, watch } from 'vue';
+import { isPhoneNumber } from 'class-validator';
 
 import { IS_VALID_PHONE_NUMBER } from '../../../data/RULES';
 import { FormStateKey, useFormStore } from '../../../stores/form';
@@ -56,12 +44,10 @@ const props = withDefaults(
     countryCodes: PhoneCountryCode[];
     stateKey?: FormStateKey;
     initialValue?: string; // Only considered when stateKey is null, so this field can be a non-saving subfield of other fields
-    optional?: boolean; // Will disable mandatory checks
   }>(),
   {
     stateKey: undefined,
     initialValue: undefined,
-    optional: true,
   }
 );
 
@@ -121,7 +107,7 @@ watch(phoneInput, () => {
     );
 
     // Check validity (otherwise save null)
-    if (IS_VALID_PHONE_NUMBER(newInput)) {
+    if (isPhoneNumber(newInput, selectedCode.value.code)) {
       fieldValue.value = newInput;
     } else {
       fieldValue.value = null;

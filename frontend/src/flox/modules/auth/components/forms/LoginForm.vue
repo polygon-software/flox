@@ -2,20 +2,19 @@
   <FloxWrapper :module="MODULES.AUTH">
     <div class="column q-pa-sm text-center justify-center" style="margin: 50px">
       <GenericForm
+        :finish-label="$t('buttons.login')"
         :form-key="loginFormKey.formKey"
         :pages="LoginFormPages"
         text-position="center"
-        :finish-label="$t('buttons.login')"
-        submit-on-enter
         @submit="onLogin"
       />
     </div>
-    <div class="col q-mt-md">
+    <div class="col q-mt-md text-center">
       <q-btn
         :label="$t('authentication.forgot_password')"
         class="primary"
-        flat
         dense
+        flat
         no-caps
         style="text-decoration: underline"
         @click="forgotPassword"
@@ -25,23 +24,23 @@
   </FloxWrapper>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { inject } from 'vue';
 import { useQuasar } from 'quasar';
 
 import { i18n } from 'boot/i18n';
+import { MODULES } from 'src/flox/enum/MODULES';
+import { showErrorNotification } from 'src/tools/notification.tool';
 
 import { fetchByKey } from '../../../form/helpers/form-helpers';
 import * as auth from '../..';
-import { MODULES } from '../../../../MODULES';
 import FloxWrapper from '../../../../core/components/FloxWrapper.vue';
-import { showErrorNotification } from '../../../form/helpers/notification-helpers';
-import LoginFormPages from '../../../form/data/form/LoginFormPages';
+import LoginFormPages from '../../../form/data/formPages/LoginFormPages';
 import { useFormStore } from '../../../form/stores/form';
 import GenericForm from '../../../form/components/GenericForm.vue';
 import AuthenticationService from '../../services/auth.service';
-import { loginFormKey } from '../../../form/data/form/FormKeys';
-import { FIELDS } from '../../../form/data/form/FIELDS';
+import { loginFormKey } from '../../../form/data/FORM_KEYS';
+import { FIELDS } from '../../../form/data/FIELDS';
 
 const $authService: AuthenticationService | undefined = inject('$authService');
 const $q = useQuasar();
@@ -69,7 +68,7 @@ async function onLogin(): Promise<void> {
 
   try {
     // Actually log in
-    await $authService?.login(identifier, password);
+    await $authService?.login(identifier, password, $q);
 
     // Empty store state
     store.clearForm(loginFormKey.formKey);

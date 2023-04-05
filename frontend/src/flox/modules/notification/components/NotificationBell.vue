@@ -41,8 +41,8 @@
     </q-menu>
     <q-tooltip>{{
       hasNotifications
-        ? $t('notification.notifications')
-        : $t('notification.no_notifications')
+        ? $t('notifications.notifications')
+        : $t('notifications.no_notifications')
     }}</q-tooltip>
   </q-btn>
 </template>

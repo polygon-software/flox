@@ -1,7 +1,8 @@
 import { gql } from '@apollo/client/core';
 
-import { TABLES } from 'src/flox/TABLES';
 import { QueryObject } from 'src/apollo/query';
+
+import { TABLES } from '../../enum/TABLES';
 
 export const GET_USER_GROUP = {
   query: gql`

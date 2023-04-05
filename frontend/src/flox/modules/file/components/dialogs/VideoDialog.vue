@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 import { useDialogPluginComponent } from 'quasar';
-import { computed, ComputedRef, defineProps } from 'vue';
+import { computed, ComputedRef } from 'vue';
 
 import FileEntity from 'src/flox/modules/file/entities/file.entity';
 

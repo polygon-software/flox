@@ -41,6 +41,23 @@ input AddUsersToUserGroupInput {
   userUuids: [ID!]!
 }
 
+input AdminCreateUserInput {
+  deliveryMediums: [DeliveryMediums!]!
+  email: String!
+  lang: String
+  phoneNumber: String
+  role: Role!
+  username: String!
+}
+
+type AdminCreateUserOutput {
+  """Created user"""
+  data: User!
+
+  """password"""
+  password: String
+}
+
 type BoundingBox {
   """Creation date"""
   createdAt: DateTime!
@@ -103,14 +120,6 @@ input CreateUserGroupInput {
   users: [ID!] = []
 }
 
-input CreateUserInput {
-  cognitoUuid: String!
-  email: String!
-  lang: String
-  role: String
-  username: String!
-}
-
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -118,6 +127,12 @@ scalar DateTime
 
 input DeleteInput {
   uuid: ID!
+}
+
+enum DeliveryMediums {
+  CUSTOM_EMAIL
+  EMAIL
+  SMS
 }
 
 type FileSearchOutput {
@@ -288,19 +303,23 @@ input MessageInput {
 type Mutation {
   AddUserToUserGroup(addUserToUserGroupInput: AddUserToUserGroupInput!): UserGroup!
   AddUsersToUserGroup(addUsersToUserGroupInput: AddUsersToUserGroupInput!): UserGroup!
+  AdminCreateUser(adminCreateUserInput: AdminCreateUserInput!): AdminCreateUserOutput!
   CreateFile(createFileInput: CreateFileInput!): S3File!
   CreateImage(createImageInput: CreateImageInput!): Image!
-  CreateUser(createUserInput: CreateUserInput!): User!
   CreateUserGroup(createUserGroupInput: CreateUserGroupInput!): UserGroup!
   DeleteFile(deleteInput: DeleteInput!): S3File!
   DeleteImage(deleteImageInput: DeleteInput!): Image!
   DeleteUser(deleteUserInput: DeleteInput!): User!
   DeleteUserGroup(deleteInput: DeleteInput!): UserGroup!
+  DisableUser(disableUserInput: UpdateInput!): User!
+  EnableUser(enableUserInput: UpdateInput!): User!
+  ForceUserPasswordChange(forceUserPasswordChangeInput: UpdateInput!): User!
   ManipulateFileAccessUserGroups(manipulateAccessGroups: ManipulateAccessGroupsInput!): S3File!
   MarkNotificationAsRead(markAsReadInput: MarkAsReadInput!): Notification!
   NotifyAllUsers(notifyInput: NotifyInput!): [Notification!]!
   NotifyUsers(notifyUsersInput: NotifyUsersInput!): [Notification!]!
   RemoveUserFromUserGroup(removeUserFromUserGroupInput: RemoveUserFromUserGroupInput!): UserGroup!
+  SignupCreateUser(signupCreateUserInput: SignupCreateUserInput!): User!
   TestPayment: PaymentIntentOutput!
   UpdateFile(updateFileInput: UpdateFileInput!): S3File!
   UpdateUser(updateUserInput: UpdateUserInput!): User!
@@ -514,6 +533,7 @@ type Query {
     expires: Int
     uuids: [ID!] = []
   ): [Image!]!
+  IsUserEnabled(cognitoUuid: ID, uuid: ID!): Boolean!
   MyFiles(
     """URL expiration duration (in seconds)"""
     expires: Int
@@ -760,6 +780,11 @@ input RemoveUserFromUserGroupInput {
   userUuid: ID!
 }
 
+enum Role {
+  ADMIN
+  USER
+}
+
 type S3File {
   """Creation date"""
   createdAt: DateTime!
@@ -801,12 +826,25 @@ type S3File {
   uuid: ID!
 }
 
+input SignupCreateUserInput {
+  email: String!
+  lang: String
+
+  """password"""
+  password: String!
+  username: String!
+}
+
 input UpdateFileInput {
   """Name of File"""
   filename: String
 
   """Path to file"""
   path: String!
+  uuid: ID!
+}
+
+input UpdateInput {
   uuid: ID!
 }
 
@@ -835,6 +873,9 @@ type User {
 
   """E-mail address"""
   email: String!
+
+  """User enabled or not"""
+  enabled: Boolean
 
   """User groups this user belongs to"""
   groups: [UserGroup!]!

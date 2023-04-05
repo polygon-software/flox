@@ -1,27 +1,36 @@
 import { useApolloClient } from '@vue/apollo-composable';
 import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js';
-import {
-  CognitoUser,
-  CognitoUserSession,
-  ISignUpResult,
-} from 'amazon-cognito-identity-js';
+import { CognitoUser, CognitoUserSession } from 'amazon-cognito-identity-js';
 import cloneDeep from 'lodash/cloneDeep';
 import { QVueGlobals, useQuasar } from 'quasar';
 
 import { i18n } from 'boot/i18n';
 import Env from 'src/env';
-import * as auth from 'src/flox/modules/auth';
-import { createUser } from 'src/flox/modules/auth/services/user.service';
-import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
-import ROUTES from 'src/router/routes';
-import ErrorService from 'src/services/ErrorService';
-import RouterService from 'src/services/RouterService';
+import AdminCreatedUser from 'src/flox/modules/auth/data/types/AdminCreatedUser';
 import { showSuccessNotification } from 'src/tools/notification.tool';
+import UserEntity from 'src/flox/modules/auth/entities/user.entity';
 
+import { useAuthStore } from '../stores/auth.store';
+import ROUTES from '../../../../router/routes';
+import ErrorService from '../../../../services/ErrorService';
+import RouterService from '../../../../services/RouterService';
+import ForgotPasswordDialog from '../components/dialogs/ForgotPasswordDialog.vue';
 import ChangePasswordDialog from '../components/dialogs/ChangePasswordDialog.vue';
 import EmailConfirmationDialog from '../components/dialogs/EmailConfirmationDialog.vue';
 import QrCodeDialog from '../components/dialogs/QrCodeDialog.vue';
 import ResetPasswordDialog from '../components/dialogs/ResetPasswordDialog.vue';
+import MFADialog from '../components/dialogs/MFADialog.vue';
+import DELIVERY_MEDIUMS from '../../../enum/DELIVERY_MEDIUMS';
+import ROLE from '../../../enum/USER_ROLES';
+
+import {
+  adminCreateUser,
+  disableUser,
+  enableUser,
+  signup,
+} from './user.service';
+
+const userNotDefinedError = i18n.global.t('errors.user_not_defined');
 
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
@@ -92,10 +101,15 @@ export default class AuthenticationService {
    *
    * @param identifier - the authentication's identifier (usually E-mail or username)
    * @param password - the authentication's password
-   * @param newPassword - the new password if this function is triggered from set-password page
+   * @param q - Quasar instance (for opening dialogs)
+   * @param [newPassword] - the new password if this function is triggered from set-password page
    */
-  async login(identifier: string, password: string): Promise<void> {
-    const { $q } = this;
+  async login(
+    identifier: string,
+    password: string,
+    q: QVueGlobals,
+    newPassword = ''
+  ): Promise<void> {
     // Generate auth details
     const authenticationDetails =
       new AmazonCognitoIdentity.AuthenticationDetails({
@@ -105,10 +119,8 @@ export default class AuthenticationService {
 
     const { userPool } = this.$authStore;
 
-    if (userPool === undefined) {
-      this.$errorService.showErrorDialog(
-        new Error(i18n.global.t('errors.user_not_defined'))
-      );
+    if (!userPool) {
+      this.$errorService.showErrorDialog(new Error(userNotDefinedError));
       return undefined;
     }
     // Actual Cognito authentication on given pool
@@ -140,17 +152,39 @@ export default class AuthenticationService {
         },
 
         // Called when user is in FORCE_PASSWORD_CHANGE state and must thus set a new password
-        newPasswordRequired(userAttributes) {
-          const attrs = cloneDeep(userAttributes) as Record<string, unknown>;
-          // Show password change dialog
-          $q.dialog({
+        newPasswordRequired(
+          userAttributes: Record<string, unknown>, // all user attributes (e.g. 'email', 'email_verified')
+          requiredAttributes: string[] // list of attributes that must be passed in order to update password (usually none)
+        ) {
+          // Build list of required attributes (for most user pools, this will be left empty)
+          const attributes: Record<string, unknown> = {};
+          if (requiredAttributes?.length > 0) {
+            Object.keys(userAttributes).forEach((key) => {
+              if (requiredAttributes.includes(key)) {
+                attributes[key] = userAttributes[key];
+              }
+            });
+          }
+
+          // Case 1: Password already given; complete directly
+          if (newPassword) {
+            cognitoUser.completeNewPasswordChallenge(
+              newPassword,
+              attributes,
+              this
+            );
+            return;
+          }
+
+          // Case 2: No password given: show dialog for setting new one
+          q.dialog({
             component: ChangePasswordDialog,
-            componentProps: {},
           }).onOk(({ passwordNew }: { passwordNew: string }) => {
-            // Ensure e-mail doesn't get passed, so cognito doesn't recognize it as change
-            delete attrs.email;
-            delete attrs.email_verified;
-            cognitoUser.completeNewPasswordChallenge(passwordNew, attrs, this);
+            cognitoUser.completeNewPasswordChallenge(
+              passwordNew,
+              attributes,
+              this
+            );
           });
         },
 
@@ -161,6 +195,7 @@ export default class AuthenticationService {
 
         // MFA code required (NOT part of normal flow)
         mfaRequired() {
+          // eslint-disable-next-line no-alert
           const verificationCode = prompt(
             i18n.global.t('messages.enter_verification_code', '')
           );
@@ -198,66 +233,80 @@ export default class AuthenticationService {
   }
 
   /**
+   * Lets an admin create a new user
+   * @param username - the chosen username
+   * @param email - the authentication's e-mail address
+   * @param role - the user's role
+   * @param deliveryMediums - medium to use to deliver user's new login information (sms, email, both or none)
+   * @param [phoneNumber] - number to send the SMS invitation to
+   * @param [locale] - the chosen language locale
+   * @returns - the newly created user
+   */
+  // eslint-disable-next-line class-methods-use-this
+  async adminCreateUser(
+    username: string,
+    email: string,
+    role: ROLE,
+    deliveryMediums: DELIVERY_MEDIUMS[],
+    phoneNumber?: string,
+    locale?: string
+  ): Promise<AdminCreatedUser | null> {
+    return adminCreateUser(
+      username,
+      email,
+      role,
+      deliveryMediums,
+      phoneNumber,
+      locale
+    );
+  }
+
+  /**
    * Signs up by creating a new authentication using the given Username, e-mail, password and language.
    *
    * @param username - the chosen username
    * @param email - the authentication's e-mail address
    * @param password - the new authentication's chosen password. Must fulfill the set password conditions
-   * @param locale - the chosen language locale
-   * @param attributes - custom attributes to add (if any)
+   * @param [lang] - the chosen language
    */
-  async signUp(
+  // eslint-disable-next-line class-methods-use-this
+  async signup(
     username: string,
     email: string,
     password: string,
-    locale?: string,
-    attributes?: Record<string, string>
-  ): Promise<void> {
-    const cognitoUserWrapper: ISignUpResult = await new Promise(
-      (resolve, reject) => {
-        const userAttributes = [];
+    lang?: string
+  ): Promise<UserEntity | null> {
+    return signup(username, email, password, lang);
+  }
 
-        // Add e-mail to attributes
-        userAttributes.push(
-          new AmazonCognitoIdentity.CognitoUserAttribute({
-            Name: 'email',
-            Value: email,
-          })
-        );
-
-        // Handle custom attributes
-        if (attributes) {
-          Object.keys(attributes).forEach((attributeKey) => {
-            userAttributes.push(
-              new AmazonCognitoIdentity.CognitoUserAttribute({
-                Name: attributeKey,
-                Value: attributes[attributeKey],
-              })
-            );
-          });
-        }
-
-        // Trigger signup
-        this.$authStore.userPool?.signUp(
-          username,
-          password,
-          userAttributes,
-          [],
-          (err?: Error, result?: ISignUpResult) => {
-            if (err) {
-              this.$errorService.showErrorDialog(err);
-              reject();
-            }
-            if (result) {
-              resolve(result);
-            }
-          }
-        );
-      }
+  /**
+   * Disable all users in the given list
+   *
+   * @param users - list of users to disable
+   */
+  // eslint-disable-next-line class-methods-use-this
+  async disableUsers(
+    users: UserEntity[]
+  ): Promise<PromiseSettledResult<Awaited<UserEntity> | null>[]> {
+    const disableRequests = users.map((user: UserEntity) =>
+      disableUser(user.uuid)
     );
+    return Promise.allSettled(disableRequests);
+  }
 
-    // Register in database TODO application specific: apply any other attributes here as well
-    await createUser(username, email, cognitoUserWrapper.userSub, locale);
+  /**
+   * Enable all users in the given list
+   *
+   * @param users - list of users to enable
+   */
+  // eslint-disable-next-line class-methods-use-this
+  async enableUsers(
+    users: UserEntity[]
+  ): Promise<PromiseSettledResult<Awaited<UserEntity> | null>[]> {
+    const disableRequests = users.map((user: UserEntity) =>
+      enableUser(user.uuid)
+    );
+    return Promise.allSettled(disableRequests);
   }
 
   /**
@@ -330,33 +379,19 @@ export default class AuthenticationService {
     const { userPool } = this.$authStore;
 
     if (userPool === undefined) {
-      this.$errorService.showErrorDialog(
-        new Error(i18n.global.t('errors.user_not_defined'))
-      );
+      this.$errorService.showErrorDialog(new Error(userNotDefinedError));
       return;
     }
 
-    const isEmailUsername = auth.moduleConfig().emailAsUsername;
-
     this.$q
       .dialog({
-        title: i18n.global.t('messages.reset_password'),
-        message: i18n.global.t(
-          `messages.enter_${isEmailUsername ? 'email' : 'username'}`
-        ),
-        cancel: true,
-        persistent: true,
-        prompt: {
-          model: '',
-          isValid: (val: string): boolean => val.length >= 1,
-          type: 'text',
-        },
+        component: ForgotPasswordDialog,
       })
-      .onOk((input: string) => {
+      .onOk((username: string) => {
         // Set up cognitoUser first
         this.$authStore.setCognitoUser(
           new CognitoUser({
-            Username: input,
+            Username: username,
             Pool: userPool,
           })
         );
@@ -384,19 +419,18 @@ export default class AuthenticationService {
     this.$q
       .dialog({
         component: ResetPasswordDialog,
-        componentProps: {},
       })
       .onOk(
         ({
-          passwordNew,
           verificationCode,
+          newPassword,
         }: {
-          passwordNew: string;
           verificationCode: string;
+          newPassword: string;
         }) => {
           this.$authStore.cognitoUser?.confirmPassword(
             verificationCode,
-            passwordNew,
+            newPassword,
             {
               onSuccess: () => {
                 showSuccessNotification(
@@ -411,6 +445,41 @@ export default class AuthenticationService {
           );
         }
       );
+  }
+
+  /**
+   * Shows a dialog for requesting password reset. The verification code is sent to the given e-mail address
+   * @param username - the username of the logged-in user
+   * @returns void
+   */
+  showRequestNewPasswordDialog(username: string): void {
+    const { userPool } = this.$authStore;
+
+    if (userPool === undefined) {
+      this.$errorService.showErrorDialog(new Error(userNotDefinedError));
+      return;
+    }
+
+    this.$authStore.setCognitoUser(
+      new CognitoUser({
+        Username: username,
+        Pool: userPool,
+      })
+    );
+
+    // Call forgotPassword on cognitoUser
+    this.$authStore.cognitoUser?.forgotPassword({
+      onSuccess() {
+        // Do nothing
+      },
+      onFailure: (err: Error) => {
+        this.$authStore.setCognitoUser(undefined);
+        this.onFailure(err);
+      },
+      inputVerificationCode: () => {
+        this.showResetPasswordFormDialog();
+      },
+    });
   }
 
   /**
@@ -481,15 +550,7 @@ export default class AuthenticationService {
           // Verify code
           this.$q
             .dialog({
-              title: i18n.global.t('authentication.verification'),
-              message: i18n.global.t('authentication.verification_message'),
-              cancel: true,
-              persistent: true,
-              prompt: {
-                model: '',
-                isValid: (val: string): boolean => val.length >= 6,
-                type: 'text',
-              },
+              component: MFADialog,
             })
             .onOk((code: string) => {
               cognitoUser.verifySoftwareToken(code, 'TOTP Device', {
@@ -540,15 +601,7 @@ export default class AuthenticationService {
     // Verify code
     this.$q
       .dialog({
-        title: i18n.global.t('messages.verification'),
-        message: i18n.global.t('messages.enter_2fa'),
-        cancel: true,
-        persistent: true,
-        prompt: {
-          model: '',
-          isValid: (val: string): boolean => val.length >= 6,
-          type: 'text',
-        },
+        component: MFADialog,
       })
       .onOk((code: string) => {
         // Deep copy user so state object does not get altered
@@ -593,13 +646,15 @@ export default class AuthenticationService {
    * @param password - the authentication's password for re-login
    */
   onFailure(error: Error, identifier?: string, password?: string): void {
+    let message;
+
     switch (error.name) {
       // Case 1: User has not verified their e-mail yet
       case 'UserNotConfirmedException':
         void this.showEmailVerificationDialog().then(() => {
           if (identifier && password) {
             // Retry login
-            void this.login(identifier, password);
+            void this.login(identifier, password, this.$q);
           }
         });
         break;
@@ -624,6 +679,28 @@ export default class AuthenticationService {
             this.showResetPasswordFormDialog();
           },
         });
+        break;
+      // Case 3: Wrong password or user's Cognito account is disabled
+      case 'NotAuthorizedException':
+        if (error.message.includes('Incorrect username or password')) {
+          // Wrong username / password
+          message = i18n.global.t('errors.incorrect_username_or_password');
+        } else if (error.message.includes('User is disabled')) {
+          // Account disabled
+          message = i18n.global.t('errors.account_disabled');
+        } else if (
+          error.message.includes(
+            'User password cannot be reset in the current state'
+          )
+        ) {
+          // Password can't be reset
+          message = i18n.global.t('errors.cannot_reset_password');
+        }
+
+        // Other NotAuthorizedExceptions are handled directly
+        this.$errorService.showErrorDialog(
+          message ? new Error(message) : error
+        );
         break;
       // Default: any other error
       default:

@@ -1,7 +1,7 @@
 import { ArgsType, Field, Int } from '@nestjs/graphql';
 import { IsNumber, IsOptional } from 'class-validator';
 
-import GetMultipleArgs from '../../../abstracts/crud/dto/get-multiple.args';
+import GetMultipleArgs from '../../../abstracts/crud/dto/args/get-multiple.args';
 
 @ArgsType()
 export default class GetMultipleImagesArgs extends GetMultipleArgs {
