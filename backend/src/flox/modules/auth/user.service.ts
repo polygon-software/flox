@@ -140,7 +140,7 @@ export default class UserService extends AbstractSearchService<User> {
    */
   async isUserEnabled(getUserArgs: GetUserArgs): Promise<boolean> {
     const user = await this.getUser(getUserArgs);
-    return isUserEnabled(user.email);
+    return isUserEnabled(user.username);
   }
 
   /**

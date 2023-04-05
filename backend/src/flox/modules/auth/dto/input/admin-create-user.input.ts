@@ -1,43 +1,13 @@
 import { Field, InputType } from '@nestjs/graphql';
-import {
-  IsArray,
-  IsEmail,
-  IsEnum,
-  IsLocale,
-  IsLowercase,
-  IsNotEmpty,
-  IsOptional,
-  IsPhoneNumber,
-  IsString,
-  MaxLength,
-  MinLength,
-} from 'class-validator';
+import { IsArray, IsEnum, IsOptional, IsPhoneNumber } from 'class-validator';
 
-import CreateInput from '../../../abstracts/crud/dto/input/create.input';
 import DELIVERY_MEDIUMS from '../../../../enum/DELIVERY_MEDIUMS';
 import ROLE from '../../../../enum/USER_ROLES';
 
+import CreateUserInput from './create-user.input';
+
 @InputType()
-export default class AdminCreateUserInput extends CreateInput {
-  @Field(() => String)
-  @IsString()
-  @IsNotEmpty()
-  username: string;
-
-  @Field(() => String)
-  @IsString()
-  @IsEmail()
-  email: string;
-
-  @Field(() => String, { nullable: true })
-  @IsString()
-  @MinLength(2)
-  @MaxLength(2)
-  @IsLowercase()
-  @IsLocale()
-  @IsOptional()
-  lang: string;
-
+export default class AdminCreateUserInput extends CreateUserInput {
   @Field(() => ROLE)
   @IsEnum(ROLE)
   role: ROLE;

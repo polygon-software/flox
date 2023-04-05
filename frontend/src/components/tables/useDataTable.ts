@@ -389,12 +389,10 @@ export function useDataTable(
       );
       await executeMutation(updateObject, mutationVariables);
       showSuccessNotification($q, i18n.global.t('messages.entry_edited'), {
-        position: 'top-right',
         timeout: 500,
       });
     } catch (e) {
       showErrorNotification($q, i18n.global.t('errors.entry_edit_failed'), {
-        position: 'top-right',
         timeout: 500,
       });
     }
@@ -410,14 +408,12 @@ export function useDataTable(
     return executeMutation<BaseEntity>(deletionObject, toRaw(row))
       .then(() => {
         showSuccessNotification($q, i18n.global.t('messages.entry_deleted'), {
-          position: 'top-right',
           timeout: 500,
         });
       })
       .catch((e) => {
         console.error(e);
         showErrorNotification($q, i18n.global.t('errors.entry_delete_failed'), {
-          position: 'top-right',
           timeout: 500,
         });
       });

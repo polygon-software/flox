@@ -3,6 +3,7 @@ import { isString } from 'class-validator';
 
 import { i18n } from 'boot/i18n';
 import SendInviteField from 'src/flox/modules/form/components/fields/general/SendInviteField.vue';
+import GenericSelectField from 'src/flox/modules/form/components/fields/general/GenericSelectField.vue';
 
 import AddressField from '../components/fields/general/AddressField.vue';
 import DateField from '../components/fields/general/DateField.vue';
@@ -13,10 +14,12 @@ import GenericInputField from '../components/fields/general/GenericInputField.vu
 import Password from '../components/fields/general/PasswordField.vue';
 import PasswordRepeat from '../components/fields/general/PasswordRepeatField.vue';
 import PhoneNumberField from '../components/fields/general/PhoneNumberField.vue';
-import UserRoleField from '../components/fields/general/UserRoleField.vue';
 import SelectLanguageField from '../components/fields/general/SelectLanguageField.vue';
 import { classValidatorRule } from '../helpers/validation-helpers';
-import { availablePhonenNumberOptions } from '../helpers/generation-helpers';
+import {
+  availablePhonenNumberOptions,
+  availableUserRoles,
+} from '../helpers/generation-helpers';
 
 import { Field } from './types/Field';
 import {
@@ -169,8 +172,10 @@ const FIELDS: Record<string, Field> = {
   },
   USER_ROLE: {
     key: 'userRole',
-    component: markRaw(UserRoleField),
+    component: markRaw(GenericSelectField),
     attributes: {
+      label: i18n.global.t('fields.authentication.user_role'),
+      options: availableUserRoles(),
       rules: [IS_SELECTED],
     },
   },

@@ -23,8 +23,10 @@ import { i18n } from 'boot/i18n';
 import SignupForm from 'src/flox/modules/auth/components/forms/SignupForm.vue';
 import ROUTES from 'src/router/routes';
 import RouterService from 'src/services/RouterService';
-import { showSuccessNotification } from 'src/tools/notification.tool';
-import { showErrorNotification } from 'src/flox/modules/form/helpers/notification-helpers';
+import {
+  showErrorNotification,
+  showSuccessNotification,
+} from 'src/tools/notification.tool';
 
 import AuthenticationService from '../flox/modules/auth/services/auth.service';
 

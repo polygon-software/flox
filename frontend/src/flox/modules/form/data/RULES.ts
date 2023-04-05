@@ -103,13 +103,10 @@ const IS_VALID_DATE_STRING = (val: string, format: string): boolean => {
   if (!val) {
     return false;
   }
+
   // For date strings, we additionally check that the year makes sense (since extractDate will
   // implicitly convert 05-06-0001 to 05-06-1901
   const yearIndex = format.toLowerCase().indexOf('yyyy');
-
-  const monthIndex = format.toLowerCase().indexOf('mm');
-
-  // If year is present in format, sanity-check it
   if (yearIndex > -1) {
     const yearNumber = Number.parseInt(
       val.substring(yearIndex, yearIndex + 4),
@@ -122,6 +119,7 @@ const IS_VALID_DATE_STRING = (val: string, format: string): boolean => {
   }
 
   // If month is present in format, sanity-check it
+  const monthIndex = format.toLowerCase().indexOf('mm');
   const monthNumber = Number.parseInt(
     val.substring(monthIndex, monthIndex + 2),
     10

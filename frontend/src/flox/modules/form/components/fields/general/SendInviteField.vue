@@ -1,10 +1,12 @@
 <template>
   <GenericOptionGroupField
     :initial-value="fieldValue.mediums"
-    :options="options"
+    :label="$t('fields.authentication.send_invite')"
+    :options="inviteOptions()"
     :rules="[IS_SELECTED]"
-    :label="label"
-    @change="(val) => (Array.isArray(val) ? (fieldValue.mediums = val) : null)"
+    @change="
+      (val) => (typeof val === 'string' ? (fieldValue.mediums = val) : null)
+    "
   />
   <PhoneNumberField
     v-if="phoneNumberNeeded"
@@ -15,10 +17,10 @@
   />
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { computed, Ref, ref, watch } from 'vue';
 
-import { i18n } from 'boot/i18n';
+import GenericOptionGroupField from 'src/flox/modules/form/components/fields/general/GenericOptionGroupField.vue';
 
 import DELIVERY_MEDIUMS from '../../../../../enum/DELIVERY_MEDIUMS';
 import SendInvite from '../../../data/types/SendInvite';
@@ -29,22 +31,12 @@ import {
   inviteOptions,
 } from '../../../helpers/generation-helpers';
 import { fetchByKey } from '../../../helpers/form-helpers';
-import { GenericOption } from '../../../data/types/GenericOption';
 
-import GenericOptionGroupField from './GenericOptionGroupField.vue';
 import PhoneNumberField from './PhoneNumberField.vue';
 
-const props = withDefaults(
-  defineProps<{
-    stateKey: FormStateKey;
-    label?: string;
-    options?: GenericOption[];
-  }>(),
-  {
-    label: i18n.global.t('fields.authentication.send_invite'),
-    options: () => inviteOptions(),
-  }
-);
+const props = defineProps<{
+  stateKey: FormStateKey;
+}>();
 
 const store = useFormStore();
 
@@ -61,7 +53,6 @@ const phoneNumberNeeded = computed(() => {
 
 /**
  * Saves the updated value
- * @returns void
  */
 function saveValue(): void {
   if (fieldValue.value.isComplete()) {

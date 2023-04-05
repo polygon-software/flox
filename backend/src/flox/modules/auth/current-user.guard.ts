@@ -49,7 +49,7 @@ export default class CurrentUserGuard implements CanActivate {
     // Set user in request object
     if (user) {
       dbUser = await this.userService.getUser({
-        cognitoUuid: user.UUID,
+        cognitoUuid: user.uuid,
       } as GetUserArgs);
 
       // Handle the case in which an alias is provided in header

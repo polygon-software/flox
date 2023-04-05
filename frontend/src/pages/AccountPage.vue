@@ -3,7 +3,6 @@
   <AccountSettings />
 </template>
 
-<script setup lang="ts">
-// TOOD: Implement account page
+<script lang="ts" setup>
 import AccountSettings from '../flox/core/components/menu/AccountSettings.vue';
 </script>

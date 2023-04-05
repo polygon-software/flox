@@ -30,11 +30,11 @@ import { useQuasar } from 'quasar';
 
 import { i18n } from 'boot/i18n';
 import { MODULES } from 'src/flox/enum/MODULES';
+import { showErrorNotification } from 'src/tools/notification.tool';
 
 import { fetchByKey } from '../../../form/helpers/form-helpers';
 import * as auth from '../..';
 import FloxWrapper from '../../../../core/components/FloxWrapper.vue';
-import { showErrorNotification } from '../../../form/helpers/notification-helpers';
 import LoginFormPages from '../../../form/data/formPages/LoginFormPages';
 import { useFormStore } from '../../../form/stores/form';
 import GenericForm from '../../../form/components/GenericForm.vue';
