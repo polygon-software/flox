@@ -34,12 +34,9 @@ import { fetchByKey } from '../../../helpers/form-helpers';
 
 import PhoneNumberField from './PhoneNumberField.vue';
 
-const props = withDefaults(
-  defineProps<{
-    stateKey: FormStateKey;
-  }>(),
-  {}
-);
+const props = defineProps<{
+  stateKey: FormStateKey;
+}>();
 
 const store = useFormStore();
 
