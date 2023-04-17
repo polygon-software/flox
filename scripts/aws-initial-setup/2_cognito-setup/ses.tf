@@ -1,5 +1,5 @@
 resource "aws_ses_domain_dkim" "ses_dkim" {
-  domain = join("", aws_ses_domain_identity.ses_domain.*.domain)
+  domain = var.domain
 }
 
 resource "aws_route53_record" "ses_dkim_record" {
