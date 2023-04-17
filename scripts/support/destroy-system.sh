@@ -238,6 +238,10 @@ terraform apply -auto-approve -var-file="../../support/flox.tfvars"
 cd ../../aws-initial-setup/3_main-setup || exit 1
 terraform destroy -auto-approve -var-file="../../support/flox.tfvars"
 
+# Cognito setup
+cd ../2_cognito-setup || exit 1
+terraform destroy -auto-approve -var-file="../../support/flox.tfvars"
+
 # Parent setup
 cd ../1_parent-setup || exit 1
 terraform destroy -auto-approve -var-file="../../support/flox.tfvars"
