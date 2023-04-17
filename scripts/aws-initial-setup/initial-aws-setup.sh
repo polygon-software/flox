@@ -110,11 +110,17 @@ echo "# ======== Domain Config ========" >> ../../support/flox.tfvars
 echo "domain=\"$url\"" >> ../../support/flox.tfvars
 
 # Apply pre-setup Terraform (Cognito & hosted zone)
-terraform init
+init_out=$(terraform init)
+if [[ $init_out == *"│ Error: "* ]]
+then
+  echo "$init_out"
+  echo "Error in Terraform init. Exiting..."
+  exit 1
+fi
 apply_out=$(terraform apply -auto-approve -var-file="../../support/flox.tfvars")
 if [[ $apply_out == *"│ Error: "* ]]
 then
-  echo $apply_out
+  echo "$apply_out"
   echo "Error in Terraform apply. Exiting..."
   exit 1
 fi
@@ -174,11 +180,17 @@ then
   sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
 
   # Apply Parent DNS Terraform
-  terraform init
+  init_out=$(terraform init)
+  if [[ $init_out == *"│ Error: "* ]]
+  then
+    echo "$init_out"
+    echo "Error in Terraform init. Exiting..."
+    exit 1
+  fi
   apply_out=$(terraform apply -auto-approve -var-file="../../support/flox.tfvars")
   if [[ $apply_out == *"│ Error: "* ]]
   then
-    echo $apply_out
+    echo "$apply_out"
     echo "Error in Terraform apply. Exiting..."
     exit 1
   fi
@@ -204,11 +216,17 @@ sed -i -e "s/##PROJECT##/$project/g" config.tf
 # Replace 'ORGANISATION' in config.tf with actual organisation name
 sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
 
-terraform init
+init_out=$(terraform init)
+if [[ $init_out == *"│ Error: "* ]]
+then
+  echo "$init_out"
+  echo "Error in Terraform init. Exiting..."
+  exit 1
+fi
 apply_out=$(terraform apply -auto-approve -var-file="../../support/flox.tfvars")
 if [[ $apply_out == *"│ Error: "* ]]
 then
-  echo $apply_out
+  echo "$apply_out"
   echo "Error in Terraform apply. Exiting..."
   exit 1
 fi
@@ -283,11 +301,17 @@ then
 fi
 
 # Apply main Terraform
-terraform init
+init_out=$(terraform init)
+if [[ $init_out == *"│ Error: "* ]]
+then
+  echo "$init_out"
+  echo "Error in Terraform init. Exiting..."
+  exit 1
+fi
 apply_out=$(terraform apply -auto-approve -var-file="../../support/flox.tfvars")
 if [[ $apply_out == *"│ Error: "* ]]
 then
-  echo $apply_out
+  echo "$apply_out"
   echo "Error in Terraform apply. Exiting..."
   exit 1
 fi
