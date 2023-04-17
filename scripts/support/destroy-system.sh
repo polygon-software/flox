@@ -239,8 +239,11 @@ cd ../../aws-initial-setup/3_main-setup || exit 1
 terraform destroy -auto-approve -var-file="../../support/flox.tfvars"
 
 # Cognito setup
-cd ../2_cognito-setup || exit 1
-terraform destroy -auto-approve -var-file="../../support/flox.tfvars"
+if [[ $mode != "live" ]]
+then
+  cd ../2_cognito-setup || exit 1
+  terraform destroy -auto-approve -var-file="../../support/flox.tfvars"
+fi
 
 # Parent setup
 cd ../1_parent-setup || exit 1

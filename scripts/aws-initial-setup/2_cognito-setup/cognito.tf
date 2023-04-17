@@ -18,7 +18,7 @@ resource "aws_cognito_user_pool" "user_pool" {
   }
   depends_on = [aws_ses_domain_identity_verification.ses_domain_verification]
   lifecycle {
-    prevent_destroy = var.type == "live" ? true : false
+    prevent_destroy = false
   }
 }
 
