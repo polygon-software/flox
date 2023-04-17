@@ -56,7 +56,7 @@ project=${project:1:-1}
 frontend_build_mode=$(jq ".general.mode_$mode" ../../../frontend/flox.config.json)
 frontend_build_mode=${frontend_build_mode:1:-1}
 
-aws_region=$(jq '.general.aws_region' ../../../backend/flox.config.json)
+aws_region=$(jq ".infrastructure_$mode.aws_region" ../../../backend/flox.config.json)
 aws_region=${aws_region:1:-1}
 
 organisation=$(jq '.general.organisation' ../../../backend/flox.config.json)
@@ -65,40 +65,12 @@ organisation=${organisation:1:-1}
 # Serverless mode (API only)
 serverless_api=$(jq ".infrastructure_$mode.serverless_api" ../../../backend/flox.config.json)
 
-# Get mode-dependent base URL
-if [[ $mode == "live" ]]
-then
-  url=$(jq ".general.live_domain" ../../backend/flox.config.json)
-  url=${url:1:-1}
-else
-  if [[ $mode == "stage" ]]
-  then
-    # E.g. stage-123412.flox.polygon-project.ch
-    url="$staging_branch_name.$project.polygon-project.ch"
-  else
-    # E.g. test.flox.polygon-project.ch
-    url="$mode.$project.polygon-project.ch"
-  fi
-fi
-
-# Check whether selected deployment is online (if online, fail if 'force' is not set to true)
-online_status=$(curl -s --head "https://$url" | grep '200')
-if [[ ($online_status || $mode == "live" || $mode == "test") && ( $force_deployment != "true"  || $confirm_force_deployment != "confirm")]]
-then
-  echo "Deployment in mode $mode is online at URL '$url', or is customer-facing! Use 'force' to force destruction anyways. (CAUTION: This may destroy live infrastructure!)"
-  exit 1
-fi
-
-echo "=============================================="
-echo "===  DESTROYING AWS INFRASTRUCTURE ($mode)  ==="
-echo "=============================================="
-
-# Replace 'TYPE' in config.tf with actual type (live, test, stage-123412 or dev)
+# Replace 'TYPE' in config.tf with actual type (live, test, stage-xx or dev)
 if [[ $mode == "stage" ]]
 then
-    sed -i -e "s/##TYPE##/$staging_branch_name/g" config.tf
+  sed -i -e "s/##TYPE##/$staging_branch_name/g" config.tf
 else
-    sed -i -e "s/##TYPE##/$mode/g" config.tf
+  sed -i -e "s/##TYPE##/$mode/g" config.tf
 fi
 
 # Replace 'PROJECT' in config.tf with actual project name
@@ -106,6 +78,33 @@ sed -i -e "s/##PROJECT##/$project/g" config.tf
 
 # Replace 'ORGANISATION' in config.tf with actual organisation name
 sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
+
+# Get mode-dependent base URL
+if [[ $mode == "live" ]]
+then
+  url=$(jq ".general.live_domain" ../../../backend/flox.config.json)
+  url=${url:1:-1}
+elif [[ $mode == "stage" ]];
+then
+  # E.g. stage-123412.flox.polygon-project.ch
+  url="$staging_branch_name.$project.polygon-project.ch"
+else
+  # E.g. test.flox.polygon-project.ch
+  url="$mode.$project.polygon-project.ch"
+fi
+
+# Check whether selected deployment is online (if online, fail if 'force' is not set to true)
+online_status=$(curl -s --head "https://$url" | grep '200')
+
+if [[ ($online_status || $mode == "live" || $mode == "test") && ( $force_deployment != "true"  || $confirm_force_deployment != "confirm")]]
+then
+  echo "Deployment in mode $mode is online at URL '$url', or is customer-facing! Use 'force' to force destruction anyways. (CAUTION: This may destroy live infrastructure!)"
+  exit 1
+fi
+
+echo "=============================================="
+echo "===  DESTROYING AWS INFRASTRUCTURE ($mode) ==="
+echo "=============================================="
 
 # Add domain config to flox.tfvars
 echo "# ======== Domain Config ========" >> ../../support/flox.tfvars
@@ -149,9 +148,6 @@ cd ../1_parent-setup || exit 1
 if [[ $mode == "stage" ]]
 then
     sed -i -e "s/##TYPE##/$staging_branch_name/g" config.tf
-
-    # Return main workspace name (e.g. flox-stage-170809) so workspaces can be destroyed later
-    workspace_name="$project-$staging_branch_name"
 else
     sed -i -e "s/##TYPE##/$mode/g" config.tf
 fi
@@ -214,7 +210,7 @@ terraform refresh -var-file="../../support/flox.tfvars"
 # ==        Step 3: Empty Bucket          ==
 # ==========================================
 
-cd ../../aws-update/0_pre-update|| exit
+cd ../../aws-update/0_pre-update|| exit 1
 
 # Replace 'TYPE' in config.tf with actual type (live, test, stage-123412 or dev)
 if [[ $mode == "stage" ]]
