@@ -12,10 +12,10 @@ resource "aws_route53_record" "ses_dkim_record" {
 }
 
 resource "aws_ses_domain_identity" "ses_domain" {
-  domain      = var.domain
+  domain     = var.domain
+  depends_on = [aws_route53_record.ses_dkim_record]
 }
 
 resource "aws_ses_domain_identity_verification" "ses_domain_verification" {
   domain = aws_ses_domain_identity.ses_domain.id
-  depends_on = [aws_route53_record.ses_dkim_record]
 }
