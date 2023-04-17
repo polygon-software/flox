@@ -207,7 +207,29 @@ terraform init
 terraform refresh -var-file="../../support/flox.tfvars"
 
 # ==========================================
-# ==        Step 3: Empty Bucket          ==
+# ======     Step 3: Cognito & SES    ======
+# ==========================================
+cd ../2_cognito-setup || exit 1
+
+if [[ $mode == "stage" ]]
+then
+  sed -i -e "s/##TYPE##/$staging_branch_name/g" config.tf
+else
+  sed -i -e "s/##TYPE##/$mode/g" config.tf
+fi
+
+# Replace 'PROJECT' in config.tf with actual project name
+sed -i -e "s/##PROJECT##/$project/g" config.tf
+
+# Replace 'ORGANISATION' in config.tf with actual organisation name
+sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
+
+# Refresh main Terraform state
+terraform init
+terraform refresh -var-file="../../support/flox.tfvars"
+
+# ==========================================
+# ==        Step 4: Empty Bucket          ==
 # ==========================================
 
 cd ../../aws-update/0_pre-update|| exit 1
@@ -231,7 +253,7 @@ terraform init
 terraform apply -auto-approve -var-file="../../support/flox.tfvars"
 
 # ==========================================
-# ==        Step 4: Destroy all           ==
+# ==        Step 5: Destroy all           ==
 # ==========================================
 
 # Main Setup
@@ -259,7 +281,7 @@ cd ../0_pre-setup || exit 1
 terraform destroy -auto-approve -var-file="../../support/flox.tfvars"
 
 # ==========================================
-# ==     Step 5: Destroy workspace        ==
+# ==     Step 6: Destroy workspace        ==
 # ==       (only in stage mode)           ==
 # ==========================================
 
@@ -280,7 +302,7 @@ then
 fi
 
 # ==========================================
-# ======      Step 6: Cleanup       ========
+# ======      Step 7: Cleanup       ========
 # ======    (only in local mode)    ========
 # ==========================================
 if [[ $local_mode == 'true' ]]
@@ -292,6 +314,7 @@ then
   # Reset all config.tf files to their respective template files
   cp ../0_pre-setup/config.tftemplate ../0_pre-setup/config.tf
   cp ../1_parent-setup/config.tftemplate ../1_parent-setup/config.tf
+  cp ../2_cognito-setup/config.tftemplate ../2_cognito-setup/config.tf
   cp ../3_main-setup/config.tftemplate ../3_main-setup/config.tf
   cp ../../support/destroy-staging-workspaces/config.tftemplate ../../support/destroy-staging-workspaces/config.tf
 fi
