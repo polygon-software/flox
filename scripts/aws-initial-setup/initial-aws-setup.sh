@@ -111,7 +111,13 @@ echo "domain=\"$url\"" >> ../../support/flox.tfvars
 
 # Apply pre-setup Terraform (Cognito & hosted zone)
 terraform init
-terraform apply -auto-approve -var-file="../../support/flox.tfvars"
+apply_out=$(terraform apply -auto-approve -var-file="../../support/flox.tfvars")
+if [[ $apply_out == *"│ Error: "* ]]
+then
+  echo $apply_out
+  echo "Error in Terraform apply. Exiting..."
+  exit 1
+fi
 
 # Nameserver records for next step
 ns_records=$(terraform output ns_records)
@@ -169,7 +175,13 @@ then
 
   # Apply Parent DNS Terraform
   terraform init
-  terraform apply -auto-approve -var-file="../../support/flox.tfvars"
+  apply_out=$(terraform apply -auto-approve -var-file="../../support/flox.tfvars")
+  if [[ $apply_out == *"│ Error: "* ]]
+  then
+    echo $apply_out
+    echo "Error in Terraform apply. Exiting..."
+    exit 1
+  fi
 
   cd ../2_cognito-setup || exit 1
 else
@@ -193,7 +205,13 @@ sed -i -e "s/##PROJECT##/$project/g" config.tf
 sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
 
 terraform init
-terraform apply -auto-approve -var-file="../../support/flox.tfvars"
+apply_out=$(terraform apply -auto-approve -var-file="../../support/flox.tfvars")
+if [[ $apply_out == *"│ Error: "* ]]
+then
+  echo $apply_out
+  echo "Error in Terraform apply. Exiting..."
+  exit 1
+fi
 
 user_pool_id=$(terraform output user_pool_id)
 user_pool_id=${user_pool_id:1:-1}
@@ -265,14 +283,7 @@ then
 fi
 
 # Apply main Terraform
-init_out=$(terraform init)
-if [[ $init_out == *"│ Error: "* ]]
-then
-  echo $init_out
-  echo "Error in Terraform init. Exiting..."
-  exit 1
-fi
-
+terraform init
 apply_out=$(terraform apply -auto-approve -var-file="../../support/flox.tfvars")
 if [[ $apply_out == *"│ Error: "* ]]
 then
