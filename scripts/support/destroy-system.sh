@@ -239,10 +239,15 @@ cd ../../aws-initial-setup/3_main-setup || exit 1
 terraform destroy -auto-approve -var-file="../../support/flox.tfvars"
 
 # Cognito setup
+cd ../2_cognito-setup || exit 1
 if [[ $mode != "live" ]]
 then
-  cd ../2_cognito-setup || exit 1
   terraform destroy -auto-approve -var-file="../../support/flox.tfvars"
+else
+  terraform destroy -auto-approve -var-file="../../support/flox.tfvars" -target=aws_route53_record.ses_dkim_record
+  terraform destroy -auto-approve -var-file="../../support/flox.tfvars" -target=aws_ses_domain_dkim.ses_dkim
+  terraform destroy -auto-approve -var-file="../../support/flox.tfvars" -target=aws_ses_domain_identity_verification.ses_domain_verification
+  terraform destroy -auto-approve -var-file="../../support/flox.tfvars" -target=aws_ses_domain_identity.ses_domain
 fi
 
 # Parent setup
