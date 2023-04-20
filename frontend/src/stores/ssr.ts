@@ -1,34 +1,40 @@
-import { defineStore } from 'pinia'
+import { defineStore, PiniaCustomStateProperties } from 'pinia';
 
 interface SsrState {
-  prefetchedData: Record<string, unknown>
+  prefetchedData: Record<string, unknown>;
 }
 
-export const useSsrStore = defineStore('ssrState', {
+export default defineStore('ssrState', {
   state: (): SsrState => ({
-    prefetchedData: {}
+    prefetchedData: {},
   }),
 
   getters: {
     /**
      * Gets prefetched data for a key
-     * @param {authState} state - the current state of the store
-     * @param {string} key - Key for which to retrieve data
-     * @returns {unknown|undefined} - any result
+     *
+     * @param state - the current state of the store
+     * @returns any result
      */
-    getPrefetchedData: (state) => {
-      return (key: string) => state.prefetchedData[key]
+    getPrefetchedData(
+      state: {
+        prefetchedData: Record<string, unknown>;
+      } & PiniaCustomStateProperties<SsrState>
+    ): (key: string) => any {
+      return (key: string): any => state.prefetchedData[key];
     },
   },
 
   actions: {
     /**
      * Sets prefetched data state
-     * @param {{key: string, value: unknown}} payload - value to set
-     * @returns {void}
+     *
+     * @param payload - payload to be set in prefetched data store
+     * @param payload.key - key to be set in prefetched data
+     * @param payload.value - value to be set
      */
-    setPrefetchedData(payload: {key: string, value: unknown}): void{
+    setPrefetchedData(payload: { key: string; value: unknown }): void {
       this.prefetchedData[payload.key] = payload.value;
-    }
-  }
+    },
+  },
 });

@@ -2,7 +2,7 @@
   "name": "my-app-mobile",
   "version": "0.0.1",
   "description": "A Quasar Framework app",
-  "author": "davwys <david.wyss@hotmail.ch>",
+  "author": "PolygonSolutions GmbH <kontakt@polygon-software.ch>",
   "private": true,
   "dependencies": {
     "@capacitor/android": "^3.0.0-beta.0",

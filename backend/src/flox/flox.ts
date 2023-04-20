@@ -1,19 +1,31 @@
 import { APP_GUARD } from '@nestjs/core';
-import { RolesGuard } from './modules/roles/roles.guard';
-import { JwtStrategy } from './modules/auth/jwt.strategy';
-import { JwtAuthGuard } from './modules/auth/auth.guard';
-import { FileModule } from './modules/file/file.module';
-import { UserModule } from './modules/auth/user.module';
-import { MODULES } from './MODULES';
-import { EmailModule } from './modules/email/email.module';
+import { StripeModule } from 'nestjs-stripe';
+
+import env from '../env';
+
 import { getActiveFloxModuleNames } from './core/flox-helpers';
+import JwtAuthGuard from './modules/auth/auth.guard';
+import JwtStrategy from './modules/auth/jwt.strategy';
+import UserModule from './modules/auth/user.module';
+import EmailModule from './modules/email/email.module';
+import FileModule from './modules/file/file.module';
+import ImageModule from './modules/image/image.module';
+import RolesGuard from './modules/roles/roles.guard';
+import NotificationModule from './modules/notifications/notification.module';
+import { MODULES } from './MODULES';
+import CurrentUserInterceptor from './modules/auth/current-user.guard';
+import LoginGuard from './modules/auth/login.guard';
+import PaymentModule from './modules/payment/payment.module';
+
+export type FloxModules = FileModule | ImageModule | UserModule | EmailModule;
 
 /**
  * Returns the active Flox modules based on flox.config.json
- * @returns {any[]} - list of Modules
+ *
+ * @returns list of Modules
  */
-export function floxModules() {
-  const modules = [];
+export function floxModules(): FloxModules[] {
+  const modules: FloxModules[] = [];
 
   // Get active modules from config
   const moduleNames = getActiveFloxModuleNames();
@@ -23,11 +35,26 @@ export function floxModules() {
       case MODULES.FILE:
         modules.push(FileModule);
         break;
+      case MODULES.IMAGE:
+        modules.push(ImageModule);
+        break;
       case MODULES.AUTH:
         modules.push(UserModule);
         break;
       case MODULES.EMAIL:
         modules.push(EmailModule);
+        break;
+      case MODULES.NOTIFICATION:
+        modules.push(NotificationModule);
+        break;
+      case MODULES.PAYMENT:
+        modules.push(
+          StripeModule.forRoot({
+            apiKey: env.STRIPE_SECRET_KEY,
+            apiVersion: '2022-11-15',
+          }),
+        );
+        modules.push(PaymentModule);
         break;
       // Some modules don't have to be added (e.g. 'roles')
       default:
@@ -40,10 +67,11 @@ export function floxModules() {
 
 /**
  * Returns the providers to use based on flox.config.json
- * @returns {any[]} - list of providers
+ *
+ * @returns list of providers
  */
-export function floxProviders() {
-  const providers = [];
+export function floxProviders(): any[] {
+  const providers: any[] = [];
 
   // Get active modules from config
   const moduleNames = getActiveFloxModuleNames();
@@ -57,6 +85,14 @@ export function floxProviders() {
         providers.push({
           provide: APP_GUARD,
           useClass: JwtAuthGuard,
+        });
+        providers.push({
+          provide: APP_GUARD,
+          useClass: CurrentUserInterceptor,
+        });
+        providers.push({
+          provide: APP_GUARD,
+          useClass: LoginGuard,
         });
         break;
       // Role management module

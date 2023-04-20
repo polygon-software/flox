@@ -3,7 +3,11 @@ import { createI18n } from 'vue-i18n';
 
 import messages from 'src/i18n';
 
-const i18n = createI18n({
+export type MessageSchema = typeof messages.de;
+
+const i18n = createI18n<[MessageSchema], 'de' | 'en', false>({
+  legacy: false,
+  globalInjection: true,
   locale: 'de',
   messages,
 });

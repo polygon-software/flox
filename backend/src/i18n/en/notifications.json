@@ -1,0 +1,10 @@
+{
+  "user_added_to_user_group": {
+    "title": "You were added to a new user group!",
+    "content": "You are now part of the user group '{name}'! You may now have access to new resources!"
+  },
+  "user_removed_from_user_group": {
+    "title": "You were removed from a user group!",
+    "content": "You are no longer part of the user group '{name}'! You may have lost access to some resources!"
+  }
+}

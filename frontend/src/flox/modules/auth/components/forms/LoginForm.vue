@@ -1,84 +1,87 @@
 <template>
   <FloxWrapper :module="MODULES.AUTH">
-    <div class="column q-pa-sm text-center">
-    <h5 class="q-ma-none" style="margin-bottom: 20px;">
-      {{ $t('authentication.login') }}
-    </h5>
-    <q-form
-        class="q-gutter-md"
-        @submit="onSubmit"
-    >
-      <component
-          :is="field.component"
-          v-for="field in fields"
-          :key="field.key"
-          v-bind="field.attributes"
-          v-model="form.values.value[field.key]"
-          @change="(newValue) => form.updateValue(field.key, newValue)"
+    <div class="column q-pa-sm text-center justify-center" style="margin: 50px">
+      <GenericForm
+        :finish-label="$t('buttons.login')"
+        :form-key="loginFormKey.formKey"
+        :pages="LoginFormPages"
+        text-position="center"
+        @submit="onLogin"
       />
-      <q-btn
-          style="margin-top: 20px"
-          color="primary"
-          :label="$t('authentication.login')"
-          type="submit"
-      />
-
+    </div>
+    <div class="col q-mt-md text-center">
       <q-btn
         :label="$t('authentication.forgot_password')"
-        class="text-primary"
+        class="primary"
+        dense
         flat
+        no-caps
+        style="text-decoration: underline"
         @click="forgotPassword"
-      />
-    </q-form>
-  </div>
+      >
+      </q-btn>
+    </div>
   </FloxWrapper>
 </template>
 
-<script setup lang="ts">
-import {FIELDS} from 'src/data/FIELDS';
-import { Form } from 'src/helpers/form/form-helpers'
-import {defineEmits, inject} from 'vue';
-import {AuthenticationService} from 'src/flox/modules/auth/services/AuthService';
-import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';
-import {MODULES} from 'src/flox/MODULES';
-import * as auth from 'src/flox/modules/auth'
+<script lang="ts" setup>
+import { inject } from 'vue';
+import { useQuasar } from 'quasar';
 
-const $authService: AuthenticationService|undefined = inject('$authService')
+import { i18n } from 'boot/i18n';
+import { MODULES } from 'src/flox/enum/MODULES';
+import { showErrorNotification } from 'src/tools/notification.tool';
 
-const emit = defineEmits(['submit'])
+import { fetchByKey } from '../../../form/helpers/form-helpers';
+import * as auth from '../..';
+import FloxWrapper from '../../../../core/components/FloxWrapper.vue';
+import LoginFormPages from '../../../form/data/formPages/LoginFormPages';
+import { useFormStore } from '../../../form/stores/form';
+import GenericForm from '../../../form/components/GenericForm.vue';
+import AuthenticationService from '../../services/auth.service';
+import { loginFormKey } from '../../../form/data/FORM_KEYS';
+import { FIELDS } from '../../../form/data/FIELDS';
 
-const fields = [
-  auth.moduleConfig().emailAsUsername ? FIELDS.EMAIL : FIELDS.USERNAME,
-  FIELDS.PASSWORD
-]
-
-const form = new Form()
-form.pages.value = [
-  {
-    key: 'login',
-    label: 'Login',
-    fields: fields
-  }
-]
+const $authService: AuthenticationService | undefined = inject('$authService');
+const $q = useQuasar();
+const store = useFormStore();
 
 /**
- * Emits the 'submit' event, containing the form's data
- * @returns {void}
+ * Logs in the given authentication
+ * @returns void
  */
-function onSubmit(): void {
-  const formValues: Record<string, unknown> = {
-    identifier: form.values.value[auth.moduleConfig().emailAsUsername ? FIELDS.EMAIL.key : FIELDS.USERNAME.key],
-    password: form.values.value[FIELDS.PASSWORD.key],
-  }
+async function onLogin(): Promise<void> {
+  // Get data from store
+  const identifierKey = auth.moduleConfig().emailAsUsername
+    ? FIELDS.EMAIL.key
+    : FIELDS.USERNAME.key;
 
-  emit('submit', formValues)
+  const identifier = fetchByKey({
+    ...loginFormKey,
+    fieldKey: identifierKey,
+  }) as string;
+
+  const password = fetchByKey({
+    ...loginFormKey,
+    fieldKey: FIELDS.PASSWORD.key,
+  }) as string;
+
+  try {
+    // Actually log in
+    await $authService?.login(identifier, password, $q);
+
+    // Empty store state
+    store.clearForm(loginFormKey.formKey);
+  } catch (e) {
+    showErrorNotification($q, i18n.global.t('errors.login_failed'));
+  }
 }
 
 /**
  * Triggers a password change for a non-logged in authentication
- * @returns {void}
+ * @returns void
  */
-function forgotPassword() {
+function forgotPassword(): void {
   $authService?.showResetPasswordDialog();
 }
 </script>

@@ -1,5 +1,7 @@
-import { mergeConfigurations } from '../../core/flox-helpers';
-import { floxModuleOptions } from '../../core/flox-helpers';
+import {
+  floxModuleOptions,
+  mergeConfigurations,
+} from '../../core/flox-helpers';
 import { MODULES } from '../../MODULES';
 
 /**
@@ -18,11 +20,13 @@ const defaultConfig: FileModuleConfig = {
 
 /**
  * Gets the module's actual configuration
- * @returns {FileModuleConfig} - configuration
+ *
+ * @returns configuration
  */
-export function moduleConfig() {
+export function moduleConfig(): FileModuleConfig {
   return mergeConfigurations(
     defaultConfig,
     floxModuleOptions(MODULES.FILE),
   ) as FileModuleConfig;
 }
+export default moduleConfig;

@@ -3,7 +3,11 @@
     "auth": true,
     "roles": true,
     "file": true,
-    "sharing": false
+    "image": true,
+    "sharing": false,
+    "email": true,
+    "notification": true,
+    "payment": true
   },
   "moduleOptions": {
     "auth": {
@@ -14,9 +18,18 @@
         "ADMIN", "SUPERUSER", "USER"
       ]
     },
+    "file": {},
+    "image": {},
+    "sharing": {},
     "email": {
-      "email_sender": "test@polygon-project.ch"
-    }
+      "email_sender": "no-reply"
+    },
+    "notification": {},
+    "payment": {}
+  },
+  "i18n": {
+    "defaultLocale": "en",
+    "availableLocales": ["de", "en"]
   },
   "general": {
     "database_name": "floxdb",

@@ -1,28 +1,33 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import PublicFile from './entities/public_file.entity';
-import PrivateFile from './entities/private_file.entity';
 import {
   DeleteObjectCommand,
   GetObjectCommand,
   PutObjectCommand,
   S3,
 } from '@aws-sdk/client-s3';
-import { ConfigService } from '@nestjs/config';
-import { v4 as uuid } from 'uuid';
-import { GetPublicFileArgs } from './dto/args/get-public-file.args';
-import { GetPrivateFileArgs } from './dto/args/get-private-file.args';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { DeleteFileInput } from './dto/input/delete-file.input';
+import { Repository } from 'typeorm';
+import { v4 as uuidv4 } from 'uuid';
+
+import AbstractSearchAccessControlService from '../abstracts/search-access-control/abstract-search-access-control.service';
+import AccessControlService from '../access-control/access-control.service';
+
+import S3File from './entities/file.entity';
+import FolderOutput from './dto/output/folder.output';
 
 @Injectable()
-export class FileService {
+export default class FileService extends AbstractSearchAccessControlService<S3File> {
   // S3 credentials
   private readonly credentials = {
-    region: this.configService.get('AWS_MAIN_REGION'),
-    accessKeyId: this.configService.get('AWS_ACCESS_KEY_ID'),
-    secretAccessKey: this.configService.get('AWS_SECRET_ACCESS_KEY'),
+    region: this.configService.getOrThrow<string>('AWS_MAIN_REGION'),
+    accessKeyId: this.configService.getOrThrow<string>(
+      'AWS_ADMIN_ACCESS_KEY_ID',
+    ),
+    secretAccessKey: this.configService.getOrThrow<string>(
+      'AWS_ADMIN_SECRET_ACCESS_KEY',
+    ),
   };
 
   // AWS S3 instance
@@ -30,169 +35,152 @@ export class FileService {
     credentials: this.credentials,
     region: this.credentials.region,
   });
+
   constructor(
-    @InjectRepository(PublicFile)
-    private publicFilesRepository: Repository<PublicFile>,
-
-    @InjectRepository(PrivateFile)
-    private privateFilesRepository: Repository<PrivateFile>,
-
+    @InjectRepository(S3File)
+    private fileRepository: Repository<S3File>,
     private readonly configService: ConfigService,
-  ) {}
+    protected readonly accessControlService: AccessControlService,
+  ) {
+    super();
+  }
 
   /**
-   * Uploads a file to the public S3 bucket
-   * @param {Express.Multer.File} file - the file to upload
-   * @returns {Promise<PublicFile>} - the newly uploaded file
+   * @returns file repository
    */
-  async uploadPublicFile(file: Express.Multer.File): Promise<PublicFile> {
-    // File upload
-    const key = `${uuid()}-${file.originalname}`;
+  get repository(): Repository<S3File> {
+    return this.fileRepository;
+  }
+
+  /**
+   * Creates a presigned URL for uploading a file
+   *
+   * @param file - database entry of file
+   * @returns pre-signed URL for upload
+   */
+  async createSignedUploadUrl(file: S3File): Promise<string> {
     const uploadParams = {
-      Bucket: this.configService.get('AWS_PUBLIC_BUCKET_NAME'),
-      Key: key,
-      Body: file.buffer,
-      ContentType: file.mimetype,
+      Bucket: this.configService.get<string>(
+        file.publicReadAccess
+          ? 'AWS_PUBLIC_BUCKET_NAME'
+          : 'AWS_PRIVATE_BUCKET_NAME',
+      ),
+      Key: file.uuid,
+      'Content-Type': file.mimetype,
     };
-    await this.s3.send(new PutObjectCommand(uploadParams));
-    const configService = new ConfigService();
-
-    const url = `https://${configService.get(
-      'AWS_PUBLIC_BUCKET_NAME',
-    )}.s3.${configService.get('AWS_MAIN_REGION')}.amazonaws.com/${key}`;
-
-    const newFile = this.publicFilesRepository.create({
-      key: key,
-      url: url,
+    const command = new PutObjectCommand(uploadParams);
+    return getSignedUrl(this.s3, command, {
+      expiresIn: 60 * 60,
     });
-    await this.publicFilesRepository.save(newFile);
-    return newFile;
   }
 
   /**
-   * Uploads a file to the private S3 bucket
-   * @param {Express.Multer.File} file - the file to upload
-   * @param {string} owner - the file owner's UUID
-   * @returns {Promise<PrivateFile>} - the newly uploaded file
+   * Add url to file objects for private files
+   *
+   * @param file - S3 File from Database
+   * @param args - contains UUID and optionally, expiration time
+   * @param args.expires - number in seconds, defines when file url expires
+   * @returns the file including an url from which it can be accessed
    */
-  async uploadPrivateFile(
-    file: Express.Multer.File,
-    owner: string,
-  ): Promise<PrivateFile> {
-    //File upload
-    const key = `${uuid()}-${file.originalname}`;
-    const uploadParams = {
-      Bucket: this.configService.get('AWS_PRIVATE_BUCKET_NAME'),
-      Key: key,
-      Body: file.buffer,
+  async addFileUrl(file: S3File, args: { expires?: number }): Promise<S3File> {
+    if (file.publicReadAccess) {
+      return file;
+    }
+    const options = {
+      expiresIn: args.expires ?? undefined,
     };
-    await this.s3.send(new PutObjectCommand(uploadParams));
-    const newFile = this.privateFilesRepository.create({
-      key: key,
-      owner: owner,
-    });
-    await this.privateFilesRepository.save(newFile);
-    return newFile;
+    // Generate pre-signed URL
+    const url = await getSignedUrl(
+      this.s3,
+      new GetObjectCommand({
+        Bucket: this.configService.getOrThrow<string>(
+          'AWS_PRIVATE_BUCKET_NAME',
+        ),
+        Key: file.uuid,
+      }),
+      options,
+    );
+    // Add URL to result
+    return { ...file, url };
   }
 
   /**
-   * Gets a public file
-   * @param {GetPublicFileArgs} getPublicFileArgs - contains UUID
-   * @returns {Promise<PublicFile>} - the file
+   * Adds urls to an array of files
+   *
+   * @param files - files on which url shall be added
+   * @param args - contains expiry
+   * @param args.expires - number in seconds, defines when file url expires
+   * @returns files with url
    */
-  async getPublicFile(
-    getPublicFileArgs: GetPublicFileArgs,
-  ): Promise<PublicFile> {
-    return this.publicFilesRepository.findOne({
-      where: {
-        uuid: getPublicFileArgs.uuid,
-      },
-    });
+  async addFileUrls(
+    files: S3File[],
+    args: { expires?: number },
+  ): Promise<S3File[]> {
+    return Promise.all(files.map((f) => this.addFileUrl(f, args)));
   }
 
   /**
-   * Gets a private file
-   * @param {GetPrivateFileArgs} getPrivateFileArgs - contains UUID and optionally, expiration time
-   * @returns {Promise<PrivateFile>} - the file
+   * Deletes a File from S3. Be sure to have the database entry deleted manually as well.
+   *
+   * @param file - database entry that was already deleted
+   * @returns the file that was deleted
    */
-  async getPrivateFile(
-    getPrivateFileArgs: GetPrivateFileArgs,
-  ): Promise<PrivateFile> {
-    const fileInfo = await this.privateFilesRepository.findOne({
-      where: {
-        uuid: getPrivateFileArgs.uuid,
-      },
-    });
-    if (fileInfo) {
-      const options: Record<string, unknown> = {};
-      // If expiration duration is set, apply
-      if (getPrivateFileArgs.expires) {
-        options.expiresIn = getPrivateFileArgs.expires;
+  async deleteFileFromS3(file: S3File): Promise<S3File> {
+    // Delete on S3
+    await this.s3.send(
+      new DeleteObjectCommand({
+        Bucket: this.configService.getOrThrow<string>(
+          file.publicReadAccess
+            ? 'AWS_PUBLIC_BUCKET_NAME'
+            : 'AWS_PRIVATE_BUCKET_NAME',
+        ),
+        Key: file.uuid,
+      }),
+    );
+    file.url = undefined;
+    return file;
+  }
+
+  /**
+   * Determines, for a list of files, the part of the files paths that immediately follow a provided base path
+   *
+   * @param files - files for which folders should be extracted
+   * @param path - base path from which on folder names should be determined
+   * @returns list of folder outputs
+   * @example Assume the file paths to be the following: [/root/folderA/folder1, /root/folderB, /root/folderB/folder2]
+   *          The function is called with a base path of /root would result in folder names /folderA and /folder2
+   *          since these are the immediate successors for the /root path
+   */
+  filesToFolders(files: S3File[], path: string): FolderOutput[] {
+    const folders: Record<string, FolderOutput> = {};
+    files.forEach((file) => {
+      const root = file.path.replace(path, '').split('/')[0];
+      if (!root) {
+        return;
       }
-
-      // Generate pre-signed URL
-      const url = await getSignedUrl(
-        this.s3,
-        new GetObjectCommand({
-          Bucket: this.configService.get('AWS_PRIVATE_BUCKET_NAME'),
-          Key: fileInfo.key,
-        }),
-        options,
-      );
-      const result = await this.privateFilesRepository.findOne({
-        where: {
-          uuid: getPrivateFileArgs.uuid,
-        },
-      });
-
-      // Add URL to result
-      return { ...result, url };
-    }
-
-    // File not found: throw error
-    throw new NotFoundException();
-  }
-
-  /**
-   * Deletes a private or public file
-   * @param {DeleteFileInput} deleteFileInput - contains UUID
-   * @param {boolean} isPublic - whether the file is public (otherwise, is private)
-   * @returns {Promise<PrivateFile|PublicFile>} - the file that was deleted
-   */
-  async deleteFile(
-    deleteFileInput: DeleteFileInput,
-    isPublic: boolean,
-  ): Promise<PrivateFile | PublicFile> {
-    const repository = isPublic
-      ? this.publicFilesRepository
-      : this.privateFilesRepository;
-
-    const file: PrivateFile | PublicFile = await repository.findOne({
-      where: {
-        uuid: deleteFileInput.uuid,
-      },
+      if (!(root in folders)) {
+        const folder = new FolderOutput();
+        folder.uuid = uuidv4();
+        folder.name = root;
+        folder.files = 0;
+        folder.size = 0;
+        folder.createdAt = file.createdAt;
+        folder.updatedAt = file.updatedAt;
+        folders[root] = folder;
+      }
+      const folder = folders[root];
+      folder.files += 1;
+      folder.size += file.size;
+      folder.createdAt =
+        folder.createdAt > file.createdAt ? file.createdAt : folder.createdAt;
+      if (file.updatedAt && !folder.updatedAt) {
+        folder.updatedAt = file.updatedAt;
+      }
+      if (file.updatedAt && folder.updatedAt) {
+        folder.updatedAt =
+          folder.updatedAt < file.updatedAt ? file.updatedAt : folder.updatedAt;
+      }
     });
-
-    if (file) {
-      // Delete on S3
-      await this.s3.send(
-        new DeleteObjectCommand({
-          Bucket: this.configService.get(
-            isPublic ? 'AWS_PUBLIC_BUCKET_NAME' : 'AWS_PRIVATE_BUCKET_NAME',
-          ),
-          Key: file.key,
-        }),
-      );
-
-      // Delete in database (TypeScript does not understand variable typing between PrivateFile / PublicFile here)
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const deletedFile = await repository.remove(file);
-      deletedFile.uuid = deleteFileInput.uuid;
-      return deletedFile;
-    }
-
-    // File not found: throw error
-    throw new NotFoundException();
+    return Object.values(folders);
   }
 }

@@ -3,7 +3,9 @@
     "auth": true,
     "roles": true,
     "file": true,
-    "sharing": false
+    "image": true,
+    "sharing": false,
+    "notification": true
   },
   "moduleOptions": {
     "roles": {

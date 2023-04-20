@@ -8,12 +8,12 @@
 // Configuration for your app
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const { configure } = require('quasar/wrappers');
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('path');
 
-module.exports = configure(function (ctx) {
+const { configure } = require('quasar/wrappers');
+const checker = require('vite-plugin-checker').default;
+
+module.exports = configure(function ({ prod }) {
   return {
     // https://quasar.dev/quasar-cli/supporting-ts
     supportTS: {
@@ -31,30 +31,22 @@ module.exports = configure(function (ctx) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
-    boot: ['auth', 'i18n', 'apollo', 'router'],
+    boot: ['apollo', 'auth', 'i18n', 'router'],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
     css: ['app.scss'],
 
     // https://github.com/quasarframework/quasar/tree/dev/extras
     extras: [
-      // "ionicons-v4",
-      // "mdi-v5",
-      // "fontawesome-v5",
-      // "eva-icons",
-      // "themify",
-      // "line-awesome",
-      // "roboto-font-latin-ext", // this or either "roboto-font", NEVER both!
-
-      'roboto-font', // optional, you are not bound to it
       'material-icons', // optional, you are not bound to it
     ],
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#build
     build: {
+      transpileDependencies: [],
       target: {
         browser: ['es2019', 'edge88', 'firefox78', 'chrome87', 'safari13.1'],
-        node: 'node16',
+        node: 'node14',
       },
 
       vueRouterMode: 'hash', // available values: "hash", "history"
@@ -84,6 +76,7 @@ module.exports = configure(function (ctx) {
       },
 
       vitePlugins: [
+        checker({ vueTsc: true }),
         [
           '@intlify/vite-plugin-vue-i18n',
           {
@@ -108,7 +101,7 @@ module.exports = configure(function (ctx) {
     framework: {
       config: {},
 
-      // iconSet: "material-icons", // Quasar icon set
+      iconSet: 'material-icons', // Quasar icon set
       // lang: "en-US", // Quasar language pack
 
       // For special cases outside where the auto-import strategy can have an impact
@@ -119,7 +112,7 @@ module.exports = configure(function (ctx) {
       // directives: [],
 
       // Quasar plugins
-      plugins: ['Cookies', 'Dialog', 'Notify'],
+      plugins: ['Cookies', 'Dialog', 'Notify', 'Meta'],
     },
 
     // https://v2.quasar.dev/options/animations
@@ -154,7 +147,7 @@ module.exports = configure(function (ctx) {
       // (gets superseded if process.env.PORT is specified at runtime)
 
       middlewares: [
-        ctx.prod ? 'compression' : '',
+        prod ? 'compression' : '',
         'render', // keep this as last one
       ],
     },
@@ -188,9 +181,6 @@ module.exports = configure(function (ctx) {
 
       // Full list of options: https://v2.quasar.dev/quasar-cli-vite/developing-electron-apps/configuring-electron
       electron: {
-        // extendElectronMainConf (esbuildConf)
-        // extendElectronPreloadConf (esbuildConf)
-
         inspectPort: 5858,
 
         bundler: 'packager', // "packager" or "builder"
