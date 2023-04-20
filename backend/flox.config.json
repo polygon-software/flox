@@ -32,7 +32,7 @@
     "availableLocales": ["de", "en"]
   },
   "general": {
-    "database_name": "floxdb",
+    "database_name": "privetec_db",
     "database_master_username": "db_user",
     "project": "privetec",
     "organisation": "privetec",

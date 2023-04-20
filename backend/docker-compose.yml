@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   main:
-    container_name: flox_main # TODO application specific
+    container_name: privetec_main
     build:
       context: .
     volumes:
@@ -19,7 +19,7 @@ services:
       - database
 
   database:
-    container_name: flox_database # TODO application specific
+    container_name: privetec_database
     image: postgres:14
     networks:
       - webnet

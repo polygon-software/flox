@@ -1,7 +1,7 @@
 {
-  "name": "flox-frontend",
+  "name": "privetec-frontend",
   "version": "0.1.0",
-  "description": "Flox Frontend Boilerplate",
+  "description": "PriveTec Application Frontend",
   "productName": "Quasar App",
   "author": "PolygonSolutions GmbH <kontakt@polygon-software.ch>",
   "private": true,

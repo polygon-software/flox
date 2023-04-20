@@ -1,7 +1,7 @@
 {
-  "name": "flox-backend",
+  "name": "privetec-application",
   "version": "0.1.0",
-  "description": "Flox Backend Boilerplate",
+  "description": "PriveTec Application",
   "author": "PolygonSolutions GmbH <kontakt@polygon-software.ch>",
   "private": true,
   "license": "Copyright 2022 PolygonSolutions GmbH",
