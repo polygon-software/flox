@@ -34,9 +34,9 @@
   "general": {
     "database_name": "floxdb",
     "database_master_username": "db_user",
-    "project": "flox",
-    "organisation": "polygonsoftware",
-    "live_domain": "live.flox.polygon-project.ch"
+    "project": "privetec",
+    "organisation": "privetec",
+    "live_domain": "application.privetec.ch"
   },
   "infrastructure_live": {
     "aws_region": "eu-central-1",

@@ -18,7 +18,7 @@ import ErrorService from './services/ErrorService';
 
 // Add LogRocket to production deployments / builds
 if (Env.VUE_APP_PRODUCTION) {
-  LogRocket.init('md69mq/flox'); // TODO application specific: Change LogRocket ID
+  LogRocket.init('privetec/privetec-application');
 }
 
 // Quasar

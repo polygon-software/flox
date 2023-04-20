@@ -1,22 +1,13 @@
-[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=polygon-software_full-stack-bootstrap&token=b7aaf65bd78000c4e1006f5706ccf422fe08f2be)](https://sonarcloud.io/summary/new_code?id=polygon-software_full-stack-bootstrap)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=polygon-software_privetec-application&metric=alert_status&token=3fe4e69a6f07f3a45b431ae7883217068e4517c3)](https://sonarcloud.io/summary/new_code?id=polygon-software_privetec-application)
 
-[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=polygon-software_full-stack-bootstrap&metric=ncloc&token=b7aaf65bd78000c4e1006f5706ccf422fe08f2be)](https://sonarcloud.io/summary/new_code?id=polygon-software_full-stack-bootstrap)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=polygon-software_full-stack-bootstrap&metric=coverage&token=b7aaf65bd78000c4e1006f5706ccf422fe08f2be)](https://sonarcloud.io/summary/new_code?id=polygon-software_full-stack-bootstrap)
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=polygon-software_full-stack-bootstrap&metric=bugs&token=b7aaf65bd78000c4e1006f5706ccf422fe08f2be)](https://sonarcloud.io/summary/new_code?id=polygon-software_full-stack-bootstrap)
-[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=polygon-software_full-stack-bootstrap&metric=sqale_index&token=b7aaf65bd78000c4e1006f5706ccf422fe08f2be)](https://sonarcloud.io/summary/new_code?id=polygon-software_full-stack-bootstrap)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=polygon-software_privetec-application&metric=ncloc&token=3fe4e69a6f07f3a45b431ae7883217068e4517c3)](https://sonarcloud.io/summary/new_code?id=polygon-software_privetec-application)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=polygon-software_privetec-application&metric=coverage&token=3fe4e69a6f07f3a45b431ae7883217068e4517c3)](https://sonarcloud.io/summary/new_code?id=polygon-software_privetec-application)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=polygon-software_privetec-application&metric=bugs&token=3fe4e69a6f07f3a45b431ae7883217068e4517c3)](https://sonarcloud.io/summary/new_code?id=polygon-software_privetec-application)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=polygon-software_privetec-application&metric=sqale_index&token=3fe4e69a6f07f3a45b431ae7883217068e4517c3)](https://sonarcloud.io/summary/new_code?id=polygon-software_privetec-application)
 
+# PriveTec Applications
 
-# Polygon Flox
-
-The Flox repository is intended to provide a solid baseline for starting new projects; it is meant to provide a full-stack, basic setup of all relevant services.
-It includes Terraform files for setting up the related AWS infrastructure, as well as a basic Backend, Frontend, Database, and preconfigured connections between them. Some basic examples for operations and components are included as well.
-
-All information related to developing projects with Flox is covered in the [Wiki](https://github.com/polygon-software/flox/wiki).
-
-For developers, it makes sense to read through the wiki in its entirety before working with this repository. For PMs working with Flox, reading about the [Flox Workflow](https://github.com/polygon-software/flox/wiki/1_Flox-Workflow) is probably the most important part in understanding Flox projects.
-
-
-:tada:
+PriveTec maintenance management application
 
 
   
