@@ -75,7 +75,7 @@ resource "aws_rds_cluster" "database_cluster" {
       select(.SupportedEngineModes[]?=="serverless") |
       "\(.Engine): \(.EngineVersion)"'
   **/
-  engine_version            = var.serverless_db == true && var.serverless_db_version == "v1" ? "10.18" : "13.6"
+  engine_version            = var.serverless_db == true && var.serverless_db_version == "v1" ? "10.21" : "13.6"
   cluster_identifier        = "${var.project}-${var.type}-database-cluster"
   database_name             = var.database_name
   master_username           = var.database_master_username
