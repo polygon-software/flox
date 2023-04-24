@@ -122,6 +122,9 @@ user_pool_client_id=${user_pool_client_id:1:-1}
 user_pool_arn=$(terraform output user_pool_arn)
 user_pool_arn=${user_pool_arn:1:-1}
 
+ses_domain_arn=$(terraform output ses_domain_arn)
+ses_domain_arn=${ses_domain_arn:1:-1}
+
 # Nameserver records for next step
 ns_records=$(terraform output ns_records)
 
@@ -138,6 +141,9 @@ echo "# ======== Cognito Config ========" >> ../../support/flox.tfvars
 echo "cognito_arn=\"$user_pool_arn\"" >> ../../support/flox.tfvars
 echo "user_pool_id=\"$user_pool_id\"" >> ../../support/flox.tfvars
 echo "user_pool_client_id=\"$user_pool_client_id\"" >> ../../support/flox.tfvars
+
+echo "# ======== SES Config ========" >> ../../support/flox.tfvars
+echo "ses_domain_arn=\"$ses_domain_arn\"" >> ../../support/flox.tfvars
 
 # ==========================================
 # =====   Step 1: Parent DNS state    ======
