@@ -1,5 +1,5 @@
 resource "aws_ses_domain_dkim" "ses_dkim" {
-  domain = var.domain
+  domain = join("", aws_ses_domain_identity.ses_domain.*.domain)
 }
 
 resource "aws_route53_record" "ses_dkim_record" {
@@ -12,10 +12,10 @@ resource "aws_route53_record" "ses_dkim_record" {
 }
 
 resource "aws_ses_domain_identity" "ses_domain" {
-  domain     = var.domain
-  depends_on = [aws_route53_record.ses_dkim_record]
+  domain = var.domain
 }
 
 resource "aws_ses_domain_identity_verification" "ses_domain_verification" {
-  domain = aws_ses_domain_identity.ses_domain.id
+  domain     = aws_ses_domain_identity.ses_domain.id
+  depends_on = [aws_route53_record.ses_dkim_record]
 }
