@@ -239,7 +239,7 @@ echo "VUE_APP_USER_POOL_CLIENT_ID=$user_pool_client_id" >> ../../../frontend/.en
 
 # Add SES outputs to flox.tfvars
 echo "# ======== SES Config ========" >> ../../support/flox.tfvars
-echo "ses_domain_arn=\"ses_domain_arn\"" >> ../../support/flox.tfvars
+echo "ses_domain_arn=\"$ses_domain_arn\"" >> ../../support/flox.tfvars
 
 cd ../3_cognito-setup || exit 1
 
