@@ -234,9 +234,6 @@ fi
 ses_domain_arn=$(terraform output ses_domain_arn)
 ses_domain_arn=${ses_domain_arn:1:-1}
 
-echo "VUE_APP_USER_POOL_ID=$user_pool_id" >> ../../../frontend/.env
-echo "VUE_APP_USER_POOL_CLIENT_ID=$user_pool_client_id" >> ../../../frontend/.env
-
 # Add SES outputs to flox.tfvars
 echo "# ======== SES Config ========" >> ../../support/flox.tfvars
 echo "ses_domain_arn=\"$ses_domain_arn\"" >> ../../support/flox.tfvars
@@ -244,7 +241,7 @@ echo "ses_domain_arn=\"$ses_domain_arn\"" >> ../../support/flox.tfvars
 cd ../3_cognito-setup || exit 1
 
 # ==========================================
-# ==     Step 3: Cognito & SES setup     ===
+# ======     Step 3: Cognito setup    ======
 # ==========================================
 if [[ $mode == "stage" ]]
 then
@@ -360,7 +357,7 @@ then
 fi
 
 # ==========================================
-# ======      Step 4: Cleanup       ========
+# ======      Step 5: Cleanup       ========
 # ======    (only in local mode)    ========
 # ==========================================
 
