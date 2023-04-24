@@ -42,7 +42,6 @@ variable "ns_records" {
 }
 
 variable "aws_region" {
-  default     = "eu-central-1" // Frankfurt (Germany)
   description = "AWS Region"
   type        = string
 }

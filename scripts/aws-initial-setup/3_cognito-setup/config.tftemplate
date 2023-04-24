@@ -13,7 +13,7 @@ terraform {
     organization        = "##ORGANISATION##"
 
     workspaces {
-      name = "##PROJECT##-##TYPE##-parent-setup" # will be replaced in preprocessing
+      name = "##PROJECT##-##TYPE##-cognito-setup" # will be replaced in preprocessing
     }
   }
 }
@@ -26,7 +26,7 @@ provider "aws" {
 }
 # Get workspace ID
 data "tfe_workspace" "workspace" {
-  name         = "##PROJECT##-##TYPE##-parent-setup"
+  name         = "##PROJECT##-##TYPE##-cognito-setup"
   organization = "##ORGANISATION##"
 }
 
