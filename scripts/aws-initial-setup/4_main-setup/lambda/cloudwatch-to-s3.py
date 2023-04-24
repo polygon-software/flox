@@ -23,7 +23,7 @@ def lambda_handler(event, context):
         response = logs.describe_log_groups(**extra_args)
         log_groups = log_groups + response['logGroups']
 
-        if not 'nextToken' in response:
+        if 'nextToken' not in response:
             break
         extra_args['nextToken'] = response['nextToken']
 

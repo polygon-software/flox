@@ -14,9 +14,8 @@ resource "aws_cognito_user_pool" "user_pool" {
   email_configuration {
     email_sending_account = "DEVELOPER"
     from_email_address    = "noreply@${var.domain}"
-    source_arn            = aws_ses_domain_identity.ses_domain.arn
+    source_arn            = var.ses_domain_arn
   }
-  depends_on = [aws_ses_domain_identity_verification.ses_domain_verification]
   lifecycle {
     prevent_destroy = false
   }

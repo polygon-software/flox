@@ -166,7 +166,7 @@ terraform refresh -var-file="../../support/flox.tfvars"
 # ======     Step 2: Main state     ========
 # ==========================================
 
-cd ../3_main-setup || exit 1
+cd ../4_main-setup || exit 1
 
 # Replace 'TYPE' in config.tf with actual type (live, test, stage-123412 or dev)
 if [[ $mode == "stage" ]]
@@ -196,7 +196,7 @@ else
   sudo bash build.sh "$project" "$frontend_build_mode"
 fi
 
-cd ../aws-initial-setup/3_main-setup || exit 1
+cd ../aws-initial-setup/4_main-setup || exit 1
 
 # Copy .zip files
 cp ../../outputs/frontend.zip frontend.zip
@@ -207,9 +207,9 @@ terraform init
 terraform refresh -var-file="../../support/flox.tfvars"
 
 # ==========================================
-# ======     Step 3: Cognito & SES    ======
+# ===========     Step 3: SES    ===========
 # ==========================================
-cd ../2_cognito-setup || exit 1
+cd ../2_ses-setup || exit 1
 
 if [[ $mode == "stage" ]]
 then
@@ -229,7 +229,29 @@ terraform init
 terraform refresh -var-file="../../support/flox.tfvars"
 
 # ==========================================
-# ==        Step 4: Empty Bucket          ==
+# =========     Step 4: Cognito    =========
+# ==========================================
+cd ../3_cognito-setup || exit 1
+
+if [[ $mode == "stage" ]]
+then
+  sed -i -e "s/##TYPE##/$staging_branch_name/g" config.tf
+else
+  sed -i -e "s/##TYPE##/$mode/g" config.tf
+fi
+
+# Replace 'PROJECT' in config.tf with actual project name
+sed -i -e "s/##PROJECT##/$project/g" config.tf
+
+# Replace 'ORGANISATION' in config.tf with actual organisation name
+sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
+
+# Refresh main Terraform state
+terraform init
+terraform refresh -var-file="../../support/flox.tfvars"
+
+# ==========================================
+# ==        Step 5: Empty Bucket          ==
 # ==========================================
 
 cd ../../aws-update/0_pre-update|| exit 1
@@ -253,24 +275,23 @@ terraform init
 terraform apply -auto-approve -var-file="../../support/flox.tfvars"
 
 # ==========================================
-# ==        Step 5: Destroy all           ==
+# ==        Step 6: Destroy all           ==
 # ==========================================
 
 # Main Setup
-cd ../../aws-initial-setup/3_main-setup || exit 1
+cd ../../aws-initial-setup/4_main-setup || exit 1
 terraform destroy -auto-approve -var-file="../../support/flox.tfvars"
 
 # Cognito setup
-cd ../2_cognito-setup || exit 1
 if [[ $mode != "live" ]]
 then
+  cd ../3_cognito-setup || exit 1
   terraform destroy -auto-approve -var-file="../../support/flox.tfvars"
-else
-  terraform destroy -auto-approve -var-file="../../support/flox.tfvars" -target=aws_route53_record.ses_dkim_record
-  terraform destroy -auto-approve -var-file="../../support/flox.tfvars" -target=aws_ses_domain_dkim.ses_dkim
-  terraform destroy -auto-approve -var-file="../../support/flox.tfvars" -target=aws_ses_domain_identity_verification.ses_domain_verification
-  terraform destroy -auto-approve -var-file="../../support/flox.tfvars" -target=aws_ses_domain_identity.ses_domain
 fi
+
+# SES setup
+cd ../2_ses-setup || exit 1
+terraform destroy -auto-approve -var-file="../../support/flox.tfvars"
 
 # Parent setup
 cd ../1_parent-setup || exit 1
@@ -281,7 +302,7 @@ cd ../0_pre-setup || exit 1
 terraform destroy -auto-approve -var-file="../../support/flox.tfvars"
 
 # ==========================================
-# ==     Step 6: Destroy workspace        ==
+# ==     Step 7: Destroy workspace        ==
 # ==       (only in stage mode)           ==
 # ==========================================
 
@@ -302,19 +323,20 @@ then
 fi
 
 # ==========================================
-# ======      Step 7: Cleanup       ========
+# ======      Step 8: Cleanup       ========
 # ======    (only in local mode)    ========
 # ==========================================
 if [[ $local_mode == 'true' ]]
 then
   # Remove .zip files
-  rm -f ../3_main-setup/frontend.zip
-  rm -f ../3_main-setup/backend.zip
+  rm -f ../4_main-setup/frontend.zip
+  rm -f ../4_main-setup/backend.zip
 
   # Reset all config.tf files to their respective template files
   cp ../0_pre-setup/config.tftemplate ../0_pre-setup/config.tf
   cp ../1_parent-setup/config.tftemplate ../1_parent-setup/config.tf
-  cp ../2_cognito-setup/config.tftemplate ../2_cognito-setup/config.tf
-  cp ../3_main-setup/config.tftemplate ../3_main-setup/config.tf
+  cp ../2_ses-setup/config.tftemplate ../1_parent-setup/config.tf
+  cp ../3_cognito-setup/config.tftemplate ../3_cognito-setup/config.tf
+  cp ../4_main-setup/config.tftemplate ../4_main-setup/config.tf
   cp ../../support/destroy-staging-workspaces/config.tftemplate ../../support/destroy-staging-workspaces/config.tf
 fi

@@ -216,7 +216,7 @@ terraform apply -auto-approve -var-file="../../support/flox.tfvars"
 # ==========================================
 
 # Go to main Terraform workspace to re-apply Terraform (since EBS Env state is held there)
-cd ../../aws-initial-setup/3_main-setup || exit
+cd ../../aws-initial-setup/4_main-setup || exit
 
 # Copy .zips, so terraform can handle resources
 cp ../../outputs/frontend.zip frontend.zip
