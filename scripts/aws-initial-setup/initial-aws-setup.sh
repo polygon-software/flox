@@ -376,6 +376,7 @@ then
   # Reset all config.tf files to their respective template files
   cp ../0_pre-setup/config.tftemplate ../0_pre-setup/config.tf
   cp ../1_parent-setup/config.tftemplate ../1_parent-setup/config.tf
+  cp ../2_ses-setup/config.tftemplate ../2_ses-setup/config.tf
   cp ../3_cognito-setup/config.tftemplate ../3_cognito-setup/config.tf
   cp ../4_main-setup/config.tftemplate ../4_main-setup/config.tf
 
