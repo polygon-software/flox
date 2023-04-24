@@ -90,7 +90,6 @@ else
 fi
 
 # Save url to output
-echo ::set-output name=stage_url::"$url"
 echo "stage_url=$url" >> "$GITHUB_OUTPUT"
 
 # Check whether selected deployment is already online
