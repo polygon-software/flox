@@ -135,3 +135,8 @@ variable "admin_key_secret" {
   description = "Secret of admin user programmatic access key"
   type        = string
 }
+
+variable "stripe_secret_key" {
+  description = "Stripe key"
+  type        = string
+}

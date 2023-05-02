@@ -81,6 +81,7 @@ module "api_ebs" {
   api_security_group_id         = aws_security_group.api_security_group.id
   admin_key_id                  = aws_iam_access_key.backend_admin_key.id
   admin_key_secret              = aws_iam_access_key.backend_admin_key.secret
+  stripe_secret_key             = var.stripe_secret_key
 }
 
 # Certificate for serverless mode backend
@@ -127,5 +128,6 @@ module "api_serverless" {
   database_ec2_to_rds_security_group_id = aws_security_group.database_ec2_to_rds_security_group[0].id
   admin_key_id                          = aws_iam_access_key.backend_admin_key.id
   admin_key_secret                      = aws_iam_access_key.backend_admin_key.secret
+  stripe_secret_key                     = var.stripe_secret_key
   // TODO actually use on EBS & lambda
 }

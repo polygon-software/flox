@@ -53,6 +53,9 @@ resource "aws_lambda_function" "api_lambda" {
       // AWS user credentials
       AWS_ADMIN_ACCESS_KEY_ID     = var.admin_key_id,
       AWS_ADMIN_SECRET_ACCESS_KEY = var.admin_key_secret
+
+      // Stripe variables
+      STRIPE_SECRET_KEY = var.stripe_secret_key
     }
   }
 }

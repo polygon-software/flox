@@ -137,3 +137,8 @@ variable "serverless_db_version" {
   default     = "v1"
   type        = string
 }
+
+variable "stripe_secret_key" {
+  description = "Stripe key"
+  type        = string
+}

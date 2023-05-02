@@ -1,32 +1,31 @@
-
 // Create Elastic Beanstalk resource
 resource "aws_elastic_beanstalk_application" "api_app" {
-  name                  = "${var.project}-${var.type}-api-app"
-  description           = var.eb_app_desc
+  name        = "${var.project}-${var.type}-api-app"
+  description = var.eb_app_desc
 }
 
 // Connect EBS to the S3 bucket with the app in it
 resource "aws_elastic_beanstalk_application_version" "api_app_version" {
-  bucket                = var.source_code_bucket_id
-  key                   = var.api_source_code_object_id
-  application           = aws_elastic_beanstalk_application.api_app.name
-  name                  = "${var.project}-${var.type}-api-v-${var.api_source_code_object_hash}"
+  bucket      = var.source_code_bucket_id
+  key         = var.api_source_code_object_id
+  application = aws_elastic_beanstalk_application.api_app.name
+  name        = "${var.project}-${var.type}-api-v-${var.api_source_code_object_hash}"
 }
 
 // Create EBS environment
 // for settings see https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/command-options-general.html
 resource "aws_elastic_beanstalk_environment" "api_env" {
-  name                  = "${var.project}-${var.type}-api-app-env"
-  application           = aws_elastic_beanstalk_application.api_app.name
-  solution_stack_name   = "64bit Amazon Linux 2 v5.6.3 running Node.js 16"
-  description           = "Environment for API"
+  name                = "${var.project}-${var.type}-api-app-env"
+  application         = aws_elastic_beanstalk_application.api_app.name
+  solution_stack_name = "64bit Amazon Linux 2 v5.6.3 running Node.js 16"
+  description         = "Environment for API"
   # Version override (used for update workflow)
-  version_label         = aws_elastic_beanstalk_application_version.api_app_version.name
+  version_label       = aws_elastic_beanstalk_application_version.api_app_version.name
 
   setting {
-    namespace           = "aws:autoscaling:launchconfiguration"
-    name                = "IamInstanceProfile"
-    value               = var.api_iam_instance_profile_name
+    namespace = "aws:autoscaling:launchconfiguration"
+    name      = "IamInstanceProfile"
+    value     = var.api_iam_instance_profile_name
   }
 
   setting {
@@ -259,5 +258,11 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "AWS_ADMIN_SECRET_ACCESS_KEY"
     value     = var.admin_key_secret
+  }
+
+  setting {
+    namespace = "aws:elasticbeanstalk:application:environment"
+    name      = "STRIPE_SECRET_KEY"
+    value     = var.stripe_secret_key
   }
 }
