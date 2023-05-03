@@ -70,7 +70,9 @@ const FIELDS: Record<string, Field> = {
     component: markRaw(Password),
     attributes: {
       forLogin: true,
-      rules: [IS_VALID_PASSWORD],
+      rules: [
+        classValidatorRule(isString, i18n.global.t('errors.invalid_password')),
+      ],
     },
   },
   PASSWORD: {
