@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-// eslint-disable-next-line import/prefer-default-export
+/* eslint-disable import/prefer-default-export, graphql/template-strings */
 export const schema = gql`
   type AccessControlledEntity {
     """

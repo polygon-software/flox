@@ -13,7 +13,7 @@ schemaFile=./schema.gql
 if test -f "$schemaFile"; then
   backendSchema=$(cat $schemaFile)
   rm -f src/apollo/schema.js
-  echo "import gql from 'graphql-tag';\n// eslint-disable-next-line import/prefer-default-export\nexport const schema = gql\`\n $backendSchema \n \`" >> src/apollo/schema.js
+  echo "import gql from 'graphql-tag';\n/* eslint-disable import/prefer-default-export, graphql/template-strings */\nexport const schema = gql\`\n $backendSchema \n \`" >> src/apollo/schema.js
   echo "Successfully imported GraphQL schema"
 else
   echo "Could not create schema.js, since schema.gql was not found. Assuming it already exists..."
