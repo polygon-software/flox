@@ -3,7 +3,7 @@
     <LabelWrapper :label="$t('authentication.password')">
       <q-input
         v-model="password"
-        :rules="[IS_VALID_PASSWORD]"
+        :rules="forLogin ? [] : [IS_VALID_PASSWORD]"
         :type="isPwd ? 'password' : 'text'"
         dense
         outlined
@@ -34,9 +34,11 @@ import LabelWrapper from './wrappers/LabelWrapper.vue';
 
 const props = withDefaults(
   defineProps<{
+    forLogin?: boolean;
     stateKey?: FormStateKey | null;
   }>(),
   {
+    forLogin: false,
     stateKey: null,
   }
 );

@@ -65,6 +65,14 @@ const FIELDS: Record<string, Field> = {
       ],
     },
   },
+  PASSWORD_LOGIN: {
+    key: 'passwordLogin',
+    component: markRaw(Password),
+    attributes: {
+      forLogin: true,
+      rules: [IS_VALID_PASSWORD],
+    },
+  },
   PASSWORD: {
     key: 'password',
     component: markRaw(Password),
