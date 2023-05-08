@@ -37,9 +37,6 @@ import FormModule from './modules/form/form.module';
         : join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
       driver: ApolloDriver,
-      buildSchemaOptions: {
-        dateScalarMode: 'isoDate',
-      },
       context: ({ req, res }: { req: Request; res: Response }) => ({
         req,
         res,

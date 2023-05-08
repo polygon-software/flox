@@ -1,0 +1,2 @@
+schema: './backend/src/schema.gql'
+documents: './frontend/src/**/*.{mutation,query}.ts'
