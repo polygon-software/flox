@@ -200,6 +200,8 @@ else
   cd ../scripts/aws-initial-setup/2_ses-setup || exit 1
 fi
 
+sleep 60
+
 # ==========================================
 # ==     Step 2: SES setup     ===
 # ==========================================
