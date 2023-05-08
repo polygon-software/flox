@@ -130,15 +130,6 @@ module.exports = {
         checkConstructors: false,
       },
     ],
-
-    'graphql/template-strings': [
-      'error',
-      {
-        // Import default settings for your GraphQL client. Supported values:
-        // 'apollo', 'relay', 'lokka', 'fraql', 'literal'
-        env: 'apollo',
-      },
-    ],
     'vue/block-lang': [
       'error',
       {
