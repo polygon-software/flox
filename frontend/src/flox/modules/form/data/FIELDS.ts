@@ -65,6 +65,16 @@ const FIELDS: Record<string, Field> = {
       ],
     },
   },
+  PASSWORD_LOGIN: {
+    key: 'passwordLogin',
+    component: markRaw(Password),
+    attributes: {
+      forLogin: true,
+      rules: [
+        classValidatorRule(isString, i18n.global.t('errors.invalid_password')),
+      ],
+    },
+  },
   PASSWORD: {
     key: 'password',
     component: markRaw(Password),
