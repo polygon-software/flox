@@ -26,12 +26,6 @@ resource "aws_s3_bucket" "redirect_bucket" {
   }
 }
 
-// Redirect S3 bucket ACL
-resource "aws_s3_bucket_acl" "redirect_bucket_acl" {
-  bucket = aws_s3_bucket.redirect_bucket.id
-  acl    = "public-read"
-}
-
 // Redirect S3 bucket config
 resource "aws_s3_bucket_website_configuration" "redirect_bucket_config" {
   bucket = aws_s3_bucket.redirect_bucket.bucket
