@@ -14,7 +14,7 @@ type AuthModuleConfig = {
 // Default configuration set; will get merged with custom config from flox.config.json
 const defaultConfig: AuthModuleConfig = {
   emailAsUsername: false,
-  useTwoFactor: true,
+  useTwoFactor: false,
 };
 
 /**

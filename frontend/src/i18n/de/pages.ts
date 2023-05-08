@@ -7,11 +7,11 @@ export default {
       title: 'Account',
     },
     home: {
-      title: 'Home',
+      title: 'Aufträge',
       meta: {
-        title: 'Flox',
-        description: 'Dies ist eine flox demo-seite',
-        keywords: 'flox,demo,polygon',
+        title: 'Aufträge',
+        description: 'Diese Seite zeigt alle Aufträge von Privetec an',
+        keywords: 'privetec,home,dashboard, aufträge',
       },
     },
   },

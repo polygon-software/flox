@@ -1,20 +1,14 @@
 <template>
   <h4>{{ $t('pages.home.title') }}</h4>
   <div class="row" style="gap: 25px">
-    <ModuleStatus />
-    <q-no-ssr>
-      <DosChecker />
-    </q-no-ssr>
-    <SampleForm />
+    <!-- TODO: Dashboard -->
+    <h6>Add the dashboard :)</h6>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useMeta } from 'quasar';
 
-import SampleForm from 'components/sample/SampleForm.vue';
-import DosChecker from 'components/sample/DosChecker.vue';
-import ModuleStatus from 'components/sample/ModuleStatus.vue';
 import { i18n } from 'boot/i18n';
 
 useMeta({

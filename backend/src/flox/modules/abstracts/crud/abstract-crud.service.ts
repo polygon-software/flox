@@ -1,5 +1,6 @@
 import {
   DeepPartial,
+  FindManyOptions,
   FindOneOptions,
   FindOptionsWhere,
   In,
@@ -77,7 +78,7 @@ export default abstract class AbstractCrudService<Entity extends BaseEntity> {
    */
   getAll(
     getAllArgs: GetAllArgs,
-    options?: FindOneOptions<Entity>,
+    options?: FindManyOptions<Entity>,
   ): Promise<Entity[]> {
     return this.repository.find({
       ...options,

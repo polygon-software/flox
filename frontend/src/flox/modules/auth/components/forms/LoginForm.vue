@@ -63,7 +63,7 @@ async function onLogin(): Promise<void> {
 
   const password = fetchByKey({
     ...loginFormKey,
-    fieldKey: FIELDS.PASSWORD.key,
+    fieldKey: FIELDS.PASSWORD_LOGIN.key,
   }) as string;
 
   try {

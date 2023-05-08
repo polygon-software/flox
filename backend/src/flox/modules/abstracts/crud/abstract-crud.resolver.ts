@@ -1,4 +1,4 @@
-import { FindOneOptions } from 'typeorm';
+import { FindManyOptions, FindOneOptions } from 'typeorm';
 
 import BaseEntity from '../../../core/base-entity/entities/base-entity.entity';
 
@@ -53,7 +53,7 @@ export default abstract class AbstractCrudResolver<
    */
   getAll(
     getAllArgs: GetAllArgs,
-    options?: FindOneOptions<Entity>,
+    options?: FindManyOptions<Entity>,
   ): Promise<Entity[]> {
     return this.service.getAll(getAllArgs, options);
   }

@@ -25,6 +25,7 @@ import { floxModules, floxProviders } from './flox/flox';
 import GqlThrottlerGuard from './flox/modules/GqlThrottlerGuard';
 import HealthcheckController from './flox/modules/healthcheck/healthcheck.controller';
 import env from './env';
+import FormModule from './modules/form/form.module';
 
 @Module({
   imports: [
@@ -36,6 +37,9 @@ import env from './env';
         : join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
       driver: ApolloDriver,
+      buildSchemaOptions: {
+        dateScalarMode: 'isoDate',
+      },
       context: ({ req, res }: { req: Request; res: Response }) => ({
         req,
         res,
@@ -112,7 +116,7 @@ import env from './env';
     // Flox modules
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     ...(floxModules() as any[]),
-    // Add any custom modules here
+    FormModule,
   ],
   controllers: [HealthcheckController],
   providers: [
