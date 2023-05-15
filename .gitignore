@@ -1,9 +1,6 @@
 # compiled output
 /dist
 /node_modules
-/backend/src/schema.gql
-/frontend/schema.gql
-/frontend/src/apollo/schema.js
 
 # Generated script outputs
 /scripts/support/flox.tfvars
