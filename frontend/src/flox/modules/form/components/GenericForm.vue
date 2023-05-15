@@ -115,7 +115,7 @@
 
         <!-- Finish button -->
         <q-btn
-          :class="`${ALTERNATE_BUTTON_CLASS} q-mt-md`"
+          :class="`${ALTERNATE_BUTTON_CLASS} q-mt-lg`"
           :disable="loading || !form.pageValid"
           :label="!loading ? finishLabel : loadingLabel"
           :style="`${DEFAULT_BUTTON_STYLE}`"

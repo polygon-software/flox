@@ -1,8 +1,7 @@
 <template>
   <h4>{{ $t('pages.home.title') }}</h4>
   <div class="row" style="gap: 25px">
-    <!-- TODO: Dashboard -->
-    <h6>Add the dashboard :)</h6>
+    <OrderTable />
   </div>
 </template>
 
@@ -10,6 +9,7 @@
 import { useMeta } from 'quasar';
 
 import { i18n } from 'boot/i18n';
+import OrderTable from 'components/tables/OrderTable.vue';
 
 useMeta({
   title: i18n.global.t('pages.home.meta.title'),

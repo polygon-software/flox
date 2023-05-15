@@ -183,6 +183,13 @@ export default class Form extends BaseEntity {
   isPullable: boolean;
 
   @Field(() => Boolean, {
+    description: 'Whether the form was pulled by ERP',
+  })
+  @Column({ default: false })
+  @IsBoolean()
+  wasPulled: boolean;
+
+  @Field(() => Boolean, {
     description: 'Whether the job is an emergency',
   })
   @Column({ default: false })

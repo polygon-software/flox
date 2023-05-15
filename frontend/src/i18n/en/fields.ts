@@ -49,5 +49,13 @@ export default {
     select: {
       please_select: 'Please select',
     },
+    creationDate: 'Creation date',
+    orderNumber: 'Order number',
+    orderType: 'Order type',
+    status: 'Status',
+    erp: 'ERP',
+    emergency: 'Emergency',
+    done: 'Done',
+    fromErp: 'Retrieval from ERP',
   },
 };

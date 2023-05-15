@@ -1,5 +1,5 @@
 <template>
-  <q-btn round dense flat color="grey-8" icon="translate">
+  <q-btn round dense flat icon="translate">
     <q-menu>
       <q-list separator padding>
         <q-item

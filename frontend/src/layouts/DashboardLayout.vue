@@ -215,7 +215,7 @@ const sideMenu: ComputedRef<MenuType[]> = computed(() => [
     links: [
       {
         icon: 'home',
-        text: i18n.global.t('layout.menu.home'),
+        text: i18n.global.t('layout.menu.dashboard'),
         click: (): void => {
           void $routerService?.routeTo(ROUTES.HOME);
         },

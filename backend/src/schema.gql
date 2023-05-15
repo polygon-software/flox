@@ -515,6 +515,17 @@ type Form {
 
   """UUID"""
   uuid: ID!
+
+  """Whether the form was pulled by ERP"""
+  wasPulled: Boolean!
+}
+
+type FormSearchOutput {
+  """How many items are found within database"""
+  count: Float!
+
+  """Forms that fit query"""
+  data: [Form!]!
 }
 
 type Image {
@@ -1218,12 +1229,24 @@ type Query {
   ): [UserGroup!]!
   Users(uuids: [ID!] = []): [User!]!
   getAllForms(
+    """Sort descending"""
+    descending: Boolean = false
+
+    """Search for text within items"""
+    filter: String
+
+    """Subset of the module's allowed search keys to search in"""
+    searchKeys: [String!]
+
     """How many items to skip"""
     skip: Int = 0
 
+    """Sort by property"""
+    sortBy: String
+
     """Number of items to load"""
     take: Int = 500
-  ): [Form!]!
+  ): FormSearchOutput!
   getForm(uuid: ID!): Form!
 }
 

@@ -3,13 +3,14 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AdminOnly } from '../../flox/modules/roles/authorization.decorator';
 import AbstractSearchResolver from '../../flox/modules/abstracts/search/abstract-search.resolver';
 import GetOneArgs from '../../flox/modules/abstracts/crud/dto/args/get-one.args';
-import GetAllArgs from '../../flox/modules/abstracts/crud/dto/args/get-all.args';
 import DeleteInput from '../../flox/modules/abstracts/crud/dto/input/delete.input';
+import SearchArgs from '../../flox/modules/abstracts/search/dto/args/search.args';
 
 import FormService from './form.service';
 import Form from './entities/form.entity';
 import CreateFormInput from './dto/input/create-form.input';
 import UpdateFormInput from './dto/input/update-form.input';
+import FormSearchOutput from './outputs/form-search.output';
 
 @Resolver(() => Form)
 export default class FormResolver extends AbstractSearchResolver<
@@ -101,9 +102,9 @@ export default class FormResolver extends AbstractSearchResolver<
    * @returns All exisiting forms
    */
   @AdminOnly()
-  @Query(() => [Form], { name: 'getAllForms' })
-  async getAllForms(@Args() getAllArgs: GetAllArgs): Promise<Form[]> {
-    return super.getAll(getAllArgs, {
+  @Query(() => FormSearchOutput, { name: 'getAllForms' })
+  async getAllForms(@Args() getAllArgs: SearchArgs): Promise<FormSearchOutput> {
+    return super.search(getAllArgs, {
       relations: [
         'job',
         'client',

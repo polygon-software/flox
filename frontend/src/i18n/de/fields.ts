@@ -49,5 +49,13 @@ export default {
     select: {
       please_select: 'Bitte wählen',
     },
+    creationDate: 'Erfassungsdatum',
+    orderNumber: 'Auftragsnummer',
+    orderType: 'Auftragstyp',
+    status: 'Status',
+    erp: 'ERP',
+    emergency: 'Notfall',
+    done: 'Erledigt',
+    fromErp: 'Bezug von ERP',
   },
 };

@@ -112,6 +112,10 @@ export default class FormEntity extends BaseEntity {
 
   @IsBoolean()
   @IsOptional()
+  wasPulled?: boolean;
+
+  @IsBoolean()
+  @IsOptional()
   isEmergency?: boolean;
 
   @IsBoolean()

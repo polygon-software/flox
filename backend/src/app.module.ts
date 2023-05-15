@@ -126,6 +126,7 @@ import FormModule from './modules/form/form.module';
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     ...floxProviders(),
     // Add any other custom module providers here
+    FormModule,
   ],
 })
 

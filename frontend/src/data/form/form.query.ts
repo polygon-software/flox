@@ -8,120 +8,96 @@ import { TABLES } from 'src/data/TABLES';
  */
 export const ALL_FORMS: QueryObject = {
   query: gql`
-    query {
-      getAllForms {
-        uuid
-        job {
+    query getAllForms($take: Int, $skip: Int) {
+      getAllForms(take: $take, skip: $skip) {
+        count
+        data {
+          createdAt
           uuid
-          type
-          status
-          __typename
-        }
-        startDate
-        endDate
-        internalOrderNumber
-        externalOrderNumber
-        client {
-          uuid
-          firstName
-          lastName
-          companyName
-          companyLegalForm
-          address {
+          job {
             uuid
-            street
-            number
-            city
-            zipCode
-            additionalAddress
+            type
+            status
             __typename
           }
-          phoneNumber
-          email
-          __typename
-        }
-        owner
-        objectNumber
-        tenant {
-          firstName
-          lastName
-          address {
+          startDate
+          endDate
+          internalOrderNumber
+          externalOrderNumber
+          client {
             uuid
-            street
-            number
-            city
-            zipCode
-            additionalAddress
+            firstName
+            lastName
+            companyName
+            companyLegalForm
+            address {
+              uuid
+              street
+              number
+              city
+              zipCode
+              additionalAddress
+              __typename
+            }
+            phoneNumber
+            email
             __typename
           }
-          phoneNumber
-          email
-          floorType
-          floorNumber
-          __typename
-        }
-        measurePower
-        billing {
-          uuid
-          companyName
-          firstName
-          lastName
-          address {
-            uuid
-            street
-            number
-            city
-            zipCode
-            additionalAddress
+          owner
+          objectNumber
+          tenant {
+            firstName
+            lastName
+            address {
+              uuid
+              street
+              number
+              city
+              zipCode
+              additionalAddress
+              __typename
+            }
+            phoneNumber
+            email
+            floorType
+            floorNumber
             __typename
           }
-          email
+          measurePower
+          billing {
+            uuid
+            companyName
+            firstName
+            lastName
+            address {
+              uuid
+              street
+              number
+              city
+              zipCode
+              additionalAddress
+              __typename
+            }
+            email
+            __typename
+          }
+          description
+          protocolDate
+          protocolText
+          totalAmount
+          employeeId
+          freeText
+          isPullable
+          wasPulled
+          isEmergency
+          isFinished
           __typename
         }
-        description
-        devices {
-          uuid
-          deviceType
-          deviceManufacturer
-          deviceModel
-          deviceProductionNumber
-          deviceProductionYear
-          deviceInformation
-          __typename
-        }
-        protocolDate
-        protocolText
-        articles {
-          uuid
-          articleNumber
-          manufacturerNumber
-          amount
-          discount
-          __typename
-        }
-        expenses {
-          uuid
-          name
-          timeAmount
-          discount
-          __typename
-        }
-        totalAmount
-        employeeId
-        freeText
-        images {
-          uuid
-          __typename
-        }
-        isPullable
-        isEmergency
-        isFinished
-        __typename
       }
     }
   `,
   tables: [TABLES.FORM],
-  cacheLocation: 'allForms',
+  cacheLocation: 'getAllForms',
 };
 
 export const FORM: QueryObject = {
@@ -232,6 +208,7 @@ export const FORM: QueryObject = {
           __typename
         }
         isPullable
+        wasPulled
         isEmergency
         isFinished
         __typename
@@ -241,3 +218,5 @@ export const FORM: QueryObject = {
   tables: [TABLES.FORM],
   cacheLocation: 'form',
 };
+
+export const FORM_QUERIES: QueryObject[] = [ALL_FORMS, FORM];

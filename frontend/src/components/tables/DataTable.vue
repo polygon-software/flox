@@ -164,13 +164,6 @@
     </QTable>
     <div class="row">
       <div class="col">
-        <div
-          v-if="multi"
-          class="text-subtitle2 q-pa-sm"
-          v-text="$t('table.ctrl_shift_hint')"
-        />
-      </div>
-      <div class="col">
         <div class="row justify-end" style="gap: 10px">
           <slot :selected="selected" name="actions" />
           <q-btn

@@ -1,6 +1,6 @@
 <template>
   <FloxWrapper :module="MODULES.AUTH">
-    <div class="column q-pa-sm text-center justify-center" style="margin: 50px">
+    <div class="column q-pa-sm q-mx-xl q-mt-md text-center justify-center">
       <GenericForm
         :finish-label="$t('buttons.login')"
         :form-key="loginFormKey.formKey"
@@ -9,7 +9,7 @@
         @submit="onLogin"
       />
     </div>
-    <div class="col q-mt-md text-center">
+    <div class="col text-center">
       <q-btn
         :label="$t('authentication.forgot_password')"
         class="primary"
