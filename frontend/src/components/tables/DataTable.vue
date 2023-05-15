@@ -139,7 +139,7 @@
             <q-item v-bind="itemProps">
               <q-item-section>
                 <q-item-label>
-                  {{ opt.label }}
+                  {{ (opt as ColumnInterface).label }}
                 </q-item-label>
               </q-item-section>
               <q-item-section side>

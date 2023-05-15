@@ -1,14 +1,14 @@
 <template>
-  <DataTable id="adress-table" multi :columns="columns" :query="ALL_FORMS">
+  <DataTable id="adress-table" :columns="columns" :query="SEARCH_FORMS" multi>
   </DataTable>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { useI18n } from 'vue-i18n';
 import { computed } from 'vue';
 import { format } from 'date-fns';
 
-import { ALL_FORMS } from 'src/data/form/form.query';
+import { SEARCH_FORMS } from 'src/data/form/form.query';
 import { ColumnAlign } from 'components/tables/useDataTable';
 import { JOB_STATUS, JOB_TYPE } from 'src/data/ENUM';
 
@@ -25,6 +25,16 @@ const columns = computed(() => [
     format: (val: number): string => format(new Date(val ?? 0), 'dd.MM.yyyy'),
     sortable: true,
     edit: false,
+    visible: true,
+  },
+  {
+    name: 'description',
+    label: t('fields.description'),
+    field: 'description',
+    align: ColumnAlign.left,
+    sortable: true,
+    edit: false,
+    visible: false,
   },
   {
     name: 'orderNumber',
@@ -33,6 +43,7 @@ const columns = computed(() => [
     align: ColumnAlign.left,
     sortable: true,
     edit: false,
+    visible: true,
   },
   {
     name: 'orderType',
@@ -42,6 +53,7 @@ const columns = computed(() => [
     align: ColumnAlign.left,
     sortable: true,
     edit: false,
+    visible: true,
   },
   {
     name: 'status',
@@ -51,6 +63,7 @@ const columns = computed(() => [
     align: ColumnAlign.left,
     sortable: true,
     edit: false,
+    visible: true,
   },
   {
     name: 'erp',
@@ -59,6 +72,7 @@ const columns = computed(() => [
     align: ColumnAlign.left,
     sortable: true,
     edit: false,
+    visible: true,
   },
   {
     name: 'emergency',
@@ -67,6 +81,7 @@ const columns = computed(() => [
     align: ColumnAlign.left,
     sortable: true,
     edit: false,
+    visible: true,
   },
   {
     name: 'done',
@@ -75,6 +90,7 @@ const columns = computed(() => [
     align: ColumnAlign.left,
     sortable: true,
     edit: false,
+    visible: true,
   },
   {
     name: 'fromErp',
@@ -83,6 +99,7 @@ const columns = computed(() => [
     align: ColumnAlign.left,
     sortable: true,
     edit: false,
+    visible: true,
   },
 ]);
 </script>

@@ -3,6 +3,7 @@ import set from 'lodash/set';
 import get from 'lodash/get';
 import { exportFile, QInputProps, useQuasar } from 'quasar';
 import { computed, ComputedRef, nextTick, Ref, ref, toRaw, watch } from 'vue';
+import { WatchQueryFetchPolicy } from '@apollo/client';
 
 import { i18n } from 'boot/i18n';
 import { executeMutation, MutationObject } from 'src/apollo/mutation';
@@ -67,6 +68,7 @@ export interface ColumnInterface<T = any> {
   headerStyle?: string;
   edit?: boolean;
   qInputProps?: Omit<QInputProps, 'modelValue'>;
+  visible?: boolean;
 }
 
 /**
@@ -144,21 +146,26 @@ export function useDataTable(
   });
 
   watch(columns, () => {
-    visibleColumnNames.value = columns.value.map((column) => column.name);
+    visibleColumnNames.value = columns.value
+      .filter((column) => column.visible)
+      .map((column) => column.name);
   });
 
   /**
    * Fetches Data from the Server
    *
    * @param pageRequest - contains parameters for requesting a data page
+   * @param {WatchQueryFetchPolicy} [cacheConfig] - cache configuration
    * @returns rows from server and count of total rows fitting criteria
    */
   async function fetchFromServer(
-    pageRequest: PageParameters
+    pageRequest: PageParameters,
+    cacheConfig?: WatchQueryFetchPolicy
   ): Promise<{ data: BaseEntity[]; count: number }> {
     const queryResult = await executeQuery<CountQuery<BaseEntity>>(
       queryObject,
-      pageRequest
+      pageRequest,
+      cacheConfig
     );
     return queryResult.data;
   }
@@ -188,13 +195,16 @@ export function useDataTable(
 
     const paginationSkip = (paginationPage - 1) * paginationTake;
 
-    const { count, data } = await fetchFromServer({
-      skip: paginationSkip,
-      take: paginationTake,
-      filter: filterProp,
-      sortBy: paginationSortBy,
-      descending: paginationDescending,
-    });
+    const { count, data } = await fetchFromServer(
+      {
+        skip: paginationSkip,
+        take: paginationTake,
+        filter: filterProp,
+        sortBy: paginationSortBy,
+        descending: paginationDescending,
+      },
+      filterProp ? 'cache-and-network' : 'cache-first'
+    );
     pagination.value.rowsNumber = count;
 
     rows.value.splice(0, rows.value.length, ...data);

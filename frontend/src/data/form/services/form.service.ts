@@ -21,7 +21,7 @@ import UpdateArticleInput from 'src/data/article/dto/input/updateArticleInput';
 import UpdateExpenseInput from 'src/data/expense/dto/input/updateExpenseInput';
 
 import FormEntity from '../entities/form.entity';
-import { ALL_FORMS, FORM } from '../form.query';
+import { FORM, SEARCH_FORMS } from '../form.query';
 
 /**
  * Creates a new form
@@ -211,6 +211,6 @@ export async function getForm(uuid: string): Promise<FormEntity> {
  * @returns all forms
  */
 export async function getAllForms(): Promise<FormEntity[]> {
-  const { data } = await executeQuery<FormEntity[]>(ALL_FORMS);
+  const { data } = await executeQuery<FormEntity[]>(SEARCH_FORMS);
   return data;
 }

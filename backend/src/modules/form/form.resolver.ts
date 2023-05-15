@@ -18,7 +18,26 @@ export default class FormResolver extends AbstractSearchResolver<
   FormService
 > {
   constructor(private readonly formService: FormService) {
-    super(['internalOrderNumber']);
+    super([
+      'description',
+      'owner',
+      'protocolText',
+      'employeeId',
+      'freeText',
+      'client.firstName',
+      'client.lastName',
+      'client.companyName',
+      'client.phoneNumber',
+      'client.email',
+      'tenant.firstName',
+      'tenant.lastName',
+      'tenant.phoneNumber',
+      'tenant.email',
+      'billing.companyName',
+      'billing.firstName',
+      'billing.lastName',
+      'billing.email',
+    ]);
   }
 
   /**
@@ -98,13 +117,13 @@ export default class FormResolver extends AbstractSearchResolver<
   /**
    * Returns all existing forms
    *
-   * @param getAllArgs - Pagination and sorting data
+   * @param searchArgs - Pagination and sorting data
    * @returns All exisiting forms
    */
   @AdminOnly()
-  @Query(() => FormSearchOutput, { name: 'getAllForms' })
-  async getAllForms(@Args() getAllArgs: SearchArgs): Promise<FormSearchOutput> {
-    return super.search(getAllArgs, {
+  @Query(() => FormSearchOutput, { name: 'searchForms' })
+  async searchForms(@Args() searchArgs: SearchArgs): Promise<FormSearchOutput> {
+    return super.search(searchArgs, {
       relations: [
         'job',
         'client',

@@ -1,4 +1,4 @@
-import { ApolloQueryResult } from '@apollo/client';
+import { ApolloQueryResult, WatchQueryFetchPolicy } from '@apollo/client';
 import { OperationVariables } from '@apollo/client/core/types';
 import { useApolloClient, useQuery } from '@vue/apollo-composable';
 import { DocumentNode } from 'graphql';
@@ -20,17 +20,20 @@ export interface QueryObject {
  *
  * @param queryObject - the query object constant (from QUERIES.ts)
  * @param [variables] - variables to pass to the query, if any
+ * @param {WatchQueryFetchPolicy} [cacheConfig] - cache configuration
  * @returns the query's output
  */
 export async function executeQuery<
   T extends CountQuery<any> | BaseEntity | BaseEntity[]
 >(
   queryObject: QueryObject,
-  variables?: OperationVariables
+  variables?: OperationVariables,
+  cacheConfig?: WatchQueryFetchPolicy
 ): Promise<ApolloQueryResult<T>> {
   const queryResult = useQuery<Record<string, T>>(
     queryObject.query,
-    variables ?? {}
+    variables ?? {},
+    { fetchPolicy: cacheConfig ?? undefined }
   );
 
   // If we have a cached result, return immediately

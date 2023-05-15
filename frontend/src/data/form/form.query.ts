@@ -6,10 +6,10 @@ import { TABLES } from 'src/data/TABLES';
 /**
  * Form-related queries
  */
-export const ALL_FORMS: QueryObject = {
+export const SEARCH_FORMS: QueryObject = {
   query: gql`
-    query getAllForms($take: Int, $skip: Int) {
-      getAllForms(take: $take, skip: $skip) {
+    query searchForms($take: Int, $skip: Int, $filter: String) {
+      searchForms(take: $take, skip: $skip, filter: $filter) {
         count
         data {
           createdAt
@@ -97,7 +97,7 @@ export const ALL_FORMS: QueryObject = {
     }
   `,
   tables: [TABLES.FORM],
-  cacheLocation: 'getAllForms',
+  cacheLocation: 'searchForms',
 };
 
 export const FORM: QueryObject = {
@@ -219,4 +219,4 @@ export const FORM: QueryObject = {
   cacheLocation: 'form',
 };
 
-export const FORM_QUERIES: QueryObject[] = [ALL_FORMS, FORM];
+export const FORM_QUERIES: QueryObject[] = [SEARCH_FORMS, FORM];

@@ -57,5 +57,6 @@ export default {
     emergency: 'Notfall',
     done: 'Erledigt',
     fromErp: 'Bezug von ERP',
+    description: 'Beschreibung',
   },
 };

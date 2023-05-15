@@ -1228,7 +1228,8 @@ type Query {
     userUuid: ID!
   ): [UserGroup!]!
   Users(uuids: [ID!] = []): [User!]!
-  getAllForms(
+  getForm(uuid: ID!): Form!
+  searchForms(
     """Sort descending"""
     descending: Boolean = false
 
@@ -1247,7 +1248,6 @@ type Query {
     """Number of items to load"""
     take: Int = 500
   ): FormSearchOutput!
-  getForm(uuid: ID!): Form!
 }
 
 input RemoveUserFromUserGroupInput {
