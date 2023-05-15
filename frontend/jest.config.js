@@ -1,4 +1,4 @@
-const esModules = ['quasar/lang', 'lodash-es'].join('|');
+const esModules = ['quasar/lang'].join('|');
 
 /* eslint-env node */
 module.exports = {
@@ -24,12 +24,7 @@ module.exports = {
     '<rootDir>/src/**/*.tsx',
   ],
   coveragePathIgnorePatterns: ['/node_modules/', '.d.ts$'],
-  coverageReporters: [
-    [
-      'lcov',
-      { projectRoot: '../' },
-    ],
-  ],
+  coverageReporters: [['lcov', { projectRoot: '../' }]],
   testMatch: [
     // Matches tests in any subfolder of 'src' or into 'test/jest/__tests__'
     // Matches all files with extension 'js', 'jsx', 'ts' and 'tsx'
@@ -69,10 +64,16 @@ module.exports = {
   },
   transformIgnorePatterns: [`node_modules/(?!(${esModules}))`],
   snapshotSerializers: ['<rootDir>/node_modules/jest-serializer-vue'],
-  reporters: ['default',  ['jest-sonar', {
-    outputDirectory: 'reports',
-    outputName: 'test-reporter.xml',
-    reportedFilePath: 'relative',
-    relativeRootDir: '../',
-  }]],
+  reporters: [
+    'default',
+    [
+      'jest-sonar',
+      {
+        outputDirectory: 'reports',
+        outputName: 'test-reporter.xml',
+        reportedFilePath: 'relative',
+        relativeRootDir: '../',
+      },
+    ],
+  ],
 };

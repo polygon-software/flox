@@ -1,27 +1,53 @@
 import { boot } from 'quasar/wrappers';
-import ROUTES, { CONSTRAINED_ROUTES, PUBLIC_ROUTES } from '../router/routes';
-import { Router } from 'vue-router';
-import { root } from 'src/store';
-import { User } from 'src/data/types/User';
-import { Context, Module } from 'vuex-smart-module';
-import AuthState from 'src/store/authentication/state';
-import AuthGetters from 'src/store/authentication/getters';
-import AuthActions from 'src/store/authentication/actions';
-import AuthMutations from 'src/store/authentication/mutations';
-import { fetchMyUser } from 'src/helpers/data/fetch-helpers';
-import {isModuleActive} from 'src/flox';
-import {MODULES} from 'src/flox/MODULES';
+import { Router, RouteRecordRaw } from 'vue-router';
 
+import { isModuleActive } from '../flox';
+import { MODULES } from '../flox/enum/MODULES';
+import UserEntity from '../flox/modules/auth/entities/user.entity';
+import { fetchMyUser } from '../flox/modules/auth/services/user.service';
+import { useAuthStore } from '../flox/modules/auth/stores/auth.store';
+import ROUTES, { CONSTRAINED_ROUTES, PUBLIC_ROUTES } from '../router/routes';
+
+// eslint-disable-next-line import/no-mutable-exports
 let routerInstance: Router;
 
-export default boot(({ router, store }) => {
-  // Get auth module within store (useAuth not working here)
-  const $authStore = root.context(store).modules.authModule;
+/**
+ * Returns the component of the dashboard for the currently logged-in user
+ *
+ * @param user - the user, if any
+ * @param $authStore - authentication store
+ * @returns the layout component
+ */
+function getUserRoleRoute(
+  user: UserEntity | null,
+  $authStore: ReturnType<typeof useAuthStore>
+): RouteRecordRaw {
+  // Non-logged in: Redirect to log in
+  if (!user) {
+    $authStore.setCognitoUser(undefined);
+    $authStore.setUserSession(undefined);
+    return ROUTES.LOGIN;
+  }
+
+  return ROUTES.HOME;
+  // TODO application specific: add paths per role
+  // switch (user.role) {
+  //   case ROLE.ADMIN:
+  //     return ROUTES.CUSTOMERS;
+  //   case ROLE.USER:
+  //     return ROUTES.CUSTOMERS.path + '/' + user.username;
+  //   default:
+  //     return ROUTES.LOGIN;
+  // }
+}
+
+export default boot(({ router }) => {
+  const $authStore = useAuthStore();
   routerInstance = router;
-  // eslint-disable-next-line sonarjs/cognitive-complexity
+  // eslint-disable-next-line sonarjs/cognitive-complexity,consistent-return
   router.beforeEach(async (to) => {
     // Verify valid authentication
-    const loggedIn = $authStore.getters.getLoggedInStatus();
+    const { loggedIn } = $authStore;
 
     // TODO: Add as part of sharing module
     // Case 1: trying to access non-public route while not logged in
@@ -43,20 +69,20 @@ export default boot(({ router, store }) => {
     if (loggedIn) {
       const user = await fetchMyUser();
 
-      // Case 2: going to login when logged in, or to default path '/'
+      // Case 2: going to log in when logged in, or to default path '/'
       if (!user || to.path === ROUTES.LOGIN.path || to.path === '/') {
         return getUserRoleRoute(user, $authStore);
       }
 
       // Case 3: role module is active and route has some constraints
-      if(isModuleActive(MODULES.ROLES)){
+      if (isModuleActive(MODULES.ROLES)) {
         const matchingConstrainedRoute = CONSTRAINED_ROUTES.find(
           (constrainedRoute) => constrainedRoute.path === to.path
         );
         if (matchingConstrainedRoute) {
-          const hasFullAccess = matchingConstrainedRoute.allowedRoles.includes(
-            user.role
-          );
+          const hasFullAccess =
+            user.role &&
+            matchingConstrainedRoute.allowedRoles.includes(user.role);
           if (!hasFullAccess) {
             return getUserRoleRoute(user, $authStore);
           }
@@ -64,8 +90,9 @@ export default boot(({ router, store }) => {
       }
     } else {
       // Default case: disallow access if not public
-      if(!PUBLIC_ROUTES.some((publicRoute) => publicRoute.path === to.path)){
-        return ROUTES.LOGIN
+      // eslint-disable-next-line no-lonely-if
+      if (!PUBLIC_ROUTES.some((publicRoute) => publicRoute.path === to.path)) {
+        return ROUTES.LOGIN;
       }
     }
   });
@@ -73,40 +100,3 @@ export default boot(({ router, store }) => {
 
 // Router instance for use in Vue components
 export { routerInstance };
-
-/**
- * Returns the component of the dashboard for the currently logged in user
- * @param {User|null} user - the user, if any
- * @param {Context<Module<AuthState, AuthGetters, AuthMutations, AuthActions, Record<string, any>>>} $authStore - authentication store
- * @returns {any} - the layout component
- */
-function getUserRoleRoute(
-  user: User | null,
-  $authStore: Context<
-    Module<
-      AuthState,
-      AuthGetters,
-      AuthMutations,
-      AuthActions,
-      Record<string, any>
-      >
-    >
-) {
-  // Non-logged in: Redirect to login
-  if (!user) {
-    $authStore.mutations.setCognitoUser(undefined);
-    $authStore.mutations.setUserSession(undefined);
-    return ROUTES.LOGIN;
-  }
-
-  return ROUTES.SAMPLE
-  // TODO application specific: add paths per role
-  // switch (user.role) {
-  //   case ROLE.ADMIN:
-  //     return ROUTES.CUSTOMERS;
-  //   case ROLE.USER:
-  //     return ROUTES.CUSTOMERS.path + '/' + user.username;
-  //   default:
-  //     return ROUTES.LOGIN;
-  // }
-}

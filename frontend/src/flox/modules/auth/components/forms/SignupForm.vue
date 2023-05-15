@@ -1,94 +1,78 @@
 <template>
   <FloxWrapper :module="MODULES.AUTH">
-    <div class="column q-pa-sm text-center">
-      <h5 class="q-ma-none" style="margin-bottom: 20px;">
-        {{ $t('authentication.signup') }}
-      </h5>
-      <q-form
+    <div class="column q-pa-sm text-center justify-center">
+      <GenericForm
+        :finish-label="$t('authentication.signup')"
+        :form-key="signupFormKey.formKey"
+        :pages="SignupFormPages"
+        text-position="center"
         @submit="onSubmit"
-        class="q-gutter-md"
-      >
-        <component
-          v-for="field in fields"
-          :key="field.key"
-          :is="field.component"
-          v-bind="field.attributes"
-          v-model="form.values.value[field.key]"
-          @change="(newValue) => form.updateValue(field.key, newValue)"
-        />
-        <q-btn
-          style="margin-top: 20px"
-          color="primary"
-          :label="$t('authentication.signup')"
-          type="submit"
-          :disable="!form.pageValid.value"
-        />
-
-        <q-btn
-          :label="$t('general.cancel')"
-          class="text-primary"
-          flat
-          @click="onCancel"
-        />
-      </q-form>
+      />
     </div>
   </FloxWrapper>
 </template>
 
-<script setup lang="ts">
-import {FIELDS} from 'src/data/FIELDS';
-import { Form } from 'src/helpers/form/form-helpers'
-import {defineEmits} from 'vue';
-import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';
-import {MODULES} from 'src/flox/MODULES';
-import * as auth from 'src/flox/modules/auth'
+<script lang="ts" setup>
+import { MODULES } from 'src/flox/enum/MODULES';
+import COUNTRY_CODES from 'src/flox/enum/COUNTRY_CODES';
 
-const emit = defineEmits(['submit', 'cancel'])
+import { FIELDS } from '../../../form/data/FIELDS';
+import FloxWrapper from '../../../../core/components/FloxWrapper.vue';
+import * as auth from '../..';
+import SignupFormPages from '../../../form/data/formPages/SignupFormPages';
+import GenericForm from '../../../form/components/GenericForm.vue';
+import { fetchByKey } from '../../../form/helpers/form-helpers';
+import { useFormStore } from '../../../form/stores/form';
+import { signupFormKey } from '../../../form/data/FORM_KEYS';
 
-const fields = auth.moduleConfig().emailAsUsername ?
-[
-  FIELDS.EMAIL,
-  FIELDS.PASSWORD_REPEAT
-] : [
-    FIELDS.USERNAME,
-    FIELDS.EMAIL,
-    FIELDS.PASSWORD_REPEAT
-  ]
+const emit = defineEmits<{
+  (
+    e: 'submit',
+    value: {
+      username: string;
+      email: string;
+      value: string;
+      lang?: string;
+    }
+  ): void;
+}>();
 
-const form = new Form()
-form.pages.value = [
-  {
-    key: 'login',
-    label: 'Login',
-    fields: fields
-  }
-]
+const store = useFormStore();
 
 /**
- * Emits the 'submit' event, containing the form's data
- * @returns {void}
+ * Emit the
+ * @returns void
  */
 function onSubmit(): void {
-  const formValues: Record<string, unknown> = {
-    email: form.values.value[FIELDS.EMAIL.key],
-    password: form.values.value[FIELDS.PASSWORD_REPEAT.key],
-  }
+  const email = fetchByKey({
+    ...signupFormKey,
+    fieldKey: FIELDS.EMAIL.key,
+  }) as string;
 
-  // If e-mail is also username, add 'username' field directly (identical to e-mail)
-  if( auth.moduleConfig().emailAsUsername){
-    formValues.username = form.values.value[FIELDS.EMAIL.key]
+  const password = fetchByKey({
+    ...signupFormKey,
+    fieldKey: FIELDS.PASSWORD_REPEAT.key,
+  }) as string;
+
+  const lang =
+    (
+      fetchByKey({
+        ...signupFormKey,
+        fieldKey: FIELDS.SELECT_LANGUAGE.key,
+      }) as COUNTRY_CODES
+    ).toLowerCase() ?? undefined;
+
+  if (auth.moduleConfig().emailAsUsername) {
+    emit('submit', { username: email, email, password, lang });
   } else {
-    formValues.username = form.values.value[FIELDS.USERNAME.key]
+    const username = fetchByKey({
+      ...signupFormKey,
+      fieldKey: FIELDS.USERNAME.key,
+    }) as string;
+
+    emit('submit', { username, email, password, lang });
   }
-
-  emit('submit', formValues)
-}
-
-/**
- * On cancel, emit 'cancel' event
- * @returns {Promise<void>} - done
- */
-function onCancel() {
-  emit('cancel')
+  // Empty store state
+  store.clearForm(signupFormKey.formKey);
 }
 </script>

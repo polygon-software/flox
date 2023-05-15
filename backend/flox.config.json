@@ -3,7 +3,11 @@
     "auth": true,
     "roles": true,
     "file": true,
-    "sharing": false
+    "image": true,
+    "sharing": false,
+    "email": true,
+    "notification": true,
+    "payment": true
   },
   "moduleOptions": {
     "auth": {
@@ -14,9 +18,18 @@
         "ADMIN", "SUPERUSER", "USER"
       ]
     },
+    "file": {},
+    "image": {},
+    "sharing": {},
     "email": {
-      "email_sender": "david.wyss@polygon-project.ch"
-    }
+      "email_sender": "no-reply"
+    },
+    "notification": {},
+    "payment": {}
+  },
+  "i18n": {
+    "defaultLocale": "en",
+    "availableLocales": ["de", "en"]
   },
   "general": {
     "database_name": "floxdb",
@@ -35,6 +48,12 @@
     "serverless_api": true,
     "serverless_db": true,
     "serverless_db_version": "v2"
+  },
+  "infrastructure_stage": {
+    "aws_region": "eu-central-1",
+    "serverless_api": true,
+    "serverless_db": true,
+    "serverless_db_version": "v1"
   },
   "infrastructure_dev": {
     "aws_region": "eu-central-1",

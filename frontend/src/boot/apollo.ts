@@ -1,18 +1,22 @@
-import {ApolloClient} from '@apollo/client/core'
-import {provideApolloClient} from '@vue/apollo-composable'
-import { boot } from 'quasar/wrappers'
-import { getClientOptions } from 'src/apollo'
+import { ApolloClient } from '@apollo/client/core';
+import { provideApolloClient } from '@vue/apollo-composable';
+import { boot } from 'quasar/wrappers';
 
-export default boot(
-  ({ssrContext }) => {
+import { getClientOptions } from 'src/apollo';
 
-    // Default client.
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    const options = getClientOptions(ssrContext)
+import type { QSsrContext } from '@quasar/app-vite/types/ssr';
+import type { BootFileParams } from '@quasar/app-vite';
 
-    // Apollo Client setup
-    const apolloClient = new ApolloClient(options)
+interface FloxBootFileParams<T = any> extends BootFileParams<T> {
+  ssrContext?: QSsrContext;
+}
 
-    provideApolloClient(apolloClient)
-  }
-)
+export default boot((bootContext: FloxBootFileParams) => {
+  // Default client.
+  const options = getClientOptions(bootContext.ssrContext);
+
+  // Apollo Client setup
+  const apolloClient = new ApolloClient(options);
+
+  provideApolloClient(apolloClient);
+});

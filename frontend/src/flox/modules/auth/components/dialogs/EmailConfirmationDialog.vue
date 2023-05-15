@@ -1,18 +1,15 @@
 <template>
-  <q-dialog
-    ref="dialogRef"
-  >
+  <q-dialog ref="dialogRef">
     <q-card class="q-pa-md" style="width: 400px; min-height: 250px">
-      <q-form
-        @submit="onSubmit"
-        class="q-gutter-md"
-      >
-        <h5 class="q-ma-none q-mt-lg text-center">{{ $t('messages.verification') }}</h5>
-        <p> {{ $t('messages.enter_verification_code')}} </p>
+      <q-form class="q-gutter-md" @submit="onSubmit">
+        <h5 class="q-ma-none q-mt-lg text-center">
+          {{ $t('messages.verification') }}
+        </h5>
+        <p>{{ $t('messages.enter_verification_code') }}</p>
         <q-input
+          v-model="verificationCode"
           :label="$t('authentication.verification_code')"
           maxlength="6"
-          v-model="verificationCode"
         />
 
         <!-- Code resend button -->
@@ -48,58 +45,45 @@
 </template>
 
 <script setup lang="ts">
-import {defineProps, defineEmits, PropType, ref} from 'vue';
-import {QVueGlobals, useDialogPluginComponent} from 'quasar';
-import {AuthenticationService} from 'src/flox/modules/auth/services/AuthService';
-import {showNotification} from 'src/helpers/tools/notification-helpers';
-import {i18n} from 'boot/i18n';
+import { QVueGlobals, useDialogPluginComponent } from 'quasar';
+import { ref } from 'vue';
 
-const { dialogRef, onDialogOK, onDialogHide } = useDialogPluginComponent()
+import { i18n } from 'boot/i18n';
+import AuthenticationService from 'src/flox/modules/auth/services/auth.service';
+import { showSuccessNotification } from 'src/tools/notification.tool';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const emit = defineEmits(useDialogPluginComponent.emits)
+const props = defineProps<{
+  q: QVueGlobals;
+  authService: AuthenticationService;
+}>();
 
-const props = defineProps({
-  q : {
-    type: Object as PropType<QVueGlobals>,
-    required: true,
-  },
-  authService: {
-    type: Object as PropType<AuthenticationService>,
-    required: true
-  }
-})
+// eslint-disable-next-line vue/define-emits-declaration
+defineEmits(useDialogPluginComponent.emits);
 
-const verificationCode = ref('')
-const codeSent = ref(false)
+const { dialogRef, onDialogOK, onDialogHide } = useDialogPluginComponent();
+
+const verificationCode = ref('');
+const codeSent = ref(false);
 
 /**
  * On submit, emit data outwards
- * @returns {void}
  */
-function onSubmit(){
-  onDialogOK({code: verificationCode.value,})
+function onSubmit(): void {
+  onDialogOK({ code: verificationCode.value });
 }
 
 /**
  * Resends the e-mail confirmation code
- * @returns {Promise<void>} - done
  */
-async function resendCode(){
-  if(!codeSent.value){
+async function resendCode(): Promise<void> {
+  if (!codeSent.value) {
     codeSent.value = true;
 
     // Re-send code
-    await props.authService?.resendEmailVerificationCode()
+    await props.authService?.resendEmailVerificationCode();
 
     // Show success message
-    showNotification(
-      props.q,
-      i18n.global.t('messages.code_resent'),
-      'bottom',
-      'positive'
-    )
+    showSuccessNotification(props.q, i18n.global.t('messages.code_resent'));
   }
 }
-
 </script>

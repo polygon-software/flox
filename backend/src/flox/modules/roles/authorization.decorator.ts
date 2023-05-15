@@ -4,8 +4,12 @@ import {
   ExecutionContext,
   SetMetadata,
 } from '@nestjs/common';
+
 import { getRequest } from '../../core/flox-helpers';
-import { DEFAULT_ROLES } from './config';
+import User from '../auth/entities/user.entity';
+import { CognitoUserType } from '../auth/types/cognito-user.type';
+
+import { DefaultRoles } from './config';
 
 /**
  * Defines authorization-specific (roles) decorators
@@ -19,13 +23,27 @@ export const Roles = (...roles: string[]): CustomDecorator =>
 
 // Restrict to admin role
 export const AdminOnly = (): CustomDecorator =>
-  SetMetadata(ROLES_KEY, [DEFAULT_ROLES.ADMIN]);
+  SetMetadata(ROLES_KEY, [DefaultRoles.ADMIN]);
 
 // Access to current user from request
-// The user record has the form { userId: string, username: string }
 export const CurrentUser = createParamDecorator(
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
-  (data, req: ExecutionContext) => {
-    return getRequest(req).user;
+  (data, req: ExecutionContext): User => {
+    return getRequest(req).principal as User;
+  },
+);
+
+// Access to current user from request if available
+export const OptionalUser = createParamDecorator(
+  (data, req: ExecutionContext): User | null => {
+    const { principal } = getRequest(req);
+    return principal ?? null;
+  },
+);
+
+// Access to cognito user from request in the form { userId: string, username: string }
+export const OptionalCognitoUser = createParamDecorator(
+  (data, req: ExecutionContext): CognitoUserType | null => {
+    const { user } = getRequest(req);
+    return user ?? null;
   },
 );

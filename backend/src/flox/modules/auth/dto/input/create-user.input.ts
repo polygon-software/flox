@@ -1,11 +1,22 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsLocale,
+  IsLowercase,
+  IsOptional,
+  IsString,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
+
+import CreateInput from '../../../abstracts/crud/dto/input/create.input';
 
 @InputType()
-export class CreateUserInput {
+export default class CreateUserInput extends CreateInput {
   @Field(() => String)
   @IsString()
-  @IsNotEmpty()
+  @MinLength(6)
+  @MaxLength(50)
   username: string;
 
   @Field(() => String)
@@ -13,12 +24,12 @@ export class CreateUserInput {
   @IsEmail()
   email: string;
 
-  @Field(() => String)
-  @IsString()
-  @IsNotEmpty()
-  cognitoUuid: string;
-
   @Field(() => String, { nullable: true })
   @IsString()
-  role: string;
+  @MinLength(2)
+  @MaxLength(2)
+  @IsLowercase()
+  @IsLocale()
+  @IsOptional()
+  lang: string;
 }

@@ -1,16 +1,30 @@
-import { Module } from '@nestjs/common';
-import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import configuration from './config/configuration';
-import * as Joi from 'joi';
-import { floxModules, floxProviders } from './flox/flox';
-import { TerminusModule } from '@nestjs/terminus';
-import { HttpModule } from '@nestjs/axios';
-import { HealthcheckController } from './flox/modules/healthcheck/healthcheck.controller';
+
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { HttpModule } from '@nestjs/axios';
+import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
+import { GraphQLModule } from '@nestjs/graphql';
+import { TerminusModule } from '@nestjs/terminus';
+import { ThrottlerModule } from '@nestjs/throttler';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import * as Joi from 'joi';
+import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
+import {
+  AcceptLanguageResolver,
+  CookieResolver,
+  I18nModule,
+} from 'nestjs-i18n';
+
+import flox from '../flox.config.json';
+
+import configuration from './config/configuration';
 import { isServerless } from './flox/core/flox-helpers';
+import { floxModules, floxProviders } from './flox/flox';
+import GqlThrottlerGuard from './flox/modules/GqlThrottlerGuard';
+import HealthcheckController from './flox/modules/healthcheck/healthcheck.controller';
+import env from './env';
 
 @Module({
   imports: [
@@ -22,6 +36,10 @@ import { isServerless } from './flox/core/flox-helpers';
         : join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
       driver: ApolloDriver,
+      context: ({ req, res }: { req: Request; res: Response }) => ({
+        req,
+        res,
+      }),
     }),
     ConfigModule.forRoot({
       isGlobal: true,
@@ -40,23 +58,51 @@ import { isServerless } from './flox/core/flox-helpers';
 
         // AWS
         AWS_MAIN_REGION: Joi.string().required(),
+        AWS_ADMIN_ACCESS_KEY_ID: Joi.string().required(),
+        AWS_ADMIN_SECRET_ACCESS_KEY: Joi.string().required(),
         AWS_PUBLIC_BUCKET_NAME: Joi.string().required(),
         AWS_PRIVATE_BUCKET_NAME: Joi.string().required(),
       }),
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get('database.host'),
-        port: configService.get('database.port'),
-        username: configService.get('database.username'),
-        password: configService.get('database.password'),
-        database: configService.get('database.database'),
-        entities: [configService.get('entities')],
-        synchronize: true,
-      }),
+      useFactory: (configService: ConfigService) =>
+        ({
+          type: 'postgres',
+          host: configService.getOrThrow<string>('database.host'),
+          port: configService.getOrThrow<number>('database.port'),
+          username: configService.getOrThrow<string>('database.username'),
+          password: configService.getOrThrow<string>('database.password'),
+          database: configService.getOrThrow<string>('database.database'),
+          entities: [configService.getOrThrow<string>('entities')],
+          synchronize: env.DEV,
+          logging: ['warn', 'error'],
+        } as PostgresConnectionOptions),
       inject: [ConfigService],
+    }),
+    ThrottlerModule.forRoot({
+      ttl: 10,
+      limit: 20,
+      ignoreUserAgents: [
+        // Don't throttle request that have 'googlebot' defined in them.
+        // Example user agent: Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)
+        /googlebot/gi,
+
+        // Don't throttle request that have 'bingbot' defined in them.
+        // Example user agent: Mozilla/5.0 (compatible; Bingbot/2.0; +http://www.bing.com/bingbot.htm)
+        /'bingbot'/gi,
+      ],
+    }),
+    I18nModule.forRoot({
+      fallbackLanguage: flox.i18n.defaultLocale,
+      loaderOptions: {
+        path: join(__dirname, '/i18n/'),
+        watch: env.DEV,
+      },
+      resolvers: [
+        { use: CookieResolver, options: 'lang' },
+        AcceptLanguageResolver,
+      ],
     }),
 
     // Healthcheck modules
@@ -64,12 +110,19 @@ import { isServerless } from './flox/core/flox-helpers';
     HttpModule,
 
     // Flox modules
-    ...floxModules(),
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    ...(floxModules() as any[]),
     // Add any custom modules here
   ],
   controllers: [HealthcheckController],
   providers: [
+    // Provider for throttler rate limiting
+    {
+      provide: APP_GUARD,
+      useClass: GqlThrottlerGuard,
+    },
     // Flox module Providers
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     ...floxProviders(),
     // Add any other custom module providers here
   ],
@@ -78,4 +131,4 @@ import { isServerless } from './flox/core/flox-helpers';
 /**
  * Main Module
  */
-export class AppModule {}
+export default class AppModule {}

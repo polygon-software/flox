@@ -1,76 +1,49 @@
 <template>
-  <q-dialog
-      ref="dialogRef"
-  >
-    <q-card class="q-pa-sm" style="width: 400px; min-height: 250px">
-      <strong>{{ $t('authentication.change_password') }}</strong>
-      <q-form
-          @submit="onSubmit"
-          class="q-gutter-md"
-      >
-        <q-input
-          :label="$t('authentication.old_password')"
-          v-model="passwordOld"
-          type="password"
-        />
-        <q-input
-          :label="$t('authentication.new_password')"
-          v-model="password"
-          type="password"
-          :rules="[
-              val => PASSWORD_REGEX.test(val) || $t('errors.invalid_password')
-            ]"
-        />
-        <q-input
-          :label="$t('authentication.new_password_repeat')"
-          v-model="passwordRep"
-          type="password"
-          :rules="[
-             val => val === password || $t('errors.non_matching_password'),
-          ]"
-        />
-        <q-card-actions align="right">
-          <q-btn
-            color="primary"
-            :label="$t('general.confirm')"
-            :disable="password !== passwordRep"
-            @click="onSubmit"
-          />
-          <q-btn
-            :label="$t('general.cancel')"
-            color="primary"
-            @click="onDialogHide"
-          />
-        </q-card-actions>
-      </q-form>
+  <q-dialog ref="dialogRef" persistent>
+    <q-card class="q-pa-md text-center">
+      <h5>{{ $t('authentication.set_new_password') }}</h5>
+      <GenericForm
+        style="min-width: 300px"
+        :pages="ChangePasswordFormPages"
+        :form-key="changePasswordFormKey.formKey"
+        text-position="center"
+        show-cancel
+        @submit="onSubmit"
+        @cancel="onDialogCancel"
+      />
     </q-card>
   </q-dialog>
 </template>
 
 <script setup lang="ts">
-import {defineEmits} from 'vue';
-import {ref} from 'vue';
-import {PASSWORD_REGEX} from '../../../../../helpers/REGEX'
-import {useDialogPluginComponent} from 'quasar';
+import { useDialogPluginComponent } from 'quasar';
 
-let passwordOld = ref('')
-let password = ref('')
-let passwordRep = ref('')
+import { changePasswordFormKey } from '../../../form/data/FORM_KEYS';
+import GenericForm from '../../../form/components/GenericForm.vue';
+import ChangePasswordFormPages from '../../../form/data/formPages/ChangePasswordFormPages';
+import { fetchByKey } from '../../../form/helpers/form-helpers';
+import { FIELDS } from '../../../form/data/FIELDS';
+import { useFormStore } from '../../../form/stores/form';
 
+const { dialogRef, onDialogOK, onDialogCancel } = useDialogPluginComponent();
 
-const { dialogRef, onDialogOK, onDialogHide } = useDialogPluginComponent()
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const emit = defineEmits(useDialogPluginComponent.emits)
+const store = useFormStore();
 
 /**
  * Upon submit, pass entered values outwards
- * @returns {void}
+ * @returns void
  */
-function onSubmit(){
+function onSubmit(): void {
+  const newPassword = fetchByKey({
+    ...changePasswordFormKey,
+    fieldKey: FIELDS.PASSWORD_REPEAT.key,
+  });
+
+  // Empty store state
+  store.clearForm(changePasswordFormKey.formKey);
+
   onDialogOK({
-    passwordNew: password.value,
-    passwordOld: passwordOld.value,
-  })
+    passwordNew: newPassword,
+  });
 }
 </script>

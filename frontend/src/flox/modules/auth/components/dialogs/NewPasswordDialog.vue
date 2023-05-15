@@ -1,28 +1,19 @@
 <template>
-  <q-dialog
-    ref="dialogRef"
-  >
+  <q-dialog ref="dialogRef">
     <q-card class="q-pa-sm" style="width: 400px; min-height: 250px">
       <strong>{{ $t('authentication.change_password') }}</strong>
-      <q-form
-        @submit="onSubmit"
-        class="q-gutter-md"
-      >
+      <q-form class="q-gutter-md" @submit="onSubmit">
         <q-input
-          :label="$t('authentication.new_password')"
           v-model="password"
+          :label="$t('authentication.new_password')"
           type="password"
-          :rules="[
-              val => PASSWORD_REGEX.test(val) || $t('errors.invalid_password')
-            ]"
+          :rules="passwordRules"
         />
         <q-input
-          :label="$t('authentication.new_password_repeat')"
           v-model="passwordRep"
+          :label="$t('authentication.new_password_repeat')"
           type="password"
-          :rules="[
-             val => val === password || $t('errors.non_matching_password'),
-          ]"
+          :rules="matchingRules"
         />
         <q-card-actions align="right">
           <q-btn
@@ -43,26 +34,40 @@
 </template>
 
 <script setup lang="ts">
-import {defineEmits} from 'vue';
-import {ref} from 'vue';
-import {PASSWORD_REGEX} from '../../../../../helpers/REGEX'
-import {useDialogPluginComponent} from 'quasar';
+import { useDialogPluginComponent } from 'quasar';
+import { ref } from 'vue';
 
-let password = ref('')
-let passwordRep = ref('')
+import { i18n } from 'boot/i18n';
+import {
+  joiPasswordSchema,
+  joiSchemaToValidationRule,
+} from 'src/tools/validation.tool';
 
-const { dialogRef, onDialogOK, onDialogHide } = useDialogPluginComponent()
+// eslint-disable-next-line vue/define-emits-declaration
+defineEmits(useDialogPluginComponent.emits);
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const emit = defineEmits(useDialogPluginComponent.emits)
+const password = ref('');
+const passwordRep = ref('');
+
+const passwordRules = [
+  joiSchemaToValidationRule(
+    joiPasswordSchema(),
+    i18n.global.t('errors.invalid_password')
+  ),
+];
+const matchingRules = [
+  (val: string): true | string =>
+    val === password.value || i18n.global.t('errors.non_matching_password'),
+];
+
+const { dialogRef, onDialogOK, onDialogHide } = useDialogPluginComponent();
 
 /**
  * Upon submit, pass entered values outwards
- * @returns {void}
  */
-function onSubmit(){
-  onDialogOK( {
+function onSubmit(): void {
+  onDialogOK({
     password: password.value,
-  })
+  });
 }
 </script>

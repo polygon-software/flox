@@ -1,11 +1,10 @@
 # compiled output
 /dist
 /node_modules
-/backend/src/schema.gql
 
 # Generated script outputs
 /scripts/support/flox.tfvars
-/scripts/outputs
+/scripts/outputs/*.zip
 /scripts/**/*.zip
 
 # Terraform
@@ -54,3 +53,7 @@ lerna-debug.log*
 /backend/dist/
 
 *.tfvars
+/**/.env
+
+# Pdf.js
+/frontend/public/pdfjs

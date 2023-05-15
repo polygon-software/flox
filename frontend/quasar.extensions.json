@@ -1,4 +1,6 @@
 {
+  "@quasar/qmediaplayer": {},
+  "@quasar/qpdfviewer": {},
   "@quasar/apollo": {
     "typescript": true
   },

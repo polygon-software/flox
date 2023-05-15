@@ -1,70 +1,82 @@
+import accessControlTranslations from './accessControl';
+import adminPanelTranslations from './adminPanel';
+import aliasTranslations from './alias';
+import authenticationTranslations from './authentication';
+import buttonTranslations from './buttons';
+import cardTranslations from './cards';
+import errorTranslations from './errors';
+import fieldTranslations from './fields';
+import fileTranslations from './files';
+import layoutTranslations from './layout';
+import messageTranslations from './messages';
+import notificationsTranslations from './notifications';
+import objectRecognitionTranslations from './objectRecognition';
+import pageTranslations from './pages';
+import paymentTranslations from './payment';
+
+/* eslint-disable camelcase */
 export default {
+  ...accessControlTranslations,
+  ...adminPanelTranslations,
+  ...aliasTranslations,
+  ...authenticationTranslations,
+  ...buttonTranslations,
+  ...cardTranslations,
+  ...errorTranslations,
+  ...fieldTranslations,
+  ...fileTranslations,
+  ...layoutTranslations,
+  ...messageTranslations,
+  ...notificationsTranslations,
+  ...objectRecognitionTranslations,
+  ...pageTranslations,
+  ...paymentTranslations,
   general: {
     finish: 'Finish',
     back: 'Back',
     next: 'Next',
     cancel: 'Cancel',
     confirm: 'Confirm',
+    enable: 'Enable',
+    disable: 'Disable',
+    export: 'Export',
     ok: 'OK',
-    loading: 'Loading'
+    loading: 'Loading',
+    failed: 'Failed',
+    successful: 'Successful',
+    save: 'Save',
+    create: 'Create',
+    apply: 'Apply',
+    remove: 'Remove',
+    results: 'Results',
+    no_results: 'No Results',
+    search: 'Search',
+    display: 'Display',
+    sample: 'Sample',
+    yes: 'Yes',
+    no: 'No',
   },
-  authentication: {
-    authentication: 'Authentication',
-    login: 'Log in',
-    logout: 'Log out',
-    signup: 'Sign up',
+  locales: {
+    de: 'German',
+    en: 'English',
+  },
+  users: {
+    all_users: 'All users',
+    users: 'Users',
+    avatar: 'Avatar',
     username: 'Username',
     email: 'E-Mail',
-    change_password: 'Change password',
-    forgot_password: 'Forgot password',
-    verification_code: 'Verification Code',
-    password: 'Password',
-    password_repeat: 'Repeat password',
-    old_password: 'Old password',
-    new_password: 'New password',
-    new_password_repeat: 'Repeat new password',
-    set_up_2fa: 'Set up Two Factor Authentication',
-    set_up_2fa_description: 'Use your preferred authenticator app to scan the QR code:',
-    verification: 'Verification',
-    verification_message: 'Enter your verification code:',
-    resend_code: 'I did not receive a code',
+    role: 'Role',
+    enabled: 'Enabled',
   },
-  errors: {
-    module_error: "Error: Module '{module}' is not active",
-    invalid_password: 'Please enter a valid password',
-    invalid_email: 'Please enter a valid e-mail address',
-    invalid_username: 'Please enter a username',
-    incorrect_password: 'Incorrect password',
-    incorrect_email: 'Email address not found',
-    incorrect_username: 'Username not found',
-    non_matching_password: "Passwords don't match",
-    invalid_user_pool: 'User Pool is invalid.',
-    nothing_here: 'Oops. Nothing here...',
-    user_not_defined: 'User Pool is not defined',
-    missing_properties: 'One or more of the following properties are missing for the given mutation: \'mutation\', \'tables\', \'type\', \'cacheLocation\'',
-    not_logged_in: 'Trying to log out despite not being logged in!',
-    error_occurred: 'An error occurred, try logging in again',
-    cant_find_module: 'Cannot find module ',
-    cache_location_missing: 'Cache Location is missing in mutationObject: ',
-    missing_attributes: 'Missing attributes',
-    unknown: 'Unknown Error',
+  date: {
+    date_format: 'MM.DD.YYYY',
   },
-  messages: {
-    success: 'Success',
-    failure: 'Failure',
-    email_sent: 'E-Mail(s) sent',
-    file_uploaded: 'Successfully uploaded file',
-    files_uploaded: 'Successfully uploaded files',
-    password_set: 'Password set successfully',
-    enter_new_password: 'Please enter a new password',
-    enter_verification_code: 'Please enter the verification code you received via email',
-    reset_password: 'Reset Password',
-    enter_username: 'Please enter your username:',
-    enter_email: 'Please enter your e-mail address:',
-    verification: 'Verification',
-    enter_2fa:  'Enter your two-factor authentication code',
-    code_resent: 'Successfully re-sent code',
-    password_changed: 'Successfully changed password. Please log in using the new password.',
-    account_created: 'Successfully created account',
+  validation: {
+    email: 'E-Mail invalid',
+  },
+  table: {
+    ctrl_shift_hint:
+      'Hint: Use SHIFT to select / deselect a range and CTRL to add to selection',
   },
 };
