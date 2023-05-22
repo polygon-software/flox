@@ -68,6 +68,7 @@ export default class Form extends BaseEntity {
   @JoinColumn()
   @OneToOne(() => Client, { cascade: true, nullable: true })
   @IsObject()
+  @IsOptional()
   client: Client;
 
   @Field(() => String, { description: 'Owner', nullable: true })

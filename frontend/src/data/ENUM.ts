@@ -69,3 +69,11 @@ export enum JOB_STATUS {
   PENDING = 'PENDING',
   RECEIVED = 'RECEIVED',
 }
+
+/**
+ * Type of field to display in the data table for a boolean value
+ */
+export enum BOOLEAN_FIELD_TYPE {
+  CHECK_BOX = 'CHECK_BOX',
+  TOGGLE = 'TOGGLE',
+}

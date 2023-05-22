@@ -89,6 +89,7 @@ export const CREATE_FORM: MutationObject = {
         owner
         objectNumber
         tenant {
+          uuid
           firstName
           lastName
           address {
@@ -166,7 +167,18 @@ export const CREATE_FORM: MutationObject = {
       }
     }
   `,
-  tables: [TABLES.FORM],
+  tables: [
+    TABLES.ADDRESS,
+    TABLES.ARTICLE,
+    TABLES.BILLING,
+    TABLES.CLIENT,
+    TABLES.DEVICE,
+    TABLES.EXPENSE,
+    TABLES.FORM,
+    TABLES.IMAGE_FILE,
+    TABLES.JOB,
+    TABLES.TENANT,
+  ],
   type: MutationTypes.CREATE,
   cacheLocation: 'createForm',
 };
@@ -260,6 +272,7 @@ export const UPDATE_FORM: MutationObject = {
         owner
         objectNumber
         tenant {
+          uuid
           firstName
           lastName
           address {
@@ -337,8 +350,19 @@ export const UPDATE_FORM: MutationObject = {
       }
     }
   `,
-  tables: [TABLES.FORM],
-  type: MutationTypes.UPDATE,
+  tables: [
+    TABLES.ADDRESS,
+    TABLES.ARTICLE,
+    TABLES.BILLING,
+    TABLES.CLIENT,
+    TABLES.DEVICE,
+    TABLES.EXPENSE,
+    TABLES.FORM,
+    TABLES.IMAGE_FILE,
+    TABLES.JOB,
+    TABLES.TENANT,
+  ],
+  type: MutationTypes.DEVALIDATINGUPDATE,
   cacheLocation: 'updateForm',
 };
 
@@ -379,6 +403,7 @@ export const DELETE_FORM: MutationObject = {
         owner
         objectNumber
         tenant {
+          uuid
           firstName
           lastName
           address {
@@ -456,7 +481,18 @@ export const DELETE_FORM: MutationObject = {
       }
     }
   `,
-  tables: [TABLES.FORM],
+  tables: [
+    TABLES.ADDRESS,
+    TABLES.ARTICLE,
+    TABLES.BILLING,
+    TABLES.CLIENT,
+    TABLES.DEVICE,
+    TABLES.EXPENSE,
+    TABLES.FORM,
+    TABLES.IMAGE_FILE,
+    TABLES.JOB,
+    TABLES.TENANT,
+  ],
   type: MutationTypes.DELETE,
   cacheLocation: 'deleteForm',
 };

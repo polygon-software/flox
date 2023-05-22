@@ -28,6 +28,15 @@
           <template v-if="!isBooleanContent(cellProps)"
             >{{ cellContent(cellProps) }}
           </template>
+          <q-toggle
+            v-else-if="
+              cellProps.col.booleanFieldType === BOOLEAN_FIELD_TYPE.TOGGLE
+            "
+            :model-value="cellContent(cellProps)"
+            @update:model-value="
+              updateRow(cellProps.row, cellProps.col.field, $event)
+            "
+          />
           <q-checkbox
             v-else
             :disable="cellType(cellProps) === CellType.boolean"
@@ -216,6 +225,7 @@ import { QueryObject } from 'src/apollo/query';
 import BaseEntity from 'src/flox/core/base-entity/entities/BaseEntity';
 import ConfirmButton from 'components/buttons/ConfirmButton.vue';
 import { ValidationRule } from 'src/tools/validation.tool';
+import { BOOLEAN_FIELD_TYPE } from 'src/data/ENUM';
 
 const props = withDefaults(
   defineProps<{

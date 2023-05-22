@@ -4,6 +4,7 @@ import get from 'lodash/get';
 import { exportFile, QInputProps, useQuasar } from 'quasar';
 import { computed, ComputedRef, nextTick, Ref, ref, toRaw, watch } from 'vue';
 import { WatchQueryFetchPolicy } from '@apollo/client';
+import _ from 'lodash';
 
 import { i18n } from 'boot/i18n';
 import { executeMutation, MutationObject } from 'src/apollo/mutation';
@@ -15,6 +16,7 @@ import {
   showErrorNotification,
   showSuccessNotification,
 } from 'src/tools/notification.tool';
+import { BOOLEAN_FIELD_TYPE } from 'src/data/ENUM';
 
 export interface PageRequest {
   sortBy: string;
@@ -69,6 +71,7 @@ export interface ColumnInterface<T = any> {
   edit?: boolean;
   qInputProps?: Omit<QInputProps, 'modelValue'>;
   visible?: boolean;
+  booleanFieldType?: BOOLEAN_FIELD_TYPE;
 }
 
 /**
@@ -376,6 +379,39 @@ export function useDataTable(
   }
 
   /**
+   * Deletes unneeded GraphQL values on an object and returns its cleaned state
+   * @param input - the object
+   * @param [keepCreationDate = false] - flag that keeps creation date needed for details table
+   * @returns cleaned object
+   */
+  function cleanGraphQLObject(
+    input: Record<string, unknown>,
+    keepCreationDate?: boolean
+  ): Record<string, unknown> {
+    const clone = _.cloneDeep(input);
+
+    delete clone.updatedAt;
+    // eslint-disable-next-line no-underscore-dangle
+    delete clone.__typename; // __typename is passed by GraphQL
+
+    // Recursively remove values
+    Object.keys(clone).forEach((property) => {
+      if (typeof clone[property] === 'object' && clone[property] !== null) {
+        clone[property] = cleanGraphQLObject(
+          clone[property] as Record<string, unknown>
+        );
+      }
+    });
+
+    // Remove general fields
+    if (!keepCreationDate) {
+      delete clone.createdAt;
+    }
+
+    return clone;
+  }
+
+  /**
    * Handles sending row updates to database
    *
    * @param row - row to be updated
@@ -397,7 +433,11 @@ export function useDataTable(
         updatedRowCopy,
         updateObject
       );
-      await executeMutation(updateObject, mutationVariables);
+
+      // Remove the __typename field from the mutation variables, since it breaks the backend
+      const cleanedVariables = cleanGraphQLObject(mutationVariables);
+
+      await executeMutation(updateObject, cleanedVariables);
       showSuccessNotification($q, i18n.global.t('messages.entry_edited'), {
         timeout: 500,
       });

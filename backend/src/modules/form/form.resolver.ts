@@ -40,6 +40,19 @@ export default class FormResolver extends AbstractSearchResolver<
     ]);
   }
 
+  formRelations = [
+    'articles',
+    'billing.address',
+    'client',
+    'client.address',
+    'devices',
+    'expenses',
+    'job',
+    'images',
+    'tenant',
+    'tenant.address',
+  ];
+
   /**
    * @returns form service
    */
@@ -72,7 +85,9 @@ export default class FormResolver extends AbstractSearchResolver<
   async updateForm(
     @Args('updateFormInput') updateFormInput: UpdateFormInput,
   ): Promise<Form> {
-    return super.update(updateFormInput);
+    return super.update(updateFormInput, {
+      relations: this.formRelations,
+    });
   }
 
   /**
@@ -99,18 +114,7 @@ export default class FormResolver extends AbstractSearchResolver<
   @Query(() => Form, { name: 'getForm' })
   async getForm(@Args() getOneArgs: GetOneArgs): Promise<Form | null> {
     return super.getOne(getOneArgs, {
-      relations: [
-        'job',
-        'client',
-        'client.address',
-        'tenant.address',
-        'billing.address',
-        'devices',
-        'images',
-        'articles',
-        'expenses',
-        'tenant',
-      ],
+      relations: this.formRelations,
     });
   }
 
@@ -122,20 +126,9 @@ export default class FormResolver extends AbstractSearchResolver<
    */
   @AdminOnly()
   @Query(() => FormSearchOutput, { name: 'searchForms' })
-  async searchForms(@Args() searchArgs: SearchArgs): Promise<FormSearchOutput> {
-    return super.search(searchArgs, {
-      relations: [
-        'job',
-        'client',
-        'client.address',
-        'tenant.address',
-        'billing.address',
-        'devices',
-        'images',
-        'articles',
-        'expenses',
-        'tenant',
-      ],
+  async searchForms(@Args() getAllArgs: SearchArgs): Promise<FormSearchOutput> {
+    return super.search(getAllArgs, {
+      relations: this.formRelations,
     });
   }
 }

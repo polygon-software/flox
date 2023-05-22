@@ -46,6 +46,7 @@ export const SEARCH_FORMS: QueryObject = {
           owner
           objectNumber
           tenant {
+            uuid
             firstName
             lastName
             address {
@@ -137,6 +138,7 @@ export const FORM: QueryObject = {
         owner
         objectNumber
         tenant {
+          uuid
           firstName
           lastName
           address {

@@ -632,10 +632,10 @@ type Job {
   deletedAt: DateTime
 
   """Job status"""
-  status: JobStatus!
+  status: JobStatus
 
   """Job type"""
-  type: JobType!
+  type: JobType
 
   """Last modification date"""
   updatedAt: DateTime

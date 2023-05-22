@@ -1,5 +1,11 @@
 <template>
-  <DataTable id="adress-table" :columns="columns" :query="SEARCH_FORMS" multi>
+  <DataTable
+    id="adress-table"
+    :columns="columns"
+    :query="SEARCH_FORMS"
+    multi
+    :update-mutation="UPDATE_FORM"
+  >
   </DataTable>
 </template>
 
@@ -10,7 +16,8 @@ import { format } from 'date-fns';
 
 import { SEARCH_FORMS } from 'src/data/form/form.query';
 import { ColumnAlign } from 'components/tables/useDataTable';
-import { JOB_STATUS, JOB_TYPE } from 'src/data/ENUM';
+import { BOOLEAN_FIELD_TYPE, JOB_STATUS, JOB_TYPE } from 'src/data/ENUM';
+import { UPDATE_FORM } from 'src/data/form/form.mutation';
 
 import DataTable from './DataTable.vue';
 
@@ -82,6 +89,7 @@ const columns = computed(() => [
     sortable: true,
     edit: false,
     visible: true,
+    booleanFieldType: BOOLEAN_FIELD_TYPE.TOGGLE,
   },
   {
     name: 'done',
@@ -91,6 +99,7 @@ const columns = computed(() => [
     sortable: true,
     edit: false,
     visible: true,
+    booleanFieldType: BOOLEAN_FIELD_TYPE.TOGGLE,
   },
   {
     name: 'fromErp',
@@ -100,6 +109,7 @@ const columns = computed(() => [
     sortable: true,
     edit: false,
     visible: true,
+    booleanFieldType: BOOLEAN_FIELD_TYPE.TOGGLE,
   },
 ]);
 </script>
