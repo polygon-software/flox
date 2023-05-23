@@ -16,7 +16,7 @@
         />
       </LabelWrapper>
     </div>
-    <div class="col-3">
+    <div class="col-4">
       <LabelWrapper :label="$t('fields.address.number')">
         <q-input
           v-model="fieldValue.number"
@@ -31,7 +31,7 @@
   </div>
   <!-- Bottom Row: ZIP code & city -->
   <div class="row justify-between">
-    <div class="col-3">
+    <div class="col-4">
       <LabelWrapper :label="$t('fields.address.zip_code')">
         <q-input
           v-model="fieldValue.zipCode"

@@ -2,7 +2,7 @@
   <div v-if="showTitle" class="q-mb-md text-subtitle1 text-left text-primary">
     {{ $t('fields.personal_data.sample_title') }}
   </div>
-  <div class="q-gutter-sm row">
+  <div class="row">
     <!-- First name -->
     <GenericInputField
       :label="$t('fields.personal_data.first_name')"
@@ -24,7 +24,7 @@
       @change="(newValue) => fieldValueChange('middleName', newValue)"
     />
   </div>
-  <div class="q-gutter-sm row">
+  <div class="row">
     <!-- Last name -->
     <GenericInputField
       :label="$t('fields.personal_data.last_name')"
@@ -82,6 +82,7 @@ const store = useFormStore();
 const initialValue = props.stateKey
   ? (fetchByKey(props.stateKey) as FullName | null)
   : props.initialValue;
+
 const fieldValue: Ref<FullName> = ref(
   initialValue && initialValue.isComplete() ? initialValue : new FullName()
 );

@@ -8,7 +8,7 @@ import { resetPasswordFormKey } from '../FORM_KEYS';
 // Reset password
 const resetPasswordCard = new FormCard(
   resetPasswordFormKey.cardKey,
-  [FIELDS.VERIFICATION_CODE, FIELDS.PASSWORD_REPEAT],
+  [[FIELDS.VERIFICATION_CODE, FIELDS.PASSWORD_REPEAT]],
   i18n.global.t('card_titles.set_new_password')
 );
 

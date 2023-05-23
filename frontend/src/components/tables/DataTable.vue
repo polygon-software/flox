@@ -118,6 +118,8 @@
         <q-input
           v-if="!hideSearch"
           v-model="filter"
+          class="bg-grey-2 q-px-md"
+          style="border-radius: 5px"
           :placeholder="$t('general.search')"
           borderless
           debounce="300"

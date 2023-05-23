@@ -1,6 +1,6 @@
 <template>
   <FloxWrapper :module="MODULES.AUTH">
-    <LabelWrapper :label="$t('authentication.password')">
+    <LabelWrapper :label="$t('authentication.password')" class="q-mb-md">
       <q-input
         v-model="password"
         :rules="forLogin ? [] : [IS_VALID_PASSWORD]"

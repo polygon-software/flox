@@ -8,19 +8,23 @@ import { createUserFormKey } from '../FORM_KEYS';
 
 const fields = auth.moduleConfig().emailAsUsername
   ? [
-      FIELDS.EMAIL,
-      FIELDS.SELECT_LANGUAGE,
-      FIELDS.USER_ROLE,
-      FIELDS.SEND_INVITE,
-      FIELDS.GENERATED_PASSWORD,
+      [
+        FIELDS.EMAIL,
+        FIELDS.SELECT_LANGUAGE,
+        FIELDS.USER_ROLE,
+        FIELDS.SEND_INVITE,
+        FIELDS.GENERATED_PASSWORD,
+      ],
     ]
   : [
-      FIELDS.USERNAME,
-      FIELDS.EMAIL,
-      FIELDS.SELECT_LANGUAGE,
-      FIELDS.USER_ROLE,
-      FIELDS.SEND_INVITE,
-      FIELDS.GENERATED_PASSWORD,
+      [
+        FIELDS.USERNAME,
+        FIELDS.EMAIL,
+        FIELDS.SELECT_LANGUAGE,
+        FIELDS.USER_ROLE,
+        FIELDS.SEND_INVITE,
+        FIELDS.GENERATED_PASSWORD,
+      ],
     ];
 
 // Create user

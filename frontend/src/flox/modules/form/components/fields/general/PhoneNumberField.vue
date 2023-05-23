@@ -1,30 +1,33 @@
 <template>
   <div class="row justify-between">
-    <LabelWrapper class="col-3" :label="$t('fields.phone.country_code')">
-      <!-- Country code -->
-      <q-select
-        v-model="selectedCode"
-        dense
-        outlined
-        :options="countryCodes"
-        @update:model-value="phoneInput = null"
-      />
-    </LabelWrapper>
+    <div class="col-3">
+      <LabelWrapper :label="$t('fields.phone.country_code')" class="q-mb-md">
+        <!-- Country code -->
+        <q-select
+          v-model="selectedCode"
+          dense
+          outlined
+          :options="countryCodes"
+          @update:model-value="phoneInput = null"
+        />
+      </LabelWrapper>
+    </div>
 
     <!-- Actual phone number -->
-    <LabelWrapper class="col-8" :label="$t('fields.phone.number')">
-      <q-input
-        v-model="phoneInput"
-        dense
-        outlined
-        :mask="selectedCode.mask"
-        :rules="[
-          (val) =>
-            IS_VALID_PHONE_NUMBER(selectedCode.value + val, selectedCode.code),
-        ]"
-      >
-      </q-input>
-    </LabelWrapper>
+
+    <div class="col-9">
+      <LabelWrapper :label="$t('fields.phone.number')">
+        <!-- Country code -->
+        <q-input
+          v-model="phoneInput"
+          dense
+          outlined
+          :mask="selectedCode.mask"
+          :rules="[]"
+        >
+        </q-input>
+      </LabelWrapper>
+    </div>
   </div>
 </template>
 
@@ -32,7 +35,6 @@
 import { onBeforeMount, ref, Ref, watch } from 'vue';
 import { isPhoneNumber } from 'class-validator';
 
-import { IS_VALID_PHONE_NUMBER } from '../../../data/RULES';
 import { FormStateKey, useFormStore } from '../../../stores/form';
 import { fetchByKey } from '../../../helpers/form-helpers';
 import { PhoneCountryCode } from '../../../data/types/PhoneCountryCode';

@@ -8,7 +8,7 @@ import { MFAFormKey } from '../FORM_KEYS';
 // MFA
 const MFACard = new FormCard(
   MFAFormKey.cardKey,
-  [FIELDS.MFA],
+  [[FIELDS.MFA]],
   i18n.global.t('card_titles.mfa')
 );
 

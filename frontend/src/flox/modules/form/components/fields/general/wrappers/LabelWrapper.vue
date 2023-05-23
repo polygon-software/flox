@@ -1,5 +1,5 @@
 <template>
-  <div class="column">
+  <div class="column q-mx-xs" style="flex-grow: 1">
     <div class="row justify-between">
       <div :class="DEFAULT_LABEL_CLASS" :style="DEFAULT_LABEL_STYLE">
         {{ label }}

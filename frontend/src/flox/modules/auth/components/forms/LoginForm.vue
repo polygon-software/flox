@@ -1,6 +1,9 @@
 <template>
   <FloxWrapper :module="MODULES.AUTH">
-    <div class="column q-pa-sm q-mx-xl q-mt-md text-center justify-center">
+    <div
+      class="column q-pa-sm text-center justify-center"
+      style="margin: 50px 0 50px"
+    >
       <GenericForm
         :finish-label="$t('buttons.login')"
         :form-key="loginFormKey.formKey"

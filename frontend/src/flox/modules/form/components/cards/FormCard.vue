@@ -1,6 +1,6 @@
 <template>
   <q-card
-    class="justify-center q-pa-lg q-pr-xl"
+    class="justify-center q-pa-lg"
     style="border-radius: 7px; width: 100%"
   >
     <!-- Card with image -->
@@ -22,7 +22,20 @@
       </q-card-section>
     </q-card-section>
 
-    <!-- Card without image -->
+    <!-- Card without image but with label-->
+    <q-card-section v-if="card.label" horizontal class="column">
+      <q-card-section>
+        <!-- Label text -->
+        <div class="text-center q-mb-lg">
+          {{ card.label }}
+        </div>
+        <div class="column">
+          <slot />
+        </div>
+      </q-card-section>
+    </q-card-section>
+
+    <!-- Card without image and without label-->
     <q-card-section v-else horizontal>
       <q-card-section>
         <div class="column">
@@ -34,7 +47,7 @@
 </template>
 
 <script setup lang="ts">
-import FormCard from '../../data/types/FormCard';
+import FormCard from 'src/flox/modules/form/data/types/FormCard';
 
 const props = defineProps<{
   card: FormCard;

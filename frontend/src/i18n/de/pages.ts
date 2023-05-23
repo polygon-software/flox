@@ -7,9 +7,9 @@ export default {
       title: 'Account',
     },
     home: {
-      title: 'Aufträge',
+      title: 'Dashboard',
       meta: {
-        title: 'Aufträge',
+        title: 'Dashboard',
         description: 'Diese Seite zeigt alle Aufträge von Privetec an',
         keywords: 'privetec,home,dashboard, aufträge',
       },
@@ -21,6 +21,9 @@ export default {
         description: 'Auf dieser Seite kann man sich bei PriveTec einloggen',
         keywords: 'privetec,login',
       },
+    },
+    create: {
+      title: 'Auftrag erstellen',
     },
   },
 };

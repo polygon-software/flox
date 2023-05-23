@@ -7,6 +7,7 @@
           v-if="$q.screen.gt.xs"
           class="q-ml-xs"
           flat
+          dense
           no-caps
           no-wrap
           @click="$routerService?.routeTo(ROUTES.HOME)"

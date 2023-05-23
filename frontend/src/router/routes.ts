@@ -12,6 +12,14 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/HomePage.vue') }],
   },
 
+  CREATE_ORDER: {
+    path: '/create',
+    component: () => import('layouts/SimpleDashboardLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/CreateOrderPage.vue') },
+    ],
+  },
+
   LOGIN: {
     path: '/login',
     component: () => import('layouts/ClearLayout.vue'),

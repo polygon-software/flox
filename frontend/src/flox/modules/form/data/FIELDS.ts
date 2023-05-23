@@ -1,9 +1,19 @@
 import { markRaw } from 'vue';
 import { isString } from 'class-validator';
 
-import { i18n } from 'boot/i18n';
 import SendInviteField from 'src/flox/modules/form/components/fields/general/SendInviteField.vue';
 import GenericSelectField from 'src/flox/modules/form/components/fields/general/GenericSelectField.vue';
+import { i18n } from 'boot/i18n';
+import {
+  DEVICE_TYPE,
+  FLOOR,
+  LEGAL_FORM,
+  translatedObjects,
+} from 'src/data/ENUM';
+import ArticleNumbersField from 'src/flox/modules/form/components/fields/general/ArticleNumbersField.vue';
+import TimeRecordingField from 'src/flox/modules/form/components/fields/general/TimeRecordingField.vue';
+import FileUploadField from 'src/flox/modules/form/components/fields/general/FileUploadField.vue';
+import JobInformationField from 'src/flox/modules/form/components/fields/general/JobInformationField.vue';
 
 import AddressField from '../components/fields/general/AddressField.vue';
 import DateField from '../components/fields/general/DateField.vue';
@@ -82,6 +92,20 @@ const FIELDS: Record<string, Field> = {
       rules: [IS_VALID_PASSWORD],
     },
   },
+  ARTICLE_NUMBERS: {
+    key: 'articleNumbers',
+    component: markRaw(ArticleNumbersField),
+    attributes: {
+      rules: [],
+    },
+  },
+  TIME_RECORDING: {
+    key: 'timeRecording',
+    component: markRaw(TimeRecordingField),
+    attributes: {
+      rules: [],
+    },
+  },
   OLD_PASSWORD: {
     key: 'oldPassword',
     component: markRaw(GenericInputField),
@@ -118,8 +142,61 @@ const FIELDS: Record<string, Field> = {
       dense: true,
       type: 'text',
       label: i18n.global.t('fields.personal_data.name'),
-      rules: [IS_VALID_NAME],
+      rules: [],
       width: 100,
+    },
+  },
+  OWNER: {
+    key: 'owner',
+    component: markRaw(GenericInputField),
+    attributes: {
+      type: 'text',
+      label: i18n.global.t('fields.owner'),
+      rules: [],
+    },
+  },
+  OBJECT_NUMBER: {
+    key: 'objectNumber',
+    component: markRaw(GenericInputField),
+    attributes: {
+      label: i18n.global.t('fields.object_number'),
+      type: 'number',
+      rules: [],
+    },
+  },
+  TOTAL_AMOUNT: {
+    key: 'totalAmount',
+    component: markRaw(GenericInputField),
+    attributes: {
+      label: i18n.global.t('fields.total_amount'),
+      type: 'number',
+      rules: [],
+    },
+  },
+  FILE_UPLOAD: {
+    key: 'fileUpload',
+    component: markRaw(FileUploadField),
+    attributes: {
+      rules: [],
+    },
+  },
+  EMPLOYEE_ABBREVIATION: {
+    key: 'employeeAbbreviation',
+    component: markRaw(GenericInputField),
+    attributes: {
+      type: 'text',
+      label: i18n.global.t('fields.employee_abbreviation'),
+      rules: [],
+    },
+  },
+  COMPANY_NAME: {
+    key: 'companyName',
+    component: markRaw(GenericInputField),
+    attributes: {
+      dense: true,
+      type: 'text',
+      label: i18n.global.t('fields.company_name'),
+      rules: [IS_VALID_NAME],
     },
   },
   FULL_NAME: {
@@ -141,11 +218,57 @@ const FIELDS: Record<string, Field> = {
       ],
     },
   },
+  EXTENDED_ADDRESS: {
+    key: 'extendedAddress',
+    component: markRaw(AddressField),
+    attributes: {
+      create: true,
+      showAdditionalAddress: true,
+      rules: [
+        (val: Record<string, string>): boolean | string =>
+          IS_NOT_NULL(val) || i18n.global.t('errors.invalid_address'),
+      ],
+    },
+  },
   DATE: {
     key: 'date',
     component: markRaw(DateField),
     attributes: {
       rules: [IS_VALID_DATE],
+    },
+  },
+  PROTOCOL_DATE: {
+    key: 'protocolDate',
+    component: markRaw(DateField),
+    attributes: {
+      label: i18n.global.t('fields.protocol_date'),
+      rules: [IS_VALID_DATE],
+    },
+  },
+  END_DATE: {
+    key: 'endDate',
+    component: markRaw(DateField),
+    attributes: {
+      label: i18n.global.t('fields.end_date'),
+      rules: [IS_VALID_DATE],
+    },
+  },
+  INTERNAL_ORDER_NUMBER: {
+    key: 'internalOrderNumber',
+    component: markRaw(GenericInputField),
+    attributes: {
+      label: i18n.global.t('fields.internal_order_number'),
+      type: 'number',
+      rules: [],
+    },
+  },
+  EXTERNAL_ORDER_NUMBER: {
+    key: 'externalOrderNumber',
+    component: markRaw(GenericInputField),
+    attributes: {
+      label: i18n.global.t('fields.external_order_number'),
+      type: 'number',
+      rules: [],
     },
   },
   PHONE_NUMBER: {
@@ -156,11 +279,131 @@ const FIELDS: Record<string, Field> = {
       rules: [IS_NOT_NULL],
     },
   },
+  PROBLEM_DESCRIPTION: {
+    key: 'problemDescription',
+    component: markRaw(GenericInputField),
+    attributes: {
+      type: 'textarea',
+      label: i18n.global.t('fields.problem_description'),
+      rules: [],
+      height: 400,
+    },
+  },
+  FREE_TEXT: {
+    key: 'freeText',
+    component: markRaw(GenericInputField),
+    attributes: {
+      type: 'textarea',
+      label: i18n.global.t('fields.free_text'),
+      rules: [],
+      height: 400,
+    },
+  },
   SELECT_LANGUAGE: {
     key: 'selectLanguage',
     component: markRaw(SelectLanguageField),
     attributes: {
       rules: [IS_SELECTED],
+    },
+  },
+  SELECT_POWER_MEASUREMENT: {
+    key: 'selectPowerMeasurement',
+    component: markRaw(GenericSelectField),
+    attributes: {
+      label: i18n.global.t('fields.measure_power'),
+      options: [
+        { label: i18n.global.t('general.yes'), value: true },
+        { label: i18n.global.t('general.no'), value: false },
+      ],
+      rules: [],
+    },
+  },
+  JOB_INFORMATION: {
+    key: 'jobInformation',
+    component: markRaw(JobInformationField),
+    attributes: {
+      rules: [],
+    },
+  },
+  SELECT_DEVICE_TYPE: {
+    key: 'selectDeviceType',
+    component: markRaw(GenericSelectField),
+    attributes: {
+      label: i18n.global.t('fields.device_type'),
+      options: translatedObjects(DEVICE_TYPE, 'device_type'),
+      rules: [],
+    },
+  },
+  MANUFACTURER: {
+    key: 'manufacturer',
+    component: markRaw(GenericInputField),
+    attributes: {
+      type: 'text',
+      label: i18n.global.t('fields.manufacturer'),
+      rules: [],
+    },
+  },
+  MODEL: {
+    key: 'model',
+    component: markRaw(GenericInputField),
+    attributes: {
+      type: 'text',
+      label: i18n.global.t('fields.model'),
+      rules: [],
+    },
+  },
+  PRODUCTION_NUMBER: {
+    key: 'productionNumber',
+    component: markRaw(GenericInputField),
+    attributes: {
+      type: 'text',
+      label: i18n.global.t('fields.production_number'),
+      rules: [],
+    },
+  },
+  PRODUCTION_YEAR: {
+    key: 'productionYear',
+    component: markRaw(GenericInputField),
+    attributes: {
+      type: 'number',
+      label: i18n.global.t('fields.production_year'),
+      rules: [],
+    },
+  },
+  INFORMATION: {
+    key: 'productionNumber',
+    component: markRaw(GenericInputField),
+    attributes: {
+      type: 'textarea',
+      label: i18n.global.t('fields.information'),
+      rules: [],
+    },
+  },
+  PROTOCOL: {
+    key: 'protocol',
+    component: markRaw(GenericInputField),
+    attributes: {
+      type: 'textarea',
+      label: i18n.global.t('fields.protocol'),
+      rules: [],
+    },
+  },
+  COMPANY_LEGAL_FORM: {
+    key: 'companyLegalForm',
+    component: markRaw(GenericSelectField),
+    attributes: {
+      label: i18n.global.t('fields.company_legal_form'),
+      options: translatedObjects(LEGAL_FORM, 'legal_form'),
+      rules: [],
+    },
+  },
+  FLOOR: {
+    key: 'floor',
+    component: markRaw(GenericSelectField),
+    attributes: {
+      label: i18n.global.t('fields.floor'),
+      options: translatedObjects(FLOOR, 'floor'),
+      rules: [],
     },
   },
   VERIFICATION_CODE: {

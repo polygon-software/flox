@@ -2,7 +2,7 @@
   <QForm
     v-if="form"
     ref="formRef"
-    :class="`q-gutter-md text-${textPosition}`"
+    :class="`text-${textPosition}`"
     @reset="onCancel"
     @submit="onSubmit"
   >
@@ -30,25 +30,35 @@
           class="q-mb-lg"
         >
           <div
-            v-for="(field, fieldIndex) in card.fields"
-            :key="`field_${fieldIndex}`"
+            v-for="(fieldRow, fieldRowIndex) in card.fieldRows.every((arr) =>
+              Array.isArray(arr)
+            )
+              ? card.fieldRows
+              : [card.fieldRows]"
+            :key="`fieldGroup_${fieldRowIndex}`"
+            :class="Array.isArray(fieldRow) && fieldRow.length > 1 ? 'row' : ''"
           >
-            <component
-              :is="field.component"
-              v-if="field"
-              v-bind="{
-                store,
-                stateKey: {
-                  formKey,
-                  pageKey: page.key,
-                  cardKey: card.key,
-                  fieldKey: field.key,
-                },
-                ...field.attributes,
-                options:
-                  optionOverrides?.[field.key] ?? field.attributes.options,
-              }"
-            />
+            <div
+              v-for="(field, fieldIndex) in fieldRow"
+              :key="`field_${String(fieldIndex)}`"
+            >
+              <component
+                :is="field.component"
+                v-if="field"
+                v-bind="{
+                  store,
+                  stateKey: {
+                    formKey,
+                    pageKey: page.key,
+                    cardKey: card.key,
+                    fieldKey: field.key,
+                  },
+                  ...field.attributes,
+                  options:
+                    optionOverrides?.[field.key] ?? field.attributes.options,
+                }"
+              />
+            </div>
           </div>
         </FormCard>
       </q-step>
@@ -80,13 +90,58 @@
         </q-stepper-navigation>
       </template>
     </QStepper>
+    <div v-if="form.pages.length <= 1 && form.pages[0].cards.length > 1">
+      <!-- Multi card (for single-page forms) -->
+      <FormCard
+        v-for="card in form.pages[0].cards"
+        :key="card.key"
+        :card="card"
+        class="q-mb-lg"
+      >
+        <div
+          v-for="(fieldRow, fieldRowIndex) in card.fieldRows.every((arr) =>
+            Array.isArray(arr)
+          )
+            ? card.fieldRows
+            : [card.fieldRows]"
+          :key="`fieldGroup_${fieldRowIndex}`"
+          :class="Array.isArray(fieldRow) && fieldRow.length > 1 ? 'row' : ''"
+        >
+          <component
+            :is="field.component"
+            v-for="field in fieldRow"
+            :key="field.key"
+            v-bind="{
+              store,
+              stateKey: {
+                formKey,
+                pageKey: form.pages[0].key,
+                cardKey: card.key,
+                fieldKey: field.key,
+              },
+              ...field.attributes,
+              options: optionOverrides?.[field.key] ?? field.attributes.options,
+            }"
+          />
+        </div>
+      </FormCard>
+    </div>
     <!-- Single card (for single-page forms) -->
-    <div v-else class="q-mb-lg">
+    <div
+      v-for="(
+        fieldRow, fieldRowIndex
+      ) in form.pages[0].cards[0].fieldRows.every((arr) => Array.isArray(arr))
+        ? form.pages[0].cards[0].fieldRows
+        : [form.pages[0].cards[0].fieldRows]"
+      v-else
+      :key="`fieldGroup_${fieldRowIndex}`"
+      :class="Array.isArray(fieldRow) && fieldRow.length > 1 ? 'row' : ''"
+    >
       <component
         :is="field.component"
-        v-for="field in form.pages[0].cards[0].fields"
+        v-for="field in fieldRow"
         :key="field.key"
-        class="q-mb-md"
+        class="column"
         v-bind="{
           store,
           stateKey: {
@@ -99,32 +154,32 @@
           options: optionOverrides?.[field.key] ?? field.attributes.options,
         }"
       />
-      <!--- Buttons --->
-      <div class="showCancel ? row justify-between : row justify-around">
-        <!-- Cancel button -->
-        <q-btn
-          v-if="showCancel"
-          :class="`${ALTERNATE_BUTTON_CLASS} q-mt-md`"
-          :disable="loading"
-          :label="!loading ? cancelLabel : loadingLabel"
-          :style="`${DEFAULT_BUTTON_STYLE}`"
-          type="reset"
-        >
-          <q-inner-loading :showing="loading" />
-        </q-btn>
+    </div>
+    <!--- Buttons --->
+    <div class="showCancel ? row justify-between : row justify-around">
+      <!-- Cancel button -->
+      <q-btn
+        v-if="showCancel"
+        :class="`${ALTERNATE_BUTTON_CLASS} q-mt-lg`"
+        :disable="loading"
+        :label="!loading ? cancelLabel : loadingLabel"
+        :style="`${DEFAULT_BUTTON_STYLE}`"
+        type="reset"
+      >
+        <q-inner-loading :showing="loading" />
+      </q-btn>
 
-        <!-- Finish button -->
-        <q-btn
-          :class="`${ALTERNATE_BUTTON_CLASS} q-mt-lg`"
-          :disable="loading || !form.pageValid"
-          :label="!loading ? finishLabel : loadingLabel"
-          :style="`${DEFAULT_BUTTON_STYLE}`"
-          color="primary"
-          type="submit"
-        >
-          <q-inner-loading :showing="loading" />
-        </q-btn>
-      </div>
+      <!-- Finish button -->
+      <q-btn
+        :class="`${ALTERNATE_BUTTON_CLASS} q-mt-lg`"
+        :disable="loading || !form.pageValid"
+        :label="!loading ? finishLabel : loadingLabel"
+        :style="`${DEFAULT_BUTTON_STYLE}`"
+        color="primary"
+        type="submit"
+      >
+        <q-inner-loading :showing="loading" />
+      </q-btn>
     </div>
   </QForm>
 </template>
