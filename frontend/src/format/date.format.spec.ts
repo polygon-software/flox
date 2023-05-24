@@ -1,6 +1,6 @@
 import {
   calculateAge,
-  dateToInputString,
+  dateToISOString,
   formatDate,
   formatDateTime,
 } from 'src/format/date.format';
@@ -30,8 +30,8 @@ describe('Date Helpers', () => {
     it('should return a date as an string in format (YYYY-MM-DD)', () => {
       const monthStr = (dateOneYearOneDayAgo.getMonth() + 1).toString();
       const monthSlice = dateOneYearOneDayAgo.getDate().toString();
-      expect(dateToInputString(birthday)).toStrictEqual('2014-01-31');
-      expect(dateToInputString(dateOneYearOneDayAgo)).toStrictEqual(
+      expect(dateToISOString(birthday)).toStrictEqual('2014-01-31');
+      expect(dateToISOString(dateOneYearOneDayAgo)).toStrictEqual(
         `${dateOneYearOneDayAgo
           .getFullYear()
           .toString()}-${`0${monthStr}`.slice(-2)}-${`0${monthSlice}`.slice(

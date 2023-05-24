@@ -1,4 +1,8 @@
-import { date } from 'quasar';
+import { format, formatISO, parse } from 'date-fns';
+
+const dateFormat = 'dd.MM.yyyy';
+const timeFormat = 'hh:mm';
+const dateTimeFormat = `${dateFormat} ${timeFormat}`;
 
 /**
  * This file contains all helper functions pertaining to dates
@@ -26,8 +30,8 @@ export function calculateAge(birthDate: Date): number {
  * @param inputDate - date to convert
  * @returns date input string
  */
-export function dateToInputString(inputDate: Date): string {
-  return date.formatDate(inputDate, 'YYYY-MM-DD');
+export function dateToISOString(inputDate: Date): string {
+  return formatISO(inputDate, { representation: 'date' });
 }
 
 /**
@@ -45,11 +49,11 @@ export function formatDate(inputDate: Date | string): string {
     actualDate = inputDate;
   }
 
-  return date.formatDate(actualDate, 'DD.MM.YYYY');
+  return format(actualDate, dateFormat);
 }
 
 /**
- * Formats a date to a string in 01.12.2020, 14:23 format
+ * Formats a date to a string in "01.12.2020 14:23" format
  *
  * @param inputDate - the date or date string to format
  * @returns the formatted date
@@ -63,5 +67,14 @@ export function formatDateTime(inputDate: Date | string): string {
     actualDate = inputDate;
   }
 
-  return date.formatDate(actualDate, 'DD.MM.YYYY hh:mm');
+  return format(actualDate, dateTimeFormat);
+}
+
+/**
+ * Parses a date string in 01.12.2020 format to a Date object
+ * @param dateString - the date string to parse
+ * @returns the parsed date
+ */
+export function parseDate(dateString: string): Date {
+  return parse(dateString, dateFormat, new Date());
 }

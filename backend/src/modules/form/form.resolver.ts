@@ -4,19 +4,32 @@ import { AdminOnly } from '../../flox/modules/roles/authorization.decorator';
 import AbstractSearchResolver from '../../flox/modules/abstracts/search/abstract-search.resolver';
 import GetOneArgs from '../../flox/modules/abstracts/crud/dto/args/get-one.args';
 import DeleteInput from '../../flox/modules/abstracts/crud/dto/input/delete.input';
-import SearchArgs from '../../flox/modules/abstracts/search/dto/args/search.args';
 
 import FormService from './form.service';
 import Form from './entities/form.entity';
 import CreateFormInput from './dto/input/create-form.input';
 import UpdateFormInput from './dto/input/update-form.input';
 import FormSearchOutput from './outputs/form-search.output';
+import FormSearchArgs from './dto/args/form-search.args';
 
 @Resolver(() => Form)
 export default class FormResolver extends AbstractSearchResolver<
   Form,
   FormService
 > {
+  formRelations = [
+    'articles',
+    'billing.address',
+    'client',
+    'client.address',
+    'devices',
+    'expenses',
+    'job',
+    'images',
+    'tenant',
+    'tenant.address',
+  ];
+
   constructor(private readonly formService: FormService) {
     super([
       'description',
@@ -39,19 +52,6 @@ export default class FormResolver extends AbstractSearchResolver<
       'billing.email',
     ]);
   }
-
-  formRelations = [
-    'articles',
-    'billing.address',
-    'client',
-    'client.address',
-    'devices',
-    'expenses',
-    'job',
-    'images',
-    'tenant',
-    'tenant.address',
-  ];
 
   /**
    * @returns form service
@@ -121,13 +121,15 @@ export default class FormResolver extends AbstractSearchResolver<
   /**
    * Returns all existing forms
    *
-   * @param searchArgs - Pagination and sorting data
+   * @param formSearchArgs - Pagination and sorting data
    * @returns All exisiting forms
    */
   @AdminOnly()
   @Query(() => FormSearchOutput, { name: 'searchForms' })
-  async searchForms(@Args() getAllArgs: SearchArgs): Promise<FormSearchOutput> {
-    return super.search(getAllArgs, {
+  async searchForms(
+    @Args() formSearchArgs: FormSearchArgs,
+  ): Promise<FormSearchOutput> {
+    return super.search(formSearchArgs, {
       relations: this.formRelations,
     });
   }

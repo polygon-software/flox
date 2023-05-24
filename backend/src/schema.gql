@@ -405,6 +405,11 @@ type FileSearchOutput {
   data: [S3File!]!
 }
 
+input FilterInput {
+  """Whether is findable"""
+  findable: Boolean
+}
+
 enum Floor {
   BASEMENT
   GROUND_FLOOR
@@ -518,6 +523,29 @@ type Form {
 
   """Whether the form was pulled by ERP"""
   wasPulled: Boolean!
+}
+
+input FormFilterInput {
+  """Date the form is created"""
+  createdAt: DateTime
+
+  """Date the form is resolved"""
+  endDate: DateTime
+
+  """Whether is findable"""
+  findable: Boolean
+
+  """Whether the job is an emergency"""
+  isEmergency: Boolean
+
+  """Whether the job is finished"""
+  isFinished: Boolean
+
+  """Job filter"""
+  job: JobFilterInput
+
+  """Whether the form was pulled by ERP"""
+  wasPulled: Boolean
 }
 
 type FormSearchOutput {
@@ -642,6 +670,17 @@ type Job {
 
   """UUID"""
   uuid: ID!
+}
+
+input JobFilterInput {
+  """Whether is findable"""
+  findable: Boolean
+
+  """Job status"""
+  status: JobStatus
+
+  """Job type"""
+  type: JobType
 }
 
 enum JobStatus {
@@ -1031,11 +1070,14 @@ type Query {
     """URL expiration duration (in seconds)"""
     expires: Int
 
-    """Search for text within items"""
-    filter: String
+    """Filter by property and value"""
+    filter: FilterInput
 
     """Subset of the module's allowed search keys to search in"""
     searchKeys: [String!]
+
+    """Search for text within items"""
+    searchTerm: String
 
     """How many items to skip"""
     skip: Int = 0
@@ -1053,11 +1095,14 @@ type Query {
     """URL expiration duration (in seconds)"""
     expires: Int
 
-    """Search for text within items"""
-    filter: String
+    """Filter by property and value"""
+    filter: FilterInput
 
     """Subset of the module's allowed search keys to search in"""
     searchKeys: [String!]
+
+    """Search for text within items"""
+    searchTerm: String
 
     """How many items to skip"""
     skip: Int = 0
@@ -1075,11 +1120,14 @@ type Query {
     """URL expiration duration (in seconds)"""
     expires: Int
 
-    """Search for text within items"""
-    filter: String
+    """Filter by property and value"""
+    filter: FilterInput
 
     """Subset of the module's allowed search keys to search in"""
     searchKeys: [String!]
+
+    """Search for text within items"""
+    searchTerm: String
 
     """How many items to skip"""
     skip: Int = 0
@@ -1097,11 +1145,14 @@ type Query {
     """URL expiration duration (in seconds)"""
     expires: Int
 
-    """Search for text within items"""
-    filter: String
+    """Filter by property and value"""
+    filter: FilterInput
 
     """Subset of the module's allowed search keys to search in"""
     searchKeys: [String!]
+
+    """Search for text within items"""
+    searchTerm: String
 
     """How many items to skip"""
     skip: Int = 0
@@ -1119,11 +1170,14 @@ type Query {
     """URL expiration duration (in seconds)"""
     expires: Int
 
-    """Search for text within items"""
-    filter: String
+    """Filter by property and value"""
+    filter: FilterInput
 
     """Subset of the module's allowed search keys to search in"""
     searchKeys: [String!]
+
+    """Search for text within items"""
+    searchTerm: String
 
     """How many items to skip"""
     skip: Int = 0
@@ -1138,11 +1192,14 @@ type Query {
     """Sort descending"""
     descending: Boolean = false
 
-    """Search for text within items"""
-    filter: String
+    """Filter by property and value"""
+    filter: FilterInput
 
     """Subset of the module's allowed search keys to search in"""
     searchKeys: [String!]
+
+    """Search for text within items"""
+    searchTerm: String
 
     """How many items to skip"""
     skip: Int = 0
@@ -1160,11 +1217,14 @@ type Query {
     """URL expiration duration (in seconds)"""
     expires: Int
 
-    """Search for text within items"""
-    filter: String
+    """Filter by property and value"""
+    filter: FilterInput
 
     """Subset of the module's allowed search keys to search in"""
     searchKeys: [String!]
+
+    """Search for text within items"""
+    searchTerm: String
 
     """How many items to skip"""
     skip: Int = 0
@@ -1179,11 +1239,14 @@ type Query {
     """Sort descending"""
     descending: Boolean = false
 
-    """Search for text within items"""
-    filter: String
+    """Filter by property and value"""
+    filter: FilterInput
 
     """Subset of the module's allowed search keys to search in"""
     searchKeys: [String!]
+
+    """Search for text within items"""
+    searchTerm: String
 
     """How many items to skip"""
     skip: Int = 0
@@ -1198,11 +1261,14 @@ type Query {
     """Sort descending"""
     descending: Boolean = false
 
-    """Search for text within items"""
-    filter: String
+    """Filter by property and value"""
+    filter: FilterInput
 
     """Subset of the module's allowed search keys to search in"""
     searchKeys: [String!]
+
+    """Search for text within items"""
+    searchTerm: String
 
     """How many items to skip"""
     skip: Int = 0
@@ -1233,11 +1299,14 @@ type Query {
     """Sort descending"""
     descending: Boolean = false
 
-    """Search for text within items"""
-    filter: String
+    """Filter by property and search term"""
+    filter: FormFilterInput
 
     """Subset of the module's allowed search keys to search in"""
     searchKeys: [String!]
+
+    """Search for text within items"""
+    searchTerm: String
 
     """How many items to skip"""
     skip: Int = 0

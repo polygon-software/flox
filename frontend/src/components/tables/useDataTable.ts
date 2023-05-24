@@ -34,7 +34,8 @@ export interface PageParameters {
   take: number;
   sortBy: string;
   descending: boolean;
-  filter?: string;
+  searchTerm?: string;
+  filter?: Record<string, any>;
 }
 
 export enum ColumnAlign {
@@ -100,12 +101,12 @@ export function useDataTable(
   visibleColumns: ComputedRef<ColumnInterface<BaseEntity>[]>;
   selected: Ref<BaseEntity[]>;
   visibleColumnNames: Ref<string[]>;
-  filter: Ref<string>;
+  filter: Ref<Record<string, any>>;
   loading: Ref<boolean>;
   pagination: Ref<PaginationConfig>;
   onRequest: (dataProps: {
     pagination: PageRequest;
-    filter?: string;
+    filter?: Ref<Record<string, any>>;
   }) => Promise<void>;
   exportTable: () => void;
   handleSelection: ({
@@ -138,7 +139,7 @@ export function useDataTable(
       );
     }
   );
-  const filter: Ref<string> = ref('');
+  const filter: Ref<Record<string, string | any>> = ref({ search: '' });
   const loading: Ref<boolean> = ref(false);
   const pagination: Ref<PaginationConfig> = ref({
     sortBy,
@@ -182,7 +183,7 @@ export function useDataTable(
    */
   async function onRequest(dataProps: {
     pagination: PageRequest;
-    filter?: string;
+    filter?: Record<string, any>;
   }): Promise<void> {
     const { filter: filterProp } = dataProps;
     const {
@@ -198,15 +199,23 @@ export function useDataTable(
 
     const paginationSkip = (paginationPage - 1) * paginationTake;
 
+    const searchTerm: string | undefined = filterProp?.search
+      ? (filterProp.search as string)
+      : undefined;
+
+    const reducedFilterProp = { ...filterProp };
+    delete reducedFilterProp.search;
+
     const { count, data } = await fetchFromServer(
       {
         skip: paginationSkip,
         take: paginationTake,
-        filter: filterProp,
+        searchTerm,
+        filter: reducedFilterProp,
         sortBy: paginationSortBy,
         descending: paginationDescending,
       },
-      filterProp ? 'cache-and-network' : 'cache-first'
+      'cache-and-network'
     );
     pagination.value.rowsNumber = count;
 
@@ -333,7 +342,7 @@ export function useDataTable(
       }
 
       const rangeRows = tableRows.slice(firstIndex, lastIndex + 1);
-      // we need the original row object so we can match them against the rows in range
+      // we need the original row object, so we can match them against the rows in range
       const selectedRows = selected.value.map(toRaw);
 
       selected.value = added

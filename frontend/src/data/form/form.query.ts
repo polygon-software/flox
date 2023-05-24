@@ -6,10 +6,21 @@ import { TABLES } from 'src/data/TABLES';
 /**
  * Form-related queries
  */
+
 export const SEARCH_FORMS: QueryObject = {
   query: gql`
-    query searchForms($take: Int, $skip: Int, $filter: String) {
-      searchForms(take: $take, skip: $skip, filter: $filter) {
+    query searchForms(
+      $take: Int
+      $skip: Int
+      $filter: FormFilterInput
+      $searchTerm: String
+    ) {
+      searchForms(
+        take: $take
+        skip: $skip
+        filter: $filter
+        searchTerm: $searchTerm
+      ) {
         count
         data {
           createdAt

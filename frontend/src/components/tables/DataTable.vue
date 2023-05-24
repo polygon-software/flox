@@ -115,16 +115,17 @@
         />
       </template>
       <template #top-right="headerProps">
+        <slot name="header" v-bind="headerProps" />
         <q-input
           v-if="!hideSearch"
-          v-model="filter"
-          class="bg-grey-2 q-px-md"
-          style="border-radius: 5px"
+          v-model="filter.search"
           :placeholder="$t('general.search')"
           borderless
+          class="bg-grey-2 q-px-md"
           debounce="300"
           dense
           hide-bottom-space
+          style="border-radius: 5px"
         >
           <template #append>
             <q-icon name="search" />
@@ -250,6 +251,7 @@ const props = withDefaults(
     removeIcon?: string;
     removeLabel?: string;
     optionsMenu?: boolean;
+    filter?: Record<string, any>;
   }>(),
   {
     updateMutation: undefined,
@@ -269,6 +271,7 @@ const props = withDefaults(
     prependName: '',
     tableProps: () => ({}),
     optionsMenu: false,
+    filter: () => ({}),
   }
 );
 
@@ -396,12 +399,20 @@ function validateInput(column: ColumnInterface): (value: any) => boolean {
   };
 }
 
+const propsFilter = computed(() => {
+  return { ...props.filter };
+});
+
 watch(selected, (val) => {
   emit('update:selected', val);
 });
 
 watchEffect(() => {
   columns.value = props.columns;
+});
+
+watchEffect(() => {
+  filter.value = { ...filter.value, ...propsFilter.value };
 });
 
 const extendedColumns: ComputedRef<ColumnInterface<BaseEntity>[]> = computed(
