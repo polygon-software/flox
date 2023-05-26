@@ -25,5 +25,6 @@ export default {
     entry_edited: 'Änderung gespeichert',
     entry_deleted: 'Eintrag gelöscht',
     user_created: 'Benutzer erfolgreich erstellt',
+    order_created: 'Auftrag erfolgreich erstellt',
   },
 };

@@ -133,3 +133,18 @@ variable "serverless_db_version" {
   default         = "v1"
   type            = string
 }
+
+variable "stripe_secret_key" {
+  description     = "Stripe secret key"
+  type            = string
+}
+
+variable "ERP_API_USERNAME" {
+  description     = "Username for the ERP API access"
+  type            = string
+}
+
+variable "ERP_API_PASSWORD" {
+  description     = "Password for the ERP API access"
+  type            = string
+}

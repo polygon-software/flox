@@ -10,6 +10,8 @@
       @update:model-value="saveValue"
     />
   </LabelWrapper>
+  <!-- Spacer to keep padding consistent to fields that have rules (where quasar auto-adds padding) -->
+  <div v-if="rules.length < 1" style="height: 20px" />
 </template>
 
 <script setup lang="ts">
@@ -101,6 +103,8 @@ function matchValue(): void {
         }
         return null;
       }) ?? null;
+  } else {
+    selectedOption.value = null;
   }
 }
 
@@ -111,7 +115,7 @@ onBeforeMount(() => {
 
 // Prefill, if initial data given or options have changed
 watch(
-  [(): any => props.initialValue, (): GenericOption[] => props.options],
+  [(): any => props.initialValue, (): GenericOption[] => props.options ?? []],
   () => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     fieldValue.value = props.initialValue;

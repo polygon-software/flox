@@ -2,12 +2,14 @@ import { ArgsType, Field } from '@nestjs/graphql';
 import {
   IsArray,
   IsBoolean,
+  IsObject,
   IsOptional,
   IsString,
   MaxLength,
 } from 'class-validator';
 
 import GetAllArgs from '../../../crud/dto/args/get-all.args';
+import FilterInput from '../input/filter.input';
 
 @ArgsType()
 export default class SearchArgs extends GetAllArgs {
@@ -18,7 +20,7 @@ export default class SearchArgs extends GetAllArgs {
   @IsString()
   @IsOptional()
   @MaxLength(160)
-  filter?: string;
+  searchTerm?: string;
 
   @Field(() => String, { nullable: true, description: 'Sort by property' })
   @IsString()
@@ -38,4 +40,12 @@ export default class SearchArgs extends GetAllArgs {
   @IsString({ each: true })
   @IsOptional()
   searchKeys?: string[];
+
+  @Field(() => FilterInput, {
+    nullable: true,
+    description: 'Filter by property and value',
+  })
+  @IsObject()
+  @IsOptional()
+  filter?: FilterInput;
 }

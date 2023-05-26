@@ -13,6 +13,7 @@ import notificationsTranslations from './notifications';
 import objectRecognitionTranslations from './objectRecognition';
 import pageTranslations from './pages';
 import paymentTranslations from './payment';
+import enumTranslations from './enum';
 
 /* eslint-disable camelcase */
 export default {
@@ -31,6 +32,7 @@ export default {
   ...objectRecognitionTranslations,
   ...pageTranslations,
   ...paymentTranslations,
+  ...enumTranslations,
   general: {
     finish: 'Finish',
     back: 'Back',

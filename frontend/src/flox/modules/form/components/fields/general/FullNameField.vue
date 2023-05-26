@@ -2,11 +2,11 @@
   <div v-if="showTitle" class="q-mb-md text-subtitle1 text-left text-primary">
     {{ $t('fields.personal_data.sample_title') }}
   </div>
-  <div class="q-gutter-sm row">
+  <div class="row">
     <!-- First name -->
     <GenericInputField
       :label="$t('fields.personal_data.first_name')"
-      :rules="[IS_VALID_NAME]"
+      :rules="optional ? [] : [IS_VALID_NAME]"
       :initial-value="fieldValue.firstName"
       outlined
       dense
@@ -17,18 +17,18 @@
     <GenericInputField
       v-if="showOptionalFields"
       :label="$t('fields.personal_data.middle_name')"
-      :rules="[IS_VALID_NAME]"
+      :rules="optional ? [] : [IS_VALID_NAME]"
       :initial-value="fieldValue.middleName"
       outlined
       dense
       @change="(newValue) => fieldValueChange('middleName', newValue)"
     />
   </div>
-  <div class="q-gutter-sm row">
+  <div class="row">
     <!-- Last name -->
     <GenericInputField
       :label="$t('fields.personal_data.last_name')"
-      :rules="[IS_VALID_NAME]"
+      :rules="optional ? [] : [IS_VALID_NAME]"
       :initial-value="fieldValue.lastName"
       outlined
       dense
@@ -40,10 +40,8 @@
       v-if="showOptionalFields"
       v-model="fieldValue.secondLastName"
       :label="$t('fields.personal_data.second_last_name')"
-      :rules="[IS_VALID_NAME]"
+      :rules="optional ? [] : [IS_VALID_NAME]"
       :initial-value="fieldValue.secondLastName"
-      outlined
-      dense
       @change="(newValue) => fieldValueChange('secondLastName', newValue)"
     />
   </div>
@@ -65,12 +63,14 @@ const props = withDefaults(
     initialValue?: FullName | null; // Only considered when stateKey is null, so this field can be a non-saving subfield of other fields
     showOptionalFields?: boolean; // Whether to show the optional fields (middle name, second last name)
     showTitle?: boolean;
+    optional?: boolean;
   }>(),
   {
     stateKey: null,
     initialValue: null,
     showOptionalFields: true,
     showTitle: false,
+    optional: false,
   }
 );
 
@@ -82,6 +82,7 @@ const store = useFormStore();
 const initialValue = props.stateKey
   ? (fetchByKey(props.stateKey) as FullName | null)
   : props.initialValue;
+
 const fieldValue: Ref<FullName> = ref(
   initialValue && initialValue.isComplete() ? initialValue : new FullName()
 );

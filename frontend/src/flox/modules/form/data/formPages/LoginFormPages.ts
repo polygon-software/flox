@@ -10,8 +10,8 @@ import { loginFormKey } from '../FORM_KEYS';
 const loginCard = new FormCard(
   loginFormKey.cardKey,
   [
-    auth.moduleConfig().emailAsUsername ? FIELDS.EMAIL : FIELDS.USERNAME,
-    FIELDS.PASSWORD,
+    [auth.moduleConfig().emailAsUsername ? FIELDS.EMAIL : FIELDS.USERNAME],
+    [FIELDS.PASSWORD_LOGIN],
   ],
   i18n.global.t('card_titles.login')
 );

@@ -254,4 +254,22 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
     name      = "AWS_ADMIN_SECRET_ACCESS_KEY"
     value     = var.admin_key_secret
   }
+
+  setting {
+    namespace = "aws:elasticbeanstalk:application:environment"
+    name      = "STRIPE_SECRET_KEY"
+    value     = var.stripe_secret_key
+  }
+
+  setting {
+    namespace = "aws:elasticbeanstalk:application:environment"
+    name      = "ERP_API_USERNAME"
+    value     = var.ERP_API_USERNAME
+  }
+
+  setting {
+    namespace = "aws:elasticbeanstalk:application:environment"
+    name      = "ERP_API_PASSWORD"
+    value     = var.ERP_API_PASSWORD
+  }
 }

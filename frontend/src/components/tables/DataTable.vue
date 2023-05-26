@@ -28,6 +28,15 @@
           <template v-if="!isBooleanContent(cellProps)"
             >{{ cellContent(cellProps) }}
           </template>
+          <q-toggle
+            v-else-if="
+              cellProps.col.booleanFieldType === BOOLEAN_FIELD_TYPE.TOGGLE
+            "
+            :model-value="cellContent(cellProps)"
+            @update:model-value="
+              updateRow(cellProps.row, cellProps.col.field, $event)
+            "
+          />
           <q-checkbox
             v-else
             :disable="cellType(cellProps) === CellType.boolean"
@@ -106,14 +115,17 @@
         />
       </template>
       <template #top-right="headerProps">
+        <slot name="header" v-bind="headerProps" />
         <q-input
           v-if="!hideSearch"
-          v-model="filter"
+          v-model="filter.search"
           :placeholder="$t('general.search')"
           borderless
+          class="bg-grey-2 q-px-md"
           debounce="300"
           dense
           hide-bottom-space
+          style="border-radius: 5px"
         >
           <template #append>
             <q-icon name="search" />
@@ -139,7 +151,7 @@
             <q-item v-bind="itemProps">
               <q-item-section>
                 <q-item-label>
-                  {{ opt.label }}
+                  {{ (opt as ColumnInterface).label }}
                 </q-item-label>
               </q-item-section>
               <q-item-section side>
@@ -163,13 +175,6 @@
       </template>
     </QTable>
     <div class="row">
-      <div class="col">
-        <div
-          v-if="multi"
-          class="text-subtitle2 q-pa-sm"
-          v-text="$t('table.ctrl_shift_hint')"
-        />
-      </div>
       <div class="col">
         <div class="row justify-end" style="gap: 10px">
           <slot :selected="selected" name="actions" />
@@ -223,6 +228,7 @@ import { QueryObject } from 'src/apollo/query';
 import BaseEntity from 'src/flox/core/base-entity/entities/BaseEntity';
 import ConfirmButton from 'components/buttons/ConfirmButton.vue';
 import { ValidationRule } from 'src/tools/validation.tool';
+import { BOOLEAN_FIELD_TYPE } from 'src/data/ENUM';
 
 const props = withDefaults(
   defineProps<{
@@ -245,6 +251,7 @@ const props = withDefaults(
     removeIcon?: string;
     removeLabel?: string;
     optionsMenu?: boolean;
+    filter?: Record<string, any>;
   }>(),
   {
     updateMutation: undefined,
@@ -264,6 +271,7 @@ const props = withDefaults(
     prependName: '',
     tableProps: () => ({}),
     optionsMenu: false,
+    filter: () => ({}),
   }
 );
 
@@ -391,12 +399,20 @@ function validateInput(column: ColumnInterface): (value: any) => boolean {
   };
 }
 
+const propsFilter = computed(() => {
+  return { ...props.filter };
+});
+
 watch(selected, (val) => {
   emit('update:selected', val);
 });
 
 watchEffect(() => {
   columns.value = props.columns;
+});
+
+watchEffect(() => {
+  filter.value = { ...filter.value, ...propsFilter.value };
 });
 
 const extendedColumns: ComputedRef<ColumnInterface<BaseEntity>[]> = computed(

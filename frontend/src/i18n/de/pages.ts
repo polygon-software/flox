@@ -7,12 +7,23 @@ export default {
       title: 'Account',
     },
     home: {
-      title: 'Home',
+      title: 'Dashboard',
       meta: {
-        title: 'Flox',
-        description: 'Dies ist eine flox demo-seite',
-        keywords: 'flox,demo,polygon',
+        title: 'Dashboard',
+        description: 'Diese Seite zeigt alle Aufträge von Privetec an',
+        keywords: 'privetec,home,dashboard, aufträge',
       },
+    },
+    login: {
+      title: 'Login',
+      meta: {
+        title: 'Willkommen bei PriveTec',
+        description: 'Auf dieser Seite kann man sich bei PriveTec einloggen',
+        keywords: 'privetec,login',
+      },
+    },
+    create: {
+      title: 'Auftrag erstellen',
     },
   },
 };

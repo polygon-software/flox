@@ -1,0 +1,13 @@
+export enum TABLES {
+  ADDRESS = 'ADDRESS',
+  ARTICLE = 'ARTICLE',
+  BILLING = 'BILLING',
+  CLIENT = 'CLIENT',
+  DEVICE = 'DEVICE',
+  EXPENSE = 'EXPENSE',
+  FORM = 'FORM',
+  IMAGE_FILE = 'IMAGE_FILE',
+  JOB = 'JOB',
+  TENANT = 'TENANT',
+}
+export const ALL_TABLES = Object.values(TABLES);

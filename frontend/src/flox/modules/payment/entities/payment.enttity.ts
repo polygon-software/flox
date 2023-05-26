@@ -42,7 +42,7 @@ export default class PaymentEntity extends BaseEntity {
   @IsNotEmpty()
   currency?: string;
 
-  @IsOptional()
   @IsObject()
+  @IsOptional()
   buyer?: UserEntity;
 }

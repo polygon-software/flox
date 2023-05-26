@@ -8,7 +8,7 @@ import { forgotPasswordFormKey } from '../FORM_KEYS';
 // Forgot password -> enter e-mail
 const forgotPasswordCard = new FormCard(
   forgotPasswordFormKey.cardKey,
-  [FIELDS.USERNAME],
+  [[FIELDS.USERNAME]],
   i18n.global.t('card_titles.forgot_password')
 );
 

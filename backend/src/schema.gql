@@ -41,6 +41,35 @@ input AddUsersToUserGroupInput {
   userUuids: [ID!]!
 }
 
+type Address {
+  """Additional address string"""
+  additionalAddress: String
+
+  """City"""
+  city: String!
+
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Number"""
+  number: String!
+
+  """Street"""
+  street: String!
+
+  """Last modification date"""
+  updatedAt: DateTime
+
+  """UUID"""
+  uuid: ID!
+
+  """Zip Code"""
+  zipCode: Float!
+}
+
 input AdminCreateUserInput {
   deliveryMediums: [DeliveryMediums!]!
   email: String!
@@ -56,6 +85,64 @@ type AdminCreateUserOutput {
 
   """password"""
   password: String
+}
+
+type Article {
+  """Amount"""
+  amount: Float
+
+  """Article number"""
+  articleNumber: String
+
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Discount in percent"""
+  discount: Float
+
+  """Form this arcticle belongs to"""
+  form: Form
+
+  """Manufacturer number"""
+  manufacturerNumber: String
+
+  """Last modification date"""
+  updatedAt: DateTime
+
+  """UUID"""
+  uuid: ID!
+}
+
+type Billing {
+  """Billing address"""
+  address: Address
+
+  """Billing company name"""
+  companyName: String
+
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Billing e-mail address"""
+  email: String
+
+  """First name on bill"""
+  firstName: String
+
+  """Last name on bill"""
+  lastName: String
+
+  """Last modification date"""
+  updatedAt: DateTime
+
+  """UUID"""
+  uuid: ID!
 }
 
 type BoundingBox {
@@ -87,6 +174,41 @@ type BoundingBox {
   width: Float!
 }
 
+type Client {
+  """Client's address"""
+  address: Address
+
+  """Legal form of the client's company"""
+  companyLegalForm: LegalForm
+
+  """Name of the client's company"""
+  companyName: String
+
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Client's e-mail address"""
+  email: String
+
+  """Client's first name"""
+  firstName: String
+
+  """Client's last name"""
+  lastName: String
+
+  """Client's phone number"""
+  phoneNumber: String
+
+  """Last modification date"""
+  updatedAt: DateTime
+
+  """UUID"""
+  uuid: ID!
+}
+
 input CreateFileInput {
   """Name of File"""
   filename: String!
@@ -103,6 +225,71 @@ input CreateFileInput {
   """Size of file in bytes"""
   size: Int!
   writeAccess: [ID!] = []
+}
+
+input CreateFormInput {
+  """Articles"""
+  articles: [UpdateArticleInput!]
+
+  """Billing"""
+  billing: UpdateBillingInput
+
+  """Client"""
+  client: UpdateClientInput
+
+  """Problem description"""
+  description: String
+
+  """Devices"""
+  devices: [UpdateDeviceInput!]
+
+  """Employee's ID"""
+  employeeId: String
+
+  """Date the form is resolved"""
+  endDate: DateTime
+
+  """Expenses"""
+  expenses: [UpdateExpenseInput!]
+
+  """External order number"""
+  externalOrderNumber: Float
+
+  """Additional text"""
+  freeText: String
+
+  """Internal order number"""
+  internalOrderNumber: Float
+
+  """Whether the job is an emergency"""
+  isEmergency: Boolean
+
+  """Job details"""
+  job: UpdateJobInput
+
+  """Whether the measured voltage and power (NIV) is correct"""
+  measurePower: Boolean
+
+  """Object number"""
+  objectNumber: Float
+
+  """Owner"""
+  owner: String
+
+  """Protocol date"""
+  protocolDate: DateTime
+
+  """Protocol text"""
+  protocolText: String
+
+  """Date the form is created"""
+  startDate: DateTime
+
+  """Tenant"""
+  tenant: UpdateTenantInput
+
+  """Total cost of the job"""
+  totalAmount: Float
 }
 
 input CreateImageInput {
@@ -135,12 +322,98 @@ enum DeliveryMediums {
   SMS
 }
 
+type Device {
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Additional information about the device"""
+  deviceInformation: String
+
+  """Manufacturer that made the device"""
+  deviceManufacturer: String
+
+  """Device's model"""
+  deviceModel: String
+
+  """Device's production number"""
+  deviceProductionNumber: String
+
+  """Year the device was manufactured"""
+  deviceProductionYear: Float
+
+  """Device to repair"""
+  deviceType: DeviceType
+
+  """Form the device belongs to"""
+  form: Form!
+
+  """Last modification date"""
+  updatedAt: DateTime
+
+  """UUID"""
+  uuid: ID!
+}
+
+enum DeviceType {
+  DISHWASHER
+  FRIDGE
+  HOB
+  MICROWAVE
+  OTHER
+  OVEN
+  STEAMER
+  STOVE
+  TUMBLE_DRYER
+  VENTILATION
+  WASHING_MACHNE
+}
+
+type Expense {
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Discount in percent"""
+  discount: Float
+
+  """Form the expense belongs to"""
+  form: Form
+
+  """Expense name"""
+  name: String
+
+  """Amount of time needed for the job"""
+  timeAmount: Float
+
+  """Last modification date"""
+  updatedAt: DateTime
+
+  """UUID"""
+  uuid: ID!
+}
+
 type FileSearchOutput {
   """How many items are found within database"""
   count: String!
 
   """Files that fit query"""
   data: [S3File!]!
+}
+
+input FilterInput {
+  """Whether is findable"""
+  findable: Boolean
+}
+
+enum Floor {
+  BASEMENT
+  GROUND_FLOOR
+  UPPER_FLOOR
 }
 
 type FolderOutput {
@@ -161,6 +434,126 @@ type FolderOutput {
 
   """Name of the folder"""
   uuid: ID!
+}
+
+type Form {
+  """Articles"""
+  articles: [Article!]
+
+  """Billing information"""
+  billing: Billing
+
+  """Job client"""
+  client: Client
+
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Problem description"""
+  description: String
+
+  """Devices to repair"""
+  devices: [Device!]
+
+  """Employee's ID"""
+  employeeId: String
+
+  """Date the form is resolved"""
+  endDate: DateTime
+
+  """Expenses"""
+  expenses: [Expense!]
+
+  """External order number"""
+  externalOrderNumber: Float
+
+  """Additonal text"""
+  freeText: String
+
+  """Additonal images"""
+  images: [ImageFile!]
+
+  """Internal order number"""
+  internalOrderNumber: Float
+
+  """Whether the job is an emergency"""
+  isEmergency: Boolean!
+
+  """Whether the job is finished"""
+  isFinished: Boolean!
+
+  """Whether the form can be pulled by ERP"""
+  isPullable: Boolean!
+
+  """Job details"""
+  job: Job
+
+  """Whether the measured voltage and power (NIV) is correct"""
+  measurePower: Boolean
+
+  """Object number"""
+  objectNumber: Float
+
+  """Owner"""
+  owner: String
+
+  """Protocol date"""
+  protocolDate: DateTime
+
+  """Protocol text"""
+  protocolText: String
+
+  """Date the form is created"""
+  startDate: DateTime
+
+  """Tenant"""
+  tenant: Tenant
+
+  """Total cost of the job"""
+  totalAmount: Float
+
+  """Last modification date"""
+  updatedAt: DateTime
+
+  """UUID"""
+  uuid: ID!
+
+  """Whether the form was pulled by ERP"""
+  wasPulled: Boolean!
+}
+
+input FormFilterInput {
+  """Date the form is created"""
+  createdAt: DateTime
+
+  """Date the form is resolved"""
+  endDate: DateTime
+
+  """Whether is findable"""
+  findable: Boolean
+
+  """Whether the job is an emergency"""
+  isEmergency: Boolean
+
+  """Whether the job is finished"""
+  isFinished: Boolean
+
+  """Job filter"""
+  job: JobFilterInput
+
+  """Whether the form was pulled by ERP"""
+  wasPulled: Boolean
+}
+
+type FormSearchOutput {
+  """How many items are found within database"""
+  count: Float!
+
+  """Forms that fit query"""
+  data: [Form!]!
 }
 
 type Image {
@@ -207,12 +600,105 @@ type Image {
   width: Float
 }
 
+type ImageFile {
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Name of File"""
+  filename: String
+
+  """Form the image belongs to"""
+  form: Form!
+
+  """Marks this object as readable for all logged in users"""
+  loggedInReadAccess: Boolean!
+
+  """Files mime type"""
+  mimetype: String!
+
+  """Owner of this object, has full control over it"""
+  owner: User!
+
+  """Path that leads to file"""
+  path: String
+
+  """Marks this object as publicly readable"""
+  publicReadAccess: Boolean!
+
+  """Signed URL to upload object. Only works 1 time"""
+  signedUrl: String
+
+  """Filesize in bytes"""
+  size: Float!
+
+  """Last modification date"""
+  updatedAt: DateTime
+
+  """Pre-signed download URL"""
+  url: String
+
+  """UUID"""
+  uuid: ID!
+}
+
 type ImageSearchOutput {
   """How many items are found within database"""
   count: String!
 
   """Image that fit query"""
   data: [Image!]!
+}
+
+type Job {
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Job status"""
+  status: JobStatus
+
+  """Job type"""
+  type: JobType
+
+  """Last modification date"""
+  updatedAt: DateTime
+
+  """UUID"""
+  uuid: ID!
+}
+
+input JobFilterInput {
+  """Whether is findable"""
+  findable: Boolean
+
+  """Job status"""
+  status: JobStatus
+
+  """Job type"""
+  type: JobType
+}
+
+enum JobStatus {
+  NONE
+  OPEN
+  ORDERED
+  PENDING
+  RECEIVED
+  TERMINATED
+}
+
+enum JobType {
+  APPOINTMENT
+  EXTERNAL_SERVICE
+  MATERIAL_ORDER
+  NEW_DEVICES
+  NONE
+  OFFER
 }
 
 type Label {
@@ -242,6 +728,14 @@ type Label {
 
   """UUID"""
   uuid: ID!
+}
+
+enum LegalForm {
+  COOPERATIVE
+  INDIVIDUAL_COMPANY
+  LIMITED_PARTNERSHIP
+  LLC
+  PUBLIC_COMPANY
 }
 
 input ManipulateAccessGroupsInput {
@@ -324,6 +818,9 @@ type Mutation {
   UpdateFile(updateFileInput: UpdateFileInput!): S3File!
   UpdateUser(updateUserInput: UpdateUserInput!): User!
   UpdateUserGroup(updateUserGroupInput: UpdateUserGroupInput!): UserGroup!
+  createForm(createFormInput: CreateFormInput!): Form!
+  deleteForm(deleteInput: DeleteInput!): Form!
+  updateForm(updateFormInput: UpdateFormInput!): Form!
 }
 
 type Notification {
@@ -573,11 +1070,14 @@ type Query {
     """URL expiration duration (in seconds)"""
     expires: Int
 
-    """Search for text within items"""
-    filter: String
+    """Filter by property and value"""
+    filter: FilterInput
 
     """Subset of the module's allowed search keys to search in"""
     searchKeys: [String!]
+
+    """Search for text within items"""
+    searchTerm: String
 
     """How many items to skip"""
     skip: Int = 0
@@ -595,11 +1095,14 @@ type Query {
     """URL expiration duration (in seconds)"""
     expires: Int
 
-    """Search for text within items"""
-    filter: String
+    """Filter by property and value"""
+    filter: FilterInput
 
     """Subset of the module's allowed search keys to search in"""
     searchKeys: [String!]
+
+    """Search for text within items"""
+    searchTerm: String
 
     """How many items to skip"""
     skip: Int = 0
@@ -617,11 +1120,14 @@ type Query {
     """URL expiration duration (in seconds)"""
     expires: Int
 
-    """Search for text within items"""
-    filter: String
+    """Filter by property and value"""
+    filter: FilterInput
 
     """Subset of the module's allowed search keys to search in"""
     searchKeys: [String!]
+
+    """Search for text within items"""
+    searchTerm: String
 
     """How many items to skip"""
     skip: Int = 0
@@ -639,11 +1145,14 @@ type Query {
     """URL expiration duration (in seconds)"""
     expires: Int
 
-    """Search for text within items"""
-    filter: String
+    """Filter by property and value"""
+    filter: FilterInput
 
     """Subset of the module's allowed search keys to search in"""
     searchKeys: [String!]
+
+    """Search for text within items"""
+    searchTerm: String
 
     """How many items to skip"""
     skip: Int = 0
@@ -661,11 +1170,14 @@ type Query {
     """URL expiration duration (in seconds)"""
     expires: Int
 
-    """Search for text within items"""
-    filter: String
+    """Filter by property and value"""
+    filter: FilterInput
 
     """Subset of the module's allowed search keys to search in"""
     searchKeys: [String!]
+
+    """Search for text within items"""
+    searchTerm: String
 
     """How many items to skip"""
     skip: Int = 0
@@ -680,11 +1192,14 @@ type Query {
     """Sort descending"""
     descending: Boolean = false
 
-    """Search for text within items"""
-    filter: String
+    """Filter by property and value"""
+    filter: FilterInput
 
     """Subset of the module's allowed search keys to search in"""
     searchKeys: [String!]
+
+    """Search for text within items"""
+    searchTerm: String
 
     """How many items to skip"""
     skip: Int = 0
@@ -702,11 +1217,14 @@ type Query {
     """URL expiration duration (in seconds)"""
     expires: Int
 
-    """Search for text within items"""
-    filter: String
+    """Filter by property and value"""
+    filter: FilterInput
 
     """Subset of the module's allowed search keys to search in"""
     searchKeys: [String!]
+
+    """Search for text within items"""
+    searchTerm: String
 
     """How many items to skip"""
     skip: Int = 0
@@ -721,11 +1239,14 @@ type Query {
     """Sort descending"""
     descending: Boolean = false
 
-    """Search for text within items"""
-    filter: String
+    """Filter by property and value"""
+    filter: FilterInput
 
     """Subset of the module's allowed search keys to search in"""
     searchKeys: [String!]
+
+    """Search for text within items"""
+    searchTerm: String
 
     """How many items to skip"""
     skip: Int = 0
@@ -740,11 +1261,14 @@ type Query {
     """Sort descending"""
     descending: Boolean = false
 
-    """Search for text within items"""
-    filter: String
+    """Filter by property and value"""
+    filter: FilterInput
 
     """Subset of the module's allowed search keys to search in"""
     searchKeys: [String!]
+
+    """Search for text within items"""
+    searchTerm: String
 
     """How many items to skip"""
     skip: Int = 0
@@ -770,6 +1294,29 @@ type Query {
     userUuid: ID!
   ): [UserGroup!]!
   Users(uuids: [ID!] = []): [User!]!
+  getForm(uuid: ID!): Form!
+  searchForms(
+    """Sort descending"""
+    descending: Boolean = false
+
+    """Filter by property and search term"""
+    filter: FormFilterInput
+
+    """Subset of the module's allowed search keys to search in"""
+    searchKeys: [String!]
+
+    """Search for text within items"""
+    searchTerm: String
+
+    """How many items to skip"""
+    skip: Int = 0
+
+    """Sort by property"""
+    sortBy: String
+
+    """Number of items to load"""
+    take: Int = 500
+  ): FormSearchOutput!
 }
 
 input RemoveUserFromUserGroupInput {
@@ -835,6 +1382,140 @@ input SignupCreateUserInput {
   username: String!
 }
 
+type Tenant {
+  """Tenant's address"""
+  address: Address
+
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Client's e-mail address"""
+  email: String
+
+  """Tenant's first name"""
+  firstName: String
+
+  """Floor number of tenant's apartment"""
+  floorNumber: Float
+
+  """Floor type of tenant's apartment"""
+  floorType: Floor
+
+  """Tenant's last name"""
+  lastName: String
+
+  """Tenant's phone number"""
+  phoneNumber: String
+
+  """Last modification date"""
+  updatedAt: DateTime
+
+  """UUID"""
+  uuid: ID!
+}
+
+input UpdateAddressInput {
+  additionalAddress: String
+  city: String
+  number: String
+  street: String
+  uuid: ID
+  zipCode: Float
+}
+
+input UpdateArticleInput {
+  """Amount"""
+  amount: Float
+
+  """Article number"""
+  articleNumber: String
+
+  """Discount in percent"""
+  discount: Float
+
+  """Manufacturer number"""
+  manufacturerNumber: String
+  uuid: ID
+}
+
+input UpdateBillingInput {
+  """Billing address"""
+  address: UpdateAddressInput
+
+  """Billing company name"""
+  companyName: String
+
+  """Billing e-mail address"""
+  email: String
+
+  """First name on bill"""
+  firstName: String
+
+  """Last name on bill"""
+  lastName: String
+  uuid: ID
+}
+
+input UpdateClientInput {
+  """Client's address"""
+  address: UpdateAddressInput
+
+  """Legal form of the client's company"""
+  companyLegalForm: LegalForm
+
+  """Name of the client's company"""
+  companyName: String
+
+  """Client's e-mail address"""
+  email: String
+
+  """Client's first name"""
+  firstName: String
+
+  """Client's last name"""
+  lastName: String
+
+  """Client's phone number"""
+  phoneNumber: String
+  uuid: ID
+}
+
+input UpdateDeviceInput {
+  """Additional information about the device"""
+  deviceInformation: String
+
+  """Manufacturer that made the device"""
+  deviceManufacturer: String
+
+  """Device's model"""
+  deviceModel: String
+
+  """Device's production number"""
+  deviceProductionNumber: String
+
+  """Year the device was manufactured"""
+  deviceProductionYear: Float
+
+  """Device to repair"""
+  deviceType: DeviceType
+  uuid: ID
+}
+
+input UpdateExpenseInput {
+  """Discount in percent"""
+  discount: Float
+
+  """Expense name"""
+  name: String
+
+  """Amount of time needed for the job"""
+  timeAmount: Float
+  uuid: ID
+}
+
 input UpdateFileInput {
   """Name of File"""
   filename: String
@@ -844,8 +1525,115 @@ input UpdateFileInput {
   uuid: ID!
 }
 
+input UpdateFormInput {
+  """Articles"""
+  articles: [UpdateArticleInput!]
+
+  """Billing"""
+  billing: UpdateBillingInput
+
+  """Client"""
+  client: UpdateClientInput
+
+  """Problem description"""
+  description: String
+
+  """Devices"""
+  devices: [UpdateDeviceInput!]
+
+  """Employee's ID"""
+  employeeId: String
+
+  """Date the form is resolved"""
+  endDate: DateTime
+
+  """Expenses"""
+  expenses: [UpdateExpenseInput!]
+
+  """External order number"""
+  externalOrderNumber: Float
+
+  """Additional text"""
+  freeText: String
+
+  """Internal order number"""
+  internalOrderNumber: Float
+
+  """Whether the job is an emergency"""
+  isEmergency: Boolean
+
+  """Whether the job is finished"""
+  isFinished: Boolean
+
+  """Whether the form can be pulled by ERP"""
+  isPullable: Boolean
+
+  """Job details"""
+  job: UpdateJobInput
+
+  """Whether the measured voltage and power (NIV) is correct"""
+  measurePower: Boolean
+
+  """Object number"""
+  objectNumber: Float
+
+  """Owner"""
+  owner: String
+
+  """Protocol date"""
+  protocolDate: DateTime
+
+  """Protocol text"""
+  protocolText: String
+
+  """Date the form is created"""
+  startDate: DateTime
+
+  """Tenant"""
+  tenant: UpdateTenantInput
+
+  """Total cost of the job"""
+  totalAmount: Float
+
+  """Form UUID"""
+  uuid: ID
+}
+
 input UpdateInput {
   uuid: ID!
+}
+
+input UpdateJobInput {
+  """Job status"""
+  status: JobStatus
+
+  """Job type"""
+  type: JobType
+  uuid: ID
+}
+
+input UpdateTenantInput {
+  """Tenant's address"""
+  address: UpdateAddressInput
+
+  """Client's e-mail address"""
+  email: String
+
+  """Tenant's first name"""
+  firstName: String
+
+  """Floor number of tenant's apartment"""
+  floorNumber: Float
+
+  """Floor type of tenant's apartment"""
+  floorType: Floor
+
+  """Tenant's last name"""
+  lastName: String
+
+  """Tenant's phone number"""
+  phoneNumber: String
+  uuid: ID
 }
 
 input UpdateUserGroupInput {

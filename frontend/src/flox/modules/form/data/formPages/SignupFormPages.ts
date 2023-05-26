@@ -7,12 +7,12 @@ import { FIELDS } from '../FIELDS';
 import { signupFormKey } from '../FORM_KEYS';
 
 const fields = auth.moduleConfig().emailAsUsername
-  ? [FIELDS.EMAIL, FIELDS.PASSWORD_REPEAT, FIELDS.SELECT_LANGUAGE]
+  ? [[FIELDS.EMAIL], [FIELDS.PASSWORD_REPEAT], [FIELDS.SELECT_LANGUAGE]]
   : [
-      FIELDS.USERNAME,
-      FIELDS.EMAIL,
-      FIELDS.PASSWORD_REPEAT,
-      FIELDS.SELECT_LANGUAGE,
+      [FIELDS.USERNAME],
+      [FIELDS.EMAIL],
+      [FIELDS.PASSWORD_REPEAT],
+      [FIELDS.SELECT_LANGUAGE],
     ];
 
 // Signup

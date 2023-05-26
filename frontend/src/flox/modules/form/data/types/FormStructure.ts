@@ -1,7 +1,5 @@
 import { computed, ref, Ref } from 'vue';
 
-import { ValidationRule } from 'src/tools/validation.tool';
-
 import { useFormStore } from '../../stores/form';
 
 import FormPage from './FormPage';
@@ -35,18 +33,21 @@ export default class FormStructure {
 
     // For every card on current page, check every field's validity
     return currentPage.cards.every((card: FormCard) => {
-      return card.fields.every((field: Field) => {
-        const { rules } = field.attributes;
-        return rules.every((rule: ValidationRule) => {
-          // Get relevant value from store
-          const fieldValue =
-            this.store.data[this.key]?.[currentPage.key]?.[card.key]?.[
-              field.key
-            ];
-          // If the rule returns true, it is fulfilled (otherwise, it will return an error message)
-          return (
-            typeof rule(fieldValue) === 'boolean' && rule(fieldValue) === true
-          );
+      // Update here to handle 2D array of fields
+      return card.fieldRows.every((fieldArray: Field[] | Field) => {
+        const fields = Array.isArray(fieldArray) ? fieldArray : [fieldArray];
+
+        return fields.every((field: Field) => {
+          const { rules } = field.attributes;
+
+          return rules.every((rule) => {
+            const fieldValue =
+              this.store.data[this.key]?.[currentPage.key]?.[card.key]?.[
+                field.key
+              ];
+            const ruleResult = rule(fieldValue);
+            return typeof ruleResult === 'boolean' && ruleResult;
+          });
         });
       });
     });

@@ -1,33 +1,12 @@
 <template>
-  <div class="blurred-background"></div>
-  <q-page class="flex flex-center column bg-gradient">
+  <q-page class="flex flex-center column" style="background-color: #b4dafa">
     <!-- Login Card -->
     <q-card class="login-container" flat>
-      <div class="row" style="height: 100%; align-items: stretch">
-        <div class="col-7 color-container gt-sm">
-          <!-- https://undraw.co/search make sure to change color on webpage to primary -->
-          <img
-            alt="welcome graphics"
-            src="../assets/images/undraw_working_re_ddwy.svg"
-          />
-          <h4>{{ $t('authentication.welcome_back') }}</h4>
-          <p>{{ $t('authentication.welcome_text') }}</p>
+      <div class="col-12 col-md-5 form-container q-px-lg">
+        <div class="q-mt-xl text-h6 text-center">
+          {{ $t('pages.login.meta.title') }}
         </div>
-        <div class="col-12 col-md-5 form-container q-px-lg">
-          <LoginForm @submit="onLogin" />
-          <div class="col q-mt-md text-center">
-            <q-btn
-              :label="$t('authentication.signup')"
-              class="primary"
-              dense
-              flat
-              no-caps
-              style="text-decoration: underline"
-              @click="goToSignup"
-            >
-            </q-btn>
-          </div>
-        </div>
+        <LoginForm @submit="onLogin" />
       </div>
     </q-card>
   </q-page>
@@ -38,13 +17,10 @@ import { inject } from 'vue';
 import { useQuasar } from 'quasar';
 
 import LoginForm from 'src/flox/modules/auth/components/forms/LoginForm.vue';
-import RouterService from 'src/services/RouterService';
-import ROUTES from 'src/router/routes';
 
 import AuthenticationService from '../flox/modules/auth/services/auth.service';
 
 const $authService: AuthenticationService | undefined = inject('$authService');
-const $routerService: RouterService | undefined = inject('$routerService');
 const $q = useQuasar();
 
 /**
@@ -62,14 +38,6 @@ async function onLogin({
   password: string;
 }): Promise<void> {
   await $authService?.login(identifier, password, $q);
-}
-
-/**
- * Redirects to the signup page
- * @returns void
- */
-function goToSignup(): void {
-  $routerService?.routeTo(ROUTES.SIGNUP).catch((e) => console.error(e));
 }
 </script>
 

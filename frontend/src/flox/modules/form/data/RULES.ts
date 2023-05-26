@@ -25,6 +25,7 @@ import {
 /**
  * This file contains rules that can be applied to input forms.
  */
+
 const IS_EMAIL = classValidatorRule(
   isEmail,
   i18n.global.t('errors.invalid_email')

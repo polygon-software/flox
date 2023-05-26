@@ -1,6 +1,9 @@
 <template>
   <FloxWrapper :module="MODULES.AUTH">
-    <div class="column q-pa-sm text-center justify-center" style="margin: 50px">
+    <div
+      class="column q-pa-sm text-center justify-center"
+      style="margin: 50px 0 50px"
+    >
       <GenericForm
         :finish-label="$t('buttons.login')"
         :form-key="loginFormKey.formKey"
@@ -9,7 +12,7 @@
         @submit="onLogin"
       />
     </div>
-    <div class="col q-mt-md text-center">
+    <div class="col text-center">
       <q-btn
         :label="$t('authentication.forgot_password')"
         class="primary"
@@ -63,7 +66,7 @@ async function onLogin(): Promise<void> {
 
   const password = fetchByKey({
     ...loginFormKey,
-    fieldKey: FIELDS.PASSWORD.key,
+    fieldKey: FIELDS.PASSWORD_LOGIN.key,
   }) as string;
 
   try {

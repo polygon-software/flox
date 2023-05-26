@@ -3,6 +3,8 @@ import set from 'lodash/set';
 import get from 'lodash/get';
 import { exportFile, QInputProps, useQuasar } from 'quasar';
 import { computed, ComputedRef, nextTick, Ref, ref, toRaw, watch } from 'vue';
+import { WatchQueryFetchPolicy } from '@apollo/client';
+import _ from 'lodash';
 
 import { i18n } from 'boot/i18n';
 import { executeMutation, MutationObject } from 'src/apollo/mutation';
@@ -14,6 +16,7 @@ import {
   showErrorNotification,
   showSuccessNotification,
 } from 'src/tools/notification.tool';
+import { BOOLEAN_FIELD_TYPE } from 'src/data/ENUM';
 
 export interface PageRequest {
   sortBy: string;
@@ -31,7 +34,8 @@ export interface PageParameters {
   take: number;
   sortBy: string;
   descending: boolean;
-  filter?: string;
+  searchTerm?: string;
+  filter?: Record<string, any>;
 }
 
 export enum ColumnAlign {
@@ -67,6 +71,8 @@ export interface ColumnInterface<T = any> {
   headerStyle?: string;
   edit?: boolean;
   qInputProps?: Omit<QInputProps, 'modelValue'>;
+  visible?: boolean;
+  booleanFieldType?: BOOLEAN_FIELD_TYPE;
 }
 
 /**
@@ -95,12 +101,12 @@ export function useDataTable(
   visibleColumns: ComputedRef<ColumnInterface<BaseEntity>[]>;
   selected: Ref<BaseEntity[]>;
   visibleColumnNames: Ref<string[]>;
-  filter: Ref<string>;
+  filter: Ref<Record<string, any>>;
   loading: Ref<boolean>;
   pagination: Ref<PaginationConfig>;
   onRequest: (dataProps: {
     pagination: PageRequest;
-    filter?: string;
+    filter?: Ref<Record<string, any>>;
   }) => Promise<void>;
   exportTable: () => void;
   handleSelection: ({
@@ -133,7 +139,7 @@ export function useDataTable(
       );
     }
   );
-  const filter: Ref<string> = ref('');
+  const filter: Ref<Record<string, string | any>> = ref({ search: '' });
   const loading: Ref<boolean> = ref(false);
   const pagination: Ref<PaginationConfig> = ref({
     sortBy,
@@ -144,21 +150,26 @@ export function useDataTable(
   });
 
   watch(columns, () => {
-    visibleColumnNames.value = columns.value.map((column) => column.name);
+    visibleColumnNames.value = columns.value
+      .filter((column) => column.visible)
+      .map((column) => column.name);
   });
 
   /**
    * Fetches Data from the Server
    *
    * @param pageRequest - contains parameters for requesting a data page
+   * @param {WatchQueryFetchPolicy} [cacheConfig] - cache configuration
    * @returns rows from server and count of total rows fitting criteria
    */
   async function fetchFromServer(
-    pageRequest: PageParameters
+    pageRequest: PageParameters,
+    cacheConfig?: WatchQueryFetchPolicy
   ): Promise<{ data: BaseEntity[]; count: number }> {
     const queryResult = await executeQuery<CountQuery<BaseEntity>>(
       queryObject,
-      pageRequest
+      pageRequest,
+      cacheConfig
     );
     return queryResult.data;
   }
@@ -172,7 +183,7 @@ export function useDataTable(
    */
   async function onRequest(dataProps: {
     pagination: PageRequest;
-    filter?: string;
+    filter?: Record<string, any>;
   }): Promise<void> {
     const { filter: filterProp } = dataProps;
     const {
@@ -188,13 +199,24 @@ export function useDataTable(
 
     const paginationSkip = (paginationPage - 1) * paginationTake;
 
-    const { count, data } = await fetchFromServer({
-      skip: paginationSkip,
-      take: paginationTake,
-      filter: filterProp,
-      sortBy: paginationSortBy,
-      descending: paginationDescending,
-    });
+    const searchTerm: string | undefined = filterProp?.search
+      ? (filterProp.search as string)
+      : undefined;
+
+    const reducedFilterProp = { ...filterProp };
+    delete reducedFilterProp.search;
+
+    const { count, data } = await fetchFromServer(
+      {
+        skip: paginationSkip,
+        take: paginationTake,
+        searchTerm,
+        filter: reducedFilterProp,
+        sortBy: paginationSortBy,
+        descending: paginationDescending,
+      },
+      'cache-and-network'
+    );
     pagination.value.rowsNumber = count;
 
     rows.value.splice(0, rows.value.length, ...data);
@@ -320,7 +342,7 @@ export function useDataTable(
       }
 
       const rangeRows = tableRows.slice(firstIndex, lastIndex + 1);
-      // we need the original row object so we can match them against the rows in range
+      // we need the original row object, so we can match them against the rows in range
       const selectedRows = selected.value.map(toRaw);
 
       selected.value = added
@@ -366,6 +388,39 @@ export function useDataTable(
   }
 
   /**
+   * Deletes unneeded GraphQL values on an object and returns its cleaned state
+   * @param input - the object
+   * @param [keepCreationDate = false] - flag that keeps creation date needed for details table
+   * @returns cleaned object
+   */
+  function cleanGraphQLObject(
+    input: Record<string, unknown>,
+    keepCreationDate?: boolean
+  ): Record<string, unknown> {
+    const clone = _.cloneDeep(input);
+
+    delete clone.updatedAt;
+    // eslint-disable-next-line no-underscore-dangle
+    delete clone.__typename; // __typename is passed by GraphQL
+
+    // Recursively remove values
+    Object.keys(clone).forEach((property) => {
+      if (typeof clone[property] === 'object' && clone[property] !== null) {
+        clone[property] = cleanGraphQLObject(
+          clone[property] as Record<string, unknown>
+        );
+      }
+    });
+
+    // Remove general fields
+    if (!keepCreationDate) {
+      delete clone.createdAt;
+    }
+
+    return clone;
+  }
+
+  /**
    * Handles sending row updates to database
    *
    * @param row - row to be updated
@@ -387,7 +442,11 @@ export function useDataTable(
         updatedRowCopy,
         updateObject
       );
-      await executeMutation(updateObject, mutationVariables);
+
+      // Remove the __typename field from the mutation variables, since it breaks the backend
+      const cleanedVariables = cleanGraphQLObject(mutationVariables);
+
+      await executeMutation(updateObject, cleanedVariables);
       showSuccessNotification($q, i18n.global.t('messages.entry_edited'), {
         timeout: 500,
       });

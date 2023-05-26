@@ -39,7 +39,9 @@ export default abstract class AbstractSearchAccessControlService<
           publicReadAccess: true,
         } as FindOptionsWhere<Entity>,
       ],
-      queryArgs.filter ? this.nestedSearch(searchKeys, queryArgs.filter) : [],
+      queryArgs.searchTerm
+        ? this.nestedSearch(searchKeys, queryArgs.searchTerm)
+        : [],
     );
 
     const [data, count] = await this.repository.findAndCount({
@@ -91,7 +93,9 @@ export default abstract class AbstractSearchAccessControlService<
           ]),
         } as FindOptionsWhere<Entity>,
       ],
-      queryArgs?.filter ? this.nestedSearch(searchKeys, queryArgs.filter) : [],
+      queryArgs?.searchTerm
+        ? this.nestedSearch(searchKeys, queryArgs.searchTerm)
+        : [],
     );
 
     const [data, count] = await this.repository.findAndCount({
@@ -136,7 +140,9 @@ export default abstract class AbstractSearchAccessControlService<
           uuid: In([...ownerUuids, ...readUuids]),
         } as FindOptionsWhere<Entity>,
       ],
-      queryArgs?.filter ? this.nestedSearch(searchKeys, queryArgs.filter) : [],
+      queryArgs?.searchTerm
+        ? this.nestedSearch(searchKeys, queryArgs.searchTerm)
+        : [],
     );
 
     const [data, count] = await this.repository.findAndCount({
@@ -169,8 +175,8 @@ export default abstract class AbstractSearchAccessControlService<
   ): Promise<SearchQueryOutputInterface<Entity>> {
     const [data, count] = await this.repository.findAndCount({
       ...options,
-      where: queryArgs?.filter
-        ? this.nestedSearch(searchKeys, queryArgs.filter)
+      where: queryArgs?.searchTerm
+        ? this.nestedSearch(searchKeys, queryArgs.searchTerm)
         : undefined,
       order: queryArgs?.sortBy
         ? ({

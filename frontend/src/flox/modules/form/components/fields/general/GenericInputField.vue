@@ -11,6 +11,8 @@
         {{ tooltip.text }}
       </q-tooltip>
     </q-input>
+    <!-- Spacer to keep padding consistent to fields that have rules (where quasar auto-adds padding) -->
+    <div v-if="rules.length < 1" style="height: 20px" />
   </LabelWrapper>
 </template>
 

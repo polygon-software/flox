@@ -65,5 +65,6 @@ export default {
     no_verification_code:
       'Bitte geben Sie den Bestätigungscode ein, den Sie per E-Maile erhalten haben.',
     user_creation_failed: 'Der Benutzer konnte nicht erstellt werden.',
+    order_not_created: 'Der Auftrag konnte nicht erstellt werden.',
   },
 };
