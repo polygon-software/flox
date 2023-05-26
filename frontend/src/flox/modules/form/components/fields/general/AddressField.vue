@@ -11,10 +11,11 @@
           dense
           outlined
           type="text"
-          :rules="[IS_VALID_STREET]"
+          :rules="optional ? [] : [IS_VALID_STREET]"
           @change="saveValue"
         />
       </LabelWrapper>
+      <div style="height: 20px" />
     </div>
     <div class="col-4">
       <LabelWrapper :label="$t('fields.address.number')">
@@ -23,10 +24,11 @@
           dense
           outlined
           type="text"
-          :rules="[IS_VALID_HOUSE_NUMBER]"
+          :rules="optional ? [] : [IS_VALID_HOUSE_NUMBER]"
           @change="saveValue"
         />
       </LabelWrapper>
+      <div style="height: 20px" />
     </div>
   </div>
   <!-- Bottom Row: ZIP code & city -->
@@ -38,11 +40,12 @@
           dense
           outlined
           type="text"
-          :rules="[IS_VALID_ZIP]"
+          :rules="optional ? [] : [IS_VALID_ZIP]"
           mask="####"
           @change="saveValue"
         />
       </LabelWrapper>
+      <div style="height: 20px" />
     </div>
     <div class="col-8">
       <LabelWrapper :label="$t('fields.address.city')">
@@ -51,10 +54,11 @@
           dense
           outlined
           type="text"
-          :rules="[IS_VALID_CITY]"
+          :rules="optional ? [] : [IS_VALID_CITY]"
           @change="saveValue"
         />
       </LabelWrapper>
+      <div style="height: 20px" />
     </div>
   </div>
   <div v-if="showAdditionalAddress" class="row">
@@ -65,15 +69,20 @@
           dense
           outlined
           type="text"
-          :rules="[
-            (val) =>
-              !val ||
-              IS_VALID_STRING(val) ||
-              $t('errors.invalid_additional_address'),
-          ]"
+          :rules="
+            optional
+              ? []
+              : [
+                  (val) =>
+                    !val ||
+                    IS_VALID_STRING(val) ||
+                    $t('errors.invalid_additional_address'),
+                ]
+          "
           @change="saveValue"
         />
       </LabelWrapper>
+      <div style="height: 20px" />
     </div>
   </div>
 </template>
@@ -104,12 +113,14 @@ const props = withDefaults(
     initialValue?: AddressInput | null;
     // Wheter additional information about the address can be given
     showAdditionalAddress?: boolean;
+    optional?: boolean;
   }>(),
   {
     stateKey: null,
     title: null,
     initialValue: null,
     showAdditionalAddress: false,
+    optional: false,
   }
 );
 

@@ -80,10 +80,12 @@ export default class Tenant extends BaseEntity {
     if (this.floorType === FLOOR.GROUND_FLOOR && this.floorNumber) {
       throw new Error(`Floor number must be null for floor ${this.floorType}`);
     }
+    // when floorNumber === 0 it also evaluates to true when asked !this.floorNumber, therefore we need to check for !== 0
     if (
       (this.floorType === FLOOR.UPPER_FLOOR ||
         this.floorType === FLOOR.BASEMENT) &&
-      !this.floorNumber
+      !this.floorNumber &&
+      this.floorNumber !== 0
     ) {
       throw new Error(`Floor number must be set for ${this.floorType}`);
     }

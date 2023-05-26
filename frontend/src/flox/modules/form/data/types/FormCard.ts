@@ -14,12 +14,12 @@ export default class FormCard {
 
   constructor(
     key: string,
-    fieldGroups: Array<Field[] | Field>,
+    fieldRows: Array<Field[] | Field>,
     label?: string,
     imagePath?: string
   ) {
     this.key = key;
-    this.fieldRows = fieldGroups;
+    this.fieldRows = fieldRows;
     this.label = label ?? undefined;
     this.imagePath = imagePath ?? undefined;
   }

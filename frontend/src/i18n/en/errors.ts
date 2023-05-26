@@ -52,6 +52,7 @@ export default {
     missing_properties:
       "One or more of the following properties are missing for the given mutation: 'mutation', 'tables', 'type', 'cacheLocation'",
     entry_edit_failed: 'Edit could not be saved',
+    order_not_created: 'Order could not be created',
     entry_delete_failed: 'Entry could not be deleted',
     account_disabled:
       'Your account is disabled. Please contact a system administrator.',

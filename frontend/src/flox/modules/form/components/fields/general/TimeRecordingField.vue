@@ -73,20 +73,21 @@ import { ColumnAlign, ColumnInterface } from 'components/tables/useDataTable';
 import UserEntity from 'src/flox/modules/auth/entities/user.entity';
 import { i18n } from 'boot/i18n';
 import LabelWrapper from 'src/flox/modules/form/components/fields/general/wrappers/LabelWrapper.vue';
+import { FormStateKey, useFormStore } from 'src/flox/modules/form/stores/form';
+import TimeRecordingEntry from 'src/flox/modules/form/data/types/TimeRecordingEntry';
 
 const props = withDefaults(
   defineProps<{
-    oldTimeRecordings?: {
-      taskType: string;
-      duration: number;
-      discount: number;
-    }[];
+    // Used to fetch or store data from/to the store
+    stateKey: FormStateKey;
+    oldTimeRecordings?: TimeRecordingEntry[];
   }>(),
   {
     oldTimeRecordings: () => [],
   }
 );
 
+const store = useFormStore();
 const columns: Ref<ColumnInterface<UserEntity>[]> = ref([
   {
     name: 'taskType',
@@ -120,30 +121,34 @@ const taskTypeInput: Ref<string | null> = ref(null);
 const durationInput: Ref<string | null> = ref(null);
 const discountInput: Ref<number | null> = ref(null);
 
-const timeRecordingEntry: Ref<{
-  taskType: string | null;
-  duration: number | null;
-  discount: number | null;
-}> = ref({
-  taskType: null,
-  duration: null,
-  discount: null,
-});
+const timeRecordingEntry: Ref<TimeRecordingEntry> = ref(
+  new TimeRecordingEntry(null, null, null)
+);
 
-// TODO: declare type
-const timeRecordings: Ref<
-  {
-    taskType: string | null;
-    duration: number | null;
-    discount: number | null;
-  }[]
-> = ref(cloneDeep(props.oldTimeRecordings));
+const timeRecordings: Ref<TimeRecordingEntry[]> = ref(
+  cloneDeep(props.oldTimeRecordings)
+);
+
+/**
+ * Save the updated value if valid, otherwise null
+ * @returns void
+ */
+function saveValue(): void {
+  if (timeRecordings.value && timeRecordings.value.length > 0) {
+    if (props.stateKey) {
+      store.setValue(props.stateKey, timeRecordings.value);
+    }
+  } else if (props.stateKey) {
+    store.setValue(props.stateKey, null);
+  }
+}
 
 /**
  * Deletes a row from the table
  */
 function deleteRow(index: number): void {
   timeRecordings.value.splice(index, 1);
+  saveValue();
 }
 
 /**
@@ -161,11 +166,7 @@ function isTimeRecordingValid(): boolean {
  * Sets all values of inputs and timeRecordingEntry to null
  */
 function setValuesToNull(): void {
-  timeRecordingEntry.value = {
-    taskType: null,
-    duration: null,
-    discount: null,
-  };
+  timeRecordingEntry.value = new TimeRecordingEntry(null, null, null);
   taskTypeInput.value = null;
   durationInput.value = null;
   discountInput.value = null;
@@ -181,6 +182,7 @@ function addTaskType(val: string): void {
 
   if (isTimeRecordingValid()) {
     timeRecordings.value.push(timeRecordingEntry.value);
+    saveValue();
     setValuesToNull();
   }
 }
@@ -191,10 +193,11 @@ function addTaskType(val: string): void {
  * @returns {void}
  */
 function addDuration(val: number): void {
-  timeRecordingEntry.value.duration = val;
+  timeRecordingEntry.value.duration = Number(val);
 
   if (isTimeRecordingValid()) {
     timeRecordings.value.push(timeRecordingEntry.value);
+    saveValue();
     setValuesToNull();
   }
 }
@@ -205,9 +208,10 @@ function addDuration(val: number): void {
  * @returns {void}
  */
 function addDiscount(val: number): void {
-  timeRecordingEntry.value.discount = val;
+  timeRecordingEntry.value.discount = Number(val);
   if (isTimeRecordingValid()) {
     timeRecordings.value.push(timeRecordingEntry.value);
+    saveValue();
     setValuesToNull();
   }
 }

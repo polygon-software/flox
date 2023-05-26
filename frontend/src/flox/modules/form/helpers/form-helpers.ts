@@ -1,4 +1,4 @@
-import { cloneDeep, isArray } from 'lodash-es';
+import { cloneDeep } from 'lodash-es';
 
 import { FormStateKey, useFormStore } from '../stores/form';
 import FormPage from '../data/types/FormPage';
@@ -38,7 +38,7 @@ export function buildStoreSubstructure(
 
       // For every array of fields, build object with its field values
       card.fieldRows.forEach((fieldRow) => {
-        if (isArray(fieldRow)) {
+        if (Array.isArray(fieldRow)) {
           fieldRow.forEach((field) => {
             // Ensure invalid/null fields cannot be present in cards
             if (!field) {

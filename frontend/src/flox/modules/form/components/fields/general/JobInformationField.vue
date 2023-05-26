@@ -1,18 +1,18 @@
 <template>
   <GenericSelectField
-    :initial-value="fieldValue.jobType"
+    :initial-value="fieldValue.type"
     :options="jobTypeOptions"
     :rules="[]"
     :label="i18n.global.t('fields.job_type')"
-    @change="(newValue) => fieldValueChange('jobType', newValue)"
+    @change="(newValue) => fieldValueChange('type', newValue)"
   />
 
   <GenericSelectField
-    :initial-value="fieldValue.jobStatus"
+    :initial-value="fieldValue.status"
     :options="jobStatusOptions"
     :rules="[]"
     :label="i18n.global.t('fields.job_status')"
-    @change="(newValue) => fieldValueChange('jobStatus', newValue)"
+    @change="(newValue) => fieldValueChange('status', newValue)"
   />
 </template>
 
@@ -76,10 +76,10 @@ function saveValue(): void {
  * Update job status options when job type changes
  */
 function updateJobStatusOptions(): void {
-  const jobType = fieldValue.value.jobType as JOB_TYPE;
+  const jobType = fieldValue.value.type as JOB_TYPE;
   const jobStatuses = jobTypeStatuses[jobType] || [];
 
-  fieldValue.value.jobStatus = undefined;
+  fieldValue.value.status = undefined;
   const jobStatusObject: Record<string, string> = {};
   jobStatuses.forEach((status) => {
     jobStatusObject[status] = status;
@@ -91,7 +91,7 @@ function updateJobStatusOptions(): void {
  * Watch fieldValue.value.jobType and update job status options
  */
 watch(
-  () => fieldValue.value.jobType,
+  () => fieldValue.value.type,
   () => {
     updateJobStatusOptions();
   }
@@ -115,13 +115,13 @@ watch(
  * @returns void
  */
 function fieldValueChange(
-  fieldKey: 'jobType' | 'jobStatus',
+  fieldKey: 'type' | 'status',
   value: JOB_TYPE | JOB_STATUS
 ): void {
-  if (fieldKey === 'jobType') {
-    fieldValue.value.jobType = value as JOB_TYPE;
-  } else if (fieldKey === 'jobStatus') {
-    fieldValue.value.jobStatus = value as JOB_STATUS;
+  if (fieldKey === 'type') {
+    fieldValue.value.type = value as JOB_TYPE;
+  } else if (fieldKey === 'status') {
+    fieldValue.value.status = value as JOB_STATUS;
   } else {
     throw new Error('Unknown field key');
   }

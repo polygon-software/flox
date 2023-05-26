@@ -1,5 +1,5 @@
 <template>
-  <q-card class="justify-center">
+  <q-card class="justify-center full-width">
     <div class="row justify-between items-center">
       <h5 class="q-ma-md text-black">
         {{ $t('card_titles.orders') }}
@@ -153,7 +153,7 @@
   </q-card>
 
   <!-- Bottom button row -->
-  <div class="row full-width no-wrap">
+  <div class="row full-width no-wrap q-mb-lg">
     <!-- Edit -->
     <q-btn
       :label="$t('buttons.edit')"
@@ -180,10 +180,12 @@ import { SEARCH_FORMS } from 'src/data/form/form.query';
 import { ColumnAlign } from 'components/tables/useDataTable';
 import { BOOLEAN_FIELD_TYPE, JOB_STATUS, JOB_TYPE } from 'src/data/ENUM';
 import RouterService from 'src/services/RouterService';
-import ROUTES from 'src/router/routes';
 import { i18n } from 'boot/i18n';
 import { UPDATE_FORM } from 'src/data/form/form.mutation';
+import ROUTES from 'src/router/routes';
+import FormEntity from 'src/data/form/entities/form.entity';
 import { formatDate, parseDate } from 'src/format/date.format';
+import JobEntity from 'src/data/job/entities/jobEntity';
 
 import DataTable from './DataTable.vue';
 
@@ -224,7 +226,6 @@ const filter = computed(() => ({
   isFinished: doneActive.value ? doneFilter.value : undefined,
   createdAt: creationActive.value ? parseDate(creationFilter.value) : undefined,
 }));
-
 const columns = computed(() => [
   {
     name: 'creationDate',
@@ -257,9 +258,9 @@ const columns = computed(() => [
   {
     name: 'orderType',
     label: i18n.global.t('fields.order_type'),
-    field: 'job.type',
-    format: (value: JOB_TYPE): string =>
-      i18n.global.t(`enum.job_type.${value}`),
+    field: (row: FormEntity): JobEntity | undefined => row.job,
+    format: (value: JobEntity): string =>
+      value ? i18n.global.t(`enum.job_type.${value?.type as string}`) : '-',
     align: ColumnAlign.left,
     sortable: true,
     edit: false,
@@ -268,9 +269,9 @@ const columns = computed(() => [
   {
     name: 'status',
     label: i18n.global.t('fields.status'),
-    field: 'job.status',
-    format: (value: JOB_STATUS): string =>
-      i18n.global.t(`enum.job_status.${value}`),
+    field: (row: FormEntity): JobEntity | undefined => row.job,
+    format: (value: JobEntity): string =>
+      value ? i18n.global.t(`enum.job_status.${value?.status as string}`) : '-',
     align: ColumnAlign.left,
     sortable: true,
     edit: false,

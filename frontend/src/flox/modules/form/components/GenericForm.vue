@@ -30,35 +30,29 @@
           class="q-mb-lg"
         >
           <div
-            v-for="(fieldRow, fieldRowIndex) in card.fieldRows.every((arr) =>
-              Array.isArray(arr)
-            )
-              ? card.fieldRows
-              : [card.fieldRows]"
+            v-for="(fieldRow, fieldRowIndex) in card.fieldRows"
             :key="`fieldGroup_${fieldRowIndex}`"
-            :class="Array.isArray(fieldRow) && fieldRow.length > 1 ? 'row' : ''"
+            :class="
+              Array.isArray(fieldRow) && fieldRow.length > 1 ? 'row' : 'column'
+            "
           >
-            <div
-              v-for="(field, fieldIndex) in fieldRow"
-              :key="`field_${String(fieldIndex)}`"
-            >
-              <component
-                :is="field.component"
-                v-if="field"
-                v-bind="{
-                  store,
-                  stateKey: {
-                    formKey,
-                    pageKey: page.key,
-                    cardKey: card.key,
-                    fieldKey: field.key,
-                  },
-                  ...field.attributes,
-                  options:
-                    optionOverrides?.[field.key] ?? field.attributes.options,
-                }"
-              />
-            </div>
+            <component
+              :is="field.component"
+              v-for="field in Array.isArray(fieldRow) ? fieldRow : [fieldRow]"
+              :key="field.key"
+              v-bind="{
+                store,
+                stateKey: {
+                  formKey,
+                  pageKey: page.key,
+                  cardKey: card.key,
+                  fieldKey: field.key,
+                },
+                ...field.attributes,
+                options:
+                  optionOverrides?.[field.key] ?? field.attributes.options,
+              }"
+            />
           </div>
         </FormCard>
       </q-step>
@@ -99,17 +93,15 @@
         class="q-mb-lg"
       >
         <div
-          v-for="(fieldRow, fieldRowIndex) in card.fieldRows.every((arr) =>
-            Array.isArray(arr)
-          )
-            ? card.fieldRows
-            : [card.fieldRows]"
+          v-for="(fieldRow, fieldRowIndex) in card.fieldRows"
           :key="`fieldGroup_${fieldRowIndex}`"
-          :class="Array.isArray(fieldRow) && fieldRow.length > 1 ? 'row' : ''"
+          :class="
+            Array.isArray(fieldRow) && fieldRow.length > 1 ? 'row' : 'column'
+          "
         >
           <component
             :is="field.component"
-            v-for="field in fieldRow"
+            v-for="field in Array.isArray(fieldRow) ? fieldRow : [fieldRow]"
             :key="field.key"
             v-bind="{
               store,
@@ -128,20 +120,15 @@
     </div>
     <!-- Single card (for single-page forms) -->
     <div
-      v-for="(
-        fieldRow, fieldRowIndex
-      ) in form.pages[0].cards[0].fieldRows.every((arr) => Array.isArray(arr))
-        ? form.pages[0].cards[0].fieldRows
-        : [form.pages[0].cards[0].fieldRows]"
+      v-for="(fieldRow, fieldRowIndex) in form.pages[0].cards[0].fieldRows"
       v-else
       :key="`fieldGroup_${fieldRowIndex}`"
-      :class="Array.isArray(fieldRow) && fieldRow.length > 1 ? 'row' : ''"
+      :class="Array.isArray(fieldRow) && fieldRow.length > 1 ? 'row' : 'column'"
     >
       <component
         :is="field.component"
-        v-for="field in fieldRow"
+        v-for="field in Array.isArray(fieldRow) ? fieldRow : [fieldRow]"
         :key="field.key"
-        class="column"
         v-bind="{
           store,
           stateKey: {

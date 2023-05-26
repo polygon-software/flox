@@ -25,5 +25,6 @@ export default {
     entry_edited: 'Edit saved',
     entry_deleted: 'Entry deleted',
     user_created: 'User created successfully',
+    order_created: 'Order created successfully',
   },
 };

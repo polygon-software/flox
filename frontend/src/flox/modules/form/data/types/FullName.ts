@@ -28,7 +28,12 @@ export default class FullName {
    * @returns - whether it's valid
    */
   isComplete(): boolean {
-    return !!this.firstName && !!this.lastName;
+    return (
+      !!this.firstName ||
+      !!this.middleName ||
+      !!this.lastName ||
+      !!this.secondLastName
+    );
   }
 
   /**

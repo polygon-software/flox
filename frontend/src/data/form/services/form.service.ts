@@ -5,13 +5,6 @@ import {
   DELETE_FORM,
   UPDATE_FORM,
 } from 'src/data/form/form.mutation';
-import CreateJobInput from 'src/data/job/dto/input/createJobInput';
-import CreateClientInput from 'src/data/client/dto/input/createClientInput';
-import CreateTenantInput from 'src/data/tenant/dto/input/createTenantInput';
-import CreateDeviceInput from 'src/data/device/dto/input/createDeviceInput';
-import CreateArticleInput from 'src/data/article/dto/input/createArticleInput';
-import CreateExpenseInput from 'src/data/expense/dto/input/createExpenseInput';
-import CreateBillingInput from 'src/data/billing/dto/input/createBillingInput';
 import UpdateJobInput from 'src/data/job/dto/input/updateJobInput';
 import UpdateClientInput from 'src/data/client/dto/input/updateClientInput';
 import UpdateTenantInput from 'src/data/tenant/dto/input/updateTenantInput';
@@ -19,6 +12,7 @@ import UpdateBillingInput from 'src/data/billing/dto/input/updateBillingInput';
 import UpdateDeviceInput from 'src/data/device/dto/input/updateDeviceInput';
 import UpdateArticleInput from 'src/data/article/dto/input/updateArticleInput';
 import UpdateExpenseInput from 'src/data/expense/dto/input/updateExpenseInput';
+import FormEntityInput from 'src/data/form/input/createFormEntityInput';
 
 import FormEntity from '../entities/form.entity';
 import { FORM, SEARCH_FORMS } from '../form.query';
@@ -26,76 +20,17 @@ import { FORM, SEARCH_FORMS } from '../form.query';
 /**
  * Creates a new form
  *
- * @param job -  Job input data
- * @param startDate - Date the form is created
- * @param endDate - Date the form is resolved
- * @param internalOrderNumber - Internal order number
- * @param externalOrderNumber - External order number
- * @param client - Client
- * @param owner - Owner
- * @param objectNumber - Object number
- * @param tenant - Tenant
- * @param measurePower - Measure power
- * @param billing - Billing
- * @param description - Description
- * @param devices - Devices
- * @param protocolDate - Protocol date
- * @param protcolText - Protocol text
- * @param articles - Articles
- * @param expenses - Expenses
- * @param totalAmount - Total amount
- * @param employeeId - Employee id
- * @param freeText - Free text
- * @param isEmergency - Is emergency
  * @returns - The newly created form or null if the creation failed
+ * @param input
  */
 export async function createForm(
-  job?: CreateJobInput,
-  startDate?: Date,
-  endDate?: Date,
-  internalOrderNumber?: number,
-  externalOrderNumber?: number,
-  client?: CreateClientInput,
-  owner?: string,
-  objectNumber?: number,
-  tenant?: CreateTenantInput,
-  measurePower?: boolean,
-  billing?: CreateBillingInput,
-  description?: string,
-  devices?: CreateDeviceInput[],
-  protocolDate?: Date,
-  protcolText?: string,
-  articles?: CreateArticleInput[],
-  expenses?: CreateExpenseInput[],
-  totalAmount?: number,
-  employeeId?: string,
-  freeText?: string,
-  isEmergency?: boolean
+  input: FormEntityInput
 ): Promise<FormEntity | null> {
-  const { data } = await executeMutation<FormEntity>(CREATE_FORM, {
-    job,
-    startDate,
-    endDate,
-    internalOrderNumber,
-    externalOrderNumber,
-    client,
-    owner,
-    objectNumber,
-    tenant,
-    measurePower,
-    billing,
-    description,
-    devices,
-    protocolDate,
-    protcolText,
-    articles,
-    expenses,
-    totalAmount,
-    employeeId,
-    freeText,
-    isEmergency,
-  });
-  return data ?? null;
+  const { data } = await executeMutation<FormEntity>(
+    CREATE_FORM,
+    input as unknown as Record<string, unknown>
+  );
+  return (data as FormEntity) ?? null;
 }
 
 /**

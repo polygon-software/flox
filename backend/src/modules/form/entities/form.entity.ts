@@ -114,11 +114,13 @@ export default class Form extends BaseEntity {
 
   @Field(() => [Device], {
     description: 'Devices to repair',
+    nullable: true,
   })
   @OneToMany(() => Device, (device) => device.form, {
     cascade: true,
   })
   @IsArray()
+  @IsOptional()
   devices: Device[];
 
   @Field(() => Date, {
@@ -136,18 +138,20 @@ export default class Form extends BaseEntity {
   @IsOptional()
   protocolText: string;
 
-  @Field(() => [Article], { description: 'Articles' })
+  @Field(() => [Article], { description: 'Articles', nullable: true })
   @OneToMany(() => Article, (article) => article.form, {
     cascade: true,
   })
   @IsArray()
+  @IsOptional()
   articles: Article[];
 
-  @Field(() => [Expense], { description: 'Expenses' })
+  @Field(() => [Expense], { description: 'Expenses', nullable: true })
   @OneToMany(() => Expense, (expense) => expense.form, {
     cascade: true,
   })
   @IsArray()
+  @IsOptional()
   expenses: Expense[];
 
   @Field(() => Number, {
@@ -171,9 +175,10 @@ export default class Form extends BaseEntity {
   @IsOptional()
   freeText: string;
 
-  @Field(() => [ImageFile], { description: 'Additonal images' })
+  @Field(() => [ImageFile], { description: 'Additonal images', nullable: true })
   @OneToMany(() => ImageFile, (file) => file.form)
   @IsArray()
+  @IsOptional()
   images: ImageFile[];
 
   @Field(() => Boolean, {

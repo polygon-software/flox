@@ -82,15 +82,14 @@ import { ColumnAlign, ColumnInterface } from 'components/tables/useDataTable';
 import UserEntity from 'src/flox/modules/auth/entities/user.entity';
 import { i18n } from 'boot/i18n';
 import LabelWrapper from 'src/flox/modules/form/components/fields/general/wrappers/LabelWrapper.vue';
+import { FormStateKey, useFormStore } from 'src/flox/modules/form/stores/form';
+import ArticleNumberEntry from 'src/flox/modules/form/data/types/ArticleNumberEntry';
 
 const props = withDefaults(
   defineProps<{
-    oldArticleNumbers?: {
-      articleNumber: string;
-      manufacturerNumber: number;
-      count: number;
-      discount: number;
-    }[];
+    // Used to fetch or store data from/to the store
+    stateKey: FormStateKey;
+    oldArticleNumbers?: ArticleNumberEntry[];
   }>(),
   {
     oldArticleNumbers: () => [],
@@ -138,33 +137,36 @@ const manufacturerNumberInput: Ref<string | null> = ref(null);
 const countInput: Ref<number | null> = ref(null);
 const discountInput: Ref<number | null> = ref(null);
 
-// TODO: declare type
-const articleNumberEntry: Ref<{
-  articleNumber: string | null;
-  manufacturerNumber: number | null;
-  count: number | null;
-  discount: number | null;
-}> = ref({
-  articleNumber: null,
-  manufacturerNumber: null,
-  count: null,
-  discount: null,
-});
+const store = useFormStore();
 
-const articleNumbers: Ref<
-  {
-    articleNumber: string | null;
-    manufacturerNumber: number | null;
-    count: number | null;
-    discount: number | null;
-  }[]
-> = ref(cloneDeep(props.oldArticleNumbers));
+const articleNumberEntry: Ref<ArticleNumberEntry> = ref(
+  new ArticleNumberEntry(null, null, null, null)
+);
+
+const articleNumbers: Ref<ArticleNumberEntry[]> = ref(
+  cloneDeep(props.oldArticleNumbers)
+);
+
+/**
+ * Save the updated value if valid, otherwise null
+ * @returns void
+ */
+function saveValue(): void {
+  if (articleNumbers.value && articleNumbers.value.length > 0) {
+    if (props.stateKey) {
+      store.setValue(props.stateKey, articleNumbers.value);
+    }
+  } else if (props.stateKey) {
+    store.setValue(props.stateKey, null);
+  }
+}
 
 /**
  * Deletes a row from the table
  */
 function deleteRow(index: number): void {
   articleNumbers.value.splice(index, 1);
+  saveValue();
 }
 
 /**
@@ -183,12 +185,7 @@ function isArticleNumberEntryValid(): boolean {
  * Sets all values of inputs and articleNumberEntry to null
  */
 function setValuesToNull(): void {
-  articleNumberEntry.value = {
-    articleNumber: null,
-    manufacturerNumber: null,
-    count: null,
-    discount: null,
-  };
+  articleNumberEntry.value = new ArticleNumberEntry(null, null, null, null);
   articleNumberInput.value = null;
   manufacturerNumberInput.value = null;
   countInput.value = null;
@@ -205,6 +202,7 @@ function addArticleNumber(val: string): void {
 
   if (isArticleNumberEntryValid()) {
     articleNumbers.value.push(articleNumberEntry.value);
+    saveValue();
     setValuesToNull();
   }
 }
@@ -214,11 +212,12 @@ function addArticleNumber(val: string): void {
  * @param {number} val - the value to add
  * @returns {void}
  */
-function addManufacturerNumber(val: number): void {
+function addManufacturerNumber(val: string): void {
   articleNumberEntry.value.manufacturerNumber = val;
 
   if (isArticleNumberEntryValid()) {
     articleNumbers.value.push(articleNumberEntry.value);
+    saveValue();
     setValuesToNull();
   }
 }
@@ -229,10 +228,10 @@ function addManufacturerNumber(val: number): void {
  * @returns {void}
  */
 function addCount(val: number): void {
-  articleNumberEntry.value.count = val;
-
+  articleNumberEntry.value.count = Number(val);
   if (isArticleNumberEntryValid()) {
     articleNumbers.value.push(articleNumberEntry.value);
+    saveValue();
     setValuesToNull();
   }
 }
@@ -243,9 +242,10 @@ function addCount(val: number): void {
  * @returns {void}
  */
 function addDiscount(val: number): void {
-  articleNumberEntry.value.discount = val;
+  articleNumberEntry.value.discount = Number(val);
   if (isArticleNumberEntryValid()) {
     articleNumbers.value.push(articleNumberEntry.value);
+    saveValue();
     setValuesToNull();
   }
 }

@@ -4,14 +4,14 @@ import { JOB_STATUS, JOB_TYPE, jobTypeStatuses } from 'src/data/ENUM';
  * Job class containing the job details
  */
 export default class Job {
-  jobType?: JOB_TYPE;
+  type?: JOB_TYPE;
 
-  jobStatus?: JOB_STATUS;
+  status?: JOB_STATUS;
 
   // eslint-disable-next-line require-jsdoc
   constructor(jobType?: JOB_TYPE, jobStatus?: JOB_STATUS) {
-    this.jobType = jobType;
-    this.jobStatus = jobStatus;
+    this.type = jobType;
+    this.status = jobStatus;
   }
 
   /**
@@ -19,8 +19,8 @@ export default class Job {
    * @returns - whether it's valid
    */
   isComplete(): boolean {
-    if (!!this.jobType && !!this.jobStatus) {
-      return jobTypeStatuses[this.jobType].includes(this.jobStatus);
+    if (!!this.type && !!this.status) {
+      return jobTypeStatuses[this.type].includes(this.status);
     }
     return false;
   }

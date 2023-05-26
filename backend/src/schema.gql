@@ -438,7 +438,7 @@ type FolderOutput {
 
 type Form {
   """Articles"""
-  articles: [Article!]!
+  articles: [Article!]
 
   """Billing information"""
   billing: Billing
@@ -456,7 +456,7 @@ type Form {
   description: String
 
   """Devices to repair"""
-  devices: [Device!]!
+  devices: [Device!]
 
   """Employee's ID"""
   employeeId: String
@@ -465,7 +465,7 @@ type Form {
   endDate: DateTime
 
   """Expenses"""
-  expenses: [Expense!]!
+  expenses: [Expense!]
 
   """External order number"""
   externalOrderNumber: Float
@@ -474,7 +474,7 @@ type Form {
   freeText: String
 
   """Additonal images"""
-  images: [ImageFile!]!
+  images: [ImageFile!]
 
   """Internal order number"""
   internalOrderNumber: Float

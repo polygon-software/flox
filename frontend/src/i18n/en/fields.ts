@@ -95,5 +95,6 @@ export default {
     description: 'Description',
     job_type: 'Job type',
     job_status: 'Job status',
+    floor_number: 'Floor number',
   },
 };

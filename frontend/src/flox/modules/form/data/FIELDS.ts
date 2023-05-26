@@ -25,6 +25,7 @@ import Password from '../components/fields/general/PasswordField.vue';
 import PasswordRepeat from '../components/fields/general/PasswordRepeatField.vue';
 import PhoneNumberField from '../components/fields/general/PhoneNumberField.vue';
 import SelectLanguageField from '../components/fields/general/SelectLanguageField.vue';
+import FloorNumberField from '../components/fields/general/FloorNumberField.vue';
 import { classValidatorRule } from '../helpers/validation-helpers';
 import {
   availablePhonenNumberOptions,
@@ -34,10 +35,7 @@ import {
 import { Field } from './types/Field';
 import {
   IS_EMAIL,
-  IS_NOT_NULL,
   IS_SELECTED,
-  IS_VALID_DATE,
-  IS_VALID_NAME,
   IS_VALID_PASSWORD,
   IS_VERIFICATION_CODE,
 } from './RULES';
@@ -53,7 +51,7 @@ const FIELDS: Record<string, Field> = {
     attributes: {
       type: 'email',
       label: i18n.global.t('authentication.email'),
-      rules: [IS_EMAIL],
+      rules: [],
     },
   },
   EMAIL_REPEAT: {
@@ -99,7 +97,7 @@ const FIELDS: Record<string, Field> = {
       rules: [],
     },
   },
-  TIME_RECORDING: {
+  TIME_RECORDINGS: {
     key: 'timeRecording',
     component: markRaw(TimeRecordingField),
     attributes: {
@@ -196,61 +194,60 @@ const FIELDS: Record<string, Field> = {
       dense: true,
       type: 'text',
       label: i18n.global.t('fields.company_name'),
-      rules: [IS_VALID_NAME],
+      rules: [],
     },
   },
   FULL_NAME: {
     key: 'fullName',
     component: markRaw(FullNameField),
     attributes: {
+      optional: true,
       dense: true,
-      rules: [IS_SELECTED],
+      rules: [],
     },
   },
   ADDRESS: {
     key: 'address',
     component: markRaw(AddressField),
     attributes: {
+      optional: true,
       create: true,
-      rules: [
-        (val: Record<string, string>): boolean | string =>
-          IS_NOT_NULL(val) || i18n.global.t('errors.invalid_address'),
-      ],
+      rules: [],
     },
   },
   EXTENDED_ADDRESS: {
     key: 'extendedAddress',
     component: markRaw(AddressField),
     attributes: {
+      optional: true,
       create: true,
       showAdditionalAddress: true,
-      rules: [
-        (val: Record<string, string>): boolean | string =>
-          IS_NOT_NULL(val) || i18n.global.t('errors.invalid_address'),
-      ],
+      rules: [],
     },
   },
   DATE: {
     key: 'date',
     component: markRaw(DateField),
     attributes: {
-      rules: [IS_VALID_DATE],
+      rules: [],
     },
   },
   PROTOCOL_DATE: {
     key: 'protocolDate',
     component: markRaw(DateField),
     attributes: {
+      optional: true,
       label: i18n.global.t('fields.protocol_date'),
-      rules: [IS_VALID_DATE],
+      rules: [],
     },
   },
   END_DATE: {
     key: 'endDate',
     component: markRaw(DateField),
     attributes: {
+      optional: true,
       label: i18n.global.t('fields.end_date'),
-      rules: [IS_VALID_DATE],
+      rules: [],
     },
   },
   INTERNAL_ORDER_NUMBER: {
@@ -276,7 +273,7 @@ const FIELDS: Record<string, Field> = {
     component: markRaw(PhoneNumberField),
     attributes: {
       countryCodes: availablePhonenNumberOptions(),
-      rules: [IS_NOT_NULL],
+      rules: [],
     },
   },
   PROBLEM_DESCRIPTION: {
@@ -366,6 +363,7 @@ const FIELDS: Record<string, Field> = {
     component: markRaw(GenericInputField),
     attributes: {
       type: 'number',
+      mask: '####',
       label: i18n.global.t('fields.production_year'),
       rules: [],
     },
@@ -403,6 +401,13 @@ const FIELDS: Record<string, Field> = {
     attributes: {
       label: i18n.global.t('fields.floor'),
       options: translatedObjects(FLOOR, 'floor'),
+      rules: [],
+    },
+  },
+  FLOOR_NUMBER: {
+    key: 'floorNumber',
+    component: markRaw(FloorNumberField),
+    attributes: {
       rules: [],
     },
   },

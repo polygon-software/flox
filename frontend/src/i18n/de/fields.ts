@@ -95,5 +95,6 @@ export default {
     description: 'Beschreibung',
     job_type: 'Auftragstyp',
     job_status: 'Auftragsstatus',
+    floor_number: 'Stockwerk',
   },
 };
