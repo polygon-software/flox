@@ -32,6 +32,6 @@ jobs:
 
       - name: Build & update AWS infrastructure
         working-directory: ./scripts/aws-update
-        run: bash aws-update.sh stage false ${{ steps.get_branch.outputs.branch }}
+        run: bash aws-update.sh stage false false ${{ steps.get_branch.outputs.branch }}
         env:
           TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}

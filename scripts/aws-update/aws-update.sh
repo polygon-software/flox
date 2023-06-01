@@ -3,12 +3,14 @@
 # Takes two or three parameters:
 # $1 - deployment mode: 'live', 'test', 'dev' or 'stage'
 # $2 - local mode (will perform cleanup): true or not set
-# $3 - (optional) - staging branch name (e.g. stage-123412)
+# $3 - (optional) - force update (to be used manually, in case update breaks system)
+# $4 - (optional) - staging branch name (e.g. stage-123412)
 # --------------------------------------------------------------
 
 mode=$1
 local_mode=$2
-staging_branch_name=$3
+force_update=$3
+staging_branch_name=$4
 
 if [[ $mode != "live" ]] && [[ $mode != "test" ]]  && [[ $mode != "dev" ]] && [[ $mode != "stage" ]]
 then
@@ -77,7 +79,7 @@ fi
 online_status=$(curl -s --head "https://$url" | grep '200')
 
 # If deployment is not currently online, don't continue with update
-if [[ ! $online_status ]]
+if [[ (! $online_status) && ($force_update != "true") ]]
 then
   echo "Deployment in mode '$mode' is not online at URL: $url!"
   exit 1

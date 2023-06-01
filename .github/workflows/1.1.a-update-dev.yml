@@ -4,6 +4,13 @@ on:
   push:
     branches:
       - dev
+  workflow_dispatch:
+    inputs:
+      force:
+        required: false
+        type: boolean
+        description: Force deployment. Since this action should usually not be called manually, only use this option to force an update if the previous update broke the application state.
+        default: false
 jobs:
   release:
     name: "Update DEV application"
@@ -27,6 +34,6 @@ jobs:
 
       - name: Build & update AWS infrastructure
         working-directory: ./scripts/aws-update
-        run: bash aws-update.sh dev
+        run: bash aws-update.sh dev false ${{ github.event.inputs.force }}
         env:
           TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
