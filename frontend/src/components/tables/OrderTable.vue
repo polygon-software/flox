@@ -32,19 +32,20 @@
             </q-chip>
           </template>
           <q-list>
-            <q-item
-              :active="statusActive"
-              active-class="active-filter"
-              clickable
-              @click="statusActive = !statusActive"
-            >
-              <q-item-section class="q-mr-lg">
-                <q-item-label>{{ $t('fields.status') }}</q-item-label>
+            <!-- Filter by status -->
+            <q-item class="row justify-between items-center">
+              <q-item-section class="col-3">
+                <div class="row justify-between items-center">
+                  <q-checkbox v-model="statusActive" class="col-3" dense />
+                  <q-item-label class="col-8">{{
+                    $t('fields.status')
+                  }}</q-item-label>
+                </div>
               </q-item-section>
-              <q-item-section side @click.stop>
+              <q-item-section class="col-8" side>
                 <q-select
                   v-model="statusFilter"
-                  :options="Object.values(JOB_STATUS)"
+                  :options="translatedObjects(JOB_STATUS, 'job_status')"
                   borderless
                   dense
                   hide-bottom-space
@@ -52,19 +53,20 @@
               </q-item-section>
             </q-item>
 
-            <q-item
-              :active="typeActive"
-              active-class="active-filter"
-              clickable
-              @click="typeActive = !typeActive"
-            >
-              <q-item-section class="q-mr-lg">
-                <q-item-label>{{ $t('fields.order_type') }}</q-item-label>
+            <!-- Filter by type -->
+            <q-item class="row justify-between items-center">
+              <q-item-section class="col-3">
+                <div class="row justify-between items-center">
+                  <q-checkbox v-model="typeActive" class="col-3" dense />
+                  <q-item-label class="col-8">{{
+                    $t('fields.order_type')
+                  }}</q-item-label>
+                </div>
               </q-item-section>
-              <q-item-section side @click.stop>
+              <q-item-section class="col-8" side>
                 <q-select
                   v-model="typeFilter"
-                  :options="Object.values(JOB_TYPE)"
+                  :options="translatedObjects(JOB_TYPE, 'job_type')"
                   borderless
                   dense
                   hide-bottom-space
@@ -72,58 +74,47 @@
               </q-item-section>
             </q-item>
 
-            <q-item
-              :active="erpActive"
-              active-class="active-filter"
-              clickable
-              @click="erpActive = !erpActive"
-            >
-              <q-item-section class="q-mr-lg">
-                <q-item-label>{{ $t('fields.erp') }}</q-item-label>
+            <!-- Filter by whether is an emergency -->
+            <q-item class="row justify-between items-center">
+              <q-item-section class="col-3">
+                <div class="row justify-between items-center">
+                  <q-checkbox v-model="emergencyActive" class="col-3" dense />
+                  <q-item-label class="col-8">{{
+                    $t('fields.emergency')
+                  }}</q-item-label>
+                </div>
               </q-item-section>
-              <q-item-section side @click.stop>
-                <q-checkbox v-model="erpFilter" dense />
-              </q-item-section>
-            </q-item>
-
-            <q-item
-              :active="emergencyActive"
-              active-class="active-filter"
-              clickable
-              @click="emergencyActive = !emergencyActive"
-            >
-              <q-item-section class="q-mr-lg">
-                <q-item-label>{{ $t('fields.emergency') }}</q-item-label>
-              </q-item-section>
-              <q-item-section side @click.stop>
+              <q-item-section class="col-8" side>
                 <q-toggle v-model="emergencyFilter" dense />
               </q-item-section>
             </q-item>
 
-            <q-item
-              :active="doneActive"
-              active-class="active-filter"
-              clickable
-              @click="doneActive = !doneActive"
-            >
-              <q-item-section class="q-mr-lg">
-                <q-item-label>{{ $t('fields.done') }}</q-item-label>
+            <!-- Filter by whether a order is done -->
+            <q-item class="row justify-between items-center">
+              <q-item-section class="col-3">
+                <div class="row justify-between items-center">
+                  <q-checkbox v-model="doneActive" class="col-3" dense />
+                  <q-item-label class="col-8">
+                    {{ $t('fields.done') }}</q-item-label
+                  >
+                </div>
               </q-item-section>
-              <q-item-section side @click.stop>
+              <q-item-section class="col-8" side>
                 <q-toggle v-model="doneFilter" dense />
               </q-item-section>
             </q-item>
 
-            <q-item
-              :active="creationActive"
-              active-class="active-filter"
-              clickable
-              @click="creationActive = !creationActive"
-            >
-              <q-item-section class="q-mr-lg">
-                <q-item-label>{{ $t('fields.creation_date') }}</q-item-label>
+            <!-- Filter by creation date -->
+            <q-item class="row justify-between items-center">
+              <q-item-section class="col-3">
+                <div class="row justify-between items-center">
+                  <q-checkbox v-model="creationActive" class="col-3" dense />
+                  <q-item-label class="col-8">
+                    {{ $t('fields.creation_date') }}
+                  </q-item-label>
+                </div>
               </q-item-section>
-              <q-item-section side @click.stop>
+              <q-item-section class="col-6" side>
                 <q-input v-model="creationFilter" filled mask="##.##.####">
                   <template #append>
                     <q-icon class="cursor-pointer" name="event">
@@ -133,6 +124,42 @@
                         transition-show="scale"
                       >
                         <q-date v-model="creationFilter" mask="DD.MM.YYYY">
+                          <div class="row items-center justify-end">
+                            <q-btn
+                              v-close-popup
+                              color="primary"
+                              flat
+                              label="Close"
+                            />
+                          </div>
+                        </q-date>
+                      </q-popup-proxy>
+                    </q-icon>
+                  </template>
+                </q-input>
+              </q-item-section>
+            </q-item>
+
+            <!-- Filter by whether it has been pulled by ERP -->
+            <q-item class="row justify-between items-center">
+              <q-item-section class="col-3">
+                <div class="row justify-between items-center">
+                  <q-checkbox v-model="erpActive" class="col-3" dense />
+                  <q-item-label class="col-8">{{
+                    $t('fields.erp')
+                  }}</q-item-label>
+                </div>
+              </q-item-section>
+              <q-item-section class="col-6" side>
+                <q-input v-model="erpFilter" filled mask="##.##.####">
+                  <template #append>
+                    <q-icon class="cursor-pointer" name="event">
+                      <q-popup-proxy
+                        cover
+                        transition-hide="scale"
+                        transition-show="scale"
+                      >
+                        <q-date v-model="erpFilter" mask="DD.MM.YYYY">
                           <div class="row items-center justify-end">
                             <q-btn
                               v-close-popup
@@ -172,7 +199,12 @@ import { computed, inject, ref } from 'vue';
 
 import { SEARCH_FORMS } from 'src/data/form/form.query';
 import { ColumnAlign } from 'components/tables/useDataTable';
-import { BOOLEAN_FIELD_TYPE, JOB_STATUS, JOB_TYPE } from 'src/data/ENUM';
+import {
+  BOOLEAN_FIELD_TYPE,
+  JOB_STATUS,
+  JOB_TYPE,
+  translatedObjects,
+} from 'src/data/ENUM';
 import RouterService from 'src/services/RouterService';
 import { i18n } from 'boot/i18n';
 import { DELETE_FORM, UPDATE_FORM } from 'src/data/form/form.mutation';
@@ -185,9 +217,9 @@ import DataTable from './DataTable.vue';
 
 const $routerService: RouterService | undefined = inject('$routerService');
 
-const statusFilter = ref(JOB_STATUS.OPEN);
-const typeFilter = ref(JOB_TYPE.APPOINTMENT);
-const erpFilter = ref(false);
+const statusFilter = ref(translatedObjects(JOB_STATUS, 'job_status')[0]);
+const typeFilter = ref(translatedObjects(JOB_TYPE, 'job_type')[0]);
+const erpFilter = ref(formatDate(new Date()));
 const emergencyFilter = ref(false);
 const doneFilter = ref(false);
 const creationFilter = ref(formatDate(new Date()));
@@ -212,10 +244,10 @@ const numFilters = computed(() => {
 
 const filter = computed(() => ({
   job: {
-    status: statusActive.value ? statusFilter.value : undefined,
-    type: typeActive.value ? typeFilter.value : undefined,
+    status: statusActive.value ? statusFilter.value.value : undefined,
+    type: typeActive.value ? typeFilter.value.value : undefined,
   },
-  wasPulled: erpActive.value ? erpFilter.value : undefined,
+  pulledAt: erpActive.value ? parseDate(erpFilter.value) : undefined,
   isEmergency: emergencyActive.value ? emergencyFilter.value : undefined,
   isFinished: doneActive.value ? doneFilter.value : undefined,
   createdAt: creationActive.value ? parseDate(creationFilter.value) : undefined,
