@@ -1,5 +1,5 @@
 import { FormStateKey, useFormStore } from 'src/flox/modules/form/stores/form';
-import FormEntityInput from 'src/data/form/input/createFormEntityInput';
+import FormEntityInput from 'src/data/form/dto/input/createFormEntityInput';
 import { FIELDS } from 'src/flox/modules/form/data/FIELDS';
 import UpdateJobInput from 'src/data/job/dto/input/updateJobInput';
 import FullName from 'src/flox/modules/form/data/types/FullName';
@@ -14,6 +14,8 @@ import ArticleNumberEntry from 'src/flox/modules/form/data/types/ArticleNumberEn
 import TimeRecordingEntry from 'src/flox/modules/form/data/types/TimeRecordingEntry';
 import UpdateArticleInput from 'src/data/article/dto/input/updateArticleInput';
 import UpdateExpenseInput from 'src/data/expense/dto/input/updateExpenseInput';
+import FileEntity from 'src/flox/modules/file/entities/file.entity';
+import UpdateImageFileInput from 'src/data/imageFile/dto/input/updateImageFileInput';
 
 /**
  * Helper function for getting field contents
@@ -280,6 +282,20 @@ export default function formValuesToFormEntityValues(
     | string
     | undefined;
 
+  storeKey.cardKey = 'fileUpload';
+  const images = getFieldValue(storeKey, FIELDS.FILE_UPLOAD) as
+    | FileEntity[]
+    | undefined;
+  const imageFileInputs = images?.map((image) => {
+    return new UpdateImageFileInput(
+      image.filename,
+      image.path,
+      image.mimetype,
+      image.size,
+      image.uuid
+    );
+  });
+
   // return the input object for creating/updating a form entity
   return new FormEntityInput(
     undefined,
@@ -303,6 +319,6 @@ export default function formValuesToFormEntityValues(
     totalAmount,
     employeeAbbreation,
     freeText,
-    undefined // TODO: add images
+    imageFileInputs
   );
 }

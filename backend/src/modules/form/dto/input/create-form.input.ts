@@ -18,6 +18,7 @@ import UpdateDeviceInput from '../../../device/dto/input/update-device.input';
 import UpdateArticleInput from '../../../article/dto/input/update-article.input';
 import UpdateExpenseInput from '../../../expense/dto/input/update-expense.input';
 import CreateInput from '../../../../flox/modules/abstracts/crud/dto/input/create.input';
+import UpdateImageFileInput from '../../../image-file/dto/input/update-image-file.input';
 
 @InputType()
 export default class CreateFormInput extends CreateInput {
@@ -164,4 +165,12 @@ export default class CreateFormInput extends CreateInput {
   @IsBoolean()
   @IsOptional()
   isEmergency: boolean;
+
+  @Field(() => [UpdateImageFileInput], {
+    description: 'Images',
+    nullable: true,
+  })
+  @IsArray()
+  @IsOptional()
+  images: UpdateImageFileInput[];
 }

@@ -50,6 +50,7 @@ export default class FormResolver extends AbstractSearchResolver<
       'billing.firstName',
       'billing.lastName',
       'billing.email',
+      'images.uuid',
     ]);
   }
 

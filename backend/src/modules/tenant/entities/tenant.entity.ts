@@ -1,4 +1,11 @@
-import { BeforeInsert, Column, Entity, JoinColumn, OneToOne } from 'typeorm';
+import {
+  BeforeInsert,
+  BeforeUpdate,
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+} from 'typeorm';
 import { Field, ObjectType } from '@nestjs/graphql';
 import {
   IsEmail,
@@ -76,6 +83,7 @@ export default class Tenant extends BaseEntity {
    * Ensures that the combination of floor and floor number is valid.
    */
   @BeforeInsert()
+  @BeforeUpdate()
   checkFloor(): void {
     if (this.floorType === FLOOR.GROUND_FLOOR && this.floorNumber) {
       throw new Error(`Floor number must be null for floor ${this.floorType}`);

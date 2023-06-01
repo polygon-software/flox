@@ -13,7 +13,7 @@ import {
 
 import BaseEntity from '../../../flox/core/base-entity/entities/base-entity.entity';
 import Device from '../../device/entities/device.entity';
-import ImageFile from '../../image/entities/image.entity';
+import ImageFile from '../../image-file/entities/image-file.entity';
 import Job from '../../job/entities/job.entity';
 import Client from '../../client/entities/client.entity';
 import Article from '../../article/entities/article.entity';
@@ -66,7 +66,10 @@ export default class Form extends BaseEntity {
 
   @Field(() => Client, { description: 'Job client', nullable: true })
   @JoinColumn()
-  @OneToOne(() => Client, { cascade: true, nullable: true })
+  @OneToOne(() => Client, {
+    cascade: true,
+    nullable: true,
+  })
   @IsObject()
   @IsOptional()
   client: Client;
@@ -85,7 +88,10 @@ export default class Form extends BaseEntity {
 
   @Field(() => Tenant, { description: 'Tenant', nullable: true })
   @JoinColumn()
-  @OneToOne(() => Tenant, { cascade: true, nullable: true })
+  @OneToOne(() => Tenant, {
+    cascade: true,
+    nullable: true,
+  })
   @IsObject()
   @IsOptional()
   tenant: Tenant;
@@ -101,7 +107,10 @@ export default class Form extends BaseEntity {
 
   @Field(() => Billing, { description: 'Billing information', nullable: true })
   @JoinColumn()
-  @OneToOne(() => Billing, { cascade: true, nullable: true })
+  @OneToOne(() => Billing, {
+    cascade: true,
+    nullable: true,
+  })
   @IsObject()
   @IsOptional()
   billing: Billing;
@@ -176,10 +185,20 @@ export default class Form extends BaseEntity {
   freeText: string;
 
   @Field(() => [ImageFile], { description: 'Additonal images', nullable: true })
-  @OneToMany(() => ImageFile, (file) => file.form)
+  @OneToMany(() => ImageFile, (file) => file.form, {
+    cascade: true,
+  })
   @IsArray()
   @IsOptional()
   images: ImageFile[];
+
+  @Field(() => [String], {
+    description: 'ImageFiles as base64',
+    nullable: true,
+  })
+  @IsArray()
+  @IsOptional()
+  imageStrings: string[];
 
   @Field(() => Boolean, {
     description: 'Whether the form can be pulled by ERP',
@@ -188,12 +207,14 @@ export default class Form extends BaseEntity {
   @IsBoolean()
   isPullable: boolean;
 
-  @Field(() => Boolean, {
-    description: 'Whether the form was pulled by ERP',
+  @Field(() => Date, {
+    description: 'Last time the form was pulled by ERP',
+    nullable: true,
   })
-  @Column({ default: false })
-  @IsBoolean()
-  wasPulled: boolean;
+  @Column({ nullable: true })
+  @IsDate()
+  @IsOptional()
+  pulledAt: Date;
 
   @Field(() => Boolean, {
     description: 'Whether the job is an emergency',

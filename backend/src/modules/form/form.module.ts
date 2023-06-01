@@ -6,14 +6,16 @@ import Billing from '../billing/entities/billing.entity';
 import Client from '../client/entities/client.entity';
 import Device from '../device/entities/device.entity';
 import Expense from '../expense/entities/expense.entity';
-import ImageFile from '../image/entities/image.entity';
+import ImageFile from '../image-file/entities/image-file.entity';
 import Job from '../job/entities/job.entity';
 import Address from '../address/entities/address.entity';
 import Tenant from '../tenant/entities/tenant.entity';
+import ImageFileService from '../image-file/image-file.service';
 
 import Form from './entities/form.entity';
 import FormService from './form.service';
 import FormResolver from './form.resolver';
+import FormController from './form.controller';
 
 @Module({
   imports: [
@@ -30,7 +32,8 @@ import FormResolver from './form.resolver';
       Tenant,
     ]),
   ],
-  providers: [Form, FormResolver, FormService],
+  controllers: [FormController],
   exports: [FormResolver, FormService],
+  providers: [Form, FormResolver, FormService, ImageFileService],
 })
 export default class FormModule {}

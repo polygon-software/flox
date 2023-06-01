@@ -1,5 +1,4 @@
 import FormEntity from 'src/data/form/entities/form.entity';
-import ImageFileEntity from 'src/data/imageFile/entities/imageFileEntity';
 import UpdateJobInput from 'src/data/job/dto/input/updateJobInput';
 import UpdateClientInput from 'src/data/client/dto/input/updateClientInput';
 import UpdateExpenseInput from 'src/data/expense/dto/input/updateExpenseInput';
@@ -7,6 +6,7 @@ import UpdateArticleInput from 'src/data/article/dto/input/updateArticleInput';
 import UpdateDeviceInput from 'src/data/device/dto/input/updateDeviceInput';
 import UpdateBillingInput from 'src/data/billing/dto/input/updateBillingInput';
 import UpdateTenantInput from 'src/data/tenant/dto/input/updateTenantInput';
+import UpdateImageFileInput from 'src/data/imageFile/dto/input/updateImageFileInput';
 
 /**
  * A class representing a form entity input
@@ -34,9 +34,9 @@ export default class FormEntityInput {
     private totalAmount?: number | undefined,
     private employeeId?: string | undefined,
     private freeText?: string | undefined,
-    private images?: ImageFileEntity[] | undefined,
+    private images?: UpdateImageFileInput[] | undefined,
     private isPullable?: boolean | undefined,
-    private wasPulled?: boolean | undefined,
+    private pulledAt?: Date | undefined,
     private isEmergency?: boolean | undefined,
     private isFinished?: boolean | undefined
   ) {}
@@ -71,7 +71,7 @@ export default class FormEntityInput {
       formEntity.freeText,
       formEntity.images,
       formEntity.isPullable,
-      formEntity.wasPulled,
+      formEntity.pulledAt,
       formEntity.isEmergency,
       formEntity.isFinished
     );

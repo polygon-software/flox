@@ -26,6 +26,7 @@ import GqlThrottlerGuard from './flox/modules/GqlThrottlerGuard';
 import HealthcheckController from './flox/modules/healthcheck/healthcheck.controller';
 import env from './env';
 import FormModule from './modules/form/form.module';
+import ImageFileModule from './modules/image-file/image-file.module';
 
 @Module({
   imports: [
@@ -114,6 +115,7 @@ import FormModule from './modules/form/form.module';
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     ...(floxModules() as any[]),
     FormModule,
+    ImageFileModule,
   ],
   controllers: [HealthcheckController],
   providers: [
@@ -127,6 +129,7 @@ import FormModule from './modules/form/form.module';
     ...floxProviders(),
     // Add any other custom module providers here
     FormModule,
+    ImageFileModule,
   ],
 })
 

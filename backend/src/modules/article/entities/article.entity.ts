@@ -48,7 +48,10 @@ export default class Article extends BaseEntity {
     description: 'Form this arcticle belongs to',
     nullable: true,
   })
-  @ManyToOne(() => Form, (form) => form.articles, { nullable: true })
+  @ManyToOne(() => Form, (form) => form.articles, {
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
   @IsObject()
   form: Form;
 }

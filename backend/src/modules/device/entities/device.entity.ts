@@ -74,6 +74,6 @@ export default class Device extends BaseEntity {
     description: 'Form the device belongs to',
   })
   @IsObject()
-  @ManyToOne(() => Form, (form) => form.devices)
+  @ManyToOne(() => Form, (form) => form.devices, { onDelete: 'CASCADE' })
   form: Form;
 }

@@ -2,9 +2,14 @@ import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
 import { getRequest } from '../../core/flox-helpers';
-import { IS_PUBLIC_KEY, LOGGED_IN_KEY } from '../auth/authentication.decorator';
+import {
+  IS_BASIC_AUTHENTICATED_KEY,
+  IS_PUBLIC_KEY,
+  LOGGED_IN_KEY,
+} from '../auth/authentication.decorator';
 import User from '../auth/entities/user.entity';
 import UserService from '../auth/user.service';
+import { basicAuth } from '../auth/helpers/auth.helper';
 
 import { DefaultRoles } from './config';
 
@@ -44,6 +49,11 @@ export default class RolesGuard implements CanActivate {
 
     // Public endpoints are generally accessible
     if (this.isPublic(context)) {
+      return true;
+    }
+
+    // Endpoint is accessible if basic auth is used
+    if (this.isBasicAuthenticated(context)) {
       return true;
     }
 
@@ -105,6 +115,28 @@ export default class RolesGuard implements CanActivate {
           context.getClass(),
         ])
       );
+    }
+    return false;
+  }
+
+  /**
+   * Determines whether the request is authenticated via basic auth
+   *
+   * @param context - execution context
+   * @returns whether the request is authenticated
+   */
+  isBasicAuthenticated(context: ExecutionContext): boolean {
+    const request: Request = context.switchToHttp().getRequest();
+    const usesDecorator = this.reflector.getAllAndOverride<boolean>(
+      IS_BASIC_AUTHENTICATED_KEY,
+      [context.getHandler(), context.getClass()],
+    );
+    if (usesDecorator && request) {
+      const authorizationHeader = (
+        request.headers as unknown as Record<string, string>
+      ).authorization;
+      basicAuth(authorizationHeader);
+      return true;
     }
     return false;
   }

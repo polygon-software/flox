@@ -106,13 +106,17 @@ export default class FormEntity extends BaseEntity {
   @IsOptional()
   images?: ImageFileEntity[];
 
+  @IsArray()
+  @IsOptional()
+  imageStrings?: string[];
+
   @IsBoolean()
   @IsOptional()
   isPullable?: boolean;
 
-  @IsBoolean()
+  @IsDate()
   @IsOptional()
-  wasPulled?: boolean;
+  pulledAt?: Date;
 
   @IsBoolean()
   @IsOptional()

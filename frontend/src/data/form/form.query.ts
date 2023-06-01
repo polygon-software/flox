@@ -100,7 +100,7 @@ export const SEARCH_FORMS: QueryObject = {
           employeeId
           freeText
           isPullable
-          wasPulled
+          pulledAt
           isEmergency
           isFinished
           __typename
@@ -221,7 +221,7 @@ export const FORM: QueryObject = {
           __typename
         }
         isPullable
-        wasPulled
+        pulledAt
         isEmergency
         isFinished
         __typename

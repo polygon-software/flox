@@ -6,7 +6,7 @@ import { TABLES } from '../../enum/TABLES';
 
 export const CREATE_FILE: MutationObject = {
   mutation: gql`
-    mutation CreateFile(
+    mutation CreateImageFile(
       $filename: String!
       $mimetype: String!
       $size: Int!

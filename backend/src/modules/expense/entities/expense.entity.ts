@@ -36,7 +36,10 @@ export default class Expense extends BaseEntity {
     description: 'Form the expense belongs to',
     nullable: true,
   })
-  @ManyToOne(() => Form, (form) => form.expenses, { nullable: true })
+  @ManyToOne(() => Form, (form) => form.expenses, {
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
   @IsObject()
   form: Form;
 }

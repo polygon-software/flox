@@ -31,13 +31,13 @@ export default class FormFilterInput extends FilterInput {
   @IsOptional()
   endDate?: Date;
 
-  @Field(() => Boolean, {
-    description: 'Whether the form was pulled by ERP',
+  @Field(() => Date, {
+    description: 'Last time the form was pulled by ERP',
     nullable: true,
   })
-  @IsBoolean()
+  @IsDate()
   @IsOptional()
-  wasPulled?: boolean;
+  pulledAt?: Date;
 
   @Field(() => Boolean, {
     description: 'Whether the job is an emergency',

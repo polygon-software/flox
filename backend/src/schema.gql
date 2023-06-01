@@ -258,6 +258,9 @@ input CreateFormInput {
   """Additional text"""
   freeText: String
 
+  """Images"""
+  images: [UpdateImageFileInput!]
+
   """Internal order number"""
   internalOrderNumber: Float
 
@@ -313,6 +316,7 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 input DeleteInput {
+  softDelete: Boolean
   uuid: ID!
 }
 
@@ -473,6 +477,9 @@ type Form {
   """Additonal text"""
   freeText: String
 
+  """ImageFiles as base64"""
+  imageStrings: [String!]
+
   """Additonal images"""
   images: [ImageFile!]
 
@@ -506,6 +513,9 @@ type Form {
   """Protocol text"""
   protocolText: String
 
+  """Last time the form was pulled by ERP"""
+  pulledAt: DateTime
+
   """Date the form is created"""
   startDate: DateTime
 
@@ -520,9 +530,6 @@ type Form {
 
   """UUID"""
   uuid: ID!
-
-  """Whether the form was pulled by ERP"""
-  wasPulled: Boolean!
 }
 
 input FormFilterInput {
@@ -544,8 +551,8 @@ input FormFilterInput {
   """Job filter"""
   job: JobFilterInput
 
-  """Whether the form was pulled by ERP"""
-  wasPulled: Boolean
+  """Last time the form was pulled by ERP"""
+  pulledAt: DateTime
 }
 
 type FormSearchOutput {
@@ -613,32 +620,17 @@ type ImageFile {
   """Form the image belongs to"""
   form: Form!
 
-  """Marks this object as readable for all logged in users"""
-  loggedInReadAccess: Boolean!
-
   """Files mime type"""
-  mimetype: String!
-
-  """Owner of this object, has full control over it"""
-  owner: User!
+  mimetype: String
 
   """Path that leads to file"""
   path: String
 
-  """Marks this object as publicly readable"""
-  publicReadAccess: Boolean!
-
-  """Signed URL to upload object. Only works 1 time"""
-  signedUrl: String
-
   """Filesize in bytes"""
-  size: Float!
+  size: Float
 
   """Last modification date"""
   updatedAt: DateTime
-
-  """Pre-signed download URL"""
-  url: String
 
   """UUID"""
   uuid: ID!
@@ -800,6 +792,7 @@ type Mutation {
   AdminCreateUser(adminCreateUserInput: AdminCreateUserInput!): AdminCreateUserOutput!
   CreateFile(createFileInput: CreateFileInput!): S3File!
   CreateImage(createImageInput: CreateImageInput!): Image!
+  CreateImageFile(createFileInput: CreateFileInput!): ImageFile!
   CreateUserGroup(createUserGroupInput: CreateUserGroupInput!): UserGroup!
   DeleteFile(deleteInput: DeleteInput!): S3File!
   DeleteImage(deleteImageInput: DeleteInput!): Image!
@@ -1556,6 +1549,9 @@ input UpdateFormInput {
   """Additional text"""
   freeText: String
 
+  """Images"""
+  images: [UpdateImageFileInput!]
+
   """Internal order number"""
   internalOrderNumber: Float
 
@@ -1586,6 +1582,9 @@ input UpdateFormInput {
   """Protocol text"""
   protocolText: String
 
+  """Last time the form was pulled by ERP"""
+  pulledAt: DateTime
+
   """Date the form is created"""
   startDate: DateTime
 
@@ -1596,6 +1595,23 @@ input UpdateFormInput {
   totalAmount: Float
 
   """Form UUID"""
+  uuid: ID
+}
+
+input UpdateImageFileInput {
+  """Name of File"""
+  filename: String
+
+  """Files mime type"""
+  mimetype: String
+
+  """Path that leads to file"""
+  path: String
+
+  """Filesize in bytes"""
+  size: Float
+
+  """ImageFile UUID"""
   uuid: ID
 }
 

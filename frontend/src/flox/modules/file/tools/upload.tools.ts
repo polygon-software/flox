@@ -13,6 +13,7 @@ export type SelectedFile = {
   content: File;
   url: string;
   status: string;
+  fileEntity?: FileEntity;
 };
 
 /**

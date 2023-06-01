@@ -83,8 +83,14 @@ export default function useFileUpload(filePicker: Ref<QFile | null>): {
    *
    * @param newFiles - the newly picked files
    */
-  function onFilePicked(newFiles: File[]): void {
-    newFiles.forEach((file) => {
+  function onFilePicked(newFiles: File[] | File): void {
+    let fileArray;
+    if (!Array.isArray(newFiles)) {
+      fileArray = [newFiles];
+    } else {
+      fileArray = newFiles;
+    }
+    fileArray.forEach((file) => {
       const newSelectedFile: SelectedFile = {
         content: file,
         url: URL.createObjectURL(file),
@@ -105,9 +111,11 @@ export default function useFileUpload(filePicker: Ref<QFile | null>): {
         // eslint-disable-next-line no-param-reassign
         file.status = UploadStatus.LOADING;
         try {
-          await uploadFile(file, { path });
+          const createdFile = await uploadFile(file, { path });
           // eslint-disable-next-line no-param-reassign
           file.status = UploadStatus.DONE;
+          // eslint-disable-next-line no-param-reassign
+          file.fileEntity = createdFile;
         } catch (e: any) {
           console.error(e);
           // eslint-disable-next-line no-param-reassign

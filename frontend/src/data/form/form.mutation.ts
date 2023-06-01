@@ -30,6 +30,7 @@ export const CREATE_FORM: MutationObject = {
       $employeeId: String
       $freeText: String
       $isEmergency: Boolean
+      $images: [UpdateImageFileInput!]
     ) {
       createForm(
         createFormInput: {
@@ -54,6 +55,7 @@ export const CREATE_FORM: MutationObject = {
           employeeId: $employeeId
           freeText: $freeText
           isEmergency: $isEmergency
+          images: $images
         }
       ) {
         uuid
@@ -210,6 +212,7 @@ export const UPDATE_FORM: MutationObject = {
       $isPullable: Boolean
       $isEmergency: Boolean
       $isFinished: Boolean
+      $images: [UpdateImageFileInput!]
     ) {
       updateForm(
         updateFormInput: {
@@ -237,6 +240,7 @@ export const UPDATE_FORM: MutationObject = {
           isPullable: $isPullable
           isEmergency: $isEmergency
           isFinished: $isFinished
+          images: $images
         }
       ) {
         uuid
@@ -368,8 +372,8 @@ export const UPDATE_FORM: MutationObject = {
 
 export const DELETE_FORM: MutationObject = {
   mutation: gql`
-    mutation deleteForm($uuid: ID!) {
-      deleteForm(deleteInput: { uuid: $uuid }) {
+    mutation deleteForm($uuid: ID!, $softDelete: Boolean) {
+      deleteForm(deleteInput: { uuid: $uuid, softDelete: $softDelete }) {
         uuid
         job {
           uuid

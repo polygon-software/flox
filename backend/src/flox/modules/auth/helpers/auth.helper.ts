@@ -1,4 +1,4 @@
-import { ForbiddenException } from '@nestjs/common';
+import { ForbiddenException, UnauthorizedException } from '@nestjs/common';
 
 import User from '../entities/user.entity';
 import { DefaultRoles } from '../../roles/config';
@@ -34,5 +34,26 @@ export function assertIsAllowedToManipulate(
   const allowEdit = isAllowedToManipulate(editor, editedUuid);
   if (!allowEdit) {
     throw new ForbiddenException();
+  }
+}
+
+/**
+ * Evauluates the basic authentication header sent by the ERP client.
+ *
+ * @param authentication - the authentication header
+ */
+export function basicAuth(authentication: string): void {
+  const encoded = Buffer.from(
+    authentication.split(' ')[1],
+    'base64',
+  ).toString();
+  const [username, password] = encoded.split(':');
+  if (
+    !(
+      username === process.env.ERP_API_USERNAME &&
+      password === process.env.ERP_API_PASSWORD
+    )
+  ) {
+    throw new UnauthorizedException();
   }
 }

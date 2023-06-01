@@ -18,6 +18,8 @@
       :filter="filter"
       :query="SEARCH_FORMS"
       :update-mutation="UPDATE_FORM"
+      :delete-mutation="DELETE_FORM"
+      delete-selection
       multi
     >
       <template #header>
@@ -162,14 +164,6 @@
       style="margin-left: 0"
       @click="placeholder"
     />
-
-    <!-- Delete -->
-    <q-btn
-      :label="$t('buttons.delete')"
-      class="btn-col q-mx-md text-white bg-primary"
-      icon="delete"
-      @click="placeholder"
-    />
   </div>
 </template>
 
@@ -181,7 +175,7 @@ import { ColumnAlign } from 'components/tables/useDataTable';
 import { BOOLEAN_FIELD_TYPE, JOB_STATUS, JOB_TYPE } from 'src/data/ENUM';
 import RouterService from 'src/services/RouterService';
 import { i18n } from 'boot/i18n';
-import { UPDATE_FORM } from 'src/data/form/form.mutation';
+import { DELETE_FORM, UPDATE_FORM } from 'src/data/form/form.mutation';
 import ROUTES from 'src/router/routes';
 import FormEntity from 'src/data/form/entities/form.entity';
 import { formatDate, parseDate } from 'src/format/date.format';
@@ -280,7 +274,8 @@ const columns = computed(() => [
   {
     name: 'erp',
     label: i18n.global.t('fields.erp'),
-    field: 'wasPulled',
+    field: 'pulledAt',
+    format: (val: Date): string => (val ? formatDate(new Date(val)) : '-'),
     align: ColumnAlign.left,
     sortable: true,
     edit: false,

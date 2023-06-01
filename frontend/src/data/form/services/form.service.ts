@@ -12,7 +12,7 @@ import UpdateBillingInput from 'src/data/billing/dto/input/updateBillingInput';
 import UpdateDeviceInput from 'src/data/device/dto/input/updateDeviceInput';
 import UpdateArticleInput from 'src/data/article/dto/input/updateArticleInput';
 import UpdateExpenseInput from 'src/data/expense/dto/input/updateExpenseInput';
-import FormEntityInput from 'src/data/form/input/createFormEntityInput';
+import FormEntityInput from 'src/data/form/dto/input/createFormEntityInput';
 
 import FormEntity from '../entities/form.entity';
 import { FORM, SEARCH_FORMS } from '../form.query';
@@ -123,6 +123,7 @@ export async function updateForm(
 export async function deleteForm(uuid: string): Promise<FormEntity | null> {
   const { data } = await executeMutation<FormEntity>(DELETE_FORM, {
     uuid,
+    softDelete: false,
   });
   return data ?? null;
 }

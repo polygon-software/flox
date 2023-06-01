@@ -1,5 +1,5 @@
 import { Field, ID, InputType, PartialType } from '@nestjs/graphql';
-import { IsBoolean, IsOptional, IsUUID } from 'class-validator';
+import { IsBoolean, IsDate, IsOptional, IsUUID } from 'class-validator';
 
 import CreateFormInput from './create-form.input';
 
@@ -25,4 +25,12 @@ export default class UpdateFormInput extends PartialType(CreateFormInput) {
   @IsBoolean()
   @IsOptional()
   isFinished: boolean;
+
+  @Field(() => Date, {
+    description: 'Last time the form was pulled by ERP',
+    nullable: true,
+  })
+  @IsDate()
+  @IsOptional()
+  pulledAt: Date;
 }
