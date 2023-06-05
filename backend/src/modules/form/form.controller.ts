@@ -98,8 +98,6 @@ export default class FormController extends AbstractSearchResolver<
    * @param headers -Request headers
    * @param req - Request object
    * @param res - Response object
-   * @param page - Page index for pagination (defaults to 0)
-   * @param size - Page size for pagination (defaults to 500)
    * @returns Promise<void>
    */
   @BasicAuth()
@@ -108,11 +106,9 @@ export default class FormController extends AbstractSearchResolver<
     @Headers() headers: Record<string, unknown>,
     @Req() req: Request,
     @Res() res: Response,
-    @Param('page') page = 0,
-    @Param('size') size = 500,
   ): Promise<void> {
     const forms = await super.getAll(
-      { take: size, skip: page * size },
+      { take: 500, skip: 0 },
       {
         relations: this.formRelations,
         where: { isPullable: true },
