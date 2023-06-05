@@ -1,6 +1,6 @@
 import { format, formatISO, parse } from 'date-fns';
 
-const dateFormat = 'dd.MM.yyyy';
+export const dateFormat = 'dd.MM.yyyy';
 const timeFormat = 'hh:mm';
 const dateTimeFormat = `${dateFormat} ${timeFormat}`;
 

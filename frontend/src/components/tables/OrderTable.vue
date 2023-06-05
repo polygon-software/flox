@@ -15,10 +15,10 @@
     <DataTable
       id="order-table"
       :columns="columns"
+      :delete-mutation="DELETE_FORM"
       :filter="filter"
       :query="SEARCH_FORMS"
       :update-mutation="UPDATE_FORM"
-      :delete-mutation="DELETE_FORM"
       delete-selection
       multi
     >
@@ -37,9 +37,9 @@
               <q-item-section class="col-3">
                 <div class="row justify-between items-center">
                   <q-checkbox v-model="statusActive" class="col-3" dense />
-                  <q-item-label class="col-8">{{
-                    $t('fields.status')
-                  }}</q-item-label>
+                  <q-item-label class="col-8">
+                    {{ $t('fields.status') }}
+                  </q-item-label>
                 </div>
               </q-item-section>
               <q-item-section class="col-8" side>
@@ -58,9 +58,9 @@
               <q-item-section class="col-3">
                 <div class="row justify-between items-center">
                   <q-checkbox v-model="typeActive" class="col-3" dense />
-                  <q-item-label class="col-8">{{
-                    $t('fields.order_type')
-                  }}</q-item-label>
+                  <q-item-label class="col-8">
+                    {{ $t('fields.order_type') }}
+                  </q-item-label>
                 </div>
               </q-item-section>
               <q-item-section class="col-8" side>
@@ -79,9 +79,9 @@
               <q-item-section class="col-3">
                 <div class="row justify-between items-center">
                   <q-checkbox v-model="emergencyActive" class="col-3" dense />
-                  <q-item-label class="col-8">{{
-                    $t('fields.emergency')
-                  }}</q-item-label>
+                  <q-item-label class="col-8">
+                    {{ $t('fields.emergency') }}
+                  </q-item-label>
                 </div>
               </q-item-section>
               <q-item-section class="col-8" side>
@@ -95,8 +95,8 @@
                 <div class="row justify-between items-center">
                   <q-checkbox v-model="doneActive" class="col-3" dense />
                   <q-item-label class="col-8">
-                    {{ $t('fields.done') }}</q-item-label
-                  >
+                    {{ $t('fields.done') }}
+                  </q-item-label>
                 </div>
               </q-item-section>
               <q-item-section class="col-8" side>
@@ -105,7 +105,7 @@
             </q-item>
 
             <!-- Filter by creation date -->
-            <q-item class="row justify-between items-center">
+            <q-item class="row justify-between items-center q-mb-md">
               <q-item-section class="col-3">
                 <div class="row justify-between items-center">
                   <q-checkbox v-model="creationActive" class="col-3" dense />
@@ -115,15 +115,31 @@
                 </div>
               </q-item-section>
               <q-item-section class="col-6" side>
-                <q-input v-model="creationFilter" filled mask="##.##.####">
+                <q-input
+                  v-model="creationFilter"
+                  :rules="[
+                    (val) =>
+                      IS_VALID_DATE_STRING(val, quasarDateFormat) ||
+                      $t('errors.invalid_date'),
+                  ]"
+                  filled
+                  mask="##.##.####"
+                >
                   <template #append>
-                    <q-icon class="cursor-pointer" name="event">
+                    <q-icon
+                      class="cursor-pointer"
+                      name="event"
+                      @click="resetInvalidCreationFilter"
+                    >
                       <q-popup-proxy
                         cover
                         transition-hide="scale"
                         transition-show="scale"
                       >
-                        <q-date v-model="creationFilter" mask="DD.MM.YYYY">
+                        <q-date
+                          v-model="creationFilter"
+                          :mask="quasarDateFormat"
+                        >
                           <div class="row items-center justify-end">
                             <q-btn
                               v-close-popup
@@ -141,25 +157,38 @@
             </q-item>
 
             <!-- Filter by whether it has been pulled by ERP -->
-            <q-item class="row justify-between items-center">
+            <q-item class="row justify-between items-center q-mb-md">
               <q-item-section class="col-3">
                 <div class="row justify-between items-center">
                   <q-checkbox v-model="erpActive" class="col-3" dense />
-                  <q-item-label class="col-8">{{
-                    $t('fields.erp')
-                  }}</q-item-label>
+                  <q-item-label class="col-8"
+                    >{{ $t('fields.erp') }}
+                  </q-item-label>
                 </div>
               </q-item-section>
               <q-item-section class="col-6" side>
-                <q-input v-model="erpFilter" filled mask="##.##.####">
+                <q-input
+                  v-model="erpFilter"
+                  :rules="[
+                    (val) =>
+                      IS_VALID_DATE_STRING(val, quasarDateFormat) ||
+                      $t('errors.invalid_date'),
+                  ]"
+                  filled
+                  mask="##.##.####"
+                >
                   <template #append>
-                    <q-icon class="cursor-pointer" name="event">
+                    <q-icon
+                      class="cursor-pointer"
+                      name="event"
+                      @click="resetInvalidErpFilter"
+                    >
                       <q-popup-proxy
                         cover
                         transition-hide="scale"
                         transition-show="scale"
                       >
-                        <q-date v-model="erpFilter" mask="DD.MM.YYYY">
+                        <q-date v-model="erpFilter" :mask="quasarDateFormat">
                           <div class="row items-center justify-end">
                             <q-btn
                               v-close-popup
@@ -210,12 +239,14 @@ import { i18n } from 'boot/i18n';
 import { DELETE_FORM, UPDATE_FORM } from 'src/data/form/form.mutation';
 import ROUTES from 'src/router/routes';
 import FormEntity from 'src/data/form/entities/form.entity';
-import { formatDate, parseDate } from 'src/format/date.format';
+import { dateFormat, formatDate, parseDate } from 'src/format/date.format';
 import JobEntity from 'src/data/job/entities/jobEntity';
+import { IS_VALID_DATE_STRING } from 'src/flox/modules/form/data/RULES';
 
 import DataTable from './DataTable.vue';
 
 const $routerService: RouterService | undefined = inject('$routerService');
+const quasarDateFormat = dateFormat.toUpperCase();
 
 const statusFilter = ref(translatedObjects(JOB_STATUS, 'job_status')[0]);
 const typeFilter = ref(translatedObjects(JOB_TYPE, 'job_type')[0]);
@@ -224,12 +255,42 @@ const emergencyFilter = ref(false);
 const doneFilter = ref(false);
 const creationFilter = ref(formatDate(new Date()));
 
+const isErpFilterValid = computed(() =>
+  IS_VALID_DATE_STRING(erpFilter.value, quasarDateFormat)
+);
+
+const isCreationFilterValid = computed(() =>
+  IS_VALID_DATE_STRING(creationFilter.value, quasarDateFormat)
+);
+
 const statusActive = ref(false);
 const typeActive = ref(false);
 const erpActive = ref(false);
 const emergencyActive = ref(false);
 const doneActive = ref(false);
 const creationActive = ref(false);
+
+/**
+ * If the date of the ERP filter is invalid, reset it to today's date.
+ * This is necessary because the date picker does not validate the date.
+ * If we don't do this, the date picker will accept an invalid date like 05.06.20 and this is very annoying.
+ */
+function resetInvalidErpFilter(): void {
+  if (!isErpFilterValid.value) {
+    erpFilter.value = formatDate(new Date());
+  }
+}
+
+/**
+ * If the date of the creation filter is invalid, reset it to today's date.
+ * This is necessary because the date picker does not validate the date.
+ * If we don't do this, the date picker will accept an invalid date like 05.06.20 and this is very annoying.
+ */
+function resetInvalidCreationFilter(): void {
+  if (!isCreationFilterValid.value) {
+    creationFilter.value = formatDate(new Date());
+  }
+}
 
 const numFilters = computed(() => {
   let num = 0;
