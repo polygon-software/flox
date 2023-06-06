@@ -6,7 +6,9 @@
       dense
       outlined
       style="min-width: 200px"
-      :label="!fieldValue ? $t('fields.select.please_select') : undefined"
+      :label="
+        fieldValue === null ? $t('fields.select.please_select') : undefined
+      "
       @update:model-value="saveValue"
     />
   </LabelWrapper>
@@ -67,7 +69,7 @@ function saveValue(): void {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   fieldValue.value = selectedOption.value?.value ?? null;
 
-  if (fieldValue.value) {
+  if (fieldValue.value !== null) {
     if (props.stateKey) {
       store.setValue(props.stateKey, fieldValue.value);
     } else {
@@ -86,7 +88,7 @@ function saveValue(): void {
  * @returns void
  */
 function matchValue(): void {
-  if (fieldValue.value) {
+  if (fieldValue.value !== null) {
     // Find option that matches selection
     selectedOption.value =
       props.options.find((option) => {

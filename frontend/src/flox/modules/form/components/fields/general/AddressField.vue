@@ -142,7 +142,7 @@ const fieldValue = ref(
  * @returns void
  */
 function saveValue(): void {
-  if (!!fieldValue.value && fieldValue.value.isComplete()) {
+  if (fieldValue.value) {
     if (props.stateKey) {
       store.setValue(props.stateKey, fieldValue.value);
     } else {

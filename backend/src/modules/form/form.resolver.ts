@@ -85,7 +85,7 @@ export default class FormResolver extends AbstractSearchResolver<
   async updateForm(
     @Args('updateFormInput') updateFormInput: UpdateFormInput,
   ): Promise<Form> {
-    return super.update(updateFormInput, {
+    return super.updateNestedEntity(updateFormInput, {
       relations: this.formRelations,
     });
   }
@@ -112,7 +112,7 @@ export default class FormResolver extends AbstractSearchResolver<
    */
   @AdminOnly()
   @Query(() => Form, { name: 'getForm' })
-  async getForm(@Args() getOneArgs: GetOneArgs): Promise<Form | null> {
+  async getForm(@Args() getOneArgs: GetOneArgs): Promise<Form> {
     return super.getOne(getOneArgs, {
       relations: this.formRelations,
     });

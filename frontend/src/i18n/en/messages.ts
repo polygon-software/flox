@@ -26,5 +26,7 @@ export default {
     entry_deleted: 'Entry deleted',
     user_created: 'User created successfully',
     order_created: 'Order created successfully',
+    order_updated: 'Order updated successfully',
+    both_fields_needed: 'Both fields are required to save the entry.',
   },
 };

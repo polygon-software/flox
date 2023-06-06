@@ -25,5 +25,8 @@ export default {
     create: {
       title: 'Auftrag erstellen',
     },
+    edit: {
+      title: 'Auftrag bearbeiten',
+    },
   },
 };

@@ -20,6 +20,20 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     ],
   },
 
+  EDIT_ORDER: {
+    path: '/edit',
+    component: () => import('layouts/SimpleDashboardLayout.vue'),
+    children: [
+      {
+        path: '',
+        component: () => import('pages/CreateOrderPage.vue'),
+        props: (route) => ({
+          orderUuid: route.params.orderUuid,
+        }),
+      },
+    ],
+  },
+
   LOGIN: {
     path: '/login',
     component: () => import('layouts/ClearLayout.vue'),

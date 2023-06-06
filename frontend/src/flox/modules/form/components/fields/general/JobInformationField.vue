@@ -14,12 +14,20 @@
     :label="i18n.global.t('fields.job_status')"
     @change="(newValue) => fieldValueChange('status', newValue)"
   />
+
+  <div
+    v-if="showWarning"
+    class="text-negative q-mx-sm"
+    style="text-align: left"
+  >
+    {{ i18n.global.t('messages.both_fields_needed') }}
+  </div>
 </template>
 
 <script setup lang="ts">
 import { defineProps, Ref, ref, watch } from 'vue';
 
-import { i18n } from 'boot/i18n';
+import { i18n } from 'src/boot/i18n';
 import {
   JOB_STATUS,
   JOB_TYPE,
@@ -47,12 +55,12 @@ const jobTypeOptions = translatedObjects(JOB_TYPE, 'job_type');
 const jobStatusOptions = ref(translatedObjects(JOB_STATUS, 'job_status'));
 
 const initialValue = props.stateKey
-  ? (fetchByKey(props.stateKey) as Job | null)
-  : null;
+  ? (fetchByKey(props.stateKey) as Job | undefined)
+  : undefined;
 
-const fieldValue: Ref<Job> = ref(
-  initialValue && initialValue.isComplete() ? initialValue : new Job()
-);
+const fieldValue: Ref<Job> = ref(initialValue || new Job());
+
+const showWarning = ref(false);
 
 /**
  * Save or emit the updated value if valid, otherwise null
@@ -60,7 +68,10 @@ const fieldValue: Ref<Job> = ref(
  */
 function saveValue(): void {
   if (props.stateKey) {
-    if (fieldValue.value.isComplete()) {
+    showWarning.value =
+      !!(fieldValue.value.type || fieldValue.value.status) &&
+      !(fieldValue.value.type && fieldValue.value.status);
+    if (!!fieldValue.value && fieldValue.value.isComplete()) {
       store.setValue(props.stateKey, fieldValue.value);
     } else {
       store.setValue(props.stateKey, null);
@@ -119,9 +130,9 @@ function fieldValueChange(
   value: JOB_TYPE | JOB_STATUS
 ): void {
   if (fieldKey === 'type') {
-    fieldValue.value.type = value as JOB_TYPE;
+    fieldValue.value = new Job(value as JOB_TYPE, fieldValue.value.status);
   } else if (fieldKey === 'status') {
-    fieldValue.value.status = value as JOB_STATUS;
+    fieldValue.value = new Job(fieldValue.value.type, value as JOB_STATUS);
   } else {
     throw new Error('Unknown field key');
   }

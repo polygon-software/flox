@@ -6,7 +6,7 @@ export default class ArticleNumberEntry {
 
   manufacturerNumber: string | null;
 
-  count: number | null;
+  amount: number | null;
 
   discount: number | null;
 
@@ -14,12 +14,12 @@ export default class ArticleNumberEntry {
   constructor(
     articleNumber: string | null,
     manufacturerNumber: string | null,
-    count: number | null,
+    amount: number | null,
     discount: number | null
   ) {
     this.articleNumber = articleNumber;
     this.manufacturerNumber = manufacturerNumber;
-    this.count = count;
+    this.amount = amount;
     this.discount = discount;
   }
 
@@ -31,7 +31,7 @@ export default class ArticleNumberEntry {
     return (
       this.articleNumber !== null &&
       this.manufacturerNumber !== null &&
-      this.count !== null &&
+      this.amount !== null &&
       this.discount !== null
     );
   }

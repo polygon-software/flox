@@ -50,7 +50,8 @@
 <script setup lang="ts">
 import { ref, Ref, watch } from 'vue';
 
-import FullName from '../../../data/types/FullName';
+import FullName from 'src/flox/modules/form/data/types/FullName';
+
 import { IS_VALID_NAME } from '../../../data/RULES';
 import { FormStateKey, useFormStore } from '../../../stores/form';
 import { fetchByKey } from '../../../helpers/form-helpers';
@@ -80,12 +81,10 @@ const emit = defineEmits<{
 
 const store = useFormStore();
 const initialValue = props.stateKey
-  ? (fetchByKey(props.stateKey) as FullName | null)
-  : props.initialValue;
+  ? (fetchByKey(props.stateKey) as FullName | undefined)
+  : (props.initialValue as FullName | undefined);
 
-const fieldValue: Ref<FullName> = ref(
-  initialValue && initialValue.isComplete() ? initialValue : new FullName()
-);
+const fieldValue: Ref<FullName> = ref(initialValue || new FullName());
 
 /**
  * Save or emit the updated value if valid, otherwise null
@@ -93,9 +92,14 @@ const fieldValue: Ref<FullName> = ref(
  */
 function saveValue(): void {
   if (props.stateKey) {
-    if (fieldValue.value.isComplete()) {
+    if (fieldValue.value) {
+      const fullName = new FullName(
+        fieldValue.value.firstName,
+        undefined,
+        fieldValue.value.lastName
+      );
       // Replace empty strings with undefined
-      fieldValue.value.fixEmptyStrings();
+      fullName.fixEmptyStrings();
       store.setValue(props.stateKey, fieldValue.value);
     } else {
       store.setValue(props.stateKey, null);

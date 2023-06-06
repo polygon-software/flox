@@ -26,5 +26,8 @@ export default {
     entry_deleted: 'Eintrag gelöscht',
     user_created: 'Benutzer erfolgreich erstellt',
     order_created: 'Auftrag erfolgreich erstellt',
+    order_updated: 'Auftrag erfolgreich aktualisiert',
+    both_fields_needed:
+      'Beide Felder müssen ausgefüllt werden, um den Eintrag zu speichern.',
   },
 };

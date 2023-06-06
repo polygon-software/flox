@@ -66,7 +66,14 @@
 </template>
 
 <script setup lang="ts">
-import { Ref, ref, withDefaults, defineProps } from 'vue';
+import {
+  Ref,
+  ref,
+  withDefaults,
+  defineProps,
+  computed,
+  onBeforeMount,
+} from 'vue';
 import { cloneDeep } from 'lodash-es';
 
 import { ColumnAlign, ColumnInterface } from 'components/tables/useDataTable';
@@ -75,6 +82,8 @@ import { i18n } from 'boot/i18n';
 import LabelWrapper from 'src/flox/modules/form/components/fields/general/wrappers/LabelWrapper.vue';
 import { FormStateKey, useFormStore } from 'src/flox/modules/form/stores/form';
 import TimeRecordingEntry from 'src/flox/modules/form/data/types/TimeRecordingEntry';
+import { fetchByKey } from 'src/flox/modules/form/helpers/form-helpers';
+import { FIELDS } from 'src/flox/modules/form/data/FIELDS';
 
 const props = withDefaults(
   defineProps<{
@@ -90,16 +99,16 @@ const props = withDefaults(
 const store = useFormStore();
 const columns: Ref<ColumnInterface<UserEntity>[]> = ref([
   {
-    name: 'taskType',
+    name: 'name',
     label: i18n.global.t('fields.task_type'),
-    field: 'taskType',
+    field: 'name',
     align: ColumnAlign.left,
     sortable: false,
   },
   {
-    name: 'duration',
+    name: 'timeAmount',
     label: `${i18n.global.t('fields.duration')} (h)`,
-    field: 'duration',
+    field: 'timeAmount',
     align: ColumnAlign.left,
     sortable: true,
   },
@@ -129,6 +138,15 @@ const timeRecordings: Ref<TimeRecordingEntry[]> = ref(
   cloneDeep(props.oldTimeRecordings)
 );
 
+const recordings = computed(() => {
+  return fetchByKey({
+    formKey: props.stateKey?.formKey,
+    pageKey: 'formData',
+    cardKey: 'productsAndTimeRecording',
+    fieldKey: FIELDS.TIME_RECORDINGS.key,
+  }) as TimeRecordingEntry[] | null;
+});
+
 /**
  * Save the updated value if valid, otherwise null
  * @returns void
@@ -156,8 +174,8 @@ function deleteRow(index: number): void {
  */
 function isTimeRecordingValid(): boolean {
   return (
-    !!timeRecordingEntry.value.taskType &&
-    !!timeRecordingEntry.value.duration &&
+    !!timeRecordingEntry.value.name &&
+    !!timeRecordingEntry.value.timeAmount &&
     !!timeRecordingEntry.value.discount
   );
 }
@@ -178,7 +196,7 @@ function setValuesToNull(): void {
  * @returns {void}
  */
 function addTaskType(val: string): void {
-  timeRecordingEntry.value.taskType = val;
+  timeRecordingEntry.value.name = val;
 
   if (isTimeRecordingValid()) {
     timeRecordings.value.push(timeRecordingEntry.value);
@@ -193,7 +211,7 @@ function addTaskType(val: string): void {
  * @returns {void}
  */
 function addDuration(val: number): void {
-  timeRecordingEntry.value.duration = Number(val);
+  timeRecordingEntry.value.timeAmount = Number(val);
 
   if (isTimeRecordingValid()) {
     timeRecordings.value.push(timeRecordingEntry.value);
@@ -215,4 +233,14 @@ function addDiscount(val: number): void {
     setValuesToNull();
   }
 }
+
+/**
+ *  Set time recordings in table when component is mounted
+ *  @returns {void} - done
+ */
+onBeforeMount(() => {
+  if (recordings.value) {
+    timeRecordings.value = recordings.value;
+  }
+});
 </script>

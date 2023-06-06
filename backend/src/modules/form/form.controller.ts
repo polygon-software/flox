@@ -133,7 +133,7 @@ export default class FormController extends AbstractSearchResolver<
         uuid: form.uuid,
         pulledAt: new Date(),
       };
-      promiseArray.push(super.update(updateInput));
+      promiseArray.push(super.updateNestedEntity(updateInput));
     });
     await Promise.all(promiseArray);
 

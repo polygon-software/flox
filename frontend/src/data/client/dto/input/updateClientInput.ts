@@ -47,8 +47,7 @@ export default class UpdateClientInput extends CreateClientInput {
 
   /**
    * Transform ClientEntity to input
-   * @param [client] - The client entitiy from db
-   * @param [uuid] - The uuid of the client
+   * @param [client] - The client entity from db
    * @returns - The client input for update
    */
   static fromClient(client?: ClientEntity): UpdateClientInput {

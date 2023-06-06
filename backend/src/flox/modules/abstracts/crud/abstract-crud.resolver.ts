@@ -83,6 +83,21 @@ export default abstract class AbstractCrudResolver<
   }
 
   /**
+   * Updates an existing entity within the database according to the update input by saving a given entity in the database.
+   * If entity does not exist in the database then inserts, otherwise updates.
+   *
+   * @param updateInput - specification of update, must be deep partial of entity
+   * @param options - additional type ORM find options that are applied to find query
+   * @returns the updated entity, freshly retrieved from the database
+   */
+  async updateNestedEntity(
+    updateInput: UpdateInput,
+    options?: FindOneOptions<Entity>,
+  ): Promise<Entity> {
+    return this.service.updateNestedEntity(updateInput, options);
+  }
+
+  /**
    * Removes an entity from the database
    *
    * @param deleteInput - contains the uuid of the item to remove

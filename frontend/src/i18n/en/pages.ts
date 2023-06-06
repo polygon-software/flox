@@ -25,5 +25,8 @@ export default {
     create: {
       title: 'Create Order',
     },
+    edit: {
+      title: 'Edit Order',
+    },
   },
 };

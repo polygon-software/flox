@@ -36,7 +36,9 @@ export default class ImageFileResolver extends AbstractSearchResolver<
   ): Promise<ImageFile> {
     const file = await super.create(createFileInput);
     const signedUrl = await this.imageFileService.createSignedUploadUrl(file);
-    const updatedFile = await this.imageFileService.update({ uuid: file.uuid });
+    const updatedFile = await this.imageFileService.updateNestedEntity({
+      uuid: file.uuid,
+    });
     return {
       ...updatedFile,
       signedUrl,

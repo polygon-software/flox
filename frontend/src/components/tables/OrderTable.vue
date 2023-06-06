@@ -21,6 +21,7 @@
       :update-mutation="UPDATE_FORM"
       delete-selection
       multi
+      @update:selected="updateSelectedItems"
     >
       <template #header>
         <q-btn-dropdown class="q-mr-xl" flat multiple>
@@ -214,11 +215,12 @@
   <div class="row full-width no-wrap q-mb-lg">
     <!-- Edit -->
     <q-btn
-      :label="$t('buttons.edit')"
+      :disable="selectedItems.length !== 1"
       class="btn-col q-mx-md text-white bg-primary"
-      icon="edit"
       style="margin-left: 0"
-      @click="placeholder"
+      icon="edit"
+      :label="$t('buttons.edit')"
+      @click="editOrder"
     />
   </div>
 </template>
@@ -241,6 +243,7 @@ import ROUTES from 'src/router/routes';
 import FormEntity from 'src/data/form/entities/form.entity';
 import { dateFormat, formatDate, parseDate } from 'src/format/date.format';
 import JobEntity from 'src/data/job/entities/jobEntity';
+import BaseEntity from 'src/flox/core/base-entity/entities/BaseEntity';
 import { IS_VALID_DATE_STRING } from 'src/flox/modules/form/data/RULES';
 
 import DataTable from './DataTable.vue';
@@ -414,12 +417,25 @@ async function createOrder(): Promise<void> {
   await $routerService?.routeTo(ROUTES.CREATE_ORDER);
 }
 
+const selectedItems = ref<BaseEntity[]>([]);
+
 /**
- * Function that does nothing and is a placeholder
- * TODO: Implement functionality
+ * Edit selected items
  */
-function placeholder(): void {
-  // Do nothing
+async function editOrder(): Promise<void> {
+  await $routerService?.routeTo(
+    ROUTES.EDIT_ORDER,
+    { orderUuid: selectedItems.value[0].uuid },
+    false
+  );
+}
+
+/**
+ * Updates the selected items of the order table
+ * @param selected
+ */
+function updateSelectedItems(selected: BaseEntity[]): void {
+  selectedItems.value = selected;
 }
 </script>
 

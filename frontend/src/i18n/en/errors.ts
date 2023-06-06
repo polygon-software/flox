@@ -63,5 +63,6 @@ export default {
     no_verification_code:
       'Please enter your verifiction code, which you received by e-mail.',
     user_creation_failed: 'User could not be created.',
+    order_not_updated: 'Could not update order.',
   },
 };

@@ -75,7 +75,14 @@
 </template>
 
 <script setup lang="ts">
-import { Ref, ref, withDefaults, defineProps } from 'vue';
+import {
+  Ref,
+  ref,
+  withDefaults,
+  defineProps,
+  computed,
+  onBeforeMount,
+} from 'vue';
 import { cloneDeep } from 'lodash-es';
 
 import { ColumnAlign, ColumnInterface } from 'components/tables/useDataTable';
@@ -84,6 +91,8 @@ import { i18n } from 'boot/i18n';
 import LabelWrapper from 'src/flox/modules/form/components/fields/general/wrappers/LabelWrapper.vue';
 import { FormStateKey, useFormStore } from 'src/flox/modules/form/stores/form';
 import ArticleNumberEntry from 'src/flox/modules/form/data/types/ArticleNumberEntry';
+import { fetchByKey } from 'src/flox/modules/form/helpers/form-helpers';
+import { FIELDS } from 'src/flox/modules/form/data/FIELDS';
 
 const props = withDefaults(
   defineProps<{
@@ -112,9 +121,9 @@ const columns: Ref<ColumnInterface<UserEntity>[]> = ref([
     sortable: true,
   },
   {
-    name: 'count',
+    name: 'amount',
     label: i18n.global.t('fields.count'),
-    field: 'count',
+    field: 'amount',
     align: ColumnAlign.left,
     sortable: true,
   },
@@ -147,6 +156,15 @@ const articleNumbers: Ref<ArticleNumberEntry[]> = ref(
   cloneDeep(props.oldArticleNumbers)
 );
 
+const articles = computed(() => {
+  return fetchByKey({
+    formKey: props.stateKey?.formKey,
+    pageKey: 'formData',
+    cardKey: 'productsAndTimeRecording',
+    fieldKey: FIELDS.ARTICLE_NUMBERS.key,
+  }) as ArticleNumberEntry[] | null;
+});
+
 /**
  * Save the updated value if valid, otherwise null
  * @returns void
@@ -176,7 +194,7 @@ function isArticleNumberEntryValid(): boolean {
   return (
     !!articleNumberEntry.value.articleNumber &&
     !!articleNumberEntry.value.manufacturerNumber &&
-    !!articleNumberEntry.value.count &&
+    !!articleNumberEntry.value.amount &&
     !!articleNumberEntry.value.discount
   );
 }
@@ -228,7 +246,7 @@ function addManufacturerNumber(val: string): void {
  * @returns {void}
  */
 function addCount(val: number): void {
-  articleNumberEntry.value.count = Number(val);
+  articleNumberEntry.value.amount = Number(val);
   if (isArticleNumberEntryValid()) {
     articleNumbers.value.push(articleNumberEntry.value);
     saveValue();
@@ -249,4 +267,14 @@ function addDiscount(val: number): void {
     setValuesToNull();
   }
 }
+
+/**
+ *  Set article numbers in table when component is mounted
+ *  @returns {void} - done
+ */
+onBeforeMount(() => {
+  if (articles.value) {
+    articleNumbers.value = articles.value;
+  }
+});
 </script>

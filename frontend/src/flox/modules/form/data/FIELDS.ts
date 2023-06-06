@@ -201,6 +201,7 @@ const FIELDS: Record<string, Field> = {
     key: 'fullName',
     component: markRaw(FullNameField),
     attributes: {
+      showOptionalFields: false,
       optional: true,
       dense: true,
       rules: [],
@@ -369,7 +370,7 @@ const FIELDS: Record<string, Field> = {
     },
   },
   INFORMATION: {
-    key: 'productionNumber',
+    key: 'information',
     component: markRaw(GenericInputField),
     attributes: {
       type: 'textarea',

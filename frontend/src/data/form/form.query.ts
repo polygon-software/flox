@@ -229,7 +229,7 @@ export const FORM: QueryObject = {
     }
   `,
   tables: [TABLES.FORM],
-  cacheLocation: 'form',
+  cacheLocation: 'getForm',
 };
 
 export const FORM_QUERIES: QueryObject[] = [SEARCH_FORMS, FORM];

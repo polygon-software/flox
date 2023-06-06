@@ -75,12 +75,11 @@ watch(
     ) {
       fieldValue.value = 0;
       showField.value = true;
-      saveValue();
     } else {
       fieldValue.value = null;
       showField.value = false;
-      saveValue();
     }
+    saveValue();
   }
 );
 
@@ -88,8 +87,15 @@ watch(
  * If no value in store yet, write default
  */
 onBeforeMount(() => {
-  if (!initialValue) {
-    saveValue();
+  if (
+    floorType.value === FLOOR.BASEMENT ||
+    floorType.value === FLOOR.UPPER_FLOOR
+  ) {
+    showField.value = true;
+  } else {
+    fieldValue.value = null;
+    showField.value = false;
   }
+  saveValue();
 });
 </script>

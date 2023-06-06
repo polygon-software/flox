@@ -1,5 +1,5 @@
 import { FormStateKey, useFormStore } from 'src/flox/modules/form/stores/form';
-import FormEntityInput from 'src/data/form/dto/input/createFormEntityInput';
+import FormEntityInput from 'src/data/form/input/createFormEntityInput';
 import { FIELDS } from 'src/flox/modules/form/data/FIELDS';
 import UpdateJobInput from 'src/data/job/dto/input/updateJobInput';
 import FullName from 'src/flox/modules/form/data/types/FullName';
@@ -14,8 +14,10 @@ import ArticleNumberEntry from 'src/flox/modules/form/data/types/ArticleNumberEn
 import TimeRecordingEntry from 'src/flox/modules/form/data/types/TimeRecordingEntry';
 import UpdateArticleInput from 'src/data/article/dto/input/updateArticleInput';
 import UpdateExpenseInput from 'src/data/expense/dto/input/updateExpenseInput';
+import FormEntity from 'src/data/form/entities/form.entity';
 import FileEntity from 'src/flox/modules/file/entities/file.entity';
 import UpdateImageFileInput from 'src/data/imageFile/dto/input/updateImageFileInput';
+import ImageFileEntity from 'src/data/imageFile/entities/imageFileEntity';
 
 /**
  * Helper function for getting field contents
@@ -33,12 +35,146 @@ function getFieldValue(
 }
 
 /**
+ * Fill formstore with fetched form entity values
+ * @param formKey - key of form
+ * @param formEntity - fetched form entity
+ * @returns - input for updating a form entity
+ */
+export function fillFormStoreWithFormEntityValues(
+  formEntity: FormEntity,
+  formKey: string
+): void {
+  const store = useFormStore();
+  const storeKey = {
+    formKey,
+    pageKey: 'formData',
+    cardKey: '',
+    fieldKey: '',
+  } as FormStateKey;
+  const setFieldValue = (field: { key: string }, val: unknown): void => {
+    storeKey.fieldKey = field.key;
+    store.setValue(storeKey, val);
+  };
+
+  // basic data
+  storeKey.cardKey = 'basicData';
+  setFieldValue(FIELDS.END_DATE, formEntity.endDate);
+  setFieldValue(FIELDS.EXTERNAL_ORDER_NUMBER, formEntity.externalOrderNumber);
+  setFieldValue(FIELDS.INTERNAL_ORDER_NUMBER, formEntity.internalOrderNumber);
+  setFieldValue(FIELDS.OWNER, formEntity.owner);
+  setFieldValue(FIELDS.OBJECT_NUMBER, formEntity.objectNumber);
+
+  // job data
+  storeKey.cardKey = 'jobInformation';
+  setFieldValue(FIELDS.JOB_INFORMATION, formEntity.job);
+
+  // client data
+  storeKey.cardKey = 'clientData';
+  setFieldValue(FIELDS.FULL_NAME, {
+    firstName: formEntity.client?.firstName,
+    lastName: formEntity.client?.lastName,
+  } as FullName);
+  setFieldValue(FIELDS.COMPANY_NAME, formEntity.client?.companyName);
+  setFieldValue(FIELDS.COMPANY_LEGAL_FORM, formEntity.client?.companyLegalForm);
+  setFieldValue(FIELDS.ADDRESS, formEntity.client?.address);
+  setFieldValue(FIELDS.PHONE_NUMBER, formEntity.client?.phoneNumber);
+  setFieldValue(FIELDS.EMAIL, formEntity.client?.email);
+  setFieldValue({ key: 'uuid' }, formEntity.client?.uuid);
+
+  // tenant data
+  storeKey.cardKey = 'tenantData';
+  setFieldValue(FIELDS.FULL_NAME, {
+    firstName: formEntity.tenant?.firstName,
+    lastName: formEntity.tenant?.lastName,
+  } as FullName);
+  setFieldValue(FIELDS.EXTENDED_ADDRESS, formEntity.tenant?.address);
+  setFieldValue(FIELDS.PHONE_NUMBER, formEntity.tenant?.phoneNumber);
+  setFieldValue(FIELDS.EMAIL, formEntity.tenant?.email);
+  setFieldValue(FIELDS.FLOOR, formEntity.tenant?.floorType);
+  setFieldValue(FIELDS.FLOOR_NUMBER, formEntity.tenant?.floorNumber);
+  setFieldValue({ key: 'uuid' }, formEntity.tenant?.uuid);
+
+  // billing data
+  storeKey.cardKey = 'billingData';
+  setFieldValue(FIELDS.FULL_NAME, {
+    firstName: formEntity.billing?.firstName,
+    lastName: formEntity.billing?.lastName,
+  } as FullName);
+  setFieldValue(FIELDS.COMPANY_NAME, formEntity.billing?.companyName);
+  setFieldValue(FIELDS.EXTENDED_ADDRESS, formEntity.billing?.address);
+  setFieldValue(FIELDS.EMAIL, formEntity.billing?.email);
+  setFieldValue({ key: 'uuid' }, formEntity.billing?.uuid);
+
+  // TODO: add possibility to add n devices
+  // device data 1
+  storeKey.cardKey = 'deviceData1';
+  setFieldValue(FIELDS.SELECT_DEVICE_TYPE, formEntity.devices?.[0]?.deviceType);
+  setFieldValue(
+    FIELDS.MANUFACTURER,
+    formEntity.devices?.[0]?.deviceManufacturer
+  );
+  setFieldValue(FIELDS.MODEL, formEntity.devices?.[0]?.deviceModel);
+  setFieldValue(
+    FIELDS.PRODUCTION_NUMBER,
+    formEntity.devices?.[0]?.deviceProductionNumber
+  );
+  setFieldValue(
+    FIELDS.PRODUCTION_YEAR,
+    formEntity.devices?.[0]?.deviceProductionYear
+  );
+  setFieldValue(FIELDS.INFORMATION, formEntity.devices?.[0]?.deviceInformation);
+
+  // device data 2
+  storeKey.cardKey = 'deviceData2';
+  setFieldValue(FIELDS.SELECT_DEVICE_TYPE, formEntity.devices?.[1]?.deviceType);
+  setFieldValue(
+    FIELDS.MANUFACTURER,
+    formEntity.devices?.[1]?.deviceManufacturer
+  );
+  setFieldValue(FIELDS.MODEL, formEntity.devices?.[1]?.deviceModel);
+  setFieldValue(
+    FIELDS.PRODUCTION_NUMBER,
+    formEntity.devices?.[1]?.deviceProductionNumber
+  );
+  setFieldValue(
+    FIELDS.PRODUCTION_YEAR,
+    formEntity.devices?.[1]?.deviceProductionYear
+  );
+  setFieldValue(FIELDS.INFORMATION, formEntity.devices?.[1]?.deviceInformation);
+
+  // additional data
+  storeKey.cardKey = 'additionalData';
+  setFieldValue(FIELDS.SELECT_POWER_MEASUREMENT, formEntity.measurePower);
+  setFieldValue(FIELDS.PROBLEM_DESCRIPTION, formEntity.description);
+  setFieldValue(FIELDS.PROTOCOL_DATE, formEntity.protocolDate);
+  setFieldValue(FIELDS.PROTOCOL, formEntity.protocolText);
+
+  // productsAndTimeRecording
+  storeKey.cardKey = 'productsAndTimeRecording';
+  setFieldValue(FIELDS.ARTICLE_NUMBERS, formEntity.articles);
+  setFieldValue(FIELDS.TIME_RECORDINGS, formEntity.expenses);
+
+  // final data
+  storeKey.cardKey = 'finalInformation';
+  setFieldValue(FIELDS.TOTAL_AMOUNT, formEntity.totalAmount);
+  setFieldValue(FIELDS.EMPLOYEE_ABBREVIATION, formEntity.employeeId);
+  setFieldValue(FIELDS.FREE_TEXT, formEntity.freeText);
+
+  // file upload
+  storeKey.cardKey = 'fileUpload';
+  setFieldValue(FIELDS.FILE_UPLOAD, formEntity.images);
+}
+
+/**
  * Transform the FormValues to FormEntityValues
- * @param {string} formKey - key of form
- * @returns {FormEntityInput} - input for creating/updating a form entity
+ * @param formKey - key of form
+ * @param uuid - uuid of form
+ * @returns - input for creating/updating a form entity
  */
 export default function formValuesToFormEntityValues(
-  formKey: string
+  formKey: string,
+  uuid?: string,
+  oldImages?: ImageFileEntity[]
 ): FormEntityInput {
   const storeKey = {
     formKey,
@@ -75,7 +211,7 @@ export default function formValuesToFormEntityValues(
   const billingFullName = getFieldValue(storeKey, FIELDS.FULL_NAME) as
     | FullName
     | undefined;
-  const billingAddress = getFieldValue(storeKey, FIELDS.ADDRESS) as
+  const billingAddress = getFieldValue(storeKey, FIELDS.EXTENDED_ADDRESS) as
     | AddressInput
     | undefined;
   const billingEmail = getFieldValue(storeKey, FIELDS.EMAIL) as
@@ -91,10 +227,12 @@ export default function formValuesToFormEntityValues(
           billingAddress?.street,
           billingAddress?.number,
           billingAddress?.city,
-          Number(billingAddress?.zipCode)
+          Number(billingAddress?.zipCode),
+          billingAddress?.additionalAddress
         )
       : undefined,
-    billingEmail
+    billingEmail,
+    uuid ? (getFieldValue(storeKey, { key: 'uuid' }) as string) : undefined
   );
 
   storeKey.cardKey = 'clientData';
@@ -132,7 +270,7 @@ export default function formValuesToFormEntityValues(
       : undefined,
     clientPhoneNumber?.toString(),
     clientEmail,
-    undefined
+    uuid ? (getFieldValue(storeKey, { key: 'uuid' }) as string) : undefined
   );
 
   storeKey.cardKey = 'tenantData';
@@ -142,6 +280,7 @@ export default function formValuesToFormEntityValues(
   const tenantAddress = getFieldValue(storeKey, FIELDS.EXTENDED_ADDRESS) as
     | AddressInput
     | undefined;
+
   const tenantPhoneNumber = getFieldValue(storeKey, FIELDS.PHONE_NUMBER) as
     | string
     | undefined;
@@ -160,13 +299,15 @@ export default function formValuesToFormEntityValues(
           tenantAddress?.street,
           tenantAddress?.number,
           tenantAddress?.city,
-          Number(tenantAddress?.zipCode)
+          Number(tenantAddress?.zipCode),
+          tenantAddress?.additionalAddress
         )
       : undefined,
     tenantPhoneNumber?.toString(),
     tenantEmail,
     floorType,
-    floorNumber
+    floorNumber,
+    uuid ? (getFieldValue(storeKey, { key: 'uuid' }) as string) : undefined
   );
 
   storeKey.cardKey = 'additionalData';
@@ -185,7 +326,6 @@ export default function formValuesToFormEntityValues(
     | Date
     | undefined;
 
-  // TODO: add possibility for n devices
   storeKey.cardKey = 'deviceData1';
   const deviceType1 = getFieldValue(storeKey, FIELDS.SELECT_DEVICE_TYPE) as
     | DEVICE_TYPE
@@ -254,7 +394,7 @@ export default function formValuesToFormEntityValues(
     return new UpdateArticleInput(
       entry.articleNumber ?? undefined,
       entry.manufacturerNumber?.toString() ?? undefined,
-      entry.count ?? undefined,
+      entry.amount ?? undefined,
       entry.discount ?? undefined
     );
   });
@@ -264,8 +404,8 @@ export default function formValuesToFormEntityValues(
     | undefined;
   const expensesInput = timeRecordings?.map((entry) => {
     return new UpdateExpenseInput(
-      entry.taskType ?? undefined,
-      entry.duration ?? undefined,
+      entry.name ?? undefined,
+      entry.timeAmount ?? undefined,
       entry.discount ?? undefined
     );
   });
@@ -281,11 +421,13 @@ export default function formValuesToFormEntityValues(
   const freeText = getFieldValue(storeKey, FIELDS.FREE_TEXT) as
     | string
     | undefined;
-
   storeKey.cardKey = 'fileUpload';
   const images = getFieldValue(storeKey, FIELDS.FILE_UPLOAD) as
     | FileEntity[]
     | undefined;
+  if (oldImages) {
+    images?.push(...oldImages);
+  }
   const imageFileInputs = images?.map((image) => {
     return new UpdateImageFileInput(
       image.filename,
@@ -298,7 +440,7 @@ export default function formValuesToFormEntityValues(
 
   // return the input object for creating/updating a form entity
   return new FormEntityInput(
-    undefined,
+    uuid ?? undefined,
     job,
     undefined,
     endDate,

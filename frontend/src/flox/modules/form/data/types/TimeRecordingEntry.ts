@@ -2,9 +2,9 @@
  * TimerRecordingEntry class containing the timer recording entry details
  */
 export default class TimeRecordingEntry {
-  taskType: string | null;
+  name: string | null;
 
-  duration: number | null;
+  timeAmount: number | null;
 
   discount: number | null;
 
@@ -14,8 +14,8 @@ export default class TimeRecordingEntry {
     duration: number | null,
     discount: number | null
   ) {
-    this.taskType = taskType;
-    this.duration = duration;
+    this.name = taskType;
+    this.timeAmount = duration;
     this.discount = discount;
   }
 
@@ -25,7 +25,7 @@ export default class TimeRecordingEntry {
    */
   isComplete(): boolean {
     return (
-      this.taskType !== null && this.duration !== null && this.discount !== null
+      this.name !== null && this.timeAmount !== null && this.discount !== null
     );
   }
 }
