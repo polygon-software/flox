@@ -8,12 +8,10 @@ import {
 } from 'typeorm';
 import { Field, ObjectType } from '@nestjs/graphql';
 import {
-  IsEmail,
   IsEnum,
   IsNumber,
   IsObject,
   IsOptional,
-  IsPhoneNumber,
   IsString,
 } from 'class-validator';
 
@@ -48,7 +46,7 @@ export default class Tenant extends BaseEntity {
 
   @Field(() => String, { description: "Tenant's phone number", nullable: true })
   @Column({ nullable: true })
-  @IsPhoneNumber()
+  @IsString()
   @IsOptional()
   phoneNumber: string;
 
@@ -57,7 +55,7 @@ export default class Tenant extends BaseEntity {
     nullable: true,
   })
   @Column({ nullable: true })
-  @IsEmail()
+  @IsString()
   @IsOptional()
   email: string;
 

@@ -241,7 +241,12 @@ import { i18n } from 'boot/i18n';
 import { DELETE_FORM, UPDATE_FORM } from 'src/data/form/form.mutation';
 import ROUTES from 'src/router/routes';
 import FormEntity from 'src/data/form/entities/form.entity';
-import { dateFormat, formatDate, parseDate } from 'src/format/date.format';
+import {
+  dateFormat,
+  formatDate,
+  formatDateTime,
+  parseDate,
+} from 'src/format/date.format';
 import JobEntity from 'src/data/job/entities/jobEntity';
 import BaseEntity from 'src/flox/core/base-entity/entities/BaseEntity';
 import { IS_VALID_DATE_STRING } from 'src/flox/modules/form/data/RULES';
@@ -318,11 +323,12 @@ const filter = computed(() => ({
 }));
 const columns = computed(() => [
   {
-    name: 'creationDate',
+    name: 'createdAt',
     label: i18n.global.t('fields.creation_date'),
     field: 'createdAt',
     align: ColumnAlign.left,
-    format: (val: number): string => (val ? formatDate(new Date(val)) : '-'),
+    format: (val: number): string =>
+      val ? formatDateTime(new Date(val)) : '-',
     sortable: true,
     edit: false,
     visible: true,
@@ -337,7 +343,7 @@ const columns = computed(() => [
     visible: false,
   },
   {
-    name: 'orderNumber',
+    name: 'internalOrderNumber',
     label: i18n.global.t('fields.order_number'),
     field: 'internalOrderNumber',
     align: ColumnAlign.left,
@@ -346,39 +352,37 @@ const columns = computed(() => [
     visible: true,
   },
   {
-    name: 'orderType',
+    name: 'job.type',
     label: i18n.global.t('fields.order_type'),
     field: (row: FormEntity): JobEntity | undefined => row.job,
     format: (value: JobEntity): string =>
       value ? i18n.global.t(`enum.job_type.${value?.type as string}`) : '-',
     align: ColumnAlign.left,
-    sortable: true,
     edit: false,
     visible: true,
   },
   {
-    name: 'status',
+    name: 'job.status',
     label: i18n.global.t('fields.status'),
     field: (row: FormEntity): JobEntity | undefined => row.job,
     format: (value: JobEntity): string =>
       value ? i18n.global.t(`enum.job_status.${value?.status as string}`) : '-',
     align: ColumnAlign.left,
-    sortable: true,
     edit: false,
     visible: true,
   },
   {
-    name: 'erp',
+    name: 'pulledAt',
     label: i18n.global.t('fields.erp'),
     field: 'pulledAt',
-    format: (val: Date): string => (val ? formatDate(new Date(val)) : '-'),
+    format: (val: Date): string => (val ? formatDateTime(new Date(val)) : '-'),
     align: ColumnAlign.left,
     sortable: true,
     edit: false,
     visible: true,
   },
   {
-    name: 'emergency',
+    name: 'isEmergency',
     label: i18n.global.t('fields.emergency'),
     field: 'isEmergency',
     align: ColumnAlign.left,
@@ -388,7 +392,7 @@ const columns = computed(() => [
     booleanFieldType: BOOLEAN_FIELD_TYPE.TOGGLE,
   },
   {
-    name: 'done',
+    name: 'isFinished',
     label: i18n.global.t('fields.done'),
     field: 'isFinished',
     align: ColumnAlign.left,
@@ -398,7 +402,7 @@ const columns = computed(() => [
     booleanFieldType: BOOLEAN_FIELD_TYPE.TOGGLE,
   },
   {
-    name: 'fromErp',
+    name: 'isPullable',
     label: i18n.global.t('fields.from_erp'),
     field: 'isPullable',
     align: ColumnAlign.left,

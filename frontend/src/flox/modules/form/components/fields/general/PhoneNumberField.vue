@@ -103,17 +103,10 @@ onBeforeMount(() => {
  */
 watch(phoneInput, () => {
   if (selectedCode.value && phoneInput.value) {
-    const newInput = (selectedCode.value.value + phoneInput.value).replaceAll(
+    fieldValue.value = (selectedCode.value.value + phoneInput.value).replaceAll(
       ' ',
       ''
     );
-
-    // Check validity (otherwise save null)
-    if (isPhoneNumber(newInput, selectedCode.value.code)) {
-      fieldValue.value = newInput;
-    } else {
-      fieldValue.value = null;
-    }
   } else {
     fieldValue.value = null;
   }

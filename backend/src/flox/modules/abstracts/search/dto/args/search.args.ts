@@ -30,7 +30,7 @@ export default class SearchArgs extends GetAllArgs {
 
   @Field(() => Boolean, { defaultValue: false, description: 'Sort descending' })
   @IsBoolean()
-  descending?: string;
+  descending?: boolean;
 
   @Field(() => [String], {
     nullable: true,

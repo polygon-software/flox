@@ -1,11 +1,4 @@
-import {
-  IsEmail,
-  IsEnum,
-  IsObject,
-  IsOptional,
-  IsPhoneNumber,
-  IsString,
-} from 'class-validator';
+import { IsEnum, IsObject, IsOptional, IsString } from 'class-validator';
 
 import BaseEntity from 'src/flox/core/base-entity/entities/BaseEntity';
 import { LEGAL_FORM } from 'src/data/ENUM';
@@ -35,11 +28,11 @@ export default class ClientEntity extends BaseEntity {
   @IsOptional()
   address?: AddressEntity;
 
-  @IsPhoneNumber()
+  @IsString()
   @IsOptional()
   phoneNumber?: string;
 
-  @IsEmail()
+  @IsString()
   @IsOptional()
   email?: string;
 }

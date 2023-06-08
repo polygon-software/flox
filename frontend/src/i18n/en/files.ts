@@ -3,6 +3,7 @@
 
 export default {
   files: {
+    download: 'Download',
     files: 'Files',
     create_folder: 'Create Folder',
     folder_name: 'Folder Name',

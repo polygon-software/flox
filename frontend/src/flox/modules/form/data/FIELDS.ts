@@ -49,7 +49,6 @@ const FIELDS: Record<string, Field> = {
     key: 'email',
     component: markRaw(GenericInputField),
     attributes: {
-      type: 'email',
       label: i18n.global.t('authentication.email'),
       rules: [],
     },

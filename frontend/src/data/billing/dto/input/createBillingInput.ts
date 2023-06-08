@@ -1,4 +1,4 @@
-import { IsEmail, IsObject, IsOptional, IsString } from 'class-validator';
+import { IsObject, IsOptional, IsString } from 'class-validator';
 
 import UpdateAddressInput from 'src/data/address/input/dto/updateAddressInput';
 
@@ -22,7 +22,7 @@ export default class CreateBillingInput {
   @IsOptional()
   address?: UpdateAddressInput;
 
-  @IsEmail()
+  @IsString()
   @IsOptional()
   email?: string;
 }

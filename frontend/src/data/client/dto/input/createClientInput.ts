@@ -1,11 +1,4 @@
-import {
-  IsEmail,
-  IsEnum,
-  IsObject,
-  IsOptional,
-  IsPhoneNumber,
-  IsString,
-} from 'class-validator';
+import { IsEnum, IsObject, IsOptional, IsString } from 'class-validator';
 
 import { LEGAL_FORM } from 'src/data/ENUM';
 import UpdateAddressInput from 'src/data/address/input/dto/updateAddressInput';
@@ -34,11 +27,11 @@ export default class CreateClientInput {
   @IsOptional()
   address?: UpdateAddressInput;
 
-  @IsPhoneNumber()
+  @IsString()
   @IsOptional()
   phoneNumber?: string;
 
-  @IsEmail()
+  @IsString()
   @IsOptional()
   email?: string;
 }

@@ -30,7 +30,11 @@
         <q-icon name="attach_file" />
       </template>
     </QFile>
-    <FileList :files="selectedFiles" @remove-file="removeFile($event)" />
+    <FileList
+      :files="selectedFiles"
+      @remove-file="removeFile($event)"
+      @download-file="downloadFile($event)"
+    />
   </q-card-section>
 
   <q-card-actions align="right">
@@ -73,9 +77,7 @@ const props = withDefaults(
   }
 );
 
-const emit = defineEmits<{
-  (e: 'change', value: FileEntity[]): void;
-}>();
+const emit = defineEmits<(e: 'change', value: FileEntity[]) => void>();
 
 const filePickerRef: Ref<QFile | null> = ref(null);
 

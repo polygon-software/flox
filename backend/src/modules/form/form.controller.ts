@@ -84,6 +84,17 @@ export default class FormController extends AbstractSearchResolver<
       { where: { isPullable: true }, relations: this.formRelations },
     );
 
+    // Mark all forms as pulled
+    const promiseArray: Promise<Form>[] = [];
+    forms.forEach((form) => {
+      const updateInput = {
+        uuid: form.uuid,
+        pulledAt: new Date(),
+      };
+      promiseArray.push(super.updateNestedEntity(updateInput));
+    });
+    await Promise.all(promiseArray);
+
     try {
       res.send(await this.loadFormImages(forms));
     } catch (error) {

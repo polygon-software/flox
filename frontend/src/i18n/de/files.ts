@@ -3,6 +3,7 @@
 
 export default {
   files: {
+    download: 'Herunterladen',
     files: 'Dateien',
     create_folder: 'Ordner erstellen',
     folder_name: 'Ordner Name',

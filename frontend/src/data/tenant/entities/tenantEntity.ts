@@ -1,10 +1,8 @@
 import {
-  IsEmail,
   IsEnum,
   IsNumber,
   IsObject,
   IsOptional,
-  IsPhoneNumber,
   IsString,
 } from 'class-validator';
 
@@ -28,11 +26,11 @@ export default class TenantEntity extends BaseEntity {
   @IsOptional()
   address?: AddressEntity;
 
-  @IsPhoneNumber()
+  @IsString()
   @IsOptional()
   phoneNumber?: string;
 
-  @IsEmail()
+  @IsString()
   @IsOptional()
   email?: string;
 

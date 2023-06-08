@@ -31,6 +31,7 @@
           </q-item-label>
         </q-item-section>
 
+        <!-- Remove file -->
         <q-item-section top side>
           <q-btn
             class="gt-xs"
@@ -39,10 +40,31 @@
             dense
             round
             icon="delete"
-            @click="emit('removeFile', index)"
+            @click="emitRemoveFile(index)"
           >
             <q-tooltip>
               {{ $t('files.remove') }}
+            </q-tooltip>
+          </q-btn>
+        </q-item-section>
+
+        <!-- Download file -->
+        <q-item-section
+          v-if="file.status === 'done' && file.fileEntity"
+          top
+          side
+        >
+          <q-btn
+            class="gt-xs"
+            size="12px"
+            flat
+            dense
+            round
+            icon="download"
+            @click="emitDownloadFile(file.fileEntity)"
+          >
+            <q-tooltip>
+              {{ $t('files.download') }}
             </q-tooltip>
           </q-btn>
         </q-item-section>
@@ -53,12 +75,24 @@
 
 <script setup lang="ts">
 import { SelectedFile } from 'src/flox/modules/file/tools/upload.tools';
+import FileEntity from 'src/flox/modules/file/entities/file.entity';
 
 const props = defineProps<{
   files: SelectedFile[];
 }>();
 
 const emit = defineEmits<{
-  (e: 'removeFile', index: number): void;
+  (e: 'remove-file', index: number): void;
+  (e: 'download-file', file: FileEntity): void;
 }>();
+
+const emitRemoveFile = (index: number): void => {
+  emit('remove-file', index);
+};
+
+const emitDownloadFile = (file: FileEntity | undefined): void => {
+  if (file) {
+    emit('download-file', file);
+  }
+};
 </script>

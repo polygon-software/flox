@@ -14,12 +14,16 @@ export const SEARCH_FORMS: QueryObject = {
       $skip: Int
       $filter: FormFilterInput
       $searchTerm: String
+      $sortBy: String
+      $descending: Boolean
     ) {
       searchForms(
         take: $take
         skip: $skip
         filter: $filter
         searchTerm: $searchTerm
+        sortBy: $sortBy
+        descending: $descending
       ) {
         count
         data {

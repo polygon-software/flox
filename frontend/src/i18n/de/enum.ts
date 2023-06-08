@@ -4,20 +4,20 @@
 export default {
   enum: {
     job_status: {
-      NONE: 'Keiner',
+      NONE: 'Kein',
       OPEN: 'Offen',
-      TERMINATED: 'Beendet',
+      TERMINATED: 'Terminiert',
       ORDERED: 'Bestellt',
-      PENDING: 'Ausstehend',
-      RECEIVED: 'Empfangen',
+      PENDING: 'Pendent',
+      RECEIVED: 'Eingegangen',
     },
     job_type: {
-      NONE: 'Keiner',
+      NONE: 'Kein',
       APPOINTMENT: 'Termin',
-      EXTERNAL_SERVICE: 'Externe Dienstleistung',
+      EXTERNAL_SERVICE: 'Fremdservice',
       MATERIAL_ORDER: 'Materialbestellung',
-      NEW_DEVICES: 'Neue Geräte',
-      OFFER: 'Angebot',
+      NEW_DEVICES: 'Neugeräte',
+      OFFER: 'Offerte',
     },
     floor: {
       BASEMENT: 'Keller',

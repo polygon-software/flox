@@ -1,11 +1,9 @@
 import { Field, InputType } from '@nestjs/graphql';
 import {
-  IsEmail,
   IsEnum,
   IsNumber,
   IsObject,
   IsOptional,
-  IsPhoneNumber,
   IsString,
 } from 'class-validator';
 
@@ -33,7 +31,7 @@ export default class CreateTenantInput {
   address: UpdateAddressInput;
 
   @Field(() => String, { description: "Tenant's phone number", nullable: true })
-  @IsPhoneNumber()
+  @IsString()
   @IsOptional()
   phoneNumber: string;
 
@@ -41,7 +39,7 @@ export default class CreateTenantInput {
     description: "Client's e-mail address",
     nullable: true,
   })
-  @IsEmail()
+  @IsString()
   @IsOptional()
   email: string;
 

@@ -1,4 +1,4 @@
-import { IsEmail, IsObject, IsOptional, IsString } from 'class-validator';
+import { IsObject, IsOptional, IsString } from 'class-validator';
 
 import BaseEntity from 'src/flox/core/base-entity/entities/BaseEntity';
 import AddressEntity from 'src/data/address/entities/address.entity';
@@ -23,7 +23,7 @@ export default class BillingEntity extends BaseEntity {
   @IsOptional()
   address?: AddressEntity;
 
-  @IsEmail()
+  @IsString()
   @IsOptional()
   email?: string;
 }

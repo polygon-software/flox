@@ -1,5 +1,5 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { IsEmail, IsObject, IsOptional, IsString } from 'class-validator';
+import { IsObject, IsOptional, IsString } from 'class-validator';
 
 import UpdateAddressInput from '../../../address/dto/input/update-address.input';
 
@@ -32,7 +32,7 @@ export default class CreateBillingInput {
     description: 'Billing e-mail address',
     nullable: true,
   })
-  @IsEmail()
+  @IsString()
   @IsOptional()
   email: string;
 }
