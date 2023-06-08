@@ -148,6 +148,7 @@ onMounted(async () => {
  */
 function downloadFile(file: FileEntity): void {
   const fileLink = document.createElement('a');
+  fileLink.target = '_blank';
   fileLink.href = file.url as string;
   fileLink.setAttribute('download', file.filename as string);
   fileLink.click();

@@ -84,7 +84,7 @@ module.exports = configure(function ({ prod }) {
             // compositionOnly: false,
 
             // Fix for i18n parameters with variables in production
-            runTimeOnly: false,
+            runtimeOnly: prod.dev,
             // you need to set i18n resource including paths !
             include: path.resolve(__dirname, './src/i18n/**'),
           },
