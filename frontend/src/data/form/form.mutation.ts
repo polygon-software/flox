@@ -12,11 +12,11 @@ export const CREATE_FORM: MutationObject = {
       $job: UpdateJobInput
       $startDate: DateTime
       $endDate: DateTime
-      $internalOrderNumber: Float
-      $externalOrderNumber: Float
+      $internalOrderNumber: String
+      $externalOrderNumber: String
       $client: UpdateClientInput
       $owner: String
-      $objectNumber: Float
+      $objectNumber: String
       $tenant: UpdateTenantInput
       $measurePower: Boolean
       $billing: UpdateBillingInput
@@ -192,11 +192,11 @@ export const UPDATE_FORM: MutationObject = {
       $job: UpdateJobInput
       $startDate: DateTime
       $endDate: DateTime
-      $internalOrderNumber: Float
-      $externalOrderNumber: Float
+      $internalOrderNumber: String
+      $externalOrderNumber: String
       $client: UpdateClientInput
       $owner: String
-      $objectNumber: Float
+      $objectNumber: String
       $tenant: UpdateTenantInput
       $measurePower: Boolean
       $billing: UpdateBillingInput

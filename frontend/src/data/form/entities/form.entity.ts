@@ -34,13 +34,13 @@ export default class FormEntity extends BaseEntity {
   @IsOptional()
   endDate?: Date;
 
-  @IsInt()
+  @IsString()
   @IsOptional()
-  internalOrderNumber?: number;
+  internalOrderNumber?: string;
 
-  @IsInt()
+  @IsString()
   @IsOptional()
-  externalOrderNumber?: number;
+  externalOrderNumber?: string;
 
   @IsObject()
   @IsOptional()
@@ -50,9 +50,9 @@ export default class FormEntity extends BaseEntity {
   @IsOptional()
   owner?: string;
 
-  @IsInt()
+  @IsString()
   @IsOptional()
-  objectNumber?: number;
+  objectNumber?: string;
 
   @IsObject()
   @IsOptional()

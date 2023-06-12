@@ -52,17 +52,17 @@ export default class Form extends BaseEntity {
   @IsOptional()
   endDate: Date;
 
-  @Field(() => Number, { description: 'Internal order number', nullable: true })
-  @Column({ nullable: true, type: 'int' })
-  @IsInt()
+  @Field(() => String, { description: 'Internal order number', nullable: true })
+  @Column({ nullable: true })
+  @IsString()
   @IsOptional()
-  internalOrderNumber: number;
+  internalOrderNumber: string;
 
-  @Field(() => Number, { description: 'External order number', nullable: true })
-  @Column({ nullable: true, type: 'int' })
-  @IsInt()
+  @Field(() => String, { description: 'External order number', nullable: true })
+  @Column({ nullable: true })
+  @IsString()
   @IsOptional()
-  externalOrderNumber: number;
+  externalOrderNumber: string;
 
   @Field(() => Client, { description: 'Job client', nullable: true })
   @JoinColumn()
@@ -80,11 +80,11 @@ export default class Form extends BaseEntity {
   @IsOptional()
   owner: string;
 
-  @Field(() => Number, { description: 'Object number', nullable: true })
-  @Column({ nullable: true, type: 'int' })
-  @IsInt()
+  @Field(() => String, { description: 'Object number', nullable: true })
+  @Column({ nullable: true })
+  @IsString()
   @IsOptional()
-  objectNumber: number;
+  objectNumber: string;
 
   @Field(() => Tenant, { description: 'Tenant', nullable: true })
   @JoinColumn()

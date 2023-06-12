@@ -253,7 +253,7 @@ input CreateFormInput {
   expenses: [UpdateExpenseInput!]
 
   """External order number"""
-  externalOrderNumber: Float
+  externalOrderNumber: String
 
   """Additional text"""
   freeText: String
@@ -262,7 +262,7 @@ input CreateFormInput {
   images: [UpdateImageFileInput!]
 
   """Internal order number"""
-  internalOrderNumber: Float
+  internalOrderNumber: String
 
   """Whether the job is an emergency"""
   isEmergency: Boolean
@@ -274,7 +274,7 @@ input CreateFormInput {
   measurePower: Boolean
 
   """Object number"""
-  objectNumber: Float
+  objectNumber: String
 
   """Owner"""
   owner: String
@@ -472,7 +472,7 @@ type Form {
   expenses: [Expense!]
 
   """External order number"""
-  externalOrderNumber: Float
+  externalOrderNumber: String
 
   """Additonal text"""
   freeText: String
@@ -484,7 +484,7 @@ type Form {
   images: [ImageFile!]
 
   """Internal order number"""
-  internalOrderNumber: Float
+  internalOrderNumber: String
 
   """Whether the job is an emergency"""
   isEmergency: Boolean!
@@ -502,7 +502,7 @@ type Form {
   measurePower: Boolean
 
   """Object number"""
-  objectNumber: Float
+  objectNumber: String
 
   """Owner"""
   owner: String
@@ -1544,7 +1544,7 @@ input UpdateFormInput {
   expenses: [UpdateExpenseInput!]
 
   """External order number"""
-  externalOrderNumber: Float
+  externalOrderNumber: String
 
   """Additional text"""
   freeText: String
@@ -1553,7 +1553,7 @@ input UpdateFormInput {
   images: [UpdateImageFileInput!]
 
   """Internal order number"""
-  internalOrderNumber: Float
+  internalOrderNumber: String
 
   """Whether the job is an emergency"""
   isEmergency: Boolean
@@ -1571,7 +1571,7 @@ input UpdateFormInput {
   measurePower: Boolean
 
   """Object number"""
-  objectNumber: Float
+  objectNumber: String
 
   """Owner"""
   owner: String

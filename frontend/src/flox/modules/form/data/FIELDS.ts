@@ -158,7 +158,9 @@ const FIELDS: Record<string, Field> = {
     component: markRaw(GenericInputField),
     attributes: {
       label: i18n.global.t('fields.object_number'),
-      type: 'number',
+      type: 'text',
+      reverseFillMask: true,
+      mask: '#',
       rules: [],
     },
   },
@@ -256,7 +258,9 @@ const FIELDS: Record<string, Field> = {
     component: markRaw(GenericInputField),
     attributes: {
       label: i18n.global.t('fields.internal_order_number'),
-      type: 'number',
+      type: 'text',
+      reverseFillMask: true,
+      mask: '#',
       rules: [],
     },
   },
@@ -265,7 +269,9 @@ const FIELDS: Record<string, Field> = {
     component: markRaw(GenericInputField),
     attributes: {
       label: i18n.global.t('fields.external_order_number'),
-      type: 'number',
+      type: 'text',
+      reverseFillMask: true,
+      mask: '#',
       rules: [],
     },
   },

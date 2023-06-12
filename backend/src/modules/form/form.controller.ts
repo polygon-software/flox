@@ -32,6 +32,13 @@ export default class FormController extends AbstractSearchResolver<
     private readonly imageFileService: ImageFileService,
   ) {
     super([
+      'devices.deviceManufacturer',
+      'devices.deviceModel',
+      'devices.deviceInformation',
+      'devices.deviceProductionNumber',
+      'externalOrderNumber',
+      'internalOrderNumber',
+      'objectNumber',
       'description',
       'owner',
       'protocolText',

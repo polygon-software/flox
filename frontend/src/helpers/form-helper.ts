@@ -161,14 +161,14 @@ export default function formValuesToFormEntityValues(
   const externalOrderNumber = getFieldValue(
     storeKey,
     FIELDS.EXTERNAL_ORDER_NUMBER
-  ) as number | undefined;
+  ) as string | undefined;
   const internalOrderNumber = getFieldValue(
     storeKey,
     FIELDS.INTERNAL_ORDER_NUMBER
-  ) as number | undefined;
+  ) as string | undefined;
   const owner = getFieldValue(storeKey, FIELDS.OWNER) as string | undefined;
   const objectNumber = getFieldValue(storeKey, FIELDS.OBJECT_NUMBER) as
-    | number
+    | string
     | undefined;
 
   storeKey.cardKey = 'billingData';

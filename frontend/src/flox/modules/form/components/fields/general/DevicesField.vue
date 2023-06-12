@@ -179,8 +179,10 @@ function addDevice(): void {
  *  @returns {void} - done
  */
 onBeforeMount(() => {
-  if (fetchedDevices.value) {
+  if (fetchedDevices.value && fetchedDevices.value.length > 0) {
     fieldValue.value = fetchedDevices.value;
+  } else {
+    fieldValue.value = [new Device()];
   }
 });
 

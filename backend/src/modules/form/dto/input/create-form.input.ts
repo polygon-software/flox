@@ -46,15 +46,15 @@ export default class CreateFormInput extends CreateInput {
   @IsOptional()
   endDate: Date;
 
-  @Field(() => Number, { description: 'Internal order number', nullable: true })
-  @IsInt()
+  @Field(() => String, { description: 'Internal order number', nullable: true })
+  @IsString()
   @IsOptional()
-  internalOrderNumber: number;
+  internalOrderNumber: string;
 
-  @Field(() => Number, { description: 'External order number', nullable: true })
-  @IsInt()
+  @Field(() => String, { description: 'External order number', nullable: true })
+  @IsString()
   @IsOptional()
-  externalOrderNumber: number;
+  externalOrderNumber: string;
 
   @Field(() => UpdateClientInput, {
     description: 'Client',
@@ -69,10 +69,10 @@ export default class CreateFormInput extends CreateInput {
   @IsOptional()
   owner: string;
 
-  @Field(() => Number, { description: 'Object number', nullable: true })
-  @IsInt()
+  @Field(() => String, { description: 'Object number', nullable: true })
+  @IsString()
   @IsOptional()
-  objectNumber: number;
+  objectNumber: string;
 
   @Field(() => UpdateTenantInput, {
     description: 'Tenant',

@@ -32,6 +32,13 @@ export default class FormResolver extends AbstractSearchResolver<
 
   constructor(private readonly formService: FormService) {
     super([
+      'devices.deviceManufacturer',
+      'devices.deviceModel',
+      'devices.deviceInformation',
+      'devices.deviceProductionNumber',
+      'externalOrderNumber',
+      'internalOrderNumber',
+      'objectNumber',
       'description',
       'owner',
       'protocolText',
