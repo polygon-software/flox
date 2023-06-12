@@ -14,7 +14,7 @@ import UpdateImageFileInput from 'src/data/imageFile/dto/input/updateImageFileIn
 export default class FormEntityInput {
   constructor(
     private uuid?: string,
-    private job?: UpdateJobInput | null,
+    private job?: UpdateJobInput | undefined,
     private startDate?: Date | undefined,
     private endDate?: Date | undefined,
     private internalOrderNumber?: number | undefined,

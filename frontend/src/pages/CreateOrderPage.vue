@@ -133,15 +133,10 @@ const billingData = new FormCard(
   i18n.global.t('card_titles.billing_data')
 );
 
-// Device data 1
-const deviceData1 = new FormCard(
-  'deviceData1',
-  [
-    [FIELDS.SELECT_DEVICE_TYPE, FIELDS.MANUFACTURER],
-    [FIELDS.MODEL, FIELDS.PRODUCTION_NUMBER],
-    FIELDS.PRODUCTION_YEAR,
-    FIELDS.INFORMATION,
-  ],
+// Device data
+const devices = new FormCard(
+  'devices',
+  [FIELDS.DEVICES],
   i18n.global.t('card_titles.device_data1')
 );
 
@@ -233,7 +228,7 @@ onMounted(async () => {
       clientData,
       tenantData,
       billingData,
-      deviceData1,
+      devices,
       deviceData2,
       additionalData,
       productsAndTimeRecording,

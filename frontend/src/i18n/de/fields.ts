@@ -96,5 +96,6 @@ export default {
     job_type: 'Auftragstyp',
     job_status: 'Auftragsstatus',
     floor_number: 'Stockwerk',
+    device: 'Gerät',
   },
 };

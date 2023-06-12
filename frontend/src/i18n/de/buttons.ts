@@ -27,5 +27,7 @@ export default {
     login: 'Login',
     filter: 'Filter',
     request_code: 'Code anfordern',
+    add_device: 'Gerät hinzufügen',
+    remove_device: 'Gerät entfernen',
   },
 };

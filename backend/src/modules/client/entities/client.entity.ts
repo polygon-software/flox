@@ -1,11 +1,9 @@
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 import { Field, ObjectType } from '@nestjs/graphql';
 import {
-  IsEmail,
   IsEnum,
   IsObject,
   IsOptional,
-  IsPhoneNumber,
   IsString,
 } from 'class-validator';
 

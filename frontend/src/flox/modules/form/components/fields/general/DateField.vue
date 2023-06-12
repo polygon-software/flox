@@ -23,9 +23,12 @@
       :mask="mask"
       outlined
       dense
+      hide-bottom-space
       @change="saveValue"
     />
   </LabelWrapper>
+  <!-- Spacer to keep padding consistent. This field has rules (for which quasar adds bottom padding, but we hide it to have smaller padding. -->
+  <div style="height: 5px" />
 </template>
 
 <script setup lang="ts">

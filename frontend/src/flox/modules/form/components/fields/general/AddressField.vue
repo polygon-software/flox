@@ -15,7 +15,8 @@
           @change="saveValue"
         />
       </LabelWrapper>
-      <div style="height: 20px" />
+      <!-- Spacer to keep padding consistent to fields that have rules (where quasar auto-adds padding) -->
+      <div v-if="optional" style="height: 5px" />
     </div>
     <div class="col-4">
       <LabelWrapper :label="$t('fields.address.number')">
@@ -28,7 +29,8 @@
           @change="saveValue"
         />
       </LabelWrapper>
-      <div style="height: 20px" />
+      <!-- Spacer to keep padding consistent to fields that have rules (where quasar auto-adds padding) -->
+      <div v-if="optional" style="height: 5px" />
     </div>
   </div>
   <!-- Bottom Row: ZIP code & city -->
@@ -45,7 +47,8 @@
           @change="saveValue"
         />
       </LabelWrapper>
-      <div style="height: 20px" />
+      <!-- Spacer to keep padding consistent to fields that have rules (where quasar auto-adds padding) -->
+      <div v-if="optional" style="height: 5px" />
     </div>
     <div class="col-8">
       <LabelWrapper :label="$t('fields.address.city')">
@@ -58,7 +61,8 @@
           @change="saveValue"
         />
       </LabelWrapper>
-      <div style="height: 20px" />
+      <!-- Spacer to keep padding consistent to fields that have rules (where quasar auto-adds padding) -->
+      <div v-if="optional" style="height: 5px" />
     </div>
   </div>
   <div v-if="showAdditionalAddress" class="row">
@@ -82,7 +86,8 @@
           @change="saveValue"
         />
       </LabelWrapper>
-      <div style="height: 20px" />
+      <!-- Spacer to keep padding consistent to fields that have rules (where quasar auto-adds padding) -->
+      <div v-if="optional" style="height: 5px" />
     </div>
   </div>
 </template>

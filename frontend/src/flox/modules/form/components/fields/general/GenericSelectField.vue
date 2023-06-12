@@ -13,7 +13,7 @@
     />
   </LabelWrapper>
   <!-- Spacer to keep padding consistent to fields that have rules (where quasar auto-adds padding) -->
-  <div v-if="rules.length < 1" style="height: 20px" />
+  <div v-if="rules.length < 1" style="height: 5px" />
 </template>
 
 <script setup lang="ts">

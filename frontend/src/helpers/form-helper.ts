@@ -3,7 +3,7 @@ import FormEntityInput from 'src/data/form/input/createFormEntityInput';
 import { FIELDS } from 'src/flox/modules/form/data/FIELDS';
 import UpdateJobInput from 'src/data/job/dto/input/updateJobInput';
 import FullName from 'src/flox/modules/form/data/types/FullName';
-import { DEVICE_TYPE, FLOOR, LEGAL_FORM } from 'src/data/ENUM';
+import { FLOOR, LEGAL_FORM } from 'src/data/ENUM';
 import AddressInput from 'src/flox/modules/form/data/types/AddressInput';
 import UpdateClientInput from 'src/data/client/dto/input/updateClientInput';
 import UpdateAddressInput from 'src/data/address/input/dto/updateAddressInput';
@@ -105,42 +105,9 @@ export function fillFormStoreWithFormEntityValues(
   setFieldValue(FIELDS.EMAIL, formEntity.billing?.email);
   setFieldValue({ key: 'uuid' }, formEntity.billing?.uuid);
 
-  // TODO: add possibility to add n devices
-  // device data 1
-  storeKey.cardKey = 'deviceData1';
-  setFieldValue(FIELDS.SELECT_DEVICE_TYPE, formEntity.devices?.[0]?.deviceType);
-  setFieldValue(
-    FIELDS.MANUFACTURER,
-    formEntity.devices?.[0]?.deviceManufacturer
-  );
-  setFieldValue(FIELDS.MODEL, formEntity.devices?.[0]?.deviceModel);
-  setFieldValue(
-    FIELDS.PRODUCTION_NUMBER,
-    formEntity.devices?.[0]?.deviceProductionNumber
-  );
-  setFieldValue(
-    FIELDS.PRODUCTION_YEAR,
-    formEntity.devices?.[0]?.deviceProductionYear
-  );
-  setFieldValue(FIELDS.INFORMATION, formEntity.devices?.[0]?.deviceInformation);
-
-  // device data 2
-  storeKey.cardKey = 'deviceData2';
-  setFieldValue(FIELDS.SELECT_DEVICE_TYPE, formEntity.devices?.[1]?.deviceType);
-  setFieldValue(
-    FIELDS.MANUFACTURER,
-    formEntity.devices?.[1]?.deviceManufacturer
-  );
-  setFieldValue(FIELDS.MODEL, formEntity.devices?.[1]?.deviceModel);
-  setFieldValue(
-    FIELDS.PRODUCTION_NUMBER,
-    formEntity.devices?.[1]?.deviceProductionNumber
-  );
-  setFieldValue(
-    FIELDS.PRODUCTION_YEAR,
-    formEntity.devices?.[1]?.deviceProductionYear
-  );
-  setFieldValue(FIELDS.INFORMATION, formEntity.devices?.[1]?.deviceInformation);
+  // device data
+  storeKey.cardKey = 'devices';
+  setFieldValue(FIELDS.DEVICES, formEntity.devices);
 
   // additional data
   storeKey.cardKey = 'additionalData';
@@ -169,6 +136,7 @@ export function fillFormStoreWithFormEntityValues(
  * Transform the FormValues to FormEntityValues
  * @param formKey - key of form
  * @param uuid - uuid of form
+ * @param oldImages - old images of form
  * @returns - input for creating/updating a form entity
  */
 export default function formValuesToFormEntityValues(
@@ -184,10 +152,9 @@ export default function formValuesToFormEntityValues(
   } as FormStateKey;
 
   storeKey.cardKey = 'jobInformation';
-  const job = getFieldValue(
-    storeKey,
-    FIELDS.JOB_INFORMATION
-  ) as UpdateJobInput | null;
+  const job = getFieldValue(storeKey, FIELDS.JOB_INFORMATION) as
+    | UpdateJobInput
+    | undefined;
 
   storeKey.cardKey = 'basicData';
   const endDate = getFieldValue(storeKey, FIELDS.END_DATE) as Date | undefined;
@@ -326,65 +293,10 @@ export default function formValuesToFormEntityValues(
     | Date
     | undefined;
 
-  storeKey.cardKey = 'deviceData1';
-  const deviceType1 = getFieldValue(storeKey, FIELDS.SELECT_DEVICE_TYPE) as
-    | DEVICE_TYPE
+  storeKey.cardKey = 'devices';
+  const devices = getFieldValue(storeKey, FIELDS.DEVICES) as
+    | UpdateDeviceInput[]
     | undefined;
-  const deviceManufacturer1 = getFieldValue(storeKey, FIELDS.MANUFACTURER) as
-    | string
-    | undefined;
-  const deviceModel1 = getFieldValue(storeKey, FIELDS.MODEL) as
-    | string
-    | undefined;
-  const deviceSerialNumber1 = getFieldValue(
-    storeKey,
-    FIELDS.PRODUCTION_NUMBER
-  ) as string | undefined;
-  const deviceYearOfManufacture1 = getFieldValue(
-    storeKey,
-    FIELDS.PRODUCTION_YEAR
-  ) as number | undefined;
-  const deviceInformation1 = getFieldValue(storeKey, FIELDS.INFORMATION) as
-    | string
-    | undefined;
-  const device1 = new UpdateDeviceInput(
-    deviceType1,
-    deviceManufacturer1,
-    deviceModel1,
-    deviceSerialNumber1,
-    deviceYearOfManufacture1,
-    deviceInformation1
-  );
-
-  storeKey.cardKey = 'deviceData2';
-  const deviceType2 = getFieldValue(storeKey, FIELDS.SELECT_DEVICE_TYPE) as
-    | DEVICE_TYPE
-    | undefined;
-  const deviceManufacturer2 = getFieldValue(storeKey, FIELDS.MANUFACTURER) as
-    | string
-    | undefined;
-  const deviceModel2 = getFieldValue(storeKey, FIELDS.MODEL) as
-    | string
-    | undefined;
-  const deviceSerialNumber2 = getFieldValue(
-    storeKey,
-    FIELDS.PRODUCTION_NUMBER
-  ) as string | undefined;
-  const deviceYearOfManufacture2 = getFieldValue(
-    storeKey,
-    FIELDS.PRODUCTION_YEAR
-  ) as number | undefined;
-  const deviceInformation2 = getFieldValue(storeKey, FIELDS.INFORMATION) as
-    | string
-    | undefined;
-  const device2 = new UpdateDeviceInput(
-    deviceType2,
-    deviceManufacturer2,
-    deviceModel2,
-    deviceSerialNumber2,
-    deviceYearOfManufacture2,
-    deviceInformation2
-  );
 
   storeKey.cardKey = 'productsAndTimeRecording';
   const articleEntries = getFieldValue(storeKey, FIELDS.ARTICLE_NUMBERS) as
@@ -453,7 +365,7 @@ export default function formValuesToFormEntityValues(
     measurePower,
     billing,
     problemDescription,
-    [device1, device2],
+    devices,
     protocolDate,
     protocol,
     articleInput,

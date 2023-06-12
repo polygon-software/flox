@@ -1,7 +1,7 @@
 <template>
   <div class="row justify-between">
     <div class="col-3">
-      <LabelWrapper :label="$t('fields.phone.country_code')" class="q-mb-md">
+      <LabelWrapper :label="$t('fields.phone.country_code')">
         <!-- Country code -->
         <q-select
           v-model="selectedCode"
@@ -29,11 +29,12 @@
       </LabelWrapper>
     </div>
   </div>
+  <!-- Spacer to keep padding consistent to fields that have rules (where quasar auto-adds padding) -->
+  <div style="height: 5px" />
 </template>
 
 <script setup lang="ts">
 import { onBeforeMount, ref, Ref, watch } from 'vue';
-import { isPhoneNumber } from 'class-validator';
 
 import { FormStateKey, useFormStore } from '../../../stores/form';
 import { fetchByKey } from '../../../helpers/form-helpers';

@@ -26,6 +26,7 @@ import PasswordRepeat from '../components/fields/general/PasswordRepeatField.vue
 import PhoneNumberField from '../components/fields/general/PhoneNumberField.vue';
 import SelectLanguageField from '../components/fields/general/SelectLanguageField.vue';
 import FloorNumberField from '../components/fields/general/FloorNumberField.vue';
+import DevicesField from '../components/fields/general/DevicesField.vue';
 import { classValidatorRule } from '../helpers/validation-helpers';
 import {
   availablePhonenNumberOptions,
@@ -318,6 +319,13 @@ const FIELDS: Record<string, Field> = {
   JOB_INFORMATION: {
     key: 'jobInformation',
     component: markRaw(JobInformationField),
+    attributes: {
+      rules: [],
+    },
+  },
+  DEVICES: {
+    key: 'devices',
+    component: markRaw(DevicesField),
     attributes: {
       rules: [],
     },

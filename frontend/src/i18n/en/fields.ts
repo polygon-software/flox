@@ -96,5 +96,6 @@ export default {
     job_type: 'Job type',
     job_status: 'Job status',
     floor_number: 'Floor number',
+    device: 'Device',
   },
 };
