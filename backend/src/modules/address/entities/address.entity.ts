@@ -10,24 +10,28 @@ import BaseEntity from '../../../flox/core/base-entity/entities/base-entity.enti
 @Entity()
 @ObjectType()
 export default class Address extends BaseEntity {
-  @Field(() => String, { description: 'Street' })
-  @Column()
+  @Field(() => String, { description: 'Street', nullable: true })
+  @Column({ nullable: true })
   @IsString()
+  @IsOptional()
   street: string;
 
-  @Field(() => String, { description: 'Number' })
-  @Column()
+  @Field(() => String, { description: 'Number', nullable: true })
+  @Column({ nullable: true })
   @IsString()
+  @IsOptional()
   number: string;
 
-  @Field(() => String, { description: 'City' })
-  @Column()
+  @Field(() => String, { description: 'City', nullable: true })
+  @Column({ nullable: true })
   @IsString()
+  @IsOptional()
   city: string;
 
-  @Field(() => Number, { description: 'Zip Code' })
-  @Column()
+  @Field(() => Number, { description: 'Zip Code', nullable: true })
+  @Column({ nullable: true })
   @IsInt()
+  @IsOptional()
   zipCode: number;
 
   @Field(() => String, {
@@ -35,7 +39,7 @@ export default class Address extends BaseEntity {
     nullable: true,
   })
   @Column({ nullable: true })
-  @IsOptional()
   @IsString()
+  @IsOptional()
   additionalAddress: string;
 }

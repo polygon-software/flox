@@ -46,7 +46,7 @@ type Address {
   additionalAddress: String
 
   """City"""
-  city: String!
+  city: String
 
   """Creation date"""
   createdAt: DateTime!
@@ -55,10 +55,10 @@ type Address {
   deletedAt: DateTime
 
   """Number"""
-  number: String!
+  number: String
 
   """Street"""
-  street: String!
+  street: String
 
   """Last modification date"""
   updatedAt: DateTime
@@ -67,7 +67,7 @@ type Address {
   uuid: ID!
 
   """Zip Code"""
-  zipCode: Float!
+  zipCode: Float
 }
 
 input AdminCreateUserInput {
