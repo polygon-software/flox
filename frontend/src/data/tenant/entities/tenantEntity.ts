@@ -8,8 +8,6 @@ import {
 
 import BaseEntity from 'src/flox/core/base-entity/entities/BaseEntity';
 import AddressEntity from 'src/data/address/entities/address.entity';
-import { FLOOR } from 'src/data/ENUM';
-
 /**
  * A class representing a tenant data object
  */
@@ -34,11 +32,7 @@ export default class TenantEntity extends BaseEntity {
   @IsOptional()
   email?: string;
 
-  @IsEnum(FLOOR)
+  @IsString()
   @IsOptional()
-  floorType?: FLOOR;
-
-  @IsNumber()
-  @IsOptional()
-  floorNumber?: number;
+  floor?: string;
 }

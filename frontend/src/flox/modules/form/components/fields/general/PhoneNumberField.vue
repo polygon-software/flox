@@ -1,10 +1,13 @@
 <template>
   <div class="row justify-between">
     <div class="col-3">
-      <LabelWrapper :label="$t('fields.phone.country_code')">
+      <LabelWrapper
+        :label="denseLabel ? undefined : $t('fields.phone.country_code')"
+      >
         <!-- Country code -->
         <q-select
           v-model="selectedCode"
+          :label="denseLabel ? $t('fields.phone.country_code') : undefined"
           dense
           outlined
           :options="countryCodes"
@@ -16,10 +19,11 @@
     <!-- Actual phone number -->
 
     <div class="col-9">
-      <LabelWrapper :label="$t('fields.phone.number')">
+      <LabelWrapper :label="denseLabel ? undefined : $t('fields.phone_number')">
         <!-- Country code -->
         <q-input
           v-model="phoneInput"
+          :label="denseLabel ? $t('fields.phone_number') : undefined"
           dense
           outlined
           :mask="selectedCode.mask"
@@ -47,10 +51,12 @@ const props = withDefaults(
     countryCodes: PhoneCountryCode[];
     stateKey?: FormStateKey;
     initialValue?: string; // Only considered when stateKey is null, so this field can be a non-saving subfield of other fields
+    denseLabel?: boolean;
   }>(),
   {
     stateKey: undefined,
     initialValue: undefined,
+    denseLabel: false,
   }
 );
 

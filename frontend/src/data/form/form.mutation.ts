@@ -105,8 +105,7 @@ export const CREATE_FORM: MutationObject = {
           }
           phoneNumber
           email
-          floorType
-          floorNumber
+          floor
           __typename
         }
         measurePower
@@ -290,8 +289,7 @@ export const UPDATE_FORM: MutationObject = {
           }
           phoneNumber
           email
-          floorType
-          floorNumber
+          floor
           __typename
         }
         measurePower
@@ -421,8 +419,7 @@ export const DELETE_FORM: MutationObject = {
           }
           phoneNumber
           email
-          floorType
-          floorNumber
+          floor
           __typename
         }
         measurePower

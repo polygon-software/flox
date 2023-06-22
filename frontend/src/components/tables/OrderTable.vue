@@ -325,10 +325,9 @@ const columns = computed(() => [
   {
     name: 'createdAt',
     label: i18n.global.t('fields.creation_date'),
-    field: 'createdAt',
+    field: 'startDate',
     align: ColumnAlign.left,
-    format: (val: number): string =>
-      val ? formatDateTime(new Date(val)) : '-',
+    format: (val: number): string => (val ? formatDate(new Date(val)) : '-'),
     sortable: true,
     edit: false,
     visible: true,

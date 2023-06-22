@@ -75,8 +75,7 @@ export const SEARCH_FORMS: QueryObject = {
             }
             phoneNumber
             email
-            floorType
-            floorNumber
+            floor
             __typename
           }
           measurePower
@@ -167,8 +166,7 @@ export const FORM: QueryObject = {
           }
           phoneNumber
           email
-          floorType
-          floorNumber
+          floor
           __typename
         }
         measurePower

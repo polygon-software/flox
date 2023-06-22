@@ -1,5 +1,5 @@
 <template>
-  <LabelWrapper :label="label">
+  <LabelWrapper :label="denseLabel ? undefined : label">
     <QSelect
       v-model="selectedOption"
       v-bind="selectProps"
@@ -7,7 +7,11 @@
       outlined
       style="min-width: 200px"
       :label="
-        fieldValue === null ? $t('fields.select.please_select') : undefined
+        fieldValue === null
+          ? denseLabel
+            ? label
+            : $t('fields.select.please_select')
+          : undefined
       "
       @update:model-value="saveValue"
     />
@@ -36,12 +40,14 @@ const props = withDefaults(
     rules: ((val: any) => string | boolean)[];
     loading?: boolean;
     disable?: boolean;
+    denseLabel?: boolean;
   }>(),
   {
     stateKey: null,
     initialValue: null,
     loading: false,
     disable: false,
+    denseLabel: false,
   }
 );
 

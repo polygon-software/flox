@@ -6,7 +6,6 @@ import GenericSelectField from 'src/flox/modules/form/components/fields/general/
 import { i18n } from 'boot/i18n';
 import {
   DEVICE_TYPE,
-  FLOOR,
   LEGAL_FORM,
   translatedObjects,
 } from 'src/data/ENUM';
@@ -50,6 +49,7 @@ const FIELDS: Record<string, Field> = {
     key: 'email',
     component: markRaw(GenericInputField),
     attributes: {
+      denseLabel: true,
       label: i18n.global.t('authentication.email'),
       rules: [],
     },
@@ -65,6 +65,7 @@ const FIELDS: Record<string, Field> = {
     key: 'username',
     component: markRaw(GenericInputField),
     attributes: {
+      denseLabel: true,
       dense: true,
       type: 'text',
       label: i18n.global.t('authentication.username'),
@@ -108,6 +109,7 @@ const FIELDS: Record<string, Field> = {
     key: 'oldPassword',
     component: markRaw(GenericInputField),
     attributes: {
+      denseLabel: true,
       label: i18n.global.t('authentication.old_password'),
       rules: [
         classValidatorRule(
@@ -137,6 +139,7 @@ const FIELDS: Record<string, Field> = {
     key: 'name',
     component: markRaw(GenericInputField),
     attributes: {
+      denseLabel: true,
       dense: true,
       type: 'text',
       label: i18n.global.t('fields.personal_data.name'),
@@ -148,6 +151,7 @@ const FIELDS: Record<string, Field> = {
     key: 'owner',
     component: markRaw(GenericInputField),
     attributes: {
+      denseLabel: true,
       type: 'text',
       label: i18n.global.t('fields.owner'),
       rules: [],
@@ -157,6 +161,7 @@ const FIELDS: Record<string, Field> = {
     key: 'objectNumber',
     component: markRaw(GenericInputField),
     attributes: {
+      denseLabel: true,
       label: i18n.global.t('fields.object_number'),
       type: 'text',
       reverseFillMask: true,
@@ -168,6 +173,7 @@ const FIELDS: Record<string, Field> = {
     key: 'totalAmount',
     component: markRaw(GenericInputField),
     attributes: {
+      denseLabel: true,
       label: i18n.global.t('fields.total_amount'),
       type: 'number',
       rules: [],
@@ -184,6 +190,7 @@ const FIELDS: Record<string, Field> = {
     key: 'employeeAbbreviation',
     component: markRaw(GenericInputField),
     attributes: {
+      denseLabel: true,
       type: 'text',
       label: i18n.global.t('fields.employee_abbreviation'),
       rules: [],
@@ -193,6 +200,7 @@ const FIELDS: Record<string, Field> = {
     key: 'companyName',
     component: markRaw(GenericInputField),
     attributes: {
+      denseLabel: true,
       dense: true,
       type: 'text',
       label: i18n.global.t('fields.company_name'),
@@ -203,6 +211,7 @@ const FIELDS: Record<string, Field> = {
     key: 'fullName',
     component: markRaw(FullNameField),
     attributes: {
+      denseLabel: true,
       showOptionalFields: false,
       optional: true,
       dense: true,
@@ -213,6 +222,7 @@ const FIELDS: Record<string, Field> = {
     key: 'address',
     component: markRaw(AddressField),
     attributes: {
+      denseLabel: true,
       optional: true,
       create: true,
       rules: [],
@@ -222,6 +232,7 @@ const FIELDS: Record<string, Field> = {
     key: 'extendedAddress',
     component: markRaw(AddressField),
     attributes: {
+      denseLabel: true,
       optional: true,
       create: true,
       showAdditionalAddress: true,
@@ -239,8 +250,19 @@ const FIELDS: Record<string, Field> = {
     key: 'protocolDate',
     component: markRaw(DateField),
     attributes: {
+      denseLabel: true,
       optional: true,
       label: i18n.global.t('fields.protocol_date'),
+      rules: [],
+    },
+  },
+  START_DATE: {
+    key: 'startDate',
+    component: markRaw(DateField),
+    attributes: {
+      denseLabel: true,
+      optional: true,
+      label: i18n.global.t('fields.creation_date'),
       rules: [],
     },
   },
@@ -248,6 +270,7 @@ const FIELDS: Record<string, Field> = {
     key: 'endDate',
     component: markRaw(DateField),
     attributes: {
+      denseLabel: true,
       optional: true,
       label: i18n.global.t('fields.end_date'),
       rules: [],
@@ -257,6 +280,7 @@ const FIELDS: Record<string, Field> = {
     key: 'internalOrderNumber',
     component: markRaw(GenericInputField),
     attributes: {
+      denseLabel: true,
       label: i18n.global.t('fields.internal_order_number'),
       type: 'text',
       reverseFillMask: true,
@@ -268,6 +292,7 @@ const FIELDS: Record<string, Field> = {
     key: 'externalOrderNumber',
     component: markRaw(GenericInputField),
     attributes: {
+      denseLabel: true,
       label: i18n.global.t('fields.external_order_number'),
       type: 'text',
       reverseFillMask: true,
@@ -279,14 +304,26 @@ const FIELDS: Record<string, Field> = {
     key: 'phoneNumber',
     component: markRaw(PhoneNumberField),
     attributes: {
+      denseLabel: true,
       countryCodes: availablePhonenNumberOptions(),
       rules: [],
+    },
+  },
+  SIMPLE_PHONE_NUMBER: {
+    key: 'simplePhoneNumber',
+    component: markRaw(GenericInputField),
+    attributes: {
+      denseLabel: true,
+      rules: [],
+      label: i18n.global.t('fields.phone_number'),
+      type: 'text',
     },
   },
   PROBLEM_DESCRIPTION: {
     key: 'problemDescription',
     component: markRaw(GenericInputField),
     attributes: {
+      denseLabel: true,
       type: 'textarea',
       label: i18n.global.t('fields.problem_description'),
       rules: [],
@@ -297,6 +334,7 @@ const FIELDS: Record<string, Field> = {
     key: 'freeText',
     component: markRaw(GenericInputField),
     attributes: {
+      denseLabel: true,
       type: 'textarea',
       label: i18n.global.t('fields.free_text'),
       rules: [],
@@ -314,6 +352,7 @@ const FIELDS: Record<string, Field> = {
     key: 'selectPowerMeasurement',
     component: markRaw(GenericSelectField),
     attributes: {
+      denseLabel: true,
       label: i18n.global.t('fields.measure_power'),
       options: [
         { label: i18n.global.t('general.yes'), value: true },
@@ -326,6 +365,7 @@ const FIELDS: Record<string, Field> = {
     key: 'jobInformation',
     component: markRaw(JobInformationField),
     attributes: {
+      denseLabel: true,
       rules: [],
     },
   },
@@ -333,6 +373,7 @@ const FIELDS: Record<string, Field> = {
     key: 'devices',
     component: markRaw(DevicesField),
     attributes: {
+      denseLabel: true,
       rules: [],
     },
   },
@@ -340,6 +381,7 @@ const FIELDS: Record<string, Field> = {
     key: 'selectDeviceType',
     component: markRaw(GenericSelectField),
     attributes: {
+      denseLabel: true,
       label: i18n.global.t('fields.device_type'),
       options: translatedObjects(DEVICE_TYPE, 'device_type'),
       rules: [],
@@ -349,6 +391,7 @@ const FIELDS: Record<string, Field> = {
     key: 'manufacturer',
     component: markRaw(GenericInputField),
     attributes: {
+      denseLabel: true,
       type: 'text',
       label: i18n.global.t('fields.manufacturer'),
       rules: [],
@@ -358,6 +401,7 @@ const FIELDS: Record<string, Field> = {
     key: 'model',
     component: markRaw(GenericInputField),
     attributes: {
+      denseLabel: true,
       type: 'text',
       label: i18n.global.t('fields.model'),
       rules: [],
@@ -367,6 +411,7 @@ const FIELDS: Record<string, Field> = {
     key: 'productionNumber',
     component: markRaw(GenericInputField),
     attributes: {
+      denseLabel: true,
       type: 'text',
       label: i18n.global.t('fields.production_number'),
       rules: [],
@@ -376,6 +421,7 @@ const FIELDS: Record<string, Field> = {
     key: 'productionYear',
     component: markRaw(GenericInputField),
     attributes: {
+      denseLabel: true,
       type: 'number',
       mask: '####',
       label: i18n.global.t('fields.production_year'),
@@ -386,6 +432,7 @@ const FIELDS: Record<string, Field> = {
     key: 'information',
     component: markRaw(GenericInputField),
     attributes: {
+      denseLabel: true,
       type: 'textarea',
       label: i18n.global.t('fields.information'),
       rules: [],
@@ -395,6 +442,7 @@ const FIELDS: Record<string, Field> = {
     key: 'protocol',
     component: markRaw(GenericInputField),
     attributes: {
+      denseLabel: true,
       type: 'textarea',
       label: i18n.global.t('fields.protocol'),
       rules: [],
@@ -404,18 +452,20 @@ const FIELDS: Record<string, Field> = {
     key: 'companyLegalForm',
     component: markRaw(GenericSelectField),
     attributes: {
+      denseLabel: true,
       label: i18n.global.t('fields.company_legal_form'),
       options: translatedObjects(LEGAL_FORM, 'legal_form'),
       rules: [],
     },
   },
-  FLOOR: {
+  SIMPLE_FLOOR: {
     key: 'floor',
-    component: markRaw(GenericSelectField),
+    component: markRaw(GenericInputField),
     attributes: {
+      denseLabel: true,
       label: i18n.global.t('fields.floor'),
-      options: translatedObjects(FLOOR, 'floor'),
       rules: [],
+      type: 'text',
     },
   },
   FLOOR_NUMBER: {
@@ -429,6 +479,7 @@ const FIELDS: Record<string, Field> = {
     key: 'verificationCode',
     component: markRaw(GenericInputField),
     attributes: {
+      denseLabel: true,
       label: i18n.global.t('fields.authentication.verification_code'),
       mask: '######',
       rules: [IS_VERIFICATION_CODE],
@@ -438,6 +489,7 @@ const FIELDS: Record<string, Field> = {
     key: 'MFA',
     component: markRaw(GenericInputField),
     attributes: {
+      denseLabel: true,
       mask: '######',
       rules: [IS_VERIFICATION_CODE],
     },
@@ -446,6 +498,7 @@ const FIELDS: Record<string, Field> = {
     key: 'userRole',
     component: markRaw(GenericSelectField),
     attributes: {
+      denseLabel: true,
       label: i18n.global.t('fields.authentication.user_role'),
       options: availableUserRoles(),
       rules: [IS_SELECTED],

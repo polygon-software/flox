@@ -43,15 +43,12 @@ export default {
     date: {
       date: 'Datum',
     },
-    phone: {
-      number: 'Telefonnummer',
-      country_code: 'Vorwahl',
-    },
+    phone_number: 'Telefonnummer',
     select: {
       please_select: 'Bitte wählen',
     },
     creation_date: 'Erfassungsdatum',
-    end_date: 'Enddatum',
+    end_date: 'Abschlussdatum',
     order_number: 'Auftragsnummer',
     order_type: 'Auftragstyp',
     status: 'Status',
@@ -63,7 +60,7 @@ export default {
     external_order_number: 'Externe Auftragsnummer',
     company_name: 'Firmenname',
     company_legal_form: 'Rechtsform',
-    owner: 'Inhaber',
+    owner: 'Eigentümer',
     object_number: 'Objektnummer',
     floor: 'Etage',
     measure_power: 'Strommessung',

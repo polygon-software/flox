@@ -27,10 +27,7 @@
       </template>
     </q-table>
   </LabelWrapper>
-  <div
-    class="q-mx-xs q-mt-md q-mb-lg row justify-between"
-    style="max-width: 600px"
-  >
+  <div class="q-mx-xs q-mt-md q-mb-lg row justify-between">
     <div class="col-6">
       <q-input
         v-model="taskTypeInput"

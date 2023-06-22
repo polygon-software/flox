@@ -4,10 +4,13 @@
   </p>
   <!-- Top Row: Street & house number -->
   <div class="row justify-between">
-    <div class="col-8">
-      <LabelWrapper :label="$t('fields.address.street')">
+    <div class="col-4">
+      <LabelWrapper
+        :label="denseLabel ? undefined : $t('fields.address.street')"
+      >
         <q-input
           v-model="fieldValue.street"
+          :label="denseLabel ? $t('fields.address.street') : undefined"
           dense
           outlined
           type="text"
@@ -18,10 +21,13 @@
       <!-- Spacer to keep padding consistent to fields that have rules (where quasar auto-adds padding) -->
       <div v-if="optional" style="height: 5px" />
     </div>
-    <div class="col-4">
-      <LabelWrapper :label="$t('fields.address.number')">
+    <div class="col-2">
+      <LabelWrapper
+        :label="denseLabel ? undefined : $t('fields.address.number')"
+      >
         <q-input
           v-model="fieldValue.number"
+          :label="denseLabel ? $t('fields.address.number') : undefined"
           dense
           outlined
           type="text"
@@ -32,13 +38,14 @@
       <!-- Spacer to keep padding consistent to fields that have rules (where quasar auto-adds padding) -->
       <div v-if="optional" style="height: 5px" />
     </div>
-  </div>
-  <!-- Bottom Row: ZIP code & city -->
-  <div class="row justify-between">
-    <div class="col-4">
-      <LabelWrapper :label="$t('fields.address.zip_code')">
+    <!-- Bottom Row: ZIP code & city -->
+    <div class="col-2">
+      <LabelWrapper
+        :label="denseLabel ? undefined : $t('fields.address.zip_code')"
+      >
         <q-input
           v-model="fieldValue.zipCode"
+          :label="denseLabel ? $t('fields.address.zip_code') : undefined"
           dense
           outlined
           type="text"
@@ -50,10 +57,11 @@
       <!-- Spacer to keep padding consistent to fields that have rules (where quasar auto-adds padding) -->
       <div v-if="optional" style="height: 5px" />
     </div>
-    <div class="col-8">
-      <LabelWrapper :label="$t('fields.address.city')">
+    <div class="col-4">
+      <LabelWrapper :label="denseLabel ? undefined : $t('fields.address.city')">
         <q-input
           v-model="fieldValue.city"
+          :label="denseLabel ? $t('fields.address.city') : undefined"
           dense
           outlined
           type="text"
@@ -67,9 +75,16 @@
   </div>
   <div v-if="showAdditionalAddress" class="row">
     <div class="col-12">
-      <LabelWrapper :label="$t('fields.address.additional_address')">
+      <LabelWrapper
+        :label="
+          denseLabel ? undefined : $t('fields.address.additional_address')
+        "
+      >
         <q-input
           v-model="fieldValue.additionalAddress"
+          :label="
+            denseLabel ? $t('fields.address.additional_address') : undefined
+          "
           dense
           outlined
           type="text"
@@ -119,6 +134,7 @@ const props = withDefaults(
     // Wheter additional information about the address can be given
     showAdditionalAddress?: boolean;
     optional?: boolean;
+    denseLabel?: boolean;
   }>(),
   {
     stateKey: null,
@@ -126,6 +142,7 @@ const props = withDefaults(
     initialValue: null,
     showAdditionalAddress: false,
     optional: false,
+    denseLabel: false,
   }
 );
 

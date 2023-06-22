@@ -6,6 +6,7 @@
     <!-- First name -->
     <GenericInputField
       :label="$t('fields.personal_data.first_name')"
+      :dense-label="denseLabel"
       :rules="optional ? [] : [IS_VALID_NAME]"
       :initial-value="fieldValue.firstName"
       outlined
@@ -17,17 +18,17 @@
     <GenericInputField
       v-if="showOptionalFields"
       :label="$t('fields.personal_data.middle_name')"
+      :dense-label="denseLabel"
       :rules="optional ? [] : [IS_VALID_NAME]"
       :initial-value="fieldValue.middleName"
       outlined
       dense
       @change="(newValue) => fieldValueChange('middleName', newValue)"
     />
-  </div>
-  <div class="row">
     <!-- Last name -->
     <GenericInputField
       :label="$t('fields.personal_data.last_name')"
+      :dense-label="denseLabel"
       :rules="optional ? [] : [IS_VALID_NAME]"
       :initial-value="fieldValue.lastName"
       outlined
@@ -40,6 +41,7 @@
       v-if="showOptionalFields"
       v-model="fieldValue.secondLastName"
       :label="$t('fields.personal_data.second_last_name')"
+      :dense-label="denseLabel"
       :rules="optional ? [] : [IS_VALID_NAME]"
       :initial-value="fieldValue.secondLastName"
       @change="(newValue) => fieldValueChange('secondLastName', newValue)"
@@ -65,6 +67,7 @@ const props = withDefaults(
     showOptionalFields?: boolean; // Whether to show the optional fields (middle name, second last name)
     showTitle?: boolean;
     optional?: boolean;
+    denseLabel?: boolean;
   }>(),
   {
     stateKey: null,
@@ -72,6 +75,7 @@ const props = withDefaults(
     showOptionalFields: true,
     showTitle: false,
     optional: false,
+    denseLabel: false,
   }
 );
 

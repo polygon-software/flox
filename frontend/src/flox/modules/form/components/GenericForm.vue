@@ -27,7 +27,7 @@
           v-for="card in page.cards"
           :key="card.key"
           :card="card"
-          class="q-mb-lg"
+          class="q-mb-md"
         >
           <div
             v-for="(fieldRow, fieldRowIndex) in card.fieldRows"
@@ -90,7 +90,7 @@
         v-for="card in form.pages[0].cards"
         :key="card.key"
         :card="card"
-        class="q-mb-lg"
+        class="q-mb-md"
       >
         <div
           v-for="(fieldRow, fieldRowIndex) in card.fieldRows"
@@ -158,6 +158,7 @@
 
       <!-- Finish button -->
       <q-btn
+        v-if="showFinish"
         :class="`${ALTERNATE_BUTTON_CLASS} q-mt-lg`"
         :disable="loading || !form.pageValid"
         :label="!loading ? finishLabel : loadingLabel"
@@ -213,6 +214,7 @@ const props = withDefaults(
     optionOverrides?: Record<string, unknown[]> | null;
     showCancel?: boolean;
     cancelLabel?: string;
+    showFinish?: boolean;
   }>(),
   {
     finishLabel: i18n.global.t('buttons.finish'),
@@ -224,6 +226,7 @@ const props = withDefaults(
     optionOverrides: null,
     showCancel: false,
     cancelLabel: i18n.global.t('buttons.cancel'),
+    showFinish: true,
   }
 );
 

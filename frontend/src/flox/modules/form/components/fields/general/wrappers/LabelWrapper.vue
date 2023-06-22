@@ -1,6 +1,6 @@
 <template>
   <div class="column q-mx-xs" style="flex-grow: 1">
-    <div class="row justify-between">
+    <div v-if="label" class="row justify-between">
       <div :class="DEFAULT_LABEL_CLASS" :style="DEFAULT_LABEL_STYLE">
         {{ label }}
       </div>
@@ -22,7 +22,7 @@ import {
 
 const props = defineProps<{
   // Label text
-  label: string;
+  label?: string;
   // Icon name
   icon?: string;
   // Tooltip for the icon

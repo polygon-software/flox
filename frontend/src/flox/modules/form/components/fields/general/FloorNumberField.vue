@@ -16,7 +16,6 @@ import { computed, onBeforeMount, ref, watch } from 'vue';
 
 import { i18n } from 'boot/i18n';
 import { FIELDS } from 'src/flox/modules/form/data/FIELDS';
-import { FLOOR } from 'src/data/ENUM';
 
 import { IS_NOT_NULL } from '../../../data/RULES';
 import { FormStateKey, useFormStore } from '../../../stores/form';
@@ -36,15 +35,6 @@ const initialValue = (props.stateKey ? fetchByKey(props.stateKey) : null) as
 // Actual field value
 const fieldValue = ref(initialValue ?? null);
 
-const floorType = computed(() => {
-  return fetchByKey({
-    formKey: props.stateKey?.formKey as string,
-    pageKey: 'formData',
-    cardKey: 'tenantData',
-    fieldKey: FIELDS.FLOOR.key,
-  }) as FLOOR | null;
-});
-
 const showField = ref(false);
 
 /**
@@ -62,40 +52,4 @@ function saveValue(): void {
   }
 }
 
-/**
- *  Set floor number to 0 if floor type is basement or upper floor
- *  @returns {void} - done
- */
-watch(
-  () => floorType.value,
-  () => {
-    if (
-      floorType.value === FLOOR.BASEMENT ||
-      floorType.value === FLOOR.UPPER_FLOOR
-    ) {
-      fieldValue.value = 0;
-      showField.value = true;
-    } else {
-      fieldValue.value = null;
-      showField.value = false;
-    }
-    saveValue();
-  }
-);
-
-/**
- * If no value in store yet, write default
- */
-onBeforeMount(() => {
-  if (
-    floorType.value === FLOOR.BASEMENT ||
-    floorType.value === FLOOR.UPPER_FLOOR
-  ) {
-    showField.value = true;
-  } else {
-    fieldValue.value = null;
-    showField.value = false;
-  }
-  saveValue();
-});
 </script>

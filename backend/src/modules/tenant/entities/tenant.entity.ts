@@ -1,6 +1,4 @@
 import {
-  BeforeInsert,
-  BeforeUpdate,
   Column,
   Entity,
   JoinColumn,
@@ -8,15 +6,12 @@ import {
 } from 'typeorm';
 import { Field, ObjectType } from '@nestjs/graphql';
 import {
-  IsEnum,
-  IsNumber,
   IsObject,
   IsOptional,
   IsString,
 } from 'class-validator';
 
 import BaseEntity from '../../../flox/core/base-entity/entities/base-entity.entity';
-import { FLOOR } from '../../../ENUM/enum';
 import Address from '../../address/entities/address.entity';
 
 /**
@@ -59,41 +54,12 @@ export default class Tenant extends BaseEntity {
   @IsOptional()
   email: string;
 
-  @Field(() => FLOOR, {
-    description: "Floor type of tenant's apartment",
-    nullable: true,
-  })
-  @Column({ type: 'enum', enum: FLOOR, nullable: true })
-  @IsEnum(FLOOR)
-  @IsOptional()
-  floorType: FLOOR;
-
-  @Field(() => Number, {
-    description: "Floor number of tenant's apartment",
+  @Field(() => String, {
+    description: "Floor of tenant's apartment",
     nullable: true,
   })
   @Column({ nullable: true })
-  @IsNumber()
+  @IsString()
   @IsOptional()
-  floorNumber: number;
-
-  /**
-   * Ensures that the combination of floor and floor number is valid.
-   */
-  @BeforeInsert()
-  @BeforeUpdate()
-  checkFloor(): void {
-    if (this.floorType === FLOOR.GROUND_FLOOR && this.floorNumber) {
-      throw new Error(`Floor number must be null for floor ${this.floorType}`);
-    }
-    // when floorNumber === 0 it also evaluates to true when asked !this.floorNumber, therefore we need to check for !== 0
-    if (
-      (this.floorType === FLOOR.UPPER_FLOOR ||
-        this.floorType === FLOOR.BASEMENT) &&
-      !this.floorNumber &&
-      this.floorNumber !== 0
-    ) {
-      throw new Error(`Floor number must be set for ${this.floorType}`);
-    }
-  }
+  floor: string;
 }

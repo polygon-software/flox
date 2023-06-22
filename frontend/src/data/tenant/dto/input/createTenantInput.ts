@@ -1,12 +1,5 @@
-import {
-  IsEnum,
-  IsNumber,
-  IsObject,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { IsObject, IsOptional, IsString } from 'class-validator';
 
-import { FLOOR } from 'src/data/ENUM';
 import UpdateAddressInput from 'src/data/address/input/dto/updateAddressInput';
 
 /**
@@ -33,11 +26,7 @@ export default class CreateTenantInput {
   @IsOptional()
   email?: string;
 
-  @IsEnum(FLOOR)
+  @IsString()
   @IsOptional()
-  floorType?: FLOOR;
-
-  @IsNumber()
-  @IsOptional()
-  floorNumber?: number;
+  floor?: string;
 }

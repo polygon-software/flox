@@ -40,15 +40,6 @@ export enum DEVICE_TYPE {
 }
 
 /**
- * Type of floor a client lives on
- */
-export enum FLOOR {
-  BASEMENT = 'BASEMENT',
-  GROUND_FLOOR = 'GROUND_FLOOR',
-  UPPER_FLOOR = 'UPPER_FLOOR',
-}
-
-/**
  * Type of repair job
  */
 export enum JOB_TYPE {

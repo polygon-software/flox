@@ -1,7 +1,8 @@
 <template>
-  <LabelWrapper :label="label">
+  <LabelWrapper :label="denseLabel ? undefined : label">
     <q-input
       v-model="fieldValue"
+      :label="denseLabel ? label : undefined"
       dense
       outlined
       v-bind="inputProps"
@@ -54,6 +55,7 @@ const props = withDefaults(
     initialValue?: string | number | null; // Only considered when stateKey is null, so this field can be a non-saving subfield of other fields
     tooltip?: Tooltip | null;
     defaultValue?: string | number | null;
+    denseLabel?: boolean;
   }>(),
   {
     stateKey: null,
@@ -70,6 +72,7 @@ const props = withDefaults(
     initialValue: null,
     tooltip: null,
     defaultValue: null,
+    denseLabel: false,
   }
 );
 

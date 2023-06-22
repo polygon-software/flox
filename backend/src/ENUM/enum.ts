@@ -39,14 +39,6 @@ export enum DEVICE_TYPE {
   OTHER = 'OTHER',
 }
 
-/**
- * Type of floor a client lives on
- */
-export enum FLOOR {
-  BASEMENT = 'BASEMENT',
-  GROUND_FLOOR = 'GROUND_FLOOR',
-  UPPER_FLOOR = 'UPPER_FLOOR',
-}
 
 /**
  * Type of repair job
@@ -101,6 +93,5 @@ export const jobTypeStatuses: Record<JOB_TYPE, JOB_STATUS[]> = {
 registerEnumType(USER_ROLE, { name: 'UserRole' });
 registerEnumType(LEGAL_FORM, { name: 'LegalForm' });
 registerEnumType(DEVICE_TYPE, { name: 'DeviceType' });
-registerEnumType(FLOOR, { name: 'Floor' });
 registerEnumType(JOB_TYPE, { name: 'JobType' });
 registerEnumType(JOB_STATUS, { name: 'JobStatus' });

@@ -6,6 +6,7 @@
     <div class="row">
       <GenericSelectField
         :initial-value="fieldValue[deviceIndex].deviceType"
+        :dense-label="denseLabel"
         :options="translatedObjects(DEVICE_TYPE, 'device_type')"
         :rules="[]"
         :label="i18n.global.t('fields.device_type')"
@@ -13,6 +14,7 @@
       />
       <GenericInputField
         :initial-value="fieldValue[deviceIndex].deviceManufacturer"
+        :dense-label="denseLabel"
         :rules="[]"
         :label="i18n.global.t('fields.manufacturer')"
         @change="
@@ -24,6 +26,7 @@
     <div class="row">
       <GenericInputField
         :initial-value="fieldValue[deviceIndex].deviceModel"
+        :dense-label="denseLabel"
         :rules="[]"
         :label="i18n.global.t('fields.model')"
         @change="
@@ -33,6 +36,7 @@
       />
       <GenericInputField
         :initial-value="fieldValue[deviceIndex].deviceProductionNumber"
+        :dense-label="denseLabel"
         :rules="[]"
         :label="i18n.global.t('fields.production_number')"
         @change="
@@ -44,6 +48,7 @@
     </div>
     <GenericInputField
       :initial-value="fieldValue[deviceIndex].deviceProductionYear"
+      :dense-label="denseLabel"
       :rules="[]"
       :label="i18n.global.t('fields.production_year')"
       type="number"
@@ -51,6 +56,7 @@
     />
     <GenericInputField
       :initial-value="fieldValue[deviceIndex].deviceInformation"
+      :dense-label="denseLabel"
       :rules="[]"
       :label="i18n.global.t('fields.information')"
       type="textarea"
@@ -108,8 +114,11 @@ const props = withDefaults(
   defineProps<{
     // Used to fetch or store data from/to the store
     stateKey: FormStateKey;
+    denseLabel?: boolean;
   }>(),
-  {}
+  {
+    denseLabel: false,
+  }
 );
 
 const fieldValue: Ref<Device[]> = ref([new Device()]);

@@ -1,6 +1,5 @@
 import { IsOptional, IsString } from 'class-validator';
 
-import { FLOOR } from 'src/data/ENUM';
 import CreateTenantInput from 'src/data/tenant/dto/input/createTenantInput';
 import TenantEntity from 'src/data/tenant/entities/tenantEntity';
 import UpdateAddressInput from 'src/data/address/input/dto/updateAddressInput';
@@ -21,8 +20,7 @@ export default class UpdateTenantInput extends CreateTenantInput {
    * @param [address] - The address of the tenant
    * @param [phoneNumber] - The phone number of the tenant
    * @param [email] - The email of the tenant
-   * @param [floorType] - The floor type of the tenant's apartment
-   * @param [floorNumber] - The floor number of the tenant's apartment
+   * @param [floor] - The floor type of the tenant's apartment
    */
   constructor(
     firstName?: string,
@@ -30,8 +28,7 @@ export default class UpdateTenantInput extends CreateTenantInput {
     address?: UpdateAddressInput,
     phoneNumber?: string,
     email?: string,
-    floorType?: FLOOR,
-    floorNumber?: number,
+    floor?: string,
     uuid?: string
   ) {
     super();
@@ -41,8 +38,7 @@ export default class UpdateTenantInput extends CreateTenantInput {
     this.address = address;
     this.phoneNumber = phoneNumber;
     this.email = email;
-    this.floorType = floorType;
-    this.floorNumber = floorNumber;
+    this.floor = floor;
   }
 
   /**
@@ -57,8 +53,7 @@ export default class UpdateTenantInput extends CreateTenantInput {
       UpdateAddressInput.fromAddress(tenant?.address),
       tenant?.phoneNumber,
       tenant?.email,
-      tenant?.floorType,
-      tenant?.floorNumber,
+      tenant?.floor,
       tenant?.uuid
     );
   }

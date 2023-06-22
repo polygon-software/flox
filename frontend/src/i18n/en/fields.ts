@@ -43,10 +43,7 @@ export default {
     date: {
       date: 'Date',
     },
-    phone: {
-      number: 'Phone number',
-      country_code: 'Country code',
-    },
+    phone_number: 'Phone number',
     select: {
       please_select: 'Please select',
     },

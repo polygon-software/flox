@@ -1,7 +1,8 @@
 <template>
-  <LabelWrapper :label="label">
+  <LabelWrapper :label="denseLabel ? undefined : label">
     <q-input
       v-model="fieldValue"
+      :label="denseLabel ? label : undefined"
       :rules="
         optional
           ? [
@@ -52,6 +53,7 @@ const props = withDefaults(
     initialValue?: Date | null; // Only considered when stateKey is null,
     // so this field can be a non-saving subfield of other fields
     optional?: boolean;
+    denseLabel?: boolean;
   }>(),
   {
     stateKey: null,
@@ -61,6 +63,7 @@ const props = withDefaults(
     rules: () => [],
     initialValue: null,
     optional: false,
+    denseLabel: false,
   }
 );
 

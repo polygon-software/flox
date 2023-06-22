@@ -1,19 +1,51 @@
 <template>
   <q-page class="flex flex-center column">
-    <div class="q-pa-lg flex-center flex column">
+    <div class="q-py-lg flex-center flex column">
       <h4>
         {{ orderUuid ? $t('pages.edit.title') : $t('pages.create.title') }}
       </h4>
-      <div class="row" style="gap: 25px">
+      <div class="justify-between row">
+        <div class="justify-between column col-9">
+          <GenericForm
+            v-if="pagesTopRow.length > 0 && !loading"
+            :form-key="formKey"
+            :pages="pagesTopRow"
+            preserve-state
+            :loading="loading"
+            :show-finish="false"
+            class="q-px-sm"
+          />
+          <div class="justify-between row">
+            <GenericForm
+              v-if="pagesLeft.length > 0 && !loading"
+              :form-key="formKey"
+              :pages="pagesLeft"
+              preserve-state
+              :loading="loading"
+              :show-finish="false"
+              class="col-6 q-px-sm"
+            />
+            <GenericForm
+              v-if="pagesRight.length > 0 && !loading"
+              :form-key="formKey"
+              :pages="pagesRight"
+              preserve-state
+              show-cancel
+              :loading="loading"
+              class="col-6 q-px-sm"
+              @submit="submit"
+              @cancel="cancel"
+            />
+          </div>
+        </div>
         <GenericForm
-          v-if="pages.length > 0 && !loading"
+          v-if="pagesOuterRight.length > 0 && !loading"
           :form-key="formKey"
-          :pages="pages"
+          :pages="pagesOuterRight"
           preserve-state
-          show-cancel
           :loading="loading"
-          @submit="submit"
-          @cancel="cancel"
+          class="col-3 q-px-sm"
+          :show-finish="false"
         />
         <q-spinner v-if="loading" color="primary" size="3em" />
       </div>
@@ -61,6 +93,11 @@ const store = useFormStore();
 
 // Pages of the form with respective cards
 const pages: Ref<Array<FormPage>> = ref([]);
+const pagesTopRow: Ref<Array<FormPage>> = ref([]);
+const pagesLeft: Ref<Array<FormPage>> = ref([]);
+const pagesRight: Ref<Array<FormPage>> = ref([]);
+const pagesOuterRight: Ref<Array<FormPage>> = ref([]);
+
 // Loading/submitting status
 const loading = ref(false);
 
@@ -73,6 +110,7 @@ const order: Ref<FormEntity | null> = ref(null);
 const basicData = new FormCard(
   'basicData',
   [
+    FIELDS.START_DATE,
     FIELDS.END_DATE,
     FIELDS.OWNER,
     FIELDS.OBJECT_NUMBER,
@@ -85,12 +123,9 @@ const basicData = new FormCard(
 const clientData = new FormCard(
   'clientData',
   [
-    FIELDS.FULL_NAME,
-    FIELDS.COMPANY_NAME,
-    FIELDS.COMPANY_LEGAL_FORM,
+    [FIELDS.FULL_NAME, FIELDS.EMAIL, FIELDS.SIMPLE_PHONE_NUMBER],
+    [FIELDS.COMPANY_NAME, FIELDS.COMPANY_LEGAL_FORM],
     FIELDS.ADDRESS,
-    FIELDS.PHONE_NUMBER,
-    FIELDS.EMAIL,
   ],
   i18n.global.t('card_titles.client_information')
 );
@@ -99,12 +134,9 @@ const clientData = new FormCard(
 const tenantData = new FormCard(
   'tenantData',
   [
-    FIELDS.FULL_NAME,
+    [FIELDS.FULL_NAME, FIELDS.EMAIL, FIELDS.SIMPLE_PHONE_NUMBER],
     FIELDS.EXTENDED_ADDRESS,
-    FIELDS.PHONE_NUMBER,
-    FIELDS.EMAIL,
-    FIELDS.FLOOR,
-    FIELDS.FLOOR_NUMBER,
+    FIELDS.SIMPLE_FLOOR,
   ],
   i18n.global.t('card_titles.tenant_information')
 );
@@ -209,7 +241,6 @@ onMounted(async () => {
   store.clearForm(formKey);
 
   pages.value = [
-    // Basic personal data
     new FormPage('formData', i18n.global.t('dossier.form.basicPersonalData'), [
       basicData,
       jobInformation,
@@ -221,6 +252,36 @@ onMounted(async () => {
       productsAndTimeRecording,
       fileUpload,
       finalInformation,
+    ]),
+  ];
+
+  pagesTopRow.value = [
+    new FormPage('formData', i18n.global.t('dossier.form.basicPersonalData'), [
+      clientData,
+      tenantData,
+      productsAndTimeRecording,
+    ]),
+  ];
+
+  pagesLeft.value = [
+    new FormPage('formData', i18n.global.t('dossier.form.basicPersonalData'), [
+      billingData,
+      devices,
+    ]),
+  ];
+
+  pagesRight.value = [
+    new FormPage('formData', i18n.global.t('dossier.form.basicPersonalData'), [
+      additionalData,
+      fileUpload,
+      finalInformation,
+    ]),
+  ];
+
+  pagesOuterRight.value = [
+    new FormPage('formData', i18n.global.t('dossier.form.basicPersonalData'), [
+      basicData,
+      jobInformation,
     ]),
   ];
 

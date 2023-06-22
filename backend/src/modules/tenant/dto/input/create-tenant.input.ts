@@ -1,13 +1,11 @@
 import { Field, InputType } from '@nestjs/graphql';
 import {
-  IsEnum,
   IsNumber,
   IsObject,
   IsOptional,
   IsString,
 } from 'class-validator';
 
-import { FLOOR } from '../../../../ENUM/enum';
 import UpdateAddressInput from '../../../address/dto/input/update-address.input';
 
 @InputType()
@@ -43,19 +41,11 @@ export default class CreateTenantInput {
   @IsOptional()
   email: string;
 
-  @Field(() => FLOOR, {
-    description: "Floor type of tenant's apartment",
+  @Field(() => String, {
+    description: "Floor of tenant's apartment",
     nullable: true,
   })
-  @IsEnum({ type: 'enum', enum: FLOOR, nullable: true })
+  @IsString()
   @IsOptional()
-  floorType: FLOOR;
-
-  @Field(() => Number, {
-    description: "Floor number of tenant's apartment",
-    nullable: true,
-  })
-  @IsNumber()
-  @IsOptional()
-  floorNumber: number;
+  floor: string;
 }

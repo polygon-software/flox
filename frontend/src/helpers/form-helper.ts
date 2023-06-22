@@ -3,7 +3,7 @@ import FormEntityInput from 'src/data/form/input/createFormEntityInput';
 import { FIELDS } from 'src/flox/modules/form/data/FIELDS';
 import UpdateJobInput from 'src/data/job/dto/input/updateJobInput';
 import FullName from 'src/flox/modules/form/data/types/FullName';
-import { FLOOR, LEGAL_FORM } from 'src/data/ENUM';
+import { LEGAL_FORM } from 'src/data/ENUM';
 import AddressInput from 'src/flox/modules/form/data/types/AddressInput';
 import UpdateClientInput from 'src/data/client/dto/input/updateClientInput';
 import UpdateAddressInput from 'src/data/address/input/dto/updateAddressInput';
@@ -58,6 +58,7 @@ export function fillFormStoreWithFormEntityValues(
 
   // basic data
   storeKey.cardKey = 'basicData';
+  setFieldValue(FIELDS.START_DATE, formEntity.startDate);
   setFieldValue(FIELDS.END_DATE, formEntity.endDate);
   setFieldValue(FIELDS.EXTERNAL_ORDER_NUMBER, formEntity.externalOrderNumber);
   setFieldValue(FIELDS.INTERNAL_ORDER_NUMBER, formEntity.internalOrderNumber);
@@ -77,7 +78,7 @@ export function fillFormStoreWithFormEntityValues(
   setFieldValue(FIELDS.COMPANY_NAME, formEntity.client?.companyName);
   setFieldValue(FIELDS.COMPANY_LEGAL_FORM, formEntity.client?.companyLegalForm);
   setFieldValue(FIELDS.ADDRESS, formEntity.client?.address);
-  setFieldValue(FIELDS.PHONE_NUMBER, formEntity.client?.phoneNumber);
+  setFieldValue(FIELDS.SIMPLE_PHONE_NUMBER, formEntity.client?.phoneNumber);
   setFieldValue(FIELDS.EMAIL, formEntity.client?.email);
   setFieldValue({ key: 'uuid' }, formEntity.client?.uuid);
 
@@ -88,10 +89,9 @@ export function fillFormStoreWithFormEntityValues(
     lastName: formEntity.tenant?.lastName,
   } as FullName);
   setFieldValue(FIELDS.EXTENDED_ADDRESS, formEntity.tenant?.address);
-  setFieldValue(FIELDS.PHONE_NUMBER, formEntity.tenant?.phoneNumber);
+  setFieldValue(FIELDS.SIMPLE_PHONE_NUMBER, formEntity.tenant?.phoneNumber);
   setFieldValue(FIELDS.EMAIL, formEntity.tenant?.email);
-  setFieldValue(FIELDS.FLOOR, formEntity.tenant?.floorType);
-  setFieldValue(FIELDS.FLOOR_NUMBER, formEntity.tenant?.floorNumber);
+  setFieldValue(FIELDS.SIMPLE_FLOOR, formEntity.tenant?.floor);
   setFieldValue({ key: 'uuid' }, formEntity.tenant?.uuid);
 
   // billing data
@@ -157,6 +157,9 @@ export default function formValuesToFormEntityValues(
     | undefined;
 
   storeKey.cardKey = 'basicData';
+  const creationDate = getFieldValue(storeKey, FIELDS.START_DATE) as
+    | Date
+    | undefined;
   const endDate = getFieldValue(storeKey, FIELDS.END_DATE) as Date | undefined;
   const externalOrderNumber = getFieldValue(
     storeKey,
@@ -216,9 +219,10 @@ export default function formValuesToFormEntityValues(
   const clientAddress = getFieldValue(storeKey, FIELDS.ADDRESS) as
     | AddressInput
     | undefined;
-  const clientPhoneNumber = getFieldValue(storeKey, FIELDS.PHONE_NUMBER) as
-    | number
-    | undefined;
+  const clientPhoneNumber = getFieldValue(
+    storeKey,
+    FIELDS.SIMPLE_PHONE_NUMBER
+  ) as number | undefined;
   const clientEmail = getFieldValue(storeKey, FIELDS.EMAIL) as
     | string
     | undefined;
@@ -227,7 +231,7 @@ export default function formValuesToFormEntityValues(
     clientFullName?.lastName,
     clientCompanyName,
     companyLegalForm,
-    companyLegalForm
+    clientAddress
       ? new UpdateAddressInput(
           clientAddress?.street,
           clientAddress?.number,
@@ -248,15 +252,15 @@ export default function formValuesToFormEntityValues(
     | AddressInput
     | undefined;
 
-  const tenantPhoneNumber = getFieldValue(storeKey, FIELDS.PHONE_NUMBER) as
-    | string
-    | undefined;
+  const tenantPhoneNumber = getFieldValue(
+    storeKey,
+    FIELDS.SIMPLE_PHONE_NUMBER
+  ) as string | undefined;
   const tenantEmail = getFieldValue(storeKey, FIELDS.EMAIL) as
     | string
     | undefined;
-  const floorType = getFieldValue(storeKey, FIELDS.FLOOR) as FLOOR | undefined;
-  const floorNumber = getFieldValue(storeKey, FIELDS.FLOOR_NUMBER) as
-    | number
+  const floor = getFieldValue(storeKey, FIELDS.SIMPLE_FLOOR) as
+    | string
     | undefined;
   const tenant = new UpdateTenantInput(
     tenantFullName?.firstName,
@@ -272,8 +276,7 @@ export default function formValuesToFormEntityValues(
       : undefined,
     tenantPhoneNumber?.toString(),
     tenantEmail,
-    floorType,
-    floorNumber,
+    floor,
     uuid ? (getFieldValue(storeKey, { key: 'uuid' }) as string) : undefined
   );
 
@@ -354,7 +357,7 @@ export default function formValuesToFormEntityValues(
   return new FormEntityInput(
     uuid ?? undefined,
     job,
-    undefined,
+    creationDate,
     endDate,
     internalOrderNumber,
     externalOrderNumber,

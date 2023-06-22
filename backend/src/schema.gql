@@ -414,12 +414,6 @@ input FilterInput {
   findable: Boolean
 }
 
-enum Floor {
-  BASEMENT
-  GROUND_FLOOR
-  UPPER_FLOOR
-}
-
 type FolderOutput {
   """Creation date of oldest file in folder"""
   createdAt: DateTime!
@@ -1391,11 +1385,8 @@ type Tenant {
   """Tenant's first name"""
   firstName: String
 
-  """Floor number of tenant's apartment"""
-  floorNumber: Float
-
   """Floor type of tenant's apartment"""
-  floorType: Floor
+  floor: String
 
   """Tenant's last name"""
   lastName: String
@@ -1638,11 +1629,8 @@ input UpdateTenantInput {
   """Tenant's first name"""
   firstName: String
 
-  """Floor number of tenant's apartment"""
-  floorNumber: Float
-
   """Floor type of tenant's apartment"""
-  floorType: Floor
+  floorType: String
 
   """Tenant's last name"""
   lastName: String

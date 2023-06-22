@@ -1,6 +1,7 @@
 <template>
   <GenericSelectField
     :initial-value="fieldValue.type"
+    :dense-label="denseLabel"
     :options="jobTypeOptions"
     :rules="[]"
     :label="i18n.global.t('fields.job_type')"
@@ -9,6 +10,7 @@
 
   <GenericSelectField
     :initial-value="fieldValue.status"
+    :dense-label="denseLabel"
     :options="jobStatusOptions"
     :rules="[]"
     :label="i18n.global.t('fields.job_status')"
@@ -43,6 +45,7 @@ import GenericSelectField from './GenericSelectField.vue';
 
 const props = defineProps<{
   stateKey: FormStateKey;
+  denseLabel?: boolean;
 }>();
 
 const emit = defineEmits<{
