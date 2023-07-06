@@ -45,6 +45,13 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     component: () => import('layouts/SimpleDashboardLayout.vue'),
     children: [{ path: '', component: () => import('pages/AccountPage.vue') }],
   },
+
+  ARTICLES: {
+    path: '/articles',
+    component: () => import('layouts/SimpleDashboardLayout.vue'),
+    children: [{ path: '', component: () => import('pages/ArticlePage.vue') }],
+  },
+
   // Wildcard route for non-covered routes
   WILDCARD: {
     path: '/:catchAll(.*)*',

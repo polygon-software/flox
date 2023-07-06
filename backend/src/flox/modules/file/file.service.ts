@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
@@ -182,5 +182,35 @@ export default class FileService extends AbstractSearchAccessControlService<S3Fi
       }
     });
     return Object.values(folders);
+  }
+
+  /**
+   * Fetches a file from S3 for the given UUID
+   *
+   * @param uuid - UUID of the file
+   * @returns The file as a Buffer
+   */
+  async getS3File(uuid: string): Promise<Buffer> {
+    const file = await this.repository.findOne({ where: { uuid } });
+
+    if (!file) {
+      throw new NotFoundException(`File not found for UUID ${uuid}`);
+    }
+
+    const command = new GetObjectCommand({
+      Bucket: this.configService.get('AWS_PRIVATE_BUCKET_NAME'),
+      Key: file.uuid,
+    });
+
+    const response = await this.s3.send(command);
+
+    if (!response.Body) {
+      throw new NotFoundException(
+        `Failed to load file from S3 for UUID ${uuid}`,
+      );
+    }
+
+    const byteArray = await response.Body.transformToByteArray();
+    return Buffer.from(byteArray);
   }
 }

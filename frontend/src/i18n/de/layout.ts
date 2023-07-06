@@ -16,6 +16,7 @@ export default {
       admin_panel: 'Administrator-Sektion',
       payment: 'Bezahlungen',
       dashboard: 'Dashboard',
+      articles: 'Artikel',
     },
     footer: {
       developers: 'Entwickler',

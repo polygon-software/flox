@@ -10,6 +10,11 @@ export default {
       zip_code: 'ZIP',
       additional_address: 'Additional Address',
     },
+    article_upload: {
+      select_file: 'Select file',
+      submit: 'Submit',
+      title: 'Upload article list',
+    },
     authentication: {
       roles: {
         admin: 'Admin',

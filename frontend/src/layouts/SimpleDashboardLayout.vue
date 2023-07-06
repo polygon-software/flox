@@ -52,6 +52,46 @@
       </q-toolbar>
     </q-header>
 
+    <!-- Left-side menu drawer -->
+    <q-drawer
+      v-model="leftDrawerOpen"
+      :width="240"
+      bordered
+      class="drawer-bg"
+      show-if-above
+    >
+      <q-scroll-area class="fit">
+        <q-list padding>
+          <template v-for="(group, index) in sideMenu" :key="index">
+            <q-item-label
+              v-if="group.title"
+              class="text-weight-bold text-uppercase"
+              header
+            >
+              {{ group.title }}
+            </q-item-label>
+
+            <q-item
+              v-for="link in group.links"
+              :key="link.text"
+              v-ripple
+              clickable
+              @click="link.click"
+            >
+              <q-item-section avatar>
+                <q-icon :name="link.icon" color="grey" />
+              </q-item-section>
+
+              <q-item-section>
+                <q-item-label>{{ link.text }}</q-item-label>
+              </q-item-section>
+            </q-item>
+          </template>
+        </q-list>
+      </q-scroll-area>
+    </q-drawer>
+
+    <!-- Page content -->
     <q-page-container>
       <q-pull-to-refresh @refresh="refresh">
         <div :key="key" class="q-px-lg relative-position">
@@ -65,7 +105,7 @@
 </template>
 
 <script lang="ts" setup>
-import { inject, Ref, ref } from 'vue';
+import { computed, ComputedRef, inject, Ref, ref } from 'vue';
 
 import RouterService from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
@@ -73,14 +113,47 @@ import AliasIndicator from 'src/flox/modules/alias/components/AliasIndicator.vue
 import { invalidateTables } from 'src/apollo/invalidation';
 import LocaleSwitcher from 'components/locale/LocaleSwitcher.vue';
 import AuthenticationService from 'src/flox/modules/auth/services/auth.service';
+import { i18n } from 'boot/i18n';
 
 import { ALL_TABLES } from '../flox/enum/TABLES';
 
 const $routerService: RouterService | undefined = inject('$routerService');
+const leftDrawerOpen: Ref<boolean> = ref(false);
 const accountMenuOpen: Ref<boolean> = ref(false);
 const key: Ref<number> = ref(0.0);
 
 const $authService: AuthenticationService | undefined = inject('$authService');
+
+type MenuType = {
+  title?: string;
+  links: {
+    icon: string;
+    text: string;
+    click?: () => void;
+  }[];
+};
+
+const sideMenu: ComputedRef<MenuType[]> = computed(() => [
+  {
+    title: '',
+    links: [
+      {
+        icon: 'home',
+        text: i18n.global.t('layout.menu.dashboard'),
+        click: (): void => {
+          void $routerService?.routeTo(ROUTES.HOME);
+        },
+      },
+      {
+        icon: 'article',
+        text: i18n.global.t('layout.menu.articles'),
+        click: (): void => {
+          void $routerService?.routeTo(ROUTES.ARTICLES);
+        },
+      },
+    ],
+  },
+]);
 
 /**
  * Reloads the entire page and devalidates all queries

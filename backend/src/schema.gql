@@ -805,6 +805,7 @@ type Mutation {
   UpdateFile(updateFileInput: UpdateFileInput!): S3File!
   UpdateUser(updateUserInput: UpdateUserInput!): User!
   UpdateUserGroup(updateUserGroupInput: UpdateUserGroupInput!): UserGroup!
+  createArticleList(uuid: String!): [Article!]!
   createForm(createFormInput: CreateFormInput!): Form!
   deleteForm(deleteInput: DeleteInput!): Form!
   updateForm(updateFormInput: UpdateFormInput!): Form!
@@ -1385,7 +1386,7 @@ type Tenant {
   """Tenant's first name"""
   firstName: String
 
-  """Floor type of tenant's apartment"""
+  """Floor of tenant's apartment"""
   floor: String
 
   """Tenant's last name"""
@@ -1629,8 +1630,8 @@ input UpdateTenantInput {
   """Tenant's first name"""
   firstName: String
 
-  """Floor type of tenant's apartment"""
-  floorType: String
+  """Floor of tenant's apartment"""
+  floor: String
 
   """Tenant's last name"""
   lastName: String

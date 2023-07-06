@@ -10,6 +10,11 @@ export default {
       zip_code: 'PLZ',
       additional_address: 'Zusätzliche Adresse',
     },
+    article_upload: {
+      select_file: 'Datei auswählen',
+      submit: 'Hochladen',
+      title: 'Artikelliste hochladen',
+    },
     authentication: {
       roles: {
         admin: 'Admin',

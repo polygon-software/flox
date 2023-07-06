@@ -27,6 +27,7 @@ import HealthcheckController from './flox/modules/healthcheck/healthcheck.contro
 import env from './env';
 import FormModule from './modules/form/form.module';
 import ImageFileModule from './modules/image-file/image-file.module';
+import ArticleModule from './modules/article/article.module';
 
 @Module({
   imports: [
@@ -114,6 +115,7 @@ import ImageFileModule from './modules/image-file/image-file.module';
     // Flox modules
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     ...(floxModules() as any[]),
+    ArticleModule,
     FormModule,
     ImageFileModule,
   ],
@@ -128,6 +130,7 @@ import ImageFileModule from './modules/image-file/image-file.module';
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     ...floxProviders(),
     // Add any other custom module providers here
+    ArticleModule,
     FormModule,
     ImageFileModule,
   ],

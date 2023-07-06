@@ -6,6 +6,9 @@ export default {
     account: {
       title: 'Account',
     },
+    articles: {
+      title: 'Articles',
+    },
     home: {
       title: 'Dashboard',
       meta: {
