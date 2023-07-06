@@ -260,7 +260,7 @@ const columns: Ref<ColumnInterface<UserEntity>[]> = ref([
   },
 ]);
 
-const dateInput: Ref<Date | null> = ref(null);
+const dateInput: Ref<string | null> = ref(null);
 const articleNumberInput: Ref<string | null> = ref('p');
 const labelInput: Ref<string | null> = ref(null);
 const descriptionInput: Ref<number | null> = ref(null);
