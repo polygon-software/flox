@@ -34,7 +34,8 @@
         :label="$t('fields.article_number')"
         dense
         outlined
-        @change="addArticleNumber"
+        debounce="1000"
+        @update:model-value="addArticleNumber"
       />
     </div>
     <div class="col-3 q-pl-sm">
@@ -213,6 +214,10 @@ function setValuesToNull(): void {
  * @returns {void}
  */
 function addArticleNumber(val: string): void {
+  if (val.length >= 2) {
+    // TODO: fetch suggestions
+    console.log('fetch suggestions');
+  }
   articleNumberEntry.value.articleNumber = val;
 
   if (isArticleNumberEntryValid()) {
