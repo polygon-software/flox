@@ -51,5 +51,4 @@ function saveValue(): void {
     store.setValue(props.stateKey, fieldValue.value);
   }
 }
-
 </script>

@@ -4,7 +4,6 @@ import {
   IsArray,
   IsBoolean,
   IsDate,
-  IsInt,
   IsNumber,
   IsObject,
   IsOptional,
@@ -20,6 +19,7 @@ import Article from '../../article/entities/article.entity';
 import Expense from '../../expense/entities/expense.entity';
 import Tenant from '../../tenant/entities/tenant.entity';
 import Billing from '../../billing/entities/billing.entity';
+import Protocol from '../../protocol/entities/protocol.entity';
 
 /**
  * Form entity
@@ -162,6 +162,14 @@ export default class Form extends BaseEntity {
   @IsArray()
   @IsOptional()
   expenses: Expense[];
+
+  @Field(() => [Protocol], { description: 'Protocols', nullable: true })
+  @OneToMany(() => Protocol, (protocol) => protocol.form, {
+    cascade: true,
+  })
+  @IsArray()
+  @IsOptional()
+  protocols: Protocol[];
 
   @Field(() => Number, {
     description: 'Total cost of the job',

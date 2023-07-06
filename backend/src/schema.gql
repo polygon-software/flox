@@ -285,6 +285,9 @@ input CreateFormInput {
   """Protocol text"""
   protocolText: String
 
+  """Protocols"""
+  protocols: [UpdateProtocolInput!]
+
   """Date the form is created"""
   startDate: DateTime
 
@@ -506,6 +509,9 @@ type Form {
 
   """Protocol text"""
   protocolText: String
+
+  """Protocols"""
+  protocols: [Protocol!]
 
   """Last time the form was pulled by ERP"""
   pulledAt: DateTime
@@ -910,6 +916,50 @@ type PaymentSearchOutput {
 
   """Payments that fit query"""
   data: [Payment!]!
+}
+
+type Protocol {
+  """Amount of units in the protocol"""
+  amount: String
+
+  """Article number"""
+  articleNumber: String
+
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Protocol date"""
+  date: DateTime
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Description of the protocol"""
+  description: String
+
+  """Unit discount"""
+  discount: String
+
+  """Form this protocol belongs to"""
+  form: Form
+
+  """Label of the protocol"""
+  label: String
+
+  """Price of units in the protocol"""
+  price: String
+
+  """Sum of the total cost in the protocol"""
+  sum: String
+
+  """Unit of the protocol"""
+  unit: String
+
+  """Last modification date"""
+  updatedAt: DateTime
+
+  """UUID"""
+  uuid: ID!
 }
 
 type Query {
@@ -1385,7 +1435,7 @@ type Tenant {
   """Tenant's first name"""
   firstName: String
 
-  """Floor type of tenant's apartment"""
+  """Floor of tenant's apartment"""
   floor: String
 
   """Tenant's last name"""
@@ -1573,6 +1623,9 @@ input UpdateFormInput {
   """Protocol text"""
   protocolText: String
 
+  """Protocols"""
+  protocols: [UpdateProtocolInput!]
+
   """Last time the form was pulled by ERP"""
   pulledAt: DateTime
 
@@ -1619,6 +1672,36 @@ input UpdateJobInput {
   uuid: ID
 }
 
+input UpdateProtocolInput {
+  """Amount of units in the protocol"""
+  amount: String
+
+  """Article number"""
+  articleNumber: String
+
+  """Protocol date"""
+  date: DateTime
+
+  """Description of the protocol"""
+  description: String
+
+  """Unit discount"""
+  discount: String
+
+  """Label of the protocol"""
+  label: String
+
+  """Price of units in the protocol"""
+  price: String
+
+  """Sum of the total cost in the protocol"""
+  sum: String
+
+  """Unit of the protocol"""
+  unit: String
+  uuid: ID
+}
+
 input UpdateTenantInput {
   """Tenant's address"""
   address: UpdateAddressInput
@@ -1629,8 +1712,8 @@ input UpdateTenantInput {
   """Tenant's first name"""
   firstName: String
 
-  """Floor type of tenant's apartment"""
-  floorType: String
+  """Floor of tenant's apartment"""
+  floor: String
 
   """Tenant's last name"""
   lastName: String

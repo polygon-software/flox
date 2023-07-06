@@ -1,5 +1,5 @@
 import { FormStateKey, useFormStore } from 'src/flox/modules/form/stores/form';
-import FormEntityInput from 'src/data/form/input/createFormEntityInput';
+import FormEntityInput from 'src/data/form/dto/input/createFormEntityInput';
 import { FIELDS } from 'src/flox/modules/form/data/FIELDS';
 import UpdateJobInput from 'src/data/job/dto/input/updateJobInput';
 import FullName from 'src/flox/modules/form/data/types/FullName';
@@ -18,6 +18,8 @@ import FormEntity from 'src/data/form/entities/form.entity';
 import FileEntity from 'src/flox/modules/file/entities/file.entity';
 import UpdateImageFileInput from 'src/data/imageFile/dto/input/updateImageFileInput';
 import ImageFileEntity from 'src/data/imageFile/entities/imageFileEntity';
+import ProtocolEntry from 'src/flox/modules/form/data/types/ProtocolEntry';
+import UpdateProtocolInput from 'src/data/protocol/input/updateProtocolInput';
 
 /**
  * Helper function for getting field contents
@@ -130,6 +132,10 @@ export function fillFormStoreWithFormEntityValues(
   // file upload
   storeKey.cardKey = 'fileUpload';
   setFieldValue(FIELDS.FILE_UPLOAD, formEntity.images);
+
+  // protocol
+  storeKey.cardKey = 'protocols';
+  setFieldValue(FIELDS.PROTOCOLS, formEntity.protocols);
 }
 
 /**
@@ -314,6 +320,24 @@ export default function formValuesToFormEntityValues(
     );
   });
 
+  storeKey.cardKey = 'protocols';
+  const protocolEntries = getFieldValue(storeKey, FIELDS.PROTOCOLS) as
+    | ProtocolEntry[]
+    | undefined;
+  const protocolInput = protocolEntries?.map((entry) => {
+    return new UpdateProtocolInput(
+      entry.date ?? undefined,
+      entry.articleNumber ?? undefined,
+      entry.label ?? undefined,
+      entry.description ?? undefined,
+      entry.unit ?? undefined,
+      entry.amount ?? undefined,
+      entry.price ?? undefined,
+      entry.discount ?? undefined,
+      entry.sum ?? undefined
+    );
+  });
+
   const timeRecordings = getFieldValue(storeKey, FIELDS.TIME_RECORDINGS) as
     | TimeRecordingEntry[]
     | undefined;
@@ -373,6 +397,7 @@ export default function formValuesToFormEntityValues(
     protocol,
     articleInput,
     expensesInput,
+    protocolInput,
     totalAmount,
     employeeAbbreation,
     freeText,

@@ -21,5 +21,6 @@ export default {
     final_information: 'Final information',
     file_upload: 'File upload',
     job_information: 'Job information',
+    protocols: 'Protocols',
   },
 };

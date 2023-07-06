@@ -21,6 +21,7 @@ export default class FormController extends AbstractSearchResolver<
     'client.address',
     'devices',
     'expenses',
+    'protocols',
     'job',
     'images',
     'tenant',

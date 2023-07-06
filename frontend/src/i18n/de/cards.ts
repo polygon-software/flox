@@ -21,5 +21,6 @@ export default {
     final_information: 'Abschliessende Informationen',
     file_upload: 'Datei-Upload',
     job_information: 'Auftragsinformationen',
+    protocols: 'Protokolle',
   },
 };

@@ -26,6 +26,7 @@ export const CREATE_FORM: MutationObject = {
       $protocolText: String
       $articles: [UpdateArticleInput!]
       $expenses: [UpdateExpenseInput!]
+      $protocols: [UpdateProtocolInput!]
       $totalAmount: Float
       $employeeId: String
       $freeText: String
@@ -51,6 +52,7 @@ export const CREATE_FORM: MutationObject = {
           protocolText: $protocolText
           articles: $articles
           expenses: $expenses
+          protocols: $protocols
           totalAmount: $totalAmount
           employeeId: $employeeId
           freeText: $freeText
@@ -154,6 +156,19 @@ export const CREATE_FORM: MutationObject = {
           discount
           __typename
         }
+        protocols {
+          uuid
+          date
+          articleNumber
+          label
+          description
+          unit
+          amount
+          price
+          discount
+          sum
+          __typename
+        }
         totalAmount
         employeeId
         freeText
@@ -175,6 +190,7 @@ export const CREATE_FORM: MutationObject = {
     TABLES.CLIENT,
     TABLES.DEVICE,
     TABLES.EXPENSE,
+    TABLES.PROTOCOL,
     TABLES.FORM,
     TABLES.IMAGE_FILE,
     TABLES.JOB,
@@ -205,6 +221,7 @@ export const UPDATE_FORM: MutationObject = {
       $protocolText: String
       $articles: [UpdateArticleInput!]
       $expenses: [UpdateExpenseInput!]
+      $protocols: [UpdateProtocolInput!]
       $totalAmount: Float
       $employeeId: String
       $freeText: String
@@ -233,6 +250,7 @@ export const UPDATE_FORM: MutationObject = {
           protocolText: $protocolText
           articles: $articles
           expenses: $expenses
+          protocols: $protocols
           totalAmount: $totalAmount
           employeeId: $employeeId
           freeText: $freeText
@@ -338,6 +356,19 @@ export const UPDATE_FORM: MutationObject = {
           discount
           __typename
         }
+        protocols {
+          uuid
+          date
+          articleNumber
+          label
+          description
+          unit
+          amount
+          price
+          discount
+          sum
+          __typename
+        }
         totalAmount
         employeeId
         freeText
@@ -359,6 +390,7 @@ export const UPDATE_FORM: MutationObject = {
     TABLES.CLIENT,
     TABLES.DEVICE,
     TABLES.EXPENSE,
+    TABLES.PROTOCOL,
     TABLES.FORM,
     TABLES.IMAGE_FILE,
     TABLES.JOB,
@@ -468,6 +500,19 @@ export const DELETE_FORM: MutationObject = {
           discount
           __typename
         }
+        protocols {
+          uuid
+          date
+          articleNumber
+          label
+          description
+          unit
+          amount
+          price
+          discount
+          sum
+          __typename
+        }
         totalAmount
         employeeId
         freeText
@@ -489,6 +534,7 @@ export const DELETE_FORM: MutationObject = {
     TABLES.CLIENT,
     TABLES.DEVICE,
     TABLES.EXPENSE,
+    TABLES.PROTOCOL,
     TABLES.FORM,
     TABLES.IMAGE_FILE,
     TABLES.JOB,

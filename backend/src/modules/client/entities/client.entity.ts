@@ -1,11 +1,6 @@
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 import { Field, ObjectType } from '@nestjs/graphql';
-import {
-  IsEnum,
-  IsObject,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { IsEnum, IsObject, IsOptional, IsString } from 'class-validator';
 
 import BaseEntity from '../../../flox/core/base-entity/entities/base-entity.entity';
 import { LEGAL_FORM } from '../../../ENUM/enum';

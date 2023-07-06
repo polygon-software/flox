@@ -144,12 +144,7 @@ const tenantData = new FormCard(
 // Additional data
 const additionalData = new FormCard(
   'additionalData',
-  [
-    FIELDS.SELECT_POWER_MEASUREMENT,
-    FIELDS.PROBLEM_DESCRIPTION,
-    FIELDS.PROTOCOL_DATE,
-    FIELDS.PROTOCOL,
-  ],
+  [FIELDS.SELECT_POWER_MEASUREMENT, FIELDS.PROBLEM_DESCRIPTION],
   i18n.global.t('card_titles.additional_information')
 );
 
@@ -177,6 +172,13 @@ const productsAndTimeRecording = new FormCard(
   'productsAndTimeRecording',
   [FIELDS.ARTICLE_NUMBERS, FIELDS.TIME_RECORDINGS],
   i18n.global.t('card_titles.products_and_time_recording')
+);
+
+// Protocols
+const protocols = new FormCard(
+  'protocols',
+  [FIELDS.PROTOCOLS],
+  i18n.global.t('card_titles.protocols')
 );
 
 // Final information
@@ -242,6 +244,7 @@ onMounted(async () => {
 
   pages.value = [
     new FormPage('formData', i18n.global.t('dossier.form.basicPersonalData'), [
+      protocols,
       basicData,
       jobInformation,
       clientData,
@@ -260,6 +263,7 @@ onMounted(async () => {
       clientData,
       tenantData,
       productsAndTimeRecording,
+      protocols,
     ]),
   ];
 
@@ -315,7 +319,7 @@ async function submit(): Promise<void> {
   if (!loading.value) {
     loading.value = true;
 
-    // Form values to dossier values
+    // Form values to form values
     const inputValues = formValuesToFormEntityValues(
       formKey,
       orderUuid ?? undefined,

@@ -39,7 +39,6 @@ export enum DEVICE_TYPE {
   OTHER = 'OTHER',
 }
 
-
 /**
  * Type of repair job
  */
