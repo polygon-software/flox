@@ -12,9 +12,21 @@ export default class CreateArticleInput {
   @IsOptional()
   manufacturerNumber?: string;
 
+  @IsString()
+  @IsOptional()
+  name?: string;
+
+  @IsString()
+  @IsOptional()
+  description?: string;
+
   @IsInt()
   @IsOptional()
   amount?: number;
+
+  @IsNumber()
+  @IsOptional()
+  price?: number;
 
   @IsNumber()
   @IsOptional()

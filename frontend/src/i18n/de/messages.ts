@@ -29,5 +29,6 @@ export default {
     order_updated: 'Auftrag erfolgreich aktualisiert',
     both_fields_needed:
       'Beide Felder müssen ausgefüllt werden, um den Eintrag zu speichern.',
+    articles_created: 'Artikel wurden erfolgreich erstellt',
   },
 };

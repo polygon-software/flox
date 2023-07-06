@@ -143,7 +143,10 @@ export const CREATE_FORM: MutationObject = {
           uuid
           articleNumber
           manufacturerNumber
+          name
+          description
           amount
+          price
           discount
           __typename
         }
@@ -327,7 +330,10 @@ export const UPDATE_FORM: MutationObject = {
           uuid
           articleNumber
           manufacturerNumber
+          name
+          description
           amount
+          price
           discount
           __typename
         }
@@ -457,7 +463,10 @@ export const DELETE_FORM: MutationObject = {
           uuid
           articleNumber
           manufacturerNumber
+          name
+          description
           amount
+          price
           discount
           __typename
         }

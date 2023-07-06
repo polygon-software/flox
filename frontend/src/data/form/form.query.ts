@@ -204,7 +204,10 @@ export const FORM: QueryObject = {
           uuid
           articleNumber
           manufacturerNumber
+          name
+          description
           amount
+          price
           discount
           __typename
         }

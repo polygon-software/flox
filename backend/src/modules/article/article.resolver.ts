@@ -8,6 +8,7 @@ import FileService from '../../flox/modules/file/file.service';
 
 import Article from './entities/article.entity';
 import ArticleService from './article.service';
+import CreateArticlesOutput from './dto/output/create-articles.output';
 
 @Resolver(() => Article)
 export default class ArticleResolver extends AbstractSearchResolver<
@@ -32,11 +33,13 @@ export default class ArticleResolver extends AbstractSearchResolver<
    * Updates the article list based on the ERP Excel export.
    *
    * @param uuid - The file as a base64 string
-   * @returns The created articles
+   * @returns The number of created articles
    */
   @Roles(USER_ROLE.ADMIN)
-  @Mutation(() => [Article], { name: 'createArticleList' })
-  async createArticleList(@Args('uuid') uuid: string): Promise<Article[]> {
+  @Mutation(() => CreateArticlesOutput, { name: 'createArticleList' })
+  async createArticleList(
+    @Args('uuid') uuid: string,
+  ): Promise<CreateArticlesOutput> {
     const fileBuffer = await this.fileService.getS3File(uuid);
     return this.articleService.createArticleList(fileBuffer);
   }

@@ -14,6 +14,7 @@ export default {
       select_file: 'Datei auswählen',
       submit: 'Hochladen',
       title: 'Artikelliste hochladen',
+      loading: 'Die Datei wird hochgeladen...',
     },
     authentication: {
       roles: {

@@ -29,11 +29,32 @@ export default class Article extends BaseEntity {
   @IsOptional()
   manufacturerNumber: string;
 
+  @Field(() => String, { description: 'Name', nullable: true })
+  @Column({ nullable: true })
+  @IsString()
+  @IsOptional()
+  name: string;
+
+  @Field(() => String, { description: 'Description', nullable: true })
+  @Column({ nullable: true })
+  @IsString()
+  @IsOptional()
+  description: string;
+
   @Field(() => Number, { description: 'Amount', nullable: true })
   @Column({ nullable: true })
   @IsInt()
   @IsOptional()
   amount: number;
+
+  @Field(() => Number, {
+    description: 'Price',
+    nullable: true,
+  })
+  @Column({ type: 'float8', nullable: true })
+  @IsNumber()
+  @IsOptional()
+  price: number;
 
   @Field(() => Number, {
     description: 'Discount in percent',

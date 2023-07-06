@@ -7,11 +7,7 @@ const CREATE_ARTICLE_LIST: MutationObject = {
   mutation: gql`
     mutation createArticleList($uuid: String!) {
       createArticleList(uuid: $uuid) {
-        uuid
-        articleNumber
-        manufacturerNumber
         amount
-        discount
       }
     }
   `,

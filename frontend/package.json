@@ -55,7 +55,6 @@
     "flat": "^5.0.2",
     "graphql": "^16.6.0",
     "graphql-tag": "^2.12.6",
-    "graphql-upload": "^16.0.2",
     "jest-sonar": "^0.2.12",
     "joi": "^17.6.4",
     "joi-password": "^4.0.0",

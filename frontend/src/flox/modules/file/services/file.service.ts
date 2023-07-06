@@ -29,6 +29,7 @@ import FolderEntity from 'src/flox/modules/file/entities/folder.entity';
 import UserGroupEntity from 'src/flox/modules/access-control/entities/user-group.entity';
 import CREATE_ARTICLE_LIST from 'src/data/article/article.mutation';
 import ArticleEntity from 'src/data/article/entities/articleEntity';
+import CreateArticlesDataEntity from 'src/data/article/entities/createArticlesDataEntity';
 
 export type FileInputs = {
   loggedInReadAccess?: boolean;
@@ -470,9 +471,12 @@ export async function manipulateFileAccessUserGroups(
  */
 export async function createArticleList(
   uuid: string
-): Promise<ArticleEntity | null> {
-  const { data } = await executeMutation<ArticleEntity>(CREATE_ARTICLE_LIST, {
-    uuid,
-  });
+): Promise<CreateArticlesDataEntity | null> {
+  const { data } = await executeMutation<CreateArticlesDataEntity>(
+    CREATE_ARTICLE_LIST,
+    {
+      uuid,
+    }
+  );
   return data ?? null;
 }

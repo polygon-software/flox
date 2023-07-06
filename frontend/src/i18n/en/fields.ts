@@ -14,6 +14,7 @@ export default {
       select_file: 'Select file',
       submit: 'Submit',
       title: 'Upload article list',
+      loading: 'Uploading file...',
     },
     authentication: {
       roles: {
