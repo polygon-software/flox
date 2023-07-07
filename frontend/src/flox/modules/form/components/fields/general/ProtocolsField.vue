@@ -41,7 +41,7 @@
             $t('errors.invalid_date'),
         ]"
         type="date"
-        @change="(val) => (protocolEntry.date = val)"
+        @change="(val: Date) => (protocolEntry.date = val)"
       />
     </div>
     <div class="col-1 q-pl-sm">
@@ -51,7 +51,7 @@
         dense
         outlined
         disable
-        @change="(val) => (protocolEntry.articleNumber = val)"
+        @change="(val: string) => (protocolEntry.articleNumber = val)"
       />
     </div>
     <div class="col-2 q-pl-sm">
@@ -60,7 +60,7 @@
         :label="$t('fields.unit')"
         dense
         outlined
-        @change="(val) => (protocolEntry.unit = val)"
+        @change="(val: string) => (protocolEntry.unit = val)"
       />
     </div>
     <div class="col-1 q-pl-sm">
@@ -71,7 +71,7 @@
         dense
         outlined
         type="number"
-        @change="(val) => (protocolEntry.amount = val)"
+        @change="(val: string) => (protocolEntry.amount = val)"
       />
     </div>
     <div class="col-2 q-pl-sm">
@@ -82,7 +82,7 @@
         suffix="CHF"
         outlined
         type="number"
-        @change="(val) => (protocolEntry.price = val)"
+        @change="(val: string) => (protocolEntry.price = val)"
       />
     </div>
     <div class="col-2 q-pl-sm">
@@ -94,7 +94,7 @@
         suffix="%"
         outlined
         type="number"
-        @change="(val) => (protocolEntry.discount = val)"
+        @change="(val: string) => (protocolEntry.discount = val)"
       />
     </div>
     <div class="col-2 q-pl-sm">
@@ -105,7 +105,7 @@
         outlined
         suffix="CHF"
         type="number"
-        @change="(val) => (protocolEntry.sum = val)"
+        @change="(val: string) => (protocolEntry.sum = val)"
       />
     </div>
     <div class="col-6">
@@ -115,7 +115,7 @@
         dense
         outlined
         type="textarea"
-        @change="(val) => (protocolEntry.description = val)"
+        @change="(val: string) => (protocolEntry.description = val)"
       />
     </div>
     <div class="col-6 q-pl-sm">
@@ -125,7 +125,7 @@
         dense
         outlined
         type="textarea"
-        @change="(val) => (protocolEntry.label = val)"
+        @change="(val: string) => (protocolEntry.label = val)"
       />
     </div>
   </div>
@@ -177,7 +177,7 @@ const columns: Ref<ColumnInterface<UserEntity>[]> = ref([
     name: 'date',
     label: i18n.global.t('fields.date.date'),
     field: 'date',
-    format: (val: number): string => (val ? formatDate(new Date(val)) : '-'),
+    format: (val: string): string => (val ? formatDate(new Date(val)) : '-'),
     align: ColumnAlign.left,
     sortable: true,
   },
