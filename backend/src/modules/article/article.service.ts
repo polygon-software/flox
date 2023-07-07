@@ -72,12 +72,18 @@ export default class ArticleService extends AbstractSearchService<Article> {
    * @returns The found articles
    */
   async articleSuggestions(searchTerm: string): Promise<Article[]> {
-    return this.repository
+    const suggestions = await this.repository
       .createQueryBuilder('article')
       .where('LOWER(article.articleNumber) LIKE LOWER(:searchTerm)', {
         searchTerm: `${searchTerm}%`,
       })
       .getMany();
+
+    // Return the result only if there are 50 suggestions or fewer
+    if (suggestions.length > 50) {
+      return [];
+    }
+    return suggestions;
   }
 
   /**
