@@ -1,22 +1,15 @@
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 import { Field, ObjectType } from '@nestjs/graphql';
-import {
-  IsInt,
-  IsNumber,
-  IsObject,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { IsInt, IsNumber, IsOptional, IsString } from 'class-validator';
 
 import BaseEntity from '../../../flox/core/base-entity/entities/base-entity.entity';
-import Form from '../../form/entities/form.entity';
 
 /**
  * Article entity
  */
 @Entity()
 @ObjectType()
-export default class Article extends BaseEntity {
+export default class ArticleSuggestion extends BaseEntity {
   @Field(() => String, { description: 'Article number', nullable: true })
   @Column({ nullable: true })
   @IsString()
@@ -29,6 +22,18 @@ export default class Article extends BaseEntity {
   @IsOptional()
   manufacturerNumber: string;
 
+  @Field(() => String, { description: 'Name', nullable: true })
+  @Column({ nullable: true })
+  @IsString()
+  @IsOptional()
+  name: string;
+
+  @Field(() => String, { description: 'Description', nullable: true })
+  @Column({ nullable: true })
+  @IsString()
+  @IsOptional()
+  description: string;
+
   @Field(() => Number, { description: 'Amount', nullable: true })
   @Column({ nullable: true })
   @IsInt()
@@ -36,22 +41,11 @@ export default class Article extends BaseEntity {
   amount: number;
 
   @Field(() => Number, {
-    description: 'Discount in percent',
+    description: 'Price',
     nullable: true,
   })
   @Column({ type: 'float8', nullable: true })
   @IsNumber()
   @IsOptional()
-  discount: number;
-
-  @Field(() => Form, {
-    description: 'Form this arcticle belongs to',
-    nullable: true,
-  })
-  @ManyToOne(() => Form, (form) => form.articles, {
-    nullable: true,
-    onDelete: 'CASCADE',
-  })
-  @IsObject()
-  form: Form;
+  price: number;
 }

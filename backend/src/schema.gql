@@ -100,14 +100,37 @@ type Article {
   """Date of deletion"""
   deletedAt: DateTime
 
-  """Description"""
-  description: String
-
   """Discount in percent"""
   discount: Float
 
   """Form this arcticle belongs to"""
   form: Form
+
+  """Manufacturer number"""
+  manufacturerNumber: String
+
+  """Last modification date"""
+  updatedAt: DateTime
+
+  """UUID"""
+  uuid: ID!
+}
+
+type ArticleSuggestion {
+  """Amount"""
+  amount: Float
+
+  """Article number"""
+  articleNumber: String
+
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Description"""
+  description: String
 
   """Manufacturer number"""
   manufacturerNumber: String
@@ -218,7 +241,7 @@ type Client {
   uuid: ID!
 }
 
-type CreateArticlesOutput {
+type CreateArticleSuggesstionOutput {
   """Amount"""
   amount: Float!
 }
@@ -825,7 +848,7 @@ type Mutation {
   UpdateFile(updateFileInput: UpdateFileInput!): S3File!
   UpdateUser(updateUserInput: UpdateUserInput!): User!
   UpdateUserGroup(updateUserGroupInput: UpdateUserGroupInput!): UserGroup!
-  createArticleList(uuid: String!): CreateArticlesOutput!
+  createArticleList(uuid: String!): CreateArticleSuggesstionOutput!
   createForm(createFormInput: CreateFormInput!): Form!
   deleteForm(deleteInput: DeleteInput!): Form!
   updateForm(updateFormInput: UpdateFormInput!): Form!
@@ -1346,7 +1369,7 @@ type Query {
     userUuid: ID!
   ): [UserGroup!]!
   Users(uuids: [ID!] = []): [User!]!
-  articleSuggestions(searchTerm: String!): [Article!]!
+  articleSuggestions(searchTerm: String!): [ArticleSuggestion!]!
   getForm(uuid: ID!): Form!
   searchForms(
     """Sort descending"""

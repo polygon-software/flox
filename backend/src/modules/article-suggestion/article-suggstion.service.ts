@@ -5,32 +5,34 @@ import xlsx from 'node-xlsx';
 
 import AbstractSearchService from '../../flox/modules/abstracts/search/abstract-search.service';
 
-import Article from './entities/article.entity';
-import CreateArticlesOutput from './dto/output/create-articles.output';
+import CreateArticleSuggesstionOutput from './dto/output/create-article-suggesstion.output';
+import ArticleSuggestion from './entities/article-suggestion.entity';
 
 @Injectable()
-export default class ArticleService extends AbstractSearchService<Article> {
+export default class ArticleSuggstionService extends AbstractSearchService<ArticleSuggestion> {
   constructor(
-    @InjectRepository(Article)
-    private readonly articleRepository: Repository<Article>,
+    @InjectRepository(ArticleSuggestion)
+    private readonly articleSuggestionRepository: Repository<ArticleSuggestion>,
   ) {
     super();
   }
 
   /**
-   * @returns Article repository
+   * @returns Article suggestion repository
    */
-  get repository(): Repository<Article> {
-    return this.articleRepository;
+  get repository(): Repository<ArticleSuggestion> {
+    return this.articleSuggestionRepository;
   }
 
   /**
-   * Updates the articles entities with the data from the given ERP export.
+   * Updates the articles suggestion entities with the data from the given ERP export.
    *
    * @param file - File containg the article list
-   * @returns The number of created articles
+   * @returns The number of created article suggestions
    */
-  async createArticleList(file: Buffer): Promise<CreateArticlesOutput> {
+  async createArticleSuggestionList(
+    file: Buffer,
+  ): Promise<CreateArticleSuggesstionOutput> {
     const parsedFile = xlsx.parse(file);
     const sheet = parsedFile[0].data;
 
@@ -46,22 +48,24 @@ export default class ArticleService extends AbstractSearchService<Article> {
         name: (entry[3] as string) ?? null,
         description: (entry[4] as string) ?? null,
         amount: 1,
-      } as Article;
+      } as ArticleSuggestion;
     });
 
     // Get the existing articles and delete them
     const articles = await this.repository.find();
     if (articles.length > 0) {
-      await this.repository.delete(articles.map((article) => article.uuid));
+      await this.articleSuggestionRepository.delete(
+        articles.map((article) => article.uuid),
+      );
     }
 
     // Save the new articles
-    const promiseArray: Promise<Article>[] = [];
+    const promiseArray: Promise<ArticleSuggestion>[] = [];
     newArticles.forEach((article) => {
       promiseArray.push(super.create(article));
     });
     await Promise.all(promiseArray);
-    return { amount: promiseArray.length } as CreateArticlesOutput;
+    return { amount: promiseArray.length } as CreateArticleSuggesstionOutput;
   }
 
   /**
@@ -71,7 +75,7 @@ export default class ArticleService extends AbstractSearchService<Article> {
    * @param searchTerm - The term to search for
    * @returns The found articles
    */
-  async articleSuggestions(searchTerm: string): Promise<Article[]> {
+  async articleSuggestions(searchTerm: string): Promise<ArticleSuggestion[]> {
     const suggestions = await this.repository
       .createQueryBuilder('article')
       .where('LOWER(article.articleNumber) LIKE LOWER(:searchTerm)', {

@@ -27,9 +27,8 @@ import {
 } from 'src/flox/modules/file/file.mutation';
 import FolderEntity from 'src/flox/modules/file/entities/folder.entity';
 import UserGroupEntity from 'src/flox/modules/access-control/entities/user-group.entity';
-import CREATE_ARTICLE_LIST from 'src/data/article/article.mutation';
-import ArticleEntity from 'src/data/article/entities/articleEntity';
-import CreateArticlesDataEntity from 'src/data/article/entities/createArticlesDataEntity';
+import ArticleSuggestionOutput from 'src/data/articleSuggestion/dto/articleSuggestionOutput';
+import CREATE_ARTICLE_SUGGESTION_LIST from 'src/data/articleSuggestion/articleSuggesstion.mutation';
 
 export type FileInputs = {
   loggedInReadAccess?: boolean;
@@ -471,9 +470,9 @@ export async function manipulateFileAccessUserGroups(
  */
 export async function createArticleList(
   uuid: string
-): Promise<CreateArticlesDataEntity | null> {
-  const { data } = await executeMutation<CreateArticlesDataEntity>(
-    CREATE_ARTICLE_LIST,
+): Promise<ArticleSuggestionOutput | null> {
+  const { data } = await executeMutation<ArticleSuggestionOutput>(
+    CREATE_ARTICLE_SUGGESTION_LIST,
     {
       uuid,
     }

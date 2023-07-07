@@ -122,7 +122,7 @@ import ArticleNumberEntry from 'src/flox/modules/form/data/types/ArticleNumberEn
 import { fetchByKey } from 'src/flox/modules/form/helpers/form-helpers';
 import { FIELDS } from 'src/flox/modules/form/data/FIELDS';
 import getArticleSuggestions from 'src/helpers/query-helper';
-import ArticleEntity from 'src/data/article/entities/articleEntity';
+import ArticleSuggestionEntity from 'src/data/articleSuggestion/entites/articleSuggestionEntity';
 
 const props = withDefaults(
   defineProps<{
@@ -195,7 +195,7 @@ const articles = computed(() => {
   }) as ArticleNumberEntry[] | null;
 });
 
-const articleSuggestions: Ref<ArticleEntity[]> = ref([]);
+const articleSuggestions: Ref<ArticleSuggestionEntity[]> = ref([]);
 
 /**
  * Save the updated value if valid, otherwise null
@@ -264,7 +264,9 @@ function addArticleNumber(val: string): void {
  * @param val - The entered article number
  * @returns The found article suggestions
  */
-async function fetchArticleSuggestions(val: string): Promise<ArticleEntity[]> {
+async function fetchArticleSuggestions(
+  val: string
+): Promise<ArticleSuggestionEntity[]> {
   return getArticleSuggestions(val);
 }
 
@@ -330,19 +332,10 @@ function addDiscount(val: number): void {
 /**
  *
  */
-function applySuggestion(article: ArticleEntity): void {
-  if (article.articleNumber) {
-    addArticleNumber(article.articleNumber);
-  }
-  if (article.manufacturerNumber) {
-    addManufacturerNumber(article.manufacturerNumber);
-  }
-  if (article.amount) {
-    addCount(article.amount);
-  }
-  if (article.discount) {
-    addDiscount(article.discount);
-  }
+function applySuggestion(article: ArticleSuggestionEntity): void {
+  articleNumberInput.value = article.articleNumber ?? null;
+  manufacturerNumberInput.value = article.manufacturerNumber ?? null;
+  countInput.value = article.amount ?? null;
   articleSuggestions.value = [];
 }
 

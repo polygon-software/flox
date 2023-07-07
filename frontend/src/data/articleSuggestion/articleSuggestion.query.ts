@@ -19,7 +19,7 @@ const ARTICLE_SUGGESTIONS: QueryObject = {
     }
   `,
   cacheLocation: 'articleSuggestions',
-  tables: [TABLES.ARTICLE],
+  tables: [TABLES.ARTICLE_SUGGESTION],
 };
 
 export default ARTICLE_SUGGESTIONS;

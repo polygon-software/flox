@@ -13,27 +13,26 @@ import Message from '../../flox/modules/notifications/entities/message.entity';
 import User from '../../flox/modules/auth/entities/user.entity';
 import EmailService from '../../flox/modules/email/email.service';
 
-import Article from './entities/article.entity';
-import ArticleResolver from './article.resolver';
-import ArticleService from './article.service';
+import ArticleSuggestionResolver from './article-suggestion.resolver';
+import ArticleSuggstionService from './article-suggstion.service';
+import ArticleSuggestion from './entities/article-suggestion.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      Article,
-      S3File,
       AccessControlledEntity,
+      ArticleSuggestion,
       Message,
       Notification,
+      S3File,
       User,
       UserGroup,
     ]),
   ],
-  exports: [ArticleResolver, ArticleService],
+  exports: [ArticleSuggestionResolver, ArticleSuggstionService],
   providers: [
-    Article,
-    ArticleResolver,
-    ArticleService,
+    ArticleSuggestionResolver,
+    ArticleSuggstionService,
     AccessControlService,
     EmailService,
     FileService,
@@ -41,4 +40,4 @@ import ArticleService from './article.service';
     UserService,
   ],
 })
-export default class ArticleModule {}
+export default class ArticleSuggestionModule {}
