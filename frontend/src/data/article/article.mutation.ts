@@ -13,7 +13,7 @@ const CREATE_ARTICLE_LIST: MutationObject = {
   `,
   tables: [TABLES.ARTICLE],
   type: MutationTypes.CREATE,
-  cacheLocation: 'CreateArticleList',
+  cacheLocation: 'createArticleList',
 };
 
 export default CREATE_ARTICLE_LIST;

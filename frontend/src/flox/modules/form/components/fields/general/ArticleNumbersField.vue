@@ -34,8 +34,7 @@
         :label="$t('fields.article_number')"
         dense
         outlined
-        debounce="1000"
-        @update:model-value="addArticleNumber"
+        debounce="500"
       />
     </div>
     <div class="col-3 q-pl-sm">
@@ -80,6 +79,7 @@ import {
   defineProps,
   computed,
   onBeforeMount,
+  watch,
 } from 'vue';
 import { cloneDeep } from 'lodash-es';
 
@@ -214,10 +214,6 @@ function setValuesToNull(): void {
  * @returns {void}
  */
 function addArticleNumber(val: string): void {
-  if (val.length >= 2) {
-    // TODO: fetch suggestions
-    console.log('fetch suggestions');
-  }
   articleNumberEntry.value.articleNumber = val;
 
   if (isArticleNumberEntryValid()) {
@@ -226,6 +222,34 @@ function addArticleNumber(val: string): void {
     setValuesToNull();
   }
 }
+
+/**
+ * Fetches article suggestions for the given string
+ *
+ * @param val - The entered article number
+ * @returns void
+ */
+function fetchArticleSuggestions(val: string): void {
+  // TODO: fetch article suggestions
+  // TODO set value of suggestion field
+}
+
+/**
+ * Used so that the debounce function can be used on keyup, quasar somehow does not
+ * react to the event (only @change).
+ */
+watch(
+  () => articleNumberInput.value,
+  (val) => {
+    if (val) {
+      if (val.length >= 2) {
+        fetchArticleSuggestions(val);
+      } else {
+        addArticleNumber(val);
+      }
+    }
+  }
+);
 
 /**
  * Adds a value to the manufacturerNumbers array
