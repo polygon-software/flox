@@ -1296,6 +1296,7 @@ type Query {
     userUuid: ID!
   ): [UserGroup!]!
   Users(uuids: [ID!] = []): [User!]!
+  articleSuggestions(searchTerm: String!): [Article!]!
   getForm(uuid: ID!): Form!
   searchForms(
     """Sort descending"""

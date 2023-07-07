@@ -8,6 +8,7 @@ const CREATE_ARTICLE_LIST: MutationObject = {
     mutation createArticleList($uuid: String!) {
       createArticleList(uuid: $uuid) {
         amount
+        __typename
       }
     }
   `,

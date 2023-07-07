@@ -91,6 +91,7 @@ import { FormStateKey, useFormStore } from 'src/flox/modules/form/stores/form';
 import ArticleNumberEntry from 'src/flox/modules/form/data/types/ArticleNumberEntry';
 import { fetchByKey } from 'src/flox/modules/form/helpers/form-helpers';
 import { FIELDS } from 'src/flox/modules/form/data/FIELDS';
+import articleSuggestions from 'src/helpers/query-helper';
 
 const props = withDefaults(
   defineProps<{
@@ -229,8 +230,9 @@ function addArticleNumber(val: string): void {
  * @param val - The entered article number
  * @returns void
  */
-function fetchArticleSuggestions(val: string): void {
-  // TODO: fetch article suggestions
+async function fetchArticleSuggestions(val: string): Promise<void> {
+  const suggestions = await articleSuggestions(val);
+  console.log(suggestions);
   // TODO set value of suggestion field
 }
 
@@ -240,13 +242,12 @@ function fetchArticleSuggestions(val: string): void {
  */
 watch(
   () => articleNumberInput.value,
-  (val) => {
+  async (val) => {
     if (val) {
       if (val.length >= 2) {
-        fetchArticleSuggestions(val);
-      } else {
-        addArticleNumber(val);
+        await fetchArticleSuggestions(val);
       }
+      addArticleNumber(val);
     }
   }
 );

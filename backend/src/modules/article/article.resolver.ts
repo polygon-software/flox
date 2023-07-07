@@ -1,8 +1,6 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
-import { USER_ROLE } from 'src/ENUM/enum';
-
-import { Roles } from '../../flox/modules/roles/authorization.decorator';
+import { AdminOnly } from '../../flox/modules/roles/authorization.decorator';
 import AbstractSearchResolver from '../../flox/modules/abstracts/search/abstract-search.resolver';
 import FileService from '../../flox/modules/file/file.service';
 
@@ -35,12 +33,24 @@ export default class ArticleResolver extends AbstractSearchResolver<
    * @param uuid - The file as a base64 string
    * @returns The number of created articles
    */
-  @Roles(USER_ROLE.ADMIN)
+  @AdminOnly()
   @Mutation(() => CreateArticlesOutput, { name: 'createArticleList' })
   async createArticleList(
     @Args('uuid') uuid: string,
   ): Promise<CreateArticlesOutput> {
     const fileBuffer = await this.fileService.getS3File(uuid);
     return this.articleService.createArticleList(fileBuffer);
+  }
+
+  /**
+   *
+   * @param searchTerm
+   */
+  @AdminOnly()
+  @Query(() => [Article], { name: 'articleSuggestions' })
+  async articleSuggestions(
+    @Args('searchTerm') searchTerm: string,
+  ): Promise<Article[]> {
+    return this.articleService.articleSuggestions(searchTerm);
   }
 }

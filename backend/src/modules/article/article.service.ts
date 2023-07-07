@@ -65,6 +65,22 @@ export default class ArticleService extends AbstractSearchService<Article> {
   }
 
   /**
+   * Returns all articles, for which the article nubmer starts with the given
+   * search term.
+   *
+   * @param searchTerm - The term to search for
+   * @returns The found articles
+   */
+  async articleSuggestions(searchTerm: string): Promise<Article[]> {
+    return this.repository
+      .createQueryBuilder('article')
+      .where('LOWER(article.articleNumber) LIKE LOWER(:searchTerm)', {
+        searchTerm: `${searchTerm}%`,
+      })
+      .getMany();
+  }
+
+  /**
    * Helper function to extract the price from the ERP export.
    *
    * @param price - The price cell
