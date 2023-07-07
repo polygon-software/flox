@@ -28,14 +28,44 @@
     </q-table>
   </LabelWrapper>
   <div class="q-mx-xs q-mt-md q-mb-lg row justify-between">
-    <div class="col-3">
+    <div class="col-3" style="position: relative">
+      <!-- Article number input -->
       <q-input
         v-model="articleNumberInput"
         :label="$t('fields.article_number')"
         dense
         outlined
         debounce="500"
-      />
+      >
+        <!-- Used to clear the suggestions -->
+        <template #append>
+          <q-icon
+            v-if="articleSuggestions.length > 0"
+            name="close"
+            style="cursor: pointer"
+            @click="articleSuggestions = []"
+          />
+        </template>
+      </q-input>
+
+      <!--- Article suggestions -->
+      <div v-if="articleSuggestions.length > 0" class="article-suggestions">
+        <q-list bordered separator>
+          <q-item
+            v-for="(article, index) in articleSuggestions"
+            :key="index"
+            class="q-my-xs"
+            clickable
+            @click="applySuggestion(article)"
+          >
+            <q-item-section>
+              <q-item-label class="text-left">{{
+                `${article.articleNumber} - ${article.name}`
+              }}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </div>
     </div>
     <div class="col-3 q-pl-sm">
       <q-input
@@ -91,7 +121,8 @@ import { FormStateKey, useFormStore } from 'src/flox/modules/form/stores/form';
 import ArticleNumberEntry from 'src/flox/modules/form/data/types/ArticleNumberEntry';
 import { fetchByKey } from 'src/flox/modules/form/helpers/form-helpers';
 import { FIELDS } from 'src/flox/modules/form/data/FIELDS';
-import articleSuggestions from 'src/helpers/query-helper';
+import getArticleSuggestions from 'src/helpers/query-helper';
+import ArticleEntity from 'src/data/article/entities/articleEntity';
 
 const props = withDefaults(
   defineProps<{
@@ -164,6 +195,8 @@ const articles = computed(() => {
   }) as ArticleNumberEntry[] | null;
 });
 
+const articleSuggestions: Ref<ArticleEntity[]> = ref([]);
+
 /**
  * Save the updated value if valid, otherwise null
  * @returns void
@@ -225,15 +258,14 @@ function addArticleNumber(val: string): void {
 }
 
 /**
- * Fetches article suggestions for the given string
+ * Fetches article suggestions for the given string. It will only return
+ * suggestions if there are 50 or less.
  *
  * @param val - The entered article number
- * @returns void
+ * @returns The found article suggestions
  */
-async function fetchArticleSuggestions(val: string): Promise<void> {
-  const suggestions = await articleSuggestions(val);
-  console.log(suggestions);
-  // TODO set value of suggestion field
+async function fetchArticleSuggestions(val: string): Promise<ArticleEntity[]> {
+  return getArticleSuggestions(val);
 }
 
 /**
@@ -245,7 +277,7 @@ watch(
   async (val) => {
     if (val) {
       if (val.length >= 2) {
-        await fetchArticleSuggestions(val);
+        articleSuggestions.value = await fetchArticleSuggestions(val);
       }
       addArticleNumber(val);
     }
@@ -296,6 +328,25 @@ function addDiscount(val: number): void {
 }
 
 /**
+ *
+ */
+function applySuggestion(article: ArticleEntity): void {
+  if (article.articleNumber) {
+    addArticleNumber(article.articleNumber);
+  }
+  if (article.manufacturerNumber) {
+    addManufacturerNumber(article.manufacturerNumber);
+  }
+  if (article.amount) {
+    addCount(article.amount);
+  }
+  if (article.discount) {
+    addDiscount(article.discount);
+  }
+  articleSuggestions.value = [];
+}
+
+/**
  *  Set article numbers in table when component is mounted
  *  @returns {void} - done
  */
@@ -305,3 +356,14 @@ onBeforeMount(() => {
   }
 });
 </script>
+
+<style>
+.article-suggestions {
+  background: white;
+  max-height: 250px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: absolute;
+  z-index: 1000;
+}
+</style>

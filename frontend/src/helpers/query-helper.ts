@@ -7,10 +7,10 @@ import ARTICLE_SUGGESTIONS from 'src/data/article/article.query';
  * @param searchTerm - The term to search for
  * @returns The found articles
  */
-export default async function articleSuggestions(
+export default async function getArticleSuggestions(
   searchTerm: string
-): Promise<ArticleEntity> {
-  const { data } = await executeQuery<ArticleEntity>(ARTICLE_SUGGESTIONS, {
+): Promise<ArticleEntity[]> {
+  const { data } = await executeQuery<ArticleEntity[]>(ARTICLE_SUGGESTIONS, {
     searchTerm,
   });
   return data ?? null;

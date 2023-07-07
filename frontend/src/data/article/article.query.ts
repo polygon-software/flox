@@ -10,6 +10,8 @@ const ARTICLE_SUGGESTIONS: QueryObject = {
         uuid
         articleNumber
         manufacturerNumber
+        name
+        description
         amount
         discount
         __typename
