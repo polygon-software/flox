@@ -83,6 +83,7 @@ export default {
     article_number: 'Artikelnummer',
     additional_article_number: 'Zusätzliche Artikelnummer',
     manufacturer_number: 'Herstellernummer',
+    name: 'Bezeichnung',
     additional_manufacturer_number: 'Zusätzliche Herstellernummer',
     count: 'Anzahl',
     additional_count: 'Zusätzliche Anzahl',

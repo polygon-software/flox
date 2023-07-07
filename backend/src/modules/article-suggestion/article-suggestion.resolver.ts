@@ -34,8 +34,10 @@ export default class ArticleSuggestionResolver extends AbstractSearchResolver<
    * @returns The number of created articles suggestions
    */
   @AdminOnly()
-  @Mutation(() => CreateArticleSuggesstionOutput, { name: 'createArticleList' })
-  async createArticleList(
+  @Mutation(() => CreateArticleSuggesstionOutput, {
+    name: 'createArticleSuggestionList',
+  })
+  async createArticleSuggestionList(
     @Args('uuid') uuid: string,
   ): Promise<CreateArticleSuggesstionOutput> {
     const fileBuffer = await this.fileService.getS3File(uuid);

@@ -74,43 +74,60 @@ const canSubmit = computed(() => {
  * @returns void
  */
 async function createArticles(): Promise<void> {
-  loading.value = true;
-  if (fileInput.value) {
-    // Step 1: Send the file to the backend
-    const createdFile = await uploadFile(
-      {
-        content: fileInput.value,
-        url: URL.createObjectURL(fileInput.value),
-        status: UploadStatus.READY,
-      },
-      {}
-    );
+  try {
+    loading.value = true;
+    if (fileInput.value) {
+      // Step 1: Send the file to the backend
 
-    if (!createdFile) {
-      showErrorNotification($q, i18n.global.t('errors.file_upload_failed'), {
-        position: 'bottom',
-        timeout: 2000,
-      });
+      const createdFile = await uploadFile(
+        {
+          content: fileInput.value,
+          url: URL.createObjectURL(fileInput.value),
+          status: UploadStatus.READY,
+        },
+        {}
+      );
+
+      if (!createdFile) {
+        showErrorNotification($q, i18n.global.t('errors.file_upload_failed'), {
+          position: 'bottom',
+          timeout: 2000,
+        });
+      }
+
+      // Step 2: Create the articles
+      const result = await createArticleList(createdFile.uuid);
+
+      if (!result) {
+        showErrorNotification(
+          $q,
+          i18n.global.t('errors.articles_not_created'),
+          {
+            position: 'bottom',
+            timeout: 2000,
+          }
+        );
+      } else {
+        showSuccessNotification(
+          $q,
+          i18n.global.t('messages.articles_created'),
+          {
+            position: 'bottom',
+            timeout: 2000,
+          }
+        );
+      }
+
+      // Reset file input
+      fileInput.value = null;
     }
-
-    // Step 2: Create the articles
-    const result = await createArticleList(createdFile.uuid);
-
-    if (!result) {
-      showErrorNotification($q, i18n.global.t('errors.articles_not_created'), {
-        position: 'bottom',
-        timeout: 2000,
-      });
-    } else {
-      showSuccessNotification($q, i18n.global.t('messages.articles_created'), {
-        position: 'bottom',
-        timeout: 2000,
-      });
-    }
-
-    // Reset file input
-    fileInput.value = null;
+    loading.value = false;
+  } catch (e) {
+    loading.value = false;
+    showErrorNotification($q, i18n.global.t('errors.articles_not_created'), {
+      position: 'bottom',
+      timeout: 2000,
+    });
   }
-  loading.value = false;
 }
 </script>

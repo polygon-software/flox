@@ -4,5 +4,5 @@
 </template>
 
 <script lang="ts" setup>
-import ArticleUpload from 'components/menu/ArticleUpload.vue';
+import ArticleUpload from 'components/menu/ArticleSuggestionUpload.vue';
 </script>

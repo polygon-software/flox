@@ -67,6 +67,8 @@
         </q-list>
       </div>
     </div>
+
+    <!-- Manufacturer number input -->
     <div class="col-3 q-pl-sm">
       <q-input
         v-model="manufacturerNumberInput"
@@ -76,6 +78,8 @@
         @change="addManufacturerNumber"
       />
     </div>
+
+    <!-- Amount input -->
     <div class="col-3 q-pl-sm">
       <q-input
         v-model="countInput"
@@ -86,6 +90,8 @@
         @change="addCount"
       />
     </div>
+
+    <!-- Discount input -->
     <div class="col-3 q-pl-sm">
       <q-input
         v-model="discountInput"
@@ -151,6 +157,20 @@ const columns: Ref<ColumnInterface<UserEntity>[]> = ref([
     sortable: true,
   },
   {
+    name: 'name',
+    label: i18n.global.t('fields.name'),
+    field: 'name',
+    align: ColumnAlign.left,
+    sortable: true,
+  },
+  {
+    name: 'price',
+    label: i18n.global.t('fields.price'),
+    field: 'price',
+    align: ColumnAlign.left,
+    sortable: true,
+  },
+  {
     name: 'amount',
     label: i18n.global.t('fields.count'),
     field: 'amount',
@@ -176,10 +196,12 @@ const manufacturerNumberInput: Ref<string | null> = ref(null);
 const countInput: Ref<number | null> = ref(null);
 const discountInput: Ref<number | null> = ref(null);
 
+const selectedArticleNumber: Ref<string | null> = ref(null);
+
 const store = useFormStore();
 
 const articleNumberEntry: Ref<ArticleNumberEntry> = ref(
-  new ArticleNumberEntry(null, null, null, null)
+  new ArticleNumberEntry(null, null, null, null, null, null)
 );
 
 const articleNumbers: Ref<ArticleNumberEntry[]> = ref(
@@ -226,7 +248,9 @@ function isArticleNumberEntryValid(): boolean {
   return (
     !!articleNumberEntry.value.articleNumber &&
     !!articleNumberEntry.value.manufacturerNumber &&
+    !!articleNumberEntry.value.name &&
     !!articleNumberEntry.value.amount &&
+    !!articleNumberEntry.value.price &&
     !!articleNumberEntry.value.discount
   );
 }
@@ -235,7 +259,14 @@ function isArticleNumberEntryValid(): boolean {
  * Sets all values of inputs and articleNumberEntry to null
  */
 function setValuesToNull(): void {
-  articleNumberEntry.value = new ArticleNumberEntry(null, null, null, null);
+  articleNumberEntry.value = new ArticleNumberEntry(
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+  );
   articleNumberInput.value = null;
   manufacturerNumberInput.value = null;
   countInput.value = null;
@@ -277,12 +308,13 @@ async function fetchArticleSuggestions(
 watch(
   () => articleNumberInput.value,
   async (val) => {
-    if (val) {
+    if (val && !selectedArticleNumber.value) {
       if (val.length >= 2) {
         articleSuggestions.value = await fetchArticleSuggestions(val);
       }
       addArticleNumber(val);
     }
+    selectedArticleNumber.value = null;
   }
 );
 
@@ -330,12 +362,27 @@ function addDiscount(val: number): void {
 }
 
 /**
- *
+ * Adds the values from an article suggestion into the input fields.
+ * @param article - The article suggestion
+ * @returns void
  */
 function applySuggestion(article: ArticleSuggestionEntity): void {
+  selectedArticleNumber.value = article.articleNumber ?? null;
   articleNumberInput.value = article.articleNumber ?? null;
-  manufacturerNumberInput.value = article.manufacturerNumber ?? null;
-  countInput.value = article.amount ?? null;
+
+  // Manufacturer number
+  if (article.manufacturerNumber) {
+    manufacturerNumberInput.value = article.manufacturerNumber;
+    addManufacturerNumber(article.manufacturerNumber);
+  }
+
+  // Amount
+  if (article.amount) {
+    countInput.value = article.amount;
+    addCount(article.amount);
+  }
+
+  // Reset suggestions
   articleSuggestions.value = [];
 }
 

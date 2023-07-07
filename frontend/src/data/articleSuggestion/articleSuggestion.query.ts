@@ -13,7 +13,6 @@ const ARTICLE_SUGGESTIONS: QueryObject = {
         name
         description
         amount
-        discount
         __typename
       }
     }

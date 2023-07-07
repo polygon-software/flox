@@ -21,6 +21,14 @@ export default class ArticleEntity extends BaseEntity {
   @IsOptional()
   manufacturerNumber?: string;
 
+  @IsString()
+  @IsOptional()
+  name?: string;
+
+  @IsString()
+  @IsOptional()
+  description?: string;
+
   @IsInt()
   @IsOptional()
   amount?: number;
@@ -28,6 +36,10 @@ export default class ArticleEntity extends BaseEntity {
   @IsNumber()
   @IsOptional()
   discount?: number;
+
+  @IsInt()
+  @IsOptional()
+  price?: number;
 
   @IsObject()
   @IsOptional()

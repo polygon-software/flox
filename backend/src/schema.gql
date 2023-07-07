@@ -100,6 +100,9 @@ type Article {
   """Date of deletion"""
   deletedAt: DateTime
 
+  """Description"""
+  description: String
+
   """Discount in percent"""
   discount: Float
 
@@ -108,6 +111,12 @@ type Article {
 
   """Manufacturer number"""
   manufacturerNumber: String
+
+  """Name"""
+  name: String
+
+  """Price"""
+  price: Float
 
   """Last modification date"""
   updatedAt: DateTime
@@ -848,7 +857,7 @@ type Mutation {
   UpdateFile(updateFileInput: UpdateFileInput!): S3File!
   UpdateUser(updateUserInput: UpdateUserInput!): User!
   UpdateUserGroup(updateUserGroupInput: UpdateUserGroupInput!): UserGroup!
-  createArticleList(uuid: String!): CreateArticleSuggesstionOutput!
+  createArticleSuggestionList(uuid: String!): CreateArticleSuggesstionOutput!
   createForm(createFormInput: CreateFormInput!): Form!
   deleteForm(deleteInput: DeleteInput!): Form!
   updateForm(updateFormInput: UpdateFormInput!): Form!
