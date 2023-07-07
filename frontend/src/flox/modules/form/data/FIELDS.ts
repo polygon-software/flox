@@ -4,15 +4,12 @@ import { isString } from 'class-validator';
 import SendInviteField from 'src/flox/modules/form/components/fields/general/SendInviteField.vue';
 import GenericSelectField from 'src/flox/modules/form/components/fields/general/GenericSelectField.vue';
 import { i18n } from 'boot/i18n';
-import {
-  DEVICE_TYPE,
-  LEGAL_FORM,
-  translatedObjects,
-} from 'src/data/ENUM';
+import { DEVICE_TYPE, LEGAL_FORM, translatedObjects } from 'src/data/ENUM';
 import ArticleNumbersField from 'src/flox/modules/form/components/fields/general/ArticleNumbersField.vue';
 import TimeRecordingField from 'src/flox/modules/form/components/fields/general/TimeRecordingField.vue';
 import FileUploadField from 'src/flox/modules/form/components/fields/general/FileUploadField.vue';
 import JobInformationField from 'src/flox/modules/form/components/fields/general/JobInformationField.vue';
+import ProtocolsField from 'src/flox/modules/form/components/fields/general/ProtocolsField.vue';
 
 import AddressField from '../components/fields/general/AddressField.vue';
 import DateField from '../components/fields/general/DateField.vue';
@@ -133,6 +130,13 @@ const FIELDS: Record<string, Field> = {
     attributes: {
       newPassword: true,
       rules: [IS_VALID_PASSWORD],
+    },
+  },
+  PROTOCOLS: {
+    key: 'protocols',
+    component: markRaw(ProtocolsField),
+    attributes: {
+      rules: [],
     },
   },
   NAME: {

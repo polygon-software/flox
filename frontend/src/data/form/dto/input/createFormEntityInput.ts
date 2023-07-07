@@ -7,6 +7,7 @@ import UpdateDeviceInput from 'src/data/device/dto/input/updateDeviceInput';
 import UpdateBillingInput from 'src/data/billing/dto/input/updateBillingInput';
 import UpdateTenantInput from 'src/data/tenant/dto/input/updateTenantInput';
 import UpdateImageFileInput from 'src/data/imageFile/dto/input/updateImageFileInput';
+import UpdateProtocolInput from 'src/data/protocol/input/updateProtocolInput';
 
 /**
  * A class representing a form entity input
@@ -31,6 +32,7 @@ export default class FormEntityInput {
     private protocolText?: string | undefined,
     private articles?: UpdateArticleInput[] | undefined,
     private expenses?: UpdateExpenseInput[] | undefined,
+    private protocols?: UpdateProtocolInput[] | undefined,
     private totalAmount?: number | undefined,
     private employeeId?: string | undefined,
     private freeText?: string | undefined,
@@ -66,6 +68,7 @@ export default class FormEntityInput {
       formEntity.protocolText,
       formEntity.articles,
       formEntity.expenses,
+      formEntity.protocols,
       formEntity.totalAmount,
       formEntity.employeeId,
       formEntity.freeText,

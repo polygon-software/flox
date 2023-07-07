@@ -5,6 +5,7 @@ export enum TABLES {
   CLIENT = 'CLIENT',
   DEVICE = 'DEVICE',
   EXPENSE = 'EXPENSE',
+  PROTOCOL = 'PROTOCOL',
   FORM = 'FORM',
   IMAGE_FILE = 'IMAGE_FILE',
   JOB = 'JOB',

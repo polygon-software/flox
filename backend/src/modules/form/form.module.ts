@@ -11,6 +11,7 @@ import Job from '../job/entities/job.entity';
 import Address from '../address/entities/address.entity';
 import Tenant from '../tenant/entities/tenant.entity';
 import ImageFileService from '../image-file/image-file.service';
+import Protocol from '../protocol/entities/protocol.entity';
 
 import Form from './entities/form.entity';
 import FormService from './form.service';
@@ -26,6 +27,7 @@ import FormController from './form.controller';
       Client,
       Device,
       Expense,
+      Protocol,
       Form,
       ImageFile,
       Job,

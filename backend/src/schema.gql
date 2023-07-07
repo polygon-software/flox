@@ -299,6 +299,9 @@ input CreateFormInput {
   """Protocol text"""
   protocolText: String
 
+  """Protocols"""
+  protocols: [UpdateProtocolInput!]
+
   """Date the form is created"""
   startDate: DateTime
 
@@ -520,6 +523,9 @@ type Form {
 
   """Protocol text"""
   protocolText: String
+
+  """Protocols"""
+  protocols: [Protocol!]
 
   """Last time the form was pulled by ERP"""
   pulledAt: DateTime
@@ -925,6 +931,50 @@ type PaymentSearchOutput {
 
   """Payments that fit query"""
   data: [Payment!]!
+}
+
+type Protocol {
+  """Amount of units in the protocol"""
+  amount: String
+
+  """Article number"""
+  articleNumber: String
+
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Protocol date"""
+  date: DateTime
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Description of the protocol"""
+  description: String
+
+  """Unit discount"""
+  discount: String
+
+  """Form this protocol belongs to"""
+  form: Form
+
+  """Label of the protocol"""
+  label: String
+
+  """Price of units in the protocol"""
+  price: String
+
+  """Sum of the total cost in the protocol"""
+  sum: String
+
+  """Unit of the protocol"""
+  unit: String
+
+  """Last modification date"""
+  updatedAt: DateTime
+
+  """UUID"""
+  uuid: ID!
 }
 
 type Query {
@@ -1598,6 +1648,9 @@ input UpdateFormInput {
   """Protocol text"""
   protocolText: String
 
+  """Protocols"""
+  protocols: [UpdateProtocolInput!]
+
   """Last time the form was pulled by ERP"""
   pulledAt: DateTime
 
@@ -1641,6 +1694,36 @@ input UpdateJobInput {
 
   """Job type"""
   type: JobType
+  uuid: ID
+}
+
+input UpdateProtocolInput {
+  """Amount of units in the protocol"""
+  amount: String
+
+  """Article number"""
+  articleNumber: String
+
+  """Protocol date"""
+  date: DateTime
+
+  """Description of the protocol"""
+  description: String
+
+  """Unit discount"""
+  discount: String
+
+  """Label of the protocol"""
+  label: String
+
+  """Price of units in the protocol"""
+  price: String
+
+  """Sum of the total cost in the protocol"""
+  sum: String
+
+  """Unit of the protocol"""
+  unit: String
   uuid: ID
 }
 

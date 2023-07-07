@@ -1,5 +1,6 @@
 // Field translations
 /* eslint-disable camelcase */
+/* eslint-disable sonarjs/no-duplicate-string */
 export default {
   fields: {
     address: {
@@ -100,5 +101,11 @@ export default {
     job_status: 'Job status',
     floor_number: 'Floor number',
     device: 'Device',
+    protocols: 'Protocols',
+    unit: 'Unit',
+    amount: 'Amount',
+    price: 'Price',
+    sum: 'Sum',
+    label: 'Label',
   },
 };

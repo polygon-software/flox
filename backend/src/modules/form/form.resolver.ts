@@ -24,6 +24,7 @@ export default class FormResolver extends AbstractSearchResolver<
     'client.address',
     'devices',
     'expenses',
+    'protocols',
     'job',
     'images',
     'tenant',

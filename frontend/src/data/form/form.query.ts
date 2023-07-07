@@ -218,6 +218,19 @@ export const FORM: QueryObject = {
           discount
           __typename
         }
+        protocols {
+          uuid
+          date
+          articleNumber
+          label
+          description
+          unit
+          amount
+          price
+          discount
+          sum
+          __typename
+        }
         totalAmount
         employeeId
         freeText

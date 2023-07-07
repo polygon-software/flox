@@ -3,7 +3,6 @@ import {
   IsArray,
   IsBoolean,
   IsDate,
-  IsInt,
   IsNumber,
   IsObject,
   IsOptional,
@@ -19,6 +18,7 @@ import UpdateArticleInput from '../../../article/dto/input/update-article.input'
 import UpdateExpenseInput from '../../../expense/dto/input/update-expense.input';
 import CreateInput from '../../../../flox/modules/abstracts/crud/dto/input/create.input';
 import UpdateImageFileInput from '../../../image-file/dto/input/update-image-file.input';
+import UpdateProtocolInput from '../../../protocol/input/update-protocol.input';
 
 @InputType()
 export default class CreateFormInput extends CreateInput {
@@ -139,6 +139,14 @@ export default class CreateFormInput extends CreateInput {
   @IsArray()
   @IsOptional()
   expenses: UpdateExpenseInput[];
+
+  @Field(() => [UpdateProtocolInput], {
+    description: 'Protocols',
+    nullable: true,
+  })
+  @IsArray()
+  @IsOptional()
+  protocols: UpdateProtocolInput[];
 
   @Field(() => Number, {
     description: 'Total cost of the job',

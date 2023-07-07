@@ -2,7 +2,6 @@ import {
   IsArray,
   IsBoolean,
   IsDate,
-  IsInt,
   IsNumber,
   IsObject,
   IsOptional,
@@ -18,6 +17,7 @@ import ImageFileEntity from 'src/data/imageFile/entities/imageFileEntity';
 import JobEntity from 'src/data/job/entities/jobEntity';
 import TenantEntity from 'src/data/tenant/entities/tenantEntity';
 import BillingEntity from 'src/data/billing/entities/billingEntity';
+import ProtocolEntity from 'src/data/protocol/entities/protocolEntity';
 
 /**
  * A class representing a form data object
@@ -89,6 +89,10 @@ export default class FormEntity extends BaseEntity {
   @IsArray()
   @IsOptional()
   expenses?: ExpenseEntity[];
+
+  @IsArray()
+  @IsOptional()
+  protocols?: ProtocolEntity[];
 
   @IsNumber()
   @IsOptional()

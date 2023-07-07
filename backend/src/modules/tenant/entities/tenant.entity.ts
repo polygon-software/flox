@@ -1,15 +1,6 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  OneToOne,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 import { Field, ObjectType } from '@nestjs/graphql';
-import {
-  IsObject,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { IsObject, IsOptional, IsString } from 'class-validator';
 
 import BaseEntity from '../../../flox/core/base-entity/entities/base-entity.entity';
 import Address from '../../address/entities/address.entity';
