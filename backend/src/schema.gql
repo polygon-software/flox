@@ -859,6 +859,7 @@ type Mutation {
   UpdateUserGroup(updateUserGroupInput: UpdateUserGroupInput!): UserGroup!
   createArticleSuggestionList(uuid: String!): CreateArticleSuggesstionOutput!
   createForm(createFormInput: CreateFormInput!): Form!
+  deleteArticle(deleteInput: DeleteInput!): Article!
   deleteForm(deleteInput: DeleteInput!): Form!
   updateForm(updateFormInput: UpdateFormInput!): Form!
 }
