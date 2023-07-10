@@ -28,7 +28,6 @@ import env from './env';
 import FormModule from './modules/form/form.module';
 import ImageFileModule from './modules/image-file/image-file.module';
 import ArticleSuggestionModule from './modules/article-suggestion/article-suggestion.module';
-import ArticleModule from './modules/article/article.module';
 
 @Module({
   imports: [
@@ -116,7 +115,6 @@ import ArticleModule from './modules/article/article.module';
     // Flox modules
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     ...(floxModules() as any[]),
-    ArticleModule,
     ArticleSuggestionModule,
     FormModule,
     ImageFileModule,
@@ -132,7 +130,6 @@ import ArticleModule from './modules/article/article.module';
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     ...floxProviders(),
     // Add any other custom module providers here
-    ArticleModule,
     ArticleSuggestionModule,
     FormModule,
     ImageFileModule,

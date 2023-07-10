@@ -219,12 +219,12 @@ export const UPDATE_FORM: MutationObject = {
       $measurePower: Boolean
       $billing: UpdateBillingInput
       $description: String
-      $devices: [UpdateDeviceInput!]
+      $devices: [UpdateDeviceInput!]!
       $protocolDate: DateTime
       $protocolText: String
-      $articles: [UpdateArticleInput!]
-      $expenses: [UpdateExpenseInput!]
-      $protocols: [UpdateProtocolInput!]
+      $articles: [UpdateArticleInput!]!
+      $expenses: [UpdateExpenseInput!]!
+      $protocols: [UpdateProtocolInput!]!
       $totalAmount: Float
       $employeeId: String
       $freeText: String

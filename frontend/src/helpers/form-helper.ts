@@ -305,52 +305,56 @@ export default function formValuesToFormEntityValues(
   storeKey.cardKey = 'devices';
   const devices = getFieldValue(storeKey, FIELDS.DEVICES) as
     | UpdateDeviceInput[]
-    | undefined;
+    | [];
 
   storeKey.cardKey = 'productsAndTimeRecording';
   const articleEntries = getFieldValue(storeKey, FIELDS.ARTICLE_NUMBERS) as
     | ArticleNumberEntry[]
     | undefined;
-  const articleInput = articleEntries?.map((entry) => {
-    return new UpdateArticleInput(
-      entry.articleNumber ?? undefined,
-      entry.manufacturerNumber?.toString() ?? undefined,
-      entry.name ?? undefined,
-      entry.description ?? undefined,
-      entry.amount ?? undefined,
-      entry.price ?? undefined,
-      entry.discount ?? undefined
-    );
-  });
+  const articleInput =
+    articleEntries?.map((entry) => {
+      return new UpdateArticleInput(
+        entry.articleNumber ?? undefined,
+        entry.manufacturerNumber?.toString() ?? undefined,
+        entry.name ?? undefined,
+        entry.description ?? undefined,
+        entry.amount ?? undefined,
+        entry.price ?? undefined,
+        entry.discount ?? undefined
+      );
+    }) ?? [];
 
   storeKey.cardKey = 'protocols';
   const protocolEntries = getFieldValue(storeKey, FIELDS.PROTOCOLS) as
     | ProtocolEntry[]
     | undefined;
-  const protocolInput = protocolEntries?.map((entry) => {
-    return new UpdateProtocolInput(
-      entry.date ?? undefined,
-      entry.articleNumber ?? undefined,
-      entry.label ?? undefined,
-      entry.description ?? undefined,
-      entry.unit ?? undefined,
-      entry.amount ?? undefined,
-      entry.price ?? undefined,
-      entry.discount ?? undefined,
-      entry.sum ?? undefined
-    );
-  });
+  const protocolInput =
+    protocolEntries?.map((entry) => {
+      return new UpdateProtocolInput(
+        entry.date ?? undefined,
+        entry.articleNumber ?? undefined,
+        entry.label ?? undefined,
+        entry.description ?? undefined,
+        entry.unit ?? undefined,
+        entry.amount ?? undefined,
+        entry.price ?? undefined,
+        entry.discount ?? undefined,
+        entry.sum ?? undefined
+      );
+    }) ?? [];
 
   const timeRecordings = getFieldValue(storeKey, FIELDS.TIME_RECORDINGS) as
     | TimeRecordingEntry[]
-    | undefined;
-  const expensesInput = timeRecordings?.map((entry) => {
-    return new UpdateExpenseInput(
-      entry.name ?? undefined,
-      entry.timeAmount ?? undefined,
-      entry.discount ?? undefined
-    );
-  });
+    | [];
+
+  const expensesInput =
+    timeRecordings?.map((entry) => {
+      return new UpdateExpenseInput(
+        entry.name ?? undefined,
+        entry.timeAmount ?? undefined,
+        entry.discount ?? undefined
+      );
+    }) ?? [];
 
   storeKey.cardKey = 'finalInformation';
   const totalAmount = getFieldValue(storeKey, FIELDS.TOTAL_AMOUNT) as
