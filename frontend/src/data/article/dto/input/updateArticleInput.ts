@@ -13,16 +13,22 @@ export default class UpdateArticleInput extends CreateArticleInput {
 
   /**
    * Constructor for UpdateArticleInput
-   * @param {string} [articleNumber] - The number of the article
-   * @param {string} [manufacturerNumber] - The manufacturer number of the article
-   * @param {number} [amount] - The amount of the article
-   * @param {number} [discount] - The discount for the article
-   * @param {string} [uuid] - The uuid of the article
+   * @param [articleNumber] - The number of the article
+   * @param [manufacturerNumber] - The manufacturer number of the article
+   * @param [name] - The name of the article
+   * @param [description] - The description of the article
+   * @param [amount] - The amount of the article
+   * @param [price] - The price of the article
+   * @param [discount] - The discount for the article
+   * @param [uuid] - The uuid of the article
    */
   constructor(
     articleNumber?: string,
     manufacturerNumber?: string,
+    name?: string,
+    description?: string,
     amount?: number,
+    price?: number,
     discount?: number,
     uuid?: string
   ) {
@@ -30,7 +36,10 @@ export default class UpdateArticleInput extends CreateArticleInput {
     this.uuid = uuid;
     this.articleNumber = articleNumber;
     this.manufacturerNumber = manufacturerNumber;
+    this.name = name;
+    this.description = description;
     this.amount = amount;
+    this.price = price;
     this.discount = discount;
   }
 
@@ -43,7 +52,10 @@ export default class UpdateArticleInput extends CreateArticleInput {
     return new UpdateArticleInput(
       article?.articleNumber,
       article?.manufacturerNumber,
+      article?.name,
+      article?.description,
       article?.amount,
+      article?.price,
       article?.discount,
       article?.uuid
     );

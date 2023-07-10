@@ -29,5 +29,7 @@ export default {
     request_code: 'Code anfordern',
     add_device: 'Gerät hinzufügen',
     remove_device: 'Gerät entfernen',
+    add_article: 'Artikel hinzufügen',
+    add_protocol: 'Protokoll hinzufügen',
   },
 };

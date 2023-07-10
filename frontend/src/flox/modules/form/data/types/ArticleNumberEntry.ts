@@ -8,6 +8,8 @@ export default class ArticleNumberEntry {
 
   name: string | null;
 
+  description: string | null;
+
   amount: number | null;
 
   price: number | null;
@@ -19,6 +21,7 @@ export default class ArticleNumberEntry {
     articleNumber: string | null,
     manufacturerNumber: string | null,
     name: string | null,
+    description: string | null,
     amount: number | null,
     price: number | null,
     discount: number | null
@@ -26,6 +29,7 @@ export default class ArticleNumberEntry {
     this.articleNumber = articleNumber;
     this.manufacturerNumber = manufacturerNumber;
     this.name = name;
+    this.description = description;
     this.amount = amount;
     this.price = price;
     this.discount = discount;
@@ -40,6 +44,7 @@ export default class ArticleNumberEntry {
       this.articleNumber !== null &&
       this.manufacturerNumber !== null &&
       this.name !== null &&
+      this.description !== null &&
       this.amount !== null &&
       this.price !== null &&
       this.discount !== null

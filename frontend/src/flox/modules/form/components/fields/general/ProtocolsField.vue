@@ -130,11 +130,11 @@
     </div>
   </div>
   <q-btn
-    class="q-mt-md"
+    :class="`${DEFAULT_BUTTON_CLASS} q-my-md`"
+    :style="`${DEFAULT_BUTTON_STYLE}; max-width: 300px;`"
     color="primary"
-    label="Add"
+    :label="$t('buttons.add_protocol')"
     icon="add"
-    style="max-width: 130px"
     @click="addProtocol"
   />
 </template>
@@ -160,6 +160,10 @@ import { FIELDS } from 'src/flox/modules/form/data/FIELDS';
 import { formatDate } from 'src/format/date.format';
 import { IS_VALID_DATE_STRING } from 'src/flox/modules/form/data/RULES';
 import ProtocolEntry from 'src/flox/modules/form/data/types/ProtocolEntry';
+import {
+  DEFAULT_BUTTON_CLASS,
+  DEFAULT_BUTTON_STYLE,
+} from 'src/css/defaultStyles';
 
 const props = withDefaults(
   defineProps<{

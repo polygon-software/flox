@@ -29,5 +29,7 @@ export default {
     request_code: 'Request code',
     add_device: 'Add device',
     remove_device: 'Remove device',
+    add_article: 'Add article',
+    add_protocol: 'Add protocol',
   },
 };

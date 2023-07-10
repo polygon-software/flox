@@ -54,7 +54,7 @@
         :label="$t('fields.discount')"
         dense
         outlined
-        type="number"
+        mask="##"
         suffix="%"
         @change="addDiscount"
       />

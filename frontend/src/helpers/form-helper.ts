@@ -315,7 +315,10 @@ export default function formValuesToFormEntityValues(
     return new UpdateArticleInput(
       entry.articleNumber ?? undefined,
       entry.manufacturerNumber?.toString() ?? undefined,
+      entry.name ?? undefined,
+      entry.description ?? undefined,
       entry.amount ?? undefined,
+      entry.price ?? undefined,
       entry.discount ?? undefined
     );
   });

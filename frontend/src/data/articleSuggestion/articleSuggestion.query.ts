@@ -12,6 +12,7 @@ const ARTICLE_SUGGESTIONS: QueryObject = {
         manufacturerNumber
         name
         description
+        price
         amount
         __typename
       }
