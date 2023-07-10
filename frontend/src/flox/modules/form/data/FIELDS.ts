@@ -10,6 +10,7 @@ import TimeRecordingField from 'src/flox/modules/form/components/fields/general/
 import FileUploadField from 'src/flox/modules/form/components/fields/general/FileUploadField.vue';
 import JobInformationField from 'src/flox/modules/form/components/fields/general/JobInformationField.vue';
 import ProtocolsField from 'src/flox/modules/form/components/fields/general/ProtocolsField.vue';
+import TotalAmountField from 'components/forms/TotalAmountField.vue';
 
 import AddressField from '../components/fields/general/AddressField.vue';
 import DateField from '../components/fields/general/DateField.vue';
@@ -175,11 +176,8 @@ const FIELDS: Record<string, Field> = {
   },
   TOTAL_AMOUNT: {
     key: 'totalAmount',
-    component: markRaw(GenericInputField),
+    component: markRaw(TotalAmountField),
     attributes: {
-      denseLabel: true,
-      label: i18n.global.t('fields.total_amount'),
-      type: 'number',
       rules: [],
     },
   },

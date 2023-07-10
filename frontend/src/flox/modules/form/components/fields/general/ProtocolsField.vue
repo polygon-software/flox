@@ -28,6 +28,7 @@
     </q-table>
   </LabelWrapper>
   <div class="q-mx-xs q-mt-md q-mb-lg row justify-between">
+    <!-- Date input -->
     <div class="col-2">
       <q-input
         v-model="dateInput"
@@ -44,6 +45,8 @@
         @change="(val: Date) => (protocolEntry.date = val)"
       />
     </div>
+
+    <!-- Article number input -->
     <div class="col-1 q-pl-sm">
       <q-input
         v-model="articleNumberInput"
@@ -63,6 +66,8 @@
         @change="(val: string) => (protocolEntry.unit = val)"
       />
     </div>
+
+    <!-- Amount input -->
     <div class="col-1 q-pl-sm">
       <q-input
         v-model="amountInput"
@@ -74,6 +79,8 @@
         @change="(val: string) => (protocolEntry.amount = val)"
       />
     </div>
+
+    <!-- Price input -->
     <div class="col-2 q-pl-sm">
       <q-input
         v-model="priceInput"
@@ -81,22 +88,27 @@
         dense
         suffix="CHF"
         outlined
-        type="number"
+        reverse-fill-mask
+        fill-mask="0"
+        mask="#.##"
         @change="(val: string) => (protocolEntry.price = val)"
       />
     </div>
+
+    <!-- Discount input -->
     <div class="col-2 q-pl-sm">
       <q-input
         v-model="discountInput"
         :label="$t('fields.discount')"
-        mask="##"
         dense
+        mask="##.#"
         suffix="%"
         outlined
-        type="number"
         @change="(val: string) => (protocolEntry.discount = val)"
       />
     </div>
+
+    <!-- Sum input -->
     <div class="col-2 q-pl-sm">
       <q-input
         v-model="sumInput"
@@ -104,10 +116,14 @@
         dense
         outlined
         suffix="CHF"
-        type="number"
+        reverse-fill-mask
+        fill-mask="0"
+        mask="#.##"
         @change="(val: string) => (protocolEntry.sum = val)"
       />
     </div>
+
+    <!-- Description input -->
     <div class="col-6">
       <q-input
         v-model="descriptionInput"
@@ -118,6 +134,8 @@
         @change="(val: string) => (protocolEntry.description = val)"
       />
     </div>
+
+    <!-- Label input -->
     <div class="col-6 q-pl-sm">
       <q-input
         v-model="labelInput"
@@ -129,6 +147,8 @@
       />
     </div>
   </div>
+
+  <!-- Add protocol button -->
   <q-btn
     :class="`${DEFAULT_BUTTON_CLASS} q-my-md`"
     :style="`${DEFAULT_BUTTON_STYLE}; max-width: 300px;`"

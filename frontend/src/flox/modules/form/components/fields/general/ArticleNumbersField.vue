@@ -31,7 +31,7 @@
 
     <!-- First field row -->
     <div class="q-mx-xs q-my-md row justify-between">
-      <div class="col-4 q-pl-sm" style="position: relative">
+      <div class="col-4" style="position: relative">
         <!-- Article number input -->
         <q-input
           v-model="articleNumberInput"
@@ -78,7 +78,7 @@
           :label="$t('fields.manufacturer_number')"
           dense
           outlined
-          @change="(val: string) => (articleNumberEntry.manufacturerNumber = val)"
+          @change="(val: string) => articleNumberEntry.manufacturerNumber = val"
         />
       </div>
 
@@ -89,7 +89,7 @@
           :label="$t('fields.name')"
           dense
           outlined
-          @change="(val: string) => (articleNumberEntry.name = val)"
+          @change="(val: string) => articleNumberEntry.name = val"
         />
       </div>
     </div>
@@ -97,13 +97,13 @@
     <!-- Second field row -->
     <div class="q-mx-xs q-mb-md row justify-between">
       <!-- Description input -->
-      <div class="col-3 q-pl-sm">
+      <div class="col-3">
         <q-input
           v-model="descriptionInput"
           :label="$t('fields.description')"
           dense
           outlined
-          @change="(val: string) => (articleNumberEntry.description = val)"
+          @change="(val: string) => articleNumberEntry.description = val"
         />
       </div>
 
@@ -116,7 +116,7 @@
           outlined
           reverse-fill-mask
           mask="#"
-          @change="(val: string) => (articleNumberEntry.amount = parseInt(val, 10))"
+          @change="(val: string) => articleNumberEntry.amount = parseInt(val, 10)"
         />
       </div>
 
@@ -130,7 +130,8 @@
           reverse-fill-mask
           fill-mask="0"
           mask="#.##"
-          @change="(val: string) => (articleNumberEntry.price = parseFloat(val))"
+          suffix="CHF"
+          @change="(val: string) => articleNumberEntry.price = parseFloat(val)"
         />
       </div>
 
@@ -140,13 +141,14 @@
           v-model="discountInput"
           :label="$t('fields.discount')"
           dense
-          mask="##"
+          mask="##.#"
           suffix="%"
           outlined
-          @change="(val: string) => (articleNumberEntry.discount = parseFloat(val))"
+          @change="(val: string) => articleNumberEntry.discount = parseFloat(val)"
         />
       </div>
     </div>
+
     <!-- Add article button -->
     <q-btn
       :class="`${DEFAULT_BUTTON_CLASS} q-my-md`"

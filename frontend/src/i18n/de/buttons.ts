@@ -31,5 +31,6 @@ export default {
     remove_device: 'Gerät entfernen',
     add_article: 'Artikel hinzufügen',
     add_protocol: 'Protokoll hinzufügen',
+    add_expense: 'Zeiterfasung hinzufügen',
   },
 };

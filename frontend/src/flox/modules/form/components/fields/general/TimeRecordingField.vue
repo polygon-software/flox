@@ -1,64 +1,81 @@
 <template>
-  <LabelWrapper :label="$t('fields.time_recording')">
-    <q-table
-      :rows="timeRecordings"
-      :columns="columns"
-      flat
-      bordered
-      dense
-      :rows-per-page-options="[0]"
-      hide-pagination
-    >
-      <!-- Action buttons -->
-      <template #body-cell-actions="_props">
-        <q-td :props="_props">
-          <q-btn
-            dense
-            unelevated
-            icon="delete"
-            text-color="secondary"
-            @click="deleteRow(_props.rowIndex)"
-          >
-            <q-tooltip>
-              {{ $t('buttons.delete') }}
-            </q-tooltip>
-          </q-btn>
-        </q-td>
-      </template>
-    </q-table>
-  </LabelWrapper>
-  <div class="q-mx-xs q-mt-md q-mb-lg row justify-between">
-    <div class="col-6">
-      <q-input
-        v-model="taskTypeInput"
-        :label="$t('fields.task_type')"
+  <div class="q-mb-md text-left">
+    <LabelWrapper :label="$t('fields.time_recording')">
+      <q-table
+        :rows="timeRecordings"
+        :columns="columns"
+        flat
+        bordered
         dense
-        outlined
-        @change="addTaskType"
-      />
+        :rows-per-page-options="[0]"
+        hide-pagination
+      >
+        <!-- Action buttons -->
+        <template #body-cell-actions="_props">
+          <q-td :props="_props">
+            <q-btn
+              dense
+              unelevated
+              icon="delete"
+              text-color="secondary"
+              @click="deleteRow(_props.rowIndex)"
+            >
+              <q-tooltip>
+                {{ $t('buttons.delete') }}
+              </q-tooltip>
+            </q-btn>
+          </q-td>
+        </template>
+      </q-table>
+    </LabelWrapper>
+    <div class="q-mx-xs q-mt-md q-mb-lg row justify-between">
+      <!-- Task type input -->
+      <div class="col-6">
+        <q-input
+          v-model="taskTypeInput"
+          :label="$t('fields.task_type')"
+          dense
+          outlined
+          @change="(val: string) => timeRecordingEntry.name = val"
+        />
+      </div>
+
+      <!-- Date input -->
+      <div class="col-3 q-pl-sm">
+        <q-input
+          v-model="durationInput"
+          :label="$t('fields.duration')"
+          dense
+          outlined
+          suffix="h"
+          type="number"
+          @change="(val: string) => timeRecordingEntry.timeAmount = parseFloat(val)"
+        />
+      </div>
+
+      <!-- Discount input -->
+      <div class="col-3 q-pl-sm">
+        <q-input
+          v-model="discountInput"
+          :label="$t('fields.discount')"
+          dense
+          mask="##.#"
+          suffix="%"
+          outlined
+          @change="(val: string) => timeRecordingEntry.discount = parseFloat(val)"
+        />
+      </div>
     </div>
-    <div class="col-3 q-pl-sm">
-      <q-input
-        v-model="durationInput"
-        :label="$t('fields.duration')"
-        dense
-        outlined
-        suffix="h"
-        type="number"
-        @change="addDuration"
-      />
-    </div>
-    <div class="col-3 q-pl-sm">
-      <q-input
-        v-model="discountInput"
-        :label="$t('fields.discount')"
-        dense
-        outlined
-        mask="##"
-        suffix="%"
-        @change="addDiscount"
-      />
-    </div>
+
+    <!-- Add expense button -->
+    <q-btn
+      :class="`${DEFAULT_BUTTON_CLASS} q-my-md`"
+      :style="`${DEFAULT_BUTTON_STYLE}; max-width: 300px;`"
+      color="primary"
+      :label="$t('buttons.add_expense')"
+      icon="add"
+      @click="addExpense"
+    />
   </div>
 </template>
 
@@ -81,6 +98,10 @@ import { FormStateKey, useFormStore } from 'src/flox/modules/form/stores/form';
 import TimeRecordingEntry from 'src/flox/modules/form/data/types/TimeRecordingEntry';
 import { fetchByKey } from 'src/flox/modules/form/helpers/form-helpers';
 import { FIELDS } from 'src/flox/modules/form/data/FIELDS';
+import {
+  DEFAULT_BUTTON_CLASS,
+  DEFAULT_BUTTON_STYLE,
+} from 'src/css/defaultStyles';
 
 const props = withDefaults(
   defineProps<{
@@ -167,17 +188,6 @@ function deleteRow(index: number): void {
 }
 
 /**
- * Checks whether timeRecordingEntry has no null values
- */
-function isTimeRecordingValid(): boolean {
-  return (
-    !!timeRecordingEntry.value.name &&
-    !!timeRecordingEntry.value.timeAmount &&
-    !!timeRecordingEntry.value.discount
-  );
-}
-
-/**
  * Sets all values of inputs and timeRecordingEntry to null
  */
 function setValuesToNull(): void {
@@ -188,47 +198,12 @@ function setValuesToNull(): void {
 }
 
 /**
- * Adds a value to the taskType array
- * @param {string} val - the value to add
- * @returns {void}
+ * Add expense to the store so that it appears in the table and that it can be put into the query later
  */
-function addTaskType(val: string): void {
-  timeRecordingEntry.value.name = val;
-
-  if (isTimeRecordingValid()) {
-    timeRecordings.value.push(timeRecordingEntry.value);
-    saveValue();
-    setValuesToNull();
-  }
-}
-
-/**
- * Adds a value to the duration array
- * @param {number} val - the value to add
- * @returns {void}
- */
-function addDuration(val: number): void {
-  timeRecordingEntry.value.timeAmount = Number(val);
-
-  if (isTimeRecordingValid()) {
-    timeRecordings.value.push(timeRecordingEntry.value);
-    saveValue();
-    setValuesToNull();
-  }
-}
-
-/**
- * Adds a value to the discount array
- * @param {number} val - the value to add
- * @returns {void}
- */
-function addDiscount(val: number): void {
-  timeRecordingEntry.value.discount = Number(val);
-  if (isTimeRecordingValid()) {
-    timeRecordings.value.push(timeRecordingEntry.value);
-    saveValue();
-    setValuesToNull();
-  }
+function addExpense(): void {
+  timeRecordings.value.push(timeRecordingEntry.value);
+  saveValue();
+  setValuesToNull();
 }
 
 /**
