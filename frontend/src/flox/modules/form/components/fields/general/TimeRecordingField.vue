@@ -40,7 +40,7 @@
         />
       </div>
 
-      <!-- Date input -->
+      <!-- Duration input -->
       <div class="col-3 q-pl-sm">
         <q-input
           v-model="durationInput"
@@ -48,7 +48,9 @@
           dense
           outlined
           suffix="h"
-          type="number"
+          mask="#.##"
+          reverse-fill-mask
+          fill-mask="0"
           @change="(val: string) => timeRecordingEntry.timeAmount = parseFloat(val)"
         />
       </div>
