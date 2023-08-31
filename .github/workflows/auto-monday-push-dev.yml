@@ -1,0 +1,24 @@
+name: "Auto: Label monday.com items arriving in DEV as 'Stage 0: Dev'"
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  set-status:
+    name: Set monday.com Item Status
+    runs-on: ubuntu-latest
+    steps:
+      # Set status on-dev for items that appear in a commit message in DEV
+      - name: "Update state of monday.com items to 'State 0: Dev'"
+        uses: polygon-software/action-monday-state@main
+        with:
+          monday-token: ${{ secrets.MONDAY_TOKEN }}
+          allow-no-item-id: true
+          multiple: true
+          text: ${{ join(github.event.commits.*.message, ', ') }}
+          prefix: '#'
+          status-column-title: 'Item Status!'
+          set-status: 'State 0: Dev'
+

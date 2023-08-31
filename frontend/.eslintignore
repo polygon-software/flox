@@ -1,0 +1,11 @@
+.eslintrc.js
+/node_modules
+/quasar.config.js
+/.quasar
+/src-capacitor
+/src-cordova
+/src-ssr
+/src-pwa
+/public/pdfjs
+/dist
+

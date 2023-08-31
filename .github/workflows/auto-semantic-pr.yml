@@ -1,0 +1,40 @@
+name: "Auto: Semantic Pull-Request"
+
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+      - reopened
+jobs:
+  lint-pr-title:
+    name: Lint PR Title
+    runs-on: ubuntu-latest
+    steps:
+      - name: Semantic Pull Request
+        uses: amannn/action-semantic-pull-request@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            fix
+            feat
+            doc
+            test
+            stage
+          wip: false
+          validateSingleCommit: true
+
+  lint-branch-name:
+    name: Lint Branch Name
+    runs-on: ubuntu-latest
+    steps:
+      - name: Lint branch name
+        uses: lekterable/branchlint-action@v1.0.0
+        with:
+          allowed: |
+            master
+            dev
+            /^(feature|doc|fix|test|)-([A-Za-z-_0-9])+$/
+            /^stage-[0-9]{6}$/

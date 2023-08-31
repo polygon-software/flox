@@ -1,0 +1,59 @@
+# compiled output
+/dist
+/node_modules
+
+# Generated script outputs
+/scripts/support/flox.tfvars
+/scripts/outputs/*.zip
+/scripts/**/*.zip
+
+# Terraform
+/scripts/**/.terraform
+/scripts/**/.terraform.lock.hcl
+/scripts/**/config.tf-e
+/scripts/**/terraform.tfstate
+
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# OS
+.DS_Store
+
+# Tests
+/coverage
+**/coverage
+/.nyc_output
+**/test-report.xml
+/frontend/reports
+/backend/reports
+
+# IDEs and editors
+/.idea
+.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+/backend/node_modules/
+/backend/dist/
+
+*.tfvars
+/**/.env
+
+# Pdf.js
+/frontend/public/pdfjs

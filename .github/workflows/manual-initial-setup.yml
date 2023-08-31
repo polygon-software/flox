@@ -1,0 +1,51 @@
+name: "Manual: Set up AWS"
+
+# Should only be run manually from the Actions tab (only once!)
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        required: true
+        type: choice
+        description: System deployment mode
+        options:
+          - test
+          - dev
+          - live
+          - stage
+      force:
+        required: false
+        type: boolean
+        description: Force deployment
+        default: false
+      confirm:
+        required: false
+        type: string
+        description: Enter "confirm" to confirm you are aware that DATA LOSS, INCLUDING ACCOUNTS, may occur when forcing deployment!
+jobs:
+  setup-aws:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎
+        uses: actions/checkout@v3
+
+      - name: Make scripts executable
+        run: |
+          sudo chmod +x ./scripts/support/build.sh
+          sudo chmod +x ./scripts/aws-initial-setup/initial-aws-setup.sh
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+          terraform_wrapper: false
+
+      - name: Validate Terraform
+        working-directory: ./scripts/aws-initial-setup
+        run: terraform validate
+
+      - name: Build & set up AWS infrastructure
+        working-directory: ./scripts/aws-initial-setup
+        run: bash initial-aws-setup.sh ${{ github.event.inputs.mode }} false ${{ github.event.inputs.force }} ${{ github.event.inputs.confirm }}
+        env:
+          TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}

@@ -1,0 +1,33 @@
+docs:
+  - docs/**/*
+
+frontend:
+  - frontend/**/*
+  - shared/**/*
+
+backend:
+  - backend/**/*
+  - shared/**/*
+
+tests:
+  - frontend/test/**/*
+  - backend/test/**/*
+
+ios/android:
+  - frontend/src-capacitor/**/*
+
+ssr:
+  - frontend/src-ssr/**/*
+
+pwa:
+  - frontend/src-pwa/**/*
+
+ci/cd:
+  - .github/**/*
+
+components:
+  - frontend/src/components/**/*
+
+modules:
+  - backend/src/modules/**/*
+

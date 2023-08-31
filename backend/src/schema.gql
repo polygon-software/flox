@@ -1,0 +1,939 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type AccessControlledEntity {
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Marks this object as readable for all logged in users"""
+  loggedInReadAccess: Boolean!
+
+  """Owner of this object, has full control over it"""
+  owner: User!
+
+  """Marks this object as publicly readable"""
+  publicReadAccess: Boolean!
+
+  """Last modification date"""
+  updatedAt: DateTime
+
+  """UUID"""
+  uuid: ID!
+}
+
+input AddUserToUserGroupInput {
+  """Uuid of group to which user shall be added"""
+  userGroupUuid: ID!
+
+  """Uuid of user that shall be added to group"""
+  userUuid: ID!
+}
+
+input AddUsersToUserGroupInput {
+  """Uuid of group to which user shall be added"""
+  userGroupUuid: ID!
+
+  """Uuids of users that shall be added to group"""
+  userUuids: [ID!]!
+}
+
+input AdminCreateUserInput {
+  deliveryMediums: [DeliveryMediums!]!
+  email: String!
+  lang: String
+  phoneNumber: String
+  role: Role!
+  username: String!
+}
+
+type AdminCreateUserOutput {
+  """Created user"""
+  data: User!
+
+  """password"""
+  password: String
+}
+
+type BoundingBox {
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Bounding-Box height in percentage of image height"""
+  height: Float!
+
+  """Label to which the bounding box belongs"""
+  label: Label!
+
+  """Bounding-Box position from the left side of the image, in percentage"""
+  left: Float!
+
+  """Bounding-Box position from the top side of the image, in percentage"""
+  top: Float!
+
+  """Last modification date"""
+  updatedAt: DateTime
+
+  """UUID"""
+  uuid: ID!
+
+  """Bounding-Box width in percentage of image width"""
+  width: Float!
+}
+
+input CreateFileInput {
+  """Name of File"""
+  filename: String!
+  loggedInReadAccess: Boolean = false
+
+  """File mimetype"""
+  mimetype: String!
+
+  """Path to file"""
+  path: String!
+  publicReadAccess: Boolean = false
+  readAccess: [ID!] = []
+
+  """Size of file in bytes"""
+  size: Int!
+  writeAccess: [ID!] = []
+}
+
+input CreateImageInput {
+  file: ID!
+  loggedInReadAccess: Boolean = false
+  objectRecognition: Boolean = false
+  publicReadAccess: Boolean = false
+  readAccess: [ID!] = []
+  writeAccess: [ID!] = []
+}
+
+input CreateUserGroupInput {
+  """Name of group"""
+  name: String!
+  users: [ID!] = []
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+input DeleteInput {
+  uuid: ID!
+}
+
+enum DeliveryMediums {
+  CUSTOM_EMAIL
+  EMAIL
+  SMS
+}
+
+type FileSearchOutput {
+  """How many items are found within database"""
+  count: String!
+
+  """Files that fit query"""
+  data: [S3File!]!
+}
+
+type FolderOutput {
+  """Creation date of oldest file in folder"""
+  createdAt: DateTime!
+
+  """Number of files"""
+  files: Float!
+
+  """Name of the folder"""
+  name: String!
+
+  """Summed of size of all files in folder, in bytes"""
+  size: Float!
+
+  """Last modification of any file in folder"""
+  updatedAt: DateTime
+
+  """Name of the folder"""
+  uuid: ID!
+}
+
+type Image {
+  """Capture Date"""
+  capturedAt: DateTime
+
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """File"""
+  file: S3File!
+
+  """Image Height in Pixels"""
+  height: Float
+
+  """Labels of detected objects on image"""
+  labels: [Label!]!
+
+  """GPS Latitude"""
+  latitude: Float
+
+  """Marks this object as readable for all logged in users"""
+  loggedInReadAccess: Boolean!
+
+  """GPS Longitude"""
+  longitude: Float
+
+  """Owner of this object, has full control over it"""
+  owner: User!
+
+  """Marks this object as publicly readable"""
+  publicReadAccess: Boolean!
+
+  """Last modification date"""
+  updatedAt: DateTime
+
+  """UUID"""
+  uuid: ID!
+
+  """Image Width in Pixels"""
+  width: Float
+}
+
+type ImageSearchOutput {
+  """How many items are found within database"""
+  count: String!
+
+  """Image that fit query"""
+  data: [Image!]!
+}
+
+type Label {
+  """Bounding box for every instance of this label on image"""
+  boundingBox: BoundingBox!
+
+  """Confidence between 0 and 100"""
+  confidence: Float!
+
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Image on which this label was detected"""
+  image: Image!
+
+  """Label Name"""
+  name: String!
+
+  """Parent labels"""
+  parents: [String!]!
+
+  """Last modification date"""
+  updatedAt: DateTime
+
+  """UUID"""
+  uuid: ID!
+}
+
+input ManipulateAccessGroupsInput {
+  addReadAccess: [ID!] = []
+  addWriteAccess: [ID!] = []
+  removeReadAccess: [ID!] = []
+  removeWriteAccess: [ID!] = []
+  uuid: ID!
+}
+
+input MarkAsReadInput {
+  """Uuid of notification"""
+  uuid: ID!
+}
+
+type Message {
+  """Content of message"""
+  content: String!
+
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Language of message"""
+  lang: String!
+
+  """Link to which the user is lead on click of the notification"""
+  link: String
+
+  """Notification on which this message appears"""
+  notification: Notification!
+
+  """Title of message"""
+  title: String!
+
+  """Last modification date"""
+  updatedAt: DateTime
+
+  """UUID"""
+  uuid: ID!
+}
+
+input MessageInput {
+  """Content of message"""
+  content: String!
+
+  """Language of message"""
+  lang: String!
+
+  """Link to which the user is lead on click of the notification"""
+  link: String
+
+  """Title of message"""
+  title: String!
+}
+
+type Mutation {
+  AddUserToUserGroup(addUserToUserGroupInput: AddUserToUserGroupInput!): UserGroup!
+  AddUsersToUserGroup(addUsersToUserGroupInput: AddUsersToUserGroupInput!): UserGroup!
+  AdminCreateUser(adminCreateUserInput: AdminCreateUserInput!): AdminCreateUserOutput!
+  CreateFile(createFileInput: CreateFileInput!): S3File!
+  CreateImage(createImageInput: CreateImageInput!): Image!
+  CreateUserGroup(createUserGroupInput: CreateUserGroupInput!): UserGroup!
+  DeleteFile(deleteInput: DeleteInput!): S3File!
+  DeleteImage(deleteImageInput: DeleteInput!): Image!
+  DeleteUser(deleteUserInput: DeleteInput!): User!
+  DeleteUserGroup(deleteInput: DeleteInput!): UserGroup!
+  DisableUser(disableUserInput: UpdateInput!): User!
+  EnableUser(enableUserInput: UpdateInput!): User!
+  ForceUserPasswordChange(forceUserPasswordChangeInput: UpdateInput!): User!
+  ManipulateFileAccessUserGroups(manipulateAccessGroups: ManipulateAccessGroupsInput!): S3File!
+  MarkNotificationAsRead(markAsReadInput: MarkAsReadInput!): Notification!
+  NotifyAllUsers(notifyInput: NotifyInput!): [Notification!]!
+  NotifyUsers(notifyUsersInput: NotifyUsersInput!): [Notification!]!
+  RemoveUserFromUserGroup(removeUserFromUserGroupInput: RemoveUserFromUserGroupInput!): UserGroup!
+  SignupCreateUser(signupCreateUserInput: SignupCreateUserInput!): User!
+  TestPayment: PaymentIntentOutput!
+  UpdateFile(updateFileInput: UpdateFileInput!): S3File!
+  UpdateUser(updateUserInput: UpdateUserInput!): User!
+  UpdateUserGroup(updateUserGroupInput: UpdateUserGroupInput!): UserGroup!
+}
+
+type Notification {
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Messages in different languages related to this notification"""
+  messages: [Message!]!
+
+  """Whether the recipient has seen the notification"""
+  read: Boolean!
+
+  """Recipient of the notification"""
+  recipient: User!
+
+  """Last modification date"""
+  updatedAt: DateTime
+
+  """UUID"""
+  uuid: ID!
+}
+
+input NotifyInput {
+  """Messages in different languages"""
+  messages: [MessageInput!]!
+}
+
+input NotifyUsersInput {
+  """Messages in different languages"""
+  messages: [MessageInput!]!
+
+  """Uuids of users that shall receive notifications"""
+  recipients: [ID!]!
+}
+
+type Payment {
+  """Amount paid in this transaction"""
+  amount: Float!
+
+  """Author of this article"""
+  buyer: User!
+
+  """Creation date"""
+  createdAt: DateTime!
+
+  """transaction currency"""
+  currency: String!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Description of purchase"""
+  description: String!
+
+  """Stripe payment id"""
+  intentId: String!
+
+  """Whether the payment is completed"""
+  paid: Boolean!
+
+  """Stripe payment intent client secret"""
+  secret: String!
+
+  """Payment status"""
+  status: String!
+
+  """Last modification date"""
+  updatedAt: DateTime
+
+  """UUID"""
+  uuid: ID!
+}
+
+type PaymentIntentOutput {
+  """Amount paid in this transaction"""
+  amount: Float!
+
+  """transaction currency"""
+  currency: String!
+
+  """Description of purchase"""
+  description: String!
+
+  """Stripe payment intent client secret"""
+  secret: String!
+
+  """Payment status"""
+  status: String!
+
+  """UUID"""
+  uuid: ID!
+}
+
+type PaymentSearchOutput {
+  """How many items are found within database"""
+  count: String!
+
+  """Payments that fit query"""
+  data: [Payment!]!
+}
+
+type Query {
+  AllFiles(
+    """URL expiration duration (in seconds)"""
+    expires: Int
+
+    """Path in which files must be located"""
+    path: String
+
+    """How many items to skip"""
+    skip: Int = 0
+
+    """Number of items to load"""
+    take: Int = 500
+  ): [S3File!]!
+  AllImages(
+    """URL expiration duration (in seconds)"""
+    expires: Int
+
+    """How many images to skip"""
+    skip: Int = 0
+
+    """Number of images to load"""
+    take: Int = 500
+  ): [Image!]!
+  AllMyFiles(
+    """URL expiration duration (in seconds)"""
+    expires: Int
+
+    """Path in which files must be located"""
+    path: String
+
+    """How many items to skip"""
+    skip: Int = 0
+
+    """Number of items to load"""
+    take: Int = 500
+  ): [S3File!]!
+  AllMyImages(
+    """URL expiration duration (in seconds)"""
+    expires: Int
+
+    """How many images to skip"""
+    skip: Int = 0
+
+    """Number of images to load"""
+    take: Int = 500
+  ): [Image!]!
+  AllPublicFiles(
+    """URL expiration duration (in seconds)"""
+    expires: Int
+
+    """Path in which files must be located"""
+    path: String
+
+    """How many items to skip"""
+    skip: Int = 0
+
+    """Number of items to load"""
+    take: Int = 500
+  ): [S3File!]!
+  AllUserGroups(
+    """How many items to skip"""
+    skip: Int = 0
+
+    """Number of items to load"""
+    take: Int = 500
+  ): [UserGroup!]!
+  AllUsers(
+    """How many items to skip"""
+    skip: Int = 0
+
+    """Number of items to load"""
+    take: Int = 500
+  ): [User!]!
+  File(
+    """URL expiration duration (in seconds)"""
+    expires: Int
+    uuid: ID!
+  ): S3File!
+  FileReadAccessUserGroups(uuid: ID!): [UserGroup!]!
+  FileWriteAccessUserGroups(uuid: ID!): [UserGroup!]!
+  Files(
+    """URL expiration duration (in seconds)"""
+    expires: Int
+    uuids: [ID!] = []
+  ): [S3File!]!
+  Folders(
+    """Path at start of folder"""
+    path: String!
+  ): [FolderOutput!]!
+  Image(
+    """URL expiration duration (in seconds)"""
+    expires: Int
+    uuid: ID!
+  ): Image!
+  ImageForFile(
+    """URL expiration duration (in seconds)"""
+    expires: Int
+    file: ID!
+  ): Image!
+  Images(
+    """URL expiration duration (in seconds)"""
+    expires: Int
+    uuids: [ID!] = []
+  ): [Image!]!
+  IsUserEnabled(cognitoUuid: ID, uuid: ID!): Boolean!
+  MyFiles(
+    """URL expiration duration (in seconds)"""
+    expires: Int
+    uuids: [ID!] = []
+  ): [S3File!]!
+  MyFolders(
+    """Path at start of folder"""
+    path: String!
+  ): [FolderOutput!]!
+  MyImages(
+    """URL expiration duration (in seconds)"""
+    expires: Int
+    uuids: [ID!] = []
+  ): [Image!]!
+  MyUser: User!
+  MyUserGroups(
+    """How many items to skip"""
+    skip: Int = 0
+
+    """Number of items to load"""
+    take: Int = 500
+  ): [UserGroup!]!
+  Payment(uuid: ID!): Payment!
+  PublicFiles(
+    """URL expiration duration (in seconds)"""
+    expires: Int
+    uuids: [ID!] = []
+  ): [S3File!]!
+  PublicFolders(
+    """Path at start of folder"""
+    path: String!
+  ): [FolderOutput!]!
+  SearchAdminFiles(
+    """Sort descending"""
+    descending: Boolean = false
+
+    """URL expiration duration (in seconds)"""
+    expires: Int
+
+    """Search for text within items"""
+    filter: String
+
+    """Subset of the module's allowed search keys to search in"""
+    searchKeys: [String!]
+
+    """How many items to skip"""
+    skip: Int = 0
+
+    """Sort by property"""
+    sortBy: String
+
+    """Number of items to load"""
+    take: Int = 500
+  ): FileSearchOutput!
+  SearchFiles(
+    """Sort descending"""
+    descending: Boolean = false
+
+    """URL expiration duration (in seconds)"""
+    expires: Int
+
+    """Search for text within items"""
+    filter: String
+
+    """Subset of the module's allowed search keys to search in"""
+    searchKeys: [String!]
+
+    """How many items to skip"""
+    skip: Int = 0
+
+    """Sort by property"""
+    sortBy: String
+
+    """Number of items to load"""
+    take: Int = 500
+  ): FileSearchOutput!
+  SearchImages(
+    """Sort descending"""
+    descending: Boolean = false
+
+    """URL expiration duration (in seconds)"""
+    expires: Int
+
+    """Search for text within items"""
+    filter: String
+
+    """Subset of the module's allowed search keys to search in"""
+    searchKeys: [String!]
+
+    """How many items to skip"""
+    skip: Int = 0
+
+    """Sort by property"""
+    sortBy: String
+
+    """Number of items to load"""
+    take: Int = 500
+  ): ImageSearchOutput!
+  SearchMyFiles(
+    """Sort descending"""
+    descending: Boolean = false
+
+    """URL expiration duration (in seconds)"""
+    expires: Int
+
+    """Search for text within items"""
+    filter: String
+
+    """Subset of the module's allowed search keys to search in"""
+    searchKeys: [String!]
+
+    """How many items to skip"""
+    skip: Int = 0
+
+    """Sort by property"""
+    sortBy: String
+
+    """Number of items to load"""
+    take: Int = 500
+  ): FileSearchOutput!
+  SearchMyImages(
+    """Sort descending"""
+    descending: Boolean = false
+
+    """URL expiration duration (in seconds)"""
+    expires: Int
+
+    """Search for text within items"""
+    filter: String
+
+    """Subset of the module's allowed search keys to search in"""
+    searchKeys: [String!]
+
+    """How many items to skip"""
+    skip: Int = 0
+
+    """Sort by property"""
+    sortBy: String
+
+    """Number of items to load"""
+    take: Int = 500
+  ): ImageSearchOutput!
+  SearchPayments(
+    """Sort descending"""
+    descending: Boolean = false
+
+    """Search for text within items"""
+    filter: String
+
+    """Subset of the module's allowed search keys to search in"""
+    searchKeys: [String!]
+
+    """How many items to skip"""
+    skip: Int = 0
+
+    """Sort by property"""
+    sortBy: String
+
+    """Number of items to load"""
+    take: Int = 500
+  ): PaymentSearchOutput!
+  SearchPublicFiles(
+    """Sort descending"""
+    descending: Boolean = false
+
+    """URL expiration duration (in seconds)"""
+    expires: Int
+
+    """Search for text within items"""
+    filter: String
+
+    """Subset of the module's allowed search keys to search in"""
+    searchKeys: [String!]
+
+    """How many items to skip"""
+    skip: Int = 0
+
+    """Sort by property"""
+    sortBy: String
+
+    """Number of items to load"""
+    take: Int = 500
+  ): FileSearchOutput!
+  SearchUserGroups(
+    """Sort descending"""
+    descending: Boolean = false
+
+    """Search for text within items"""
+    filter: String
+
+    """Subset of the module's allowed search keys to search in"""
+    searchKeys: [String!]
+
+    """How many items to skip"""
+    skip: Int = 0
+
+    """Sort by property"""
+    sortBy: String
+
+    """Number of items to load"""
+    take: Int = 500
+  ): UserGroupSearchOutput!
+  SearchUsers(
+    """Sort descending"""
+    descending: Boolean = false
+
+    """Search for text within items"""
+    filter: String
+
+    """Subset of the module's allowed search keys to search in"""
+    searchKeys: [String!]
+
+    """How many items to skip"""
+    skip: Int = 0
+
+    """Sort by property"""
+    sortBy: String
+
+    """Number of items to load"""
+    take: Int = 500
+  ): UserSearchOutput!
+  UnreadNotifications: [Notification!]!
+  User(cognitoUuid: ID, uuid: ID!): User!
+  UserGroup(uuid: ID!): UserGroup!
+  UserGroups(uuids: [ID!] = []): [UserGroup!]!
+  UserGroupsOfUser(
+    """How many items to skip"""
+    skip: Int = 0
+
+    """Number of items to load"""
+    take: Int = 500
+
+    """User UUID"""
+    userUuid: ID!
+  ): [UserGroup!]!
+  Users(uuids: [ID!] = []): [User!]!
+}
+
+input RemoveUserFromUserGroupInput {
+  """Uuid of group to which user shall be added"""
+  userGroupUuid: ID!
+
+  """Uuid of user that shall be removed from group"""
+  userUuid: ID!
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+type S3File {
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Name of File"""
+  filename: String
+
+  """Marks this object as readable for all logged in users"""
+  loggedInReadAccess: Boolean!
+
+  """Files mime type"""
+  mimetype: String!
+
+  """Owner of this object, has full control over it"""
+  owner: User!
+
+  """Path that leads to file"""
+  path: String
+
+  """Marks this object as publicly readable"""
+  publicReadAccess: Boolean!
+
+  """Signed URL to upload object. Only works 1 time"""
+  signedUrl: String
+
+  """Filesize in bytes"""
+  size: Float!
+
+  """Last modification date"""
+  updatedAt: DateTime
+
+  """Pre-signed download URL"""
+  url: String
+
+  """UUID"""
+  uuid: ID!
+}
+
+input SignupCreateUserInput {
+  email: String!
+  lang: String
+
+  """password"""
+  password: String!
+  username: String!
+}
+
+input UpdateFileInput {
+  """Name of File"""
+  filename: String
+
+  """Path to file"""
+  path: String!
+  uuid: ID!
+}
+
+input UpdateInput {
+  uuid: ID!
+}
+
+input UpdateUserGroupInput {
+  """Name of group"""
+  name: String!
+  uuid: ID!
+}
+
+input UpdateUserInput {
+  email: String
+  lang: String
+  username: String
+  uuid: ID!
+}
+
+type User {
+  """Cognito UUID"""
+  cognitoUuid: String!
+
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """E-mail address"""
+  email: String!
+
+  """User enabled or not"""
+  enabled: Boolean
+
+  """User groups this user belongs to"""
+  groups: [UserGroup!]!
+
+  """Preferred language of user"""
+  lang: String!
+
+  """User role"""
+  role: String
+
+  """Last modification date"""
+  updatedAt: DateTime
+
+  """Username"""
+  username: String!
+
+  """UUID"""
+  uuid: ID!
+}
+
+type UserGroup {
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Username"""
+  name: String!
+
+  """Resources this user group has read access to"""
+  readAccess: AccessControlledEntity!
+
+  """Last modification date"""
+  updatedAt: DateTime
+
+  """Users belonging to this user group"""
+  users: [User!]!
+
+  """UUID"""
+  uuid: ID!
+
+  """Resources this user group has write access to"""
+  writeAccess: AccessControlledEntity!
+}
+
+type UserGroupSearchOutput {
+  """How many items are found within database"""
+  count: String!
+
+  """User Groups that fit query"""
+  data: [UserGroup!]!
+}
+
+type UserSearchOutput {
+  """How many items are found within database"""
+  count: String!
+
+  """Users that fit query"""
+  data: [User!]!
+}

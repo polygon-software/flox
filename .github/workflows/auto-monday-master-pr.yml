@@ -1,0 +1,29 @@
+name: "Auto: Label monday.com items in a master PR as 'Stage 1: Staged'"
+
+on:
+  pull_request:
+    branches:
+      - master
+jobs:
+  set-status:
+    runs-on: ubuntu-latest
+    steps:
+      # The monday.com item IDs must appear in the Pull-Requests Body / Description. Take the commit messages
+      - name: "Update state of monday.com items to 'Stage 1: Staged'"
+        id: monday-state
+        uses: polygon-software/action-monday-state@main
+        with:
+          monday-token: ${{ secrets.MONDAY_TOKEN }}
+          allow-no-item-id: true
+          multiple: true
+          monday-organization: polygonsoftware
+          text: ${{ github.event.pull_request.body }}
+          prefix: '#'
+          status-column-title: 'Item Status!'
+          set-status: 'Stage 1: Staged'
+
+      - name: Comment PR
+        uses: polygon-software/actions-comment-pull-request@v1
+        with:
+          message: ${{ steps.monday-state.outputs.message }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

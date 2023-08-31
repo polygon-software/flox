@@ -1,0 +1,51 @@
+version: '3.7'
+
+services:
+  main:
+    container_name: flox_main # TODO application specific
+    build:
+      context: .
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+      - /usr/src/app/dist
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+    env_file:
+      - .env
+    networks:
+      - webnet
+    depends_on:
+      - database
+
+  database:
+    container_name: flox_database # TODO application specific
+    image: postgres:14
+    networks:
+      - webnet
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER:  ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - ${DB_PORT}:5432
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+
+#  nocodb:
+#    container_name: nocodb
+#    image: nocodb/nocodb:latest
+#    networks:
+#      - webnet
+#    ports:
+#      - ${NOCODB_PORT}:8080
+#    volumes:
+#      - nocodbdata:/usr/app/data
+#    depends_on:
+#      - database
+
+networks:
+  webnet:
+volumes:
+  dbdata:
+  nocodbdata:
